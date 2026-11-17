@@ -5,6 +5,9 @@ prompts in this folder, then optimised into `public/assets/img/`.
 
 ## Workflow
 
+Quickest way: paste the messages from [chatgpt-paste.md](chatgpt-paste.md) into one ChatGPT chat
+(style rules once, then one message per image). Dark variants are saved as `<name>-dark.png`.
+
 1. A prompt file is added to `prompts/` (by the developer or the agent — see
    `.claude/skills/spmb-ai-image`) and listed in the queue below.
 2. Open the prompt file, paste the **Prompt** section into ChatGPT, request the listed size.
