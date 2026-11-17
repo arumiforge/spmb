@@ -23,7 +23,8 @@ leave it in a state the next session (possibly another account) can pick up.
    git config user.email "arumiforge@gmail.com"
    git config core.hooksPath .githooks
    ```
-   Run `composer install` if `vendor/` is missing.
+   Run `composer install` if `vendor/` is missing. In cloud sessions MySQL does not
+   survive an idle container: if `mysqladmin ping` fails, run `service mysql start`.
 3. **Read context, in order**: `CLAUDE.md` → `docs/progress.md` → latest
    `docs/interview/round-NN.md` → last entries of `docs/decisions.md`.
 4. **Claim work**: check *Active work* in `progress.md` and open PRs. Never
