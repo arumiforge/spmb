@@ -8,13 +8,13 @@ personal data.
 ## Current phase
 
 **Phase 0 — Foundation**: done. **Phase 1 — Platform core**: core merged in
-[PR #1](https://github.com/arumiforge/spmb/pull/1); **phase 1 UI** in review in
-[PR #2](https://github.com/arumiforge/spmb/pull/2) (`feat/phase-1-ui`).
+[PR #1](https://github.com/arumiforge/spmb/pull/1); **phase 1 UI** merged in
+[PR #2](https://github.com/arumiforge/spmb/pull/2). Remaining phase 1 items are listed under Next steps.
 
 Done in phase 1: Shield auth with 7 roles, audit trail, TOTP 2FA (service, sign-in step, setup UI,
 per-role enforcement), installer, frontend build (Tailwind v4 + Flowbite), admin/auth/public layouts,
 school identity + branding settings, user management, module registry + permission-based sidebar,
-Panduan skeleton. 71 tests green on MySQL 8.0.
+Panduan skeleton. 72 tests green on MySQL 8.0.
 
 ## Active work
 
@@ -23,12 +23,12 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `feat/phase-1-ui` | session 2 | Phase 1 UI: frontend build, layouts, login/2FA screens, settings, users, panduan | PR #2 open |
+| `feat/phase-1-ui` | session 2 | Phase 1 UI: frontend build, layouts, login/2FA screens, settings, users, panduan | merged (PR #2) |
 
 ## Next steps
 
-1. Review and merge PR #2. After pulling: `composer install`, `npm ci && npm run build`,
-   `php spark spmb:install` (applies nothing new; no migrations were added).
+1. New session: branch from `origin/main`, then `composer install`, `npm ci && npm run build`,
+   create `.env` and run `php spark spmb:install --demo` per `docs/development.md` (no new migrations in PR #2).
 2. Finish phase 1: Super Admin page to switch modules on/off (`sistem.modul`, `setting('Features.disabled')`),
    audit log viewer (`audit.view`), friendly Indonesian 404/500 pages in the public layout.
 3. Illustrations: write prompts in `ai/` (spmb-ai-image) for the empty states, sign-in and guide pages.
