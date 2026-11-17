@@ -10,7 +10,7 @@ personal data.
 **Phase 0 — Foundation**: done. **Phase 1 — Platform core**: core merged in
 [PR #1](https://github.com/arumiforge/spmb/pull/1); **phase 1 UI** merged in
 [PR #2](https://github.com/arumiforge/spmb/pull/2); **phase 1 finish** (Fitur page, audit log viewer,
-404/500 pages, illustration prompts) on `feat/phase-1-finish`, PR open. Only the illustrations themselves remain.
+404/500 pages, illustration prompts) on `feat/phase-1-finish`, [PR #4](https://github.com/arumiforge/spmb/pull/4). Only the illustrations themselves remain.
 
 Done in phase 1: Shield auth with 7 roles, audit trail, TOTP 2FA (service, sign-in step, setup UI,
 per-role enforcement), installer, frontend build (Tailwind v4 + Flowbite), admin/auth/public layouts,
