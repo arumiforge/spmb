@@ -81,5 +81,13 @@ composer lint                   # php-cs-fixer dry run
 ## Flowbite Pro
 
 `flowbite/` holds licensed Flowbite Pro templates used as a **reference** for
-markup. The repository must stay **private** while it contains Pro source. Copy
-only the markup you need into `app/Views`, adapt it, and never publish Pro source.
+markup. The licence proof is kept by Arumi Studios outside the repository. The
+repository must stay **private** while it contains Pro source. Copy only the
+markup you need into `app/Views`, adapt it, and never publish Pro source.
+
+## Licence
+
+Proprietary, © Arumi Studios (`LICENSE`, D-017). Never add an open-source licence
+header to project files. When adding a dependency, check its licence is compatible
+(MIT, BSD, Apache-2.0, ISC are fine; ask before GPL/AGPL or commercial terms) and
+update `THIRD_PARTY_NOTICES.md`.

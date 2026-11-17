@@ -30,5 +30,7 @@ php spark serve
 
 ## License
 
-Proprietary. © Arumi Studios. CodeIgniter 4 is MIT-licensed by the CodeIgniter Foundation.
-Flowbite Pro templates are used under their commercial license and must not be redistributed.
+Proprietary — © 2026 Arumi Studios, all rights reserved. Use, copying or distribution
+requires a written agreement with Arumi Studios; see [LICENSE](LICENSE).
+Third-party components keep their own licences: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Flowbite Pro is used under Arumi Studios' commercial licence and must never be redistributed.
