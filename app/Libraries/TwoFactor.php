@@ -64,6 +64,32 @@ class TwoFactor
     }
 
     /**
+     * Returns the unconfirmed setup in progress, or starts one. Reloading the
+     * setup page therefore keeps the QR code the user may already have scanned.
+     *
+     * @return array{secret: string, uri: string}|null Null when 2FA is already on.
+     */
+    public function pendingSetup(int $userId, string $accountLabel): ?array
+    {
+        $row = $this->model->find($userId);
+
+        if ($row !== null && $row['confirmed_at'] !== null) {
+            return null;
+        }
+
+        if ($row === null) {
+            return $this->beginSetup($userId, $accountLabel);
+        }
+
+        $secret = $this->decrypt($row['secret']);
+
+        return [
+            'secret' => $secret,
+            'uri'    => $this->google2fa->getQRCodeUrl($this->issuer, $accountLabel, $secret),
+        ];
+    }
+
+    /**
      * Confirms setup with a code from the app.
      *
      * @return list<string>|null Plain recovery codes (show once), or null if the code is wrong.

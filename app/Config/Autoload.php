@@ -90,4 +90,15 @@ class Autoload extends AutoloadConfig
      * @var list<string>
      */
     public $helpers = ['auth', 'setting', 'form', 'url', 'ui'];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Each feature module is also its own namespace (Modules\<Name>), so its
+        // Language/id/<Name>.php and Views are found by the framework's file locator.
+        foreach (glob(APPPATH . 'Modules/*', GLOB_ONLYDIR) ?: [] as $dir) {
+            $this->psr4['Modules\\' . basename($dir)] = $dir;
+        }
+    }
 }
