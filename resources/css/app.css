@@ -69,3 +69,47 @@
         padding-top: 0 !important;
     }
 }
+
+/* Guide pages (/panduan): Markdown rendered from module Guide/ folders. */
+@layer components {
+    .guide h2 {
+        @apply mt-10 mb-3 scroll-mt-24 border-b border-gray-200 pb-2 text-2xl font-bold text-gray-900 dark:border-gray-700 dark:text-white;
+    }
+
+    .guide h3 {
+        @apply mt-6 mb-2 text-lg font-semibold text-gray-900 dark:text-white;
+    }
+
+    .guide p {
+        @apply my-3 leading-relaxed text-gray-700 dark:text-gray-300;
+    }
+
+    .guide ul {
+        @apply my-3 list-disc space-y-1 ps-6 text-gray-700 dark:text-gray-300;
+    }
+
+    .guide ol {
+        @apply my-3 list-decimal space-y-2 ps-6 text-gray-700 dark:text-gray-300;
+    }
+
+    .guide a {
+        @apply font-medium text-primary-700 underline hover:no-underline dark:text-primary-400;
+    }
+
+    .guide strong {
+        @apply font-semibold text-gray-900 dark:text-white;
+    }
+
+    .guide code {
+        @apply rounded bg-gray-100 px-1.5 py-0.5 text-sm dark:bg-gray-800;
+    }
+
+    /* "> **Tips:** ..." becomes a tip box */
+    .guide blockquote {
+        @apply my-4 rounded-lg border-s-4 border-primary-500 bg-primary-50 px-4 py-1 dark:bg-gray-800;
+    }
+
+    .guide blockquote p {
+        @apply text-gray-800 dark:text-gray-200;
+    }
+}
