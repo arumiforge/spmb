@@ -3,6 +3,8 @@
 namespace Config;
 
 use App\Libraries\AuditLogger;
+use App\Libraries\Menu;
+use App\Libraries\ModuleRegistry;
 use App\Libraries\TwoFactor;
 use App\Models\AuditLogModel;
 use App\Models\UserTwoFactorModel;
@@ -53,5 +55,34 @@ class Services extends BaseService
             service('encrypter'),
             $issuer,
         );
+    }
+
+    /**
+     * Feature modules in app/Modules and their on/off state.
+     */
+    public static function modules(bool $getShared = true): ModuleRegistry
+    {
+        if ($getShared) {
+            return static::getSharedInstance('modules');
+        }
+
+        $config   = config('Features');
+        $disabled = function_exists('setting') ? setting('Features.disabled') : null;
+
+        return new ModuleRegistry(APPPATH . 'Modules', $config->core, is_array($disabled) ? $disabled : $config->disabled);
+    }
+
+    /**
+     * Admin sidebar built from module menus and the user's permissions.
+     */
+    public static function menu(bool $getShared = true): Menu
+    {
+        if ($getShared) {
+            return static::getSharedInstance('menu');
+        }
+
+        return new Menu(service('modules'), [
+            ['label' => 'Dasbor', 'url' => 'admin', 'icon' => 'chart', 'permission' => 'dasbor.view', 'order' => 0],
+        ]);
     }
 }
