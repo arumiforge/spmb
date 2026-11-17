@@ -7,7 +7,7 @@ shape: landscape
 size: 1536x1024
 background: white
 variants: light
-status: requested
+status: generated
 ---
 
 # 001 — hero-beranda

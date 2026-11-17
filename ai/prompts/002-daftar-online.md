@@ -7,7 +7,7 @@ shape: portrait
 size: 1024x1536
 background: transparent
 variants: light
-status: requested
+status: generated
 ---
 
 # 002 — daftar-online
