@@ -11,7 +11,7 @@ then integrates the results.
 ## 1. Write the prompt
 
 Create `ai/prompts/<NNN>-<slug>.md` (next free number) using `ai/prompts/_template.md`.
-Follow `ai/style-guide.md` (style, palette-neutral, no text in image, no logos,
+Follow `ai/style-guide.md` (painted storybook style, D-027; muted palette, recurring cast, no text in image, no logos,
 diverse Indonesian students incl. hijab, white-label friendly). Fill in:
 target file name, usage (page + component), aspect ratio, pixel size, background
 (transparent or solid), light/dark variant needed.
