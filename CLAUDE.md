@@ -4,7 +4,10 @@ School admission system (Sistem Penerimaan Murid Baru) built by **Arumi Studios*
 First client: SMP NU Al Ma'ruf Kudus, academic year 2027/2028. The product is
 white-label: nothing school-specific is hard-coded.
 
-Read `docs/README.md` first. Decisions live in `docs/decisions.md`; open questions
+**Start every session with the `spmb-session` skill** and read `docs/progress.md`
+(current state, claimed branches, next steps); update it before you finish. Work
+happens across several Claude accounts that share nothing but this repository.
+Docs index: `docs/README.md`. Decisions live in `docs/decisions.md`; open questions
 in `docs/interview/`. Never implement against an assumption that contradicts a
 recorded decision — ask, or record a new decision.
 
@@ -65,6 +68,7 @@ composer lint                   # php-cs-fixer dry run
 
 | Skill | Use when |
 | --- | --- |
+| `spmb-session` | Start and end of every session (sync, identity, progress handoff) |
 | `spmb-module` | Creating or changing a feature module |
 | `spmb-ui` | Building any page/view (Flowbite, layout, breadcrumbs, responsive) |
 | `spmb-copy` | Writing UI text, guide pages, error messages in Indonesian |

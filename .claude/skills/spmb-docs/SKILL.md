@@ -12,6 +12,7 @@ present tense, describing what exists — not plans (plans go in `roadmap.md`).
 
 | File | Update when |
 | --- | --- |
+| `docs/progress.md` | End of every session (see `spmb-session`) |
 | `docs/README.md` | A doc is added/renamed |
 | `docs/project-brief.md` | Client brief changes (source documents from the school) |
 | `docs/requirements.md` | A requirement is added, changed, or confirmed in the interview |

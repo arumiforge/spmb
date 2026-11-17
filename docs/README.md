@@ -8,6 +8,7 @@ User-facing guides for each role are in Indonesian and live inside the app at `/
 
 | Document | Purpose |
 | --- | --- |
+| [progress.md](progress.md) | **Read first.** Current state, active branches, next steps, blockers |
 | [project-brief.md](project-brief.md) | The school's brief, summarised in English |
 | [requirements.md](requirements.md) | Functional and non-functional requirements, roles |
 | [architecture.md](architecture.md) | Stack, modules, data model outline, security |
