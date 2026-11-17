@@ -11,19 +11,16 @@ Roles are split (D-028):
    and lists it in the queue below with status `requested`.
 2. **ChatGPT makes the images** — paste the starter prompt below into ChatGPT. It follows
    [CHATGPT.md](CHATGPT.md): reads the style guide and briefs, generates the queued images one by one
-   (with dark variants `<name>-dark.png`), and opens **one pull request** that only adds files to
-   [`incoming/`](incoming/) on a branch `art/illustrations-<date>`. It never merges.
-3. **Claude installs them** — Claude reviews the images in that pull request (style, no text, empty
-   areas, transparency), asks for regenerations if needed, converts the approved ones to WebP at each
-   brief's `target`, wires them into the views with the Indonesian alt text, marks the queue rows `done`,
-   removes the originals from `incoming/` and squash-merges once CI is green and the user agrees.
+   (with dark variants `<name>-dark.png`), and opens **one pull request** from `art/illustrations-<date>`
+   that adds them to [`generated/`](generated/README.md) and sets their status to `generated`. It never merges.
+3. **Claude reviews and installs them** — Claude checks the images (style, no text, empty areas,
+   transparency), asks for regenerations if needed, converts the approved ones to WebP at each brief's
+   `target`, wires them into the views with the Indonesian alt text and sets the status to `done`.
+   The PNG originals stay in `generated/` as the source for later re-exports.
 
+Statuses: `requested` → `generated` (original delivered) → `done` (installed in the app).
 Style rules: [style-guide.md](style-guide.md) (painted storybook look, D-027). New briefs: copy
 [prompts/_template.md](prompts/_template.md). `output/` is a git-ignored scratch folder for local work.
-
-The delivered PNG originals are versioned in [`generated/`](generated/README.md) at the user's request.
-`generated` means the image is delivered and application integration is pending; `done` is reserved
-for resized assets that are installed in the views. `output/` remains ignored for scratch work.
 
 ## ChatGPT starter prompt
 
@@ -33,7 +30,7 @@ Needs ChatGPT with GitHub access to `arumiforge/spmb` that can create a branch a
 images and tells you how to upload them.
 
 ```
-Open the GitHub repository arumiforge/spmb (branch main) and read ai/CHATGPT.md. Follow it exactly. Your only job is to make the illustrations and deliver them: generate the images listed as "requested" in ai/README.md one at a time, in ID order, from the briefs in ai/prompts/, in the painted storybook style of ai/style-guide.md (hand-painted gouache/watercolour, stylised characters, not realistic, not 3D, no text in any image). Then put them only in the folder ai/incoming/ on a new branch art/illustrations-<today's date> and open one pull request into main. Do not change any other file, do not merge, and add no AI attribution. Talk to me in Indonesian. Start with image 001 and wait for my "lanjut" after each image.
+Open the GitHub repository arumiforge/spmb (branch main) and read ai/CHATGPT.md. Follow it exactly. Your only job is to make the illustrations and deliver them: generate the images listed as "requested" in ai/README.md one at a time, in ID order, from the briefs in ai/prompts/, in the painted storybook style of ai/style-guide.md (hand-painted gouache/watercolour, stylised characters, not realistic, not 3D, no text in any image). Then put them only in the folder ai/generated/ (and set their status to generated) on a new branch art/illustrations-<today's date> and open one pull request into main. Do not change anything else, do not merge, and add no AI attribution. Talk to me in Indonesian. Start with image 001 and wait for my "lanjut" after each image.
 ```
 
 ## Queue

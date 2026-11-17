@@ -21,14 +21,15 @@ Add a row to `ai/README.md` → "Queue" with status `requested`.
 ## 2. ChatGPT generates and delivers (D-028)
 
 The user starts ChatGPT with the starter prompt in `ai/README.md`. ChatGPT follows `ai/CHATGPT.md`
-and opens one pull request from `art/illustrations-<date>` that only adds files to `ai/incoming/`
-(plus `ai/incoming/DELIVERY.md`). It never touches anything else and never merges. If ChatGPT cannot
-open a pull request, the user attaches the images in chat or uploads them to `ai/incoming/` on a branch.
+and opens one pull request from `art/illustrations-<date>` that adds the PNGs to `ai/generated/`
+(with `ai/generated/README.md`) and sets their status to `generated`. It never touches anything else and
+never merges. If ChatGPT cannot open a pull request, the user attaches the images in chat or uploads them
+to `ai/generated/` on a branch.
 
-## 3. Review and install (Claude, on the same pull request)
+## 3. Review and install (Claude)
 
-- Find it: `git fetch --all` and look for `origin/art/*`, or list open pull requests.
-- Check out the branch. Commits made through GitHub by the `arumiforge` account pass the commit policy;
+- Find it: `git fetch --all` and look for `origin/art/*`, or list open pull requests; originals already
+  merged are in `ai/generated/` with status `generated`. Work on a new branch from `main`. Commits made through GitHub by the `arumiforge` account pass the commit policy;
   if the policy check fails, report the author/trailer it names to the user instead of rewriting history.
 - Review each file against the brief and `ai/style-guide.md` (look at every image): painted, not
   realistic or 3D; no text; the empty area is empty; real transparency where required; right shape and
@@ -39,7 +40,5 @@ open a pull request, the user attaches the images in chat or uploads them to `ai
   success/error states 480 px (see `ai/style-guide.md`). Use Python Pillow or the CI4 Image library.
 - Reference the image from the view with the brief's Indonesian `alt` text; dark variants via
   `dark:hidden` / `hidden dark:block` pairs.
-- Update the queue row in `ai/README.md` to `done`.
-- Delete the installed originals from `ai/incoming/` (keep `README.md`), update the PR description with
-  what was installed and what is still waiting, and **squash-merge** when CI is green and the user agrees,
-  so the large originals never enter the history of `main`.
+- Set the status to `done` in the queue row of `ai/README.md` and in the brief. Keep the PNG originals
+  in `ai/generated/` as the source for later re-exports.
