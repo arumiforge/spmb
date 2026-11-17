@@ -12,7 +12,10 @@
     <?= view('partials/head', ['title' => $title ?? '']) ?>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100">
-<main class="flex min-h-screen flex-col items-center justify-center px-4 py-8">
+<main class="flex min-h-screen items-center justify-center gap-12 px-4 py-8">
+    <div class="hidden max-w-sm flex-1 lg:block">
+        <?= illustration('auth/masuk-dasbor', lang('App.altSignIn'), 'mx-auto max-h-[32rem] w-auto', false) ?>
+    </div>
     <div class="w-full max-w-md">
         <div class="mb-6 flex items-center justify-between">
             <?= view('partials/school_brand', ['brand' => ['size' => 'h-10 w-10']]) ?>

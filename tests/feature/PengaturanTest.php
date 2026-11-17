@@ -71,6 +71,7 @@ final class PengaturanTest extends CIUnitTestCase
 
         $body = $this->get('/')->getBody();
         $this->assertStringContainsString('--brand:#0e7490', $body);
+        $this->assertStringContainsString('assets/img/hero/hero-beranda.webp', $body);
     }
 
     public function testInvalidColourIsRejected(): void

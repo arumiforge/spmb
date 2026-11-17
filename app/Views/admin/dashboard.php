@@ -37,6 +37,8 @@ $stats = [
             'title' => 'Data pendaftaran belum tersedia',
             'text'  => 'Ringkasan pendaftar, berkas, dan jadwal tes akan tampil di sini setelah fitur pendaftaran diaktifkan.',
             'icon'  => 'chart',
+            'image' => 'state/kosong-data',
+            'imageAlt' => lang('App.altNoData'),
         ]]) ?>
     </div>
     <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-xs dark:border-gray-700 dark:bg-gray-800">

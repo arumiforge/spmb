@@ -88,8 +88,8 @@ $withoutId = array_filter(['pengguna' => $filters['pengguna'], 'kegiatan' => $fi
     <?php if ($rows === []) : ?>
         <div class="p-4">
             <?= view('partials/empty_state', ['empty' => $filtered
-                ? ['title' => lang('Riwayat.emptyFilteredTitle'), 'text' => lang('Riwayat.emptyFilteredText'), 'icon' => 'search']
-                : ['title' => lang('Riwayat.emptyTitle'), 'text' => lang('Riwayat.emptyText'), 'icon' => 'clock']]) ?>
+                ? ['title' => lang('Riwayat.emptyFilteredTitle'), 'text' => lang('Riwayat.emptyFilteredText'), 'icon' => 'search', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]
+                : ['title' => lang('Riwayat.emptyTitle'), 'text' => lang('Riwayat.emptyText'), 'icon' => 'clock', 'image' => 'state/kosong-riwayat', 'imageAlt' => lang('App.altHistory')]]) ?>
         </div>
     <?php else : ?>
         <!-- Table on md and up -->

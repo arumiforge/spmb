@@ -11,6 +11,7 @@
 
 @source "../../app/Views";
 @source "../../app/Modules";
+@source "../../app/Helpers";
 @source "../../node_modules/flowbite/dist/flowbite.js";
 @source "./safelist.txt";
 @source "../js";

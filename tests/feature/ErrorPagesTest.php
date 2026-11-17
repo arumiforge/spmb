@@ -58,6 +58,7 @@ final class ErrorPagesTest extends CIUnitTestCase
         $result->assertSee(lang('App.backHome'));
         $result->assertSee(lang('App.staffLogin')); // public footer
         $result->assertSee('https://wa.me/6281234567890');
+        $result->assertSee('assets/img/state/tidak-ditemukan.webp');
         $result->assertDontSee('PageNotFoundException');
     }
 
@@ -95,6 +96,7 @@ final class ErrorPagesTest extends CIUnitTestCase
 
         $this->assertStringContainsString(lang('App.serverErrorTitle'), $html);
         $this->assertStringContainsString(lang('App.reload'), $html);
+        $this->assertStringContainsString('assets/img/state/gangguan-sistem.webp', $html);
         $this->assertStringContainsString(lang('App.staffLogin'), $html); // public layout, not the fallback
         $this->assertStringNotContainsString('Exception', $html);
     }

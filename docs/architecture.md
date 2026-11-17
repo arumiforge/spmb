@@ -92,6 +92,9 @@ Permissions stay declared centrally in `Config\AuthGroups` (tested by `AuthGroup
 - White label: `partials/head` prints `:root{--brand:#rrggbb}` from `setting('School.primaryColor')`
   (validated hex). `@theme` derives `primary-50…950` from `--brand` with `color-mix()`.
 - Dark mode via `.dark` on `<html>` (toggle, remembered per browser).
+- Illustrations: `illustration('state/kosong-data', $alt, $class, $lazy)` (`ui_helper`) prints the WebP from
+  `public/assets/img/` plus its `-dark` variant for dark mode when present; `partials/empty_state` takes
+  `image`/`imageAlt`. Sources and briefs live in `ai/` (D-027, D-028).
 - Partials receive one array (`field`, `badge`, `empty`, `brand`) because CI view data is shared
   between renders (`saveData`); a partial must not rely on loose variables.
 

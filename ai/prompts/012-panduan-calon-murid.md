@@ -7,7 +7,7 @@ shape: landscape
 size: 1536x1024
 background: white
 variants: light
-status: generated
+status: done
 ---
 
 # 012 — panduan-calon-murid

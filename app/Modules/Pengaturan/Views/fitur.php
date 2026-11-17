@@ -38,7 +38,7 @@ $card     = static function (array $m): string {
         <h2 class="border-b border-gray-200 px-4 py-3 text-base font-semibold text-gray-900 dark:border-gray-700 dark:text-white"><?= lang('Pengaturan.featuresOptional') ?></h2>
         <?php if ($optional === []) : ?>
             <div class="p-4">
-                <?= view('partials/empty_state', ['empty' => ['title' => lang('Pengaturan.featuresNone'), 'text' => lang('Pengaturan.featuresNoneText'), 'icon' => 'grid']]) ?>
+                <?= view('partials/empty_state', ['empty' => ['title' => lang('Pengaturan.featuresNone'), 'text' => lang('Pengaturan.featuresNoneText'), 'icon' => 'grid', 'image' => 'state/fitur-tambahan', 'imageAlt' => lang('App.altFeatures')]]) ?>
             </div>
         <?php else : ?>
             <ul class="divide-y divide-gray-100 dark:divide-gray-700">

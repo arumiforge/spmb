@@ -53,6 +53,13 @@ final class PanduanTest extends CIUnitTestCase
         $this->get('panduan/calon-murid')->assertDontSee('Masuk ke dasbor');
     }
 
+    public function testGuidesShowTheirCoverIllustration(): void
+    {
+        $this->get('panduan')->assertSee('guide/panduan-calon-murid.webp');
+        $this->get('panduan/calon-murid')->assertSee('guide/panduan-calon-murid.webp');
+        $this->get('panduan/panitia-pendaftaran')->assertSee('guide/panduan-petugas.webp');
+    }
+
     public function testUnknownRoleIsNotFound(): void
     {
         $this->get('panduan/tidak-ada')->assertStatus(404);

@@ -7,7 +7,7 @@ shape: square
 size: 1024x1024
 background: transparent
 variants: light+dark
-status: generated
+status: done
 ---
 
 # 008 — gangguan-sistem

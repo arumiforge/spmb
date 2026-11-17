@@ -48,4 +48,16 @@ return [
     'reload'           => 'Muat Ulang Halaman',
     'readGuide'        => 'Baca Panduan',
     'contactWhatsapp'  => 'Hubungi Panitia lewat WhatsApp',
+
+    // Alt text of the painted illustrations (ai/prompts/*.md).
+    'altHero'           => 'Orang tua dan calon murid tersenyum di depan sekolah, siap mendaftar.',
+    'altSignIn'         => 'Petugas sekolah membuka dasbor dengan aman.',
+    'altNoData'         => 'Belum ada data.',
+    'altNoResults'      => 'Data yang dicari tidak ditemukan.',
+    'altNotFound'       => 'Halaman yang Anda cari tidak ditemukan.',
+    'altServerError'    => 'Petugas sedang memperbaiki gangguan kecil di sistem.',
+    'altHistory'        => 'Buku catatan yang masih kosong.',
+    'altFeatures'       => 'Susunan balok yang menggambarkan fitur yang bisa ditambahkan.',
+    'altGuideStaff'     => 'Dua petugas sekolah membaca panduan bersama.',
+    'altGuideApplicant' => 'Orang tua dan calon murid membaca panduan pendaftaran di ponsel.',
 ];

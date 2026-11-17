@@ -39,6 +39,7 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - Friendly Indonesian 404 and 500 pages in the public layout, admin variant for signed-in staff, self-contained fallback (D-026).
 - Guide sections for Fitur (Super Admin) and Riwayat Perubahan (Admin Sekolah); icons `grid`, `clock`, `compass`, `arrow-right`.
 - Illustration briefs 001–012 rewritten in detail for a painted storybook style with a recurring cast; `ai/CHATGPT.md` lets ChatGPT generate the queue from the repository (D-027) and deliver it by pull request into `ai/generated/` for Claude to install (D-028); originals 001–012 delivered (PR #7).
+- Painted illustrations installed (WebP in `public/assets/img/`, dark variants for dark mode) on the home page, sign-in, empty states, 404/500 pages and guide pages; `illustration()` view helper.
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
