@@ -79,6 +79,7 @@ class AuthGroups extends ShieldAuthGroups
         'sistem.modul'    => 'Menyalakan atau mematikan fitur',
         'sistem.cadangan' => 'Membuat dan memulihkan cadangan data',
         'sistem.log'      => 'Melihat log sistem',
+        'sistem.keamanan' => 'Mengatur kebijakan keamanan (verifikasi dua langkah per peran)',
 
         'pengaturan.sekolah'     => 'Mengubah identitas dan tampilan sekolah',
         'pengaturan.pendaftaran' => 'Mengatur tahun ajaran, gelombang, dan berkas wajib',
@@ -87,7 +88,7 @@ class AuthGroups extends ShieldAuthGroups
         'pengguna.create'       => 'Menambah pengguna',
         'pengguna.edit'         => 'Mengubah pengguna',
         'pengguna.delete'       => 'Menghapus pengguna',
-        'pengguna.kelola-admin' => 'Mengelola akun Admin Sekolah dan Super Admin',
+        'pengguna.kelola-admin' => 'Mengelola akun Super Admin',
 
         'audit.view' => 'Melihat riwayat perubahan data',
 

@@ -13,6 +13,21 @@ $routes->get('/', 'Home::index');
 // Staff sign-in, sign-out and verification (/masuk, /keluar, /verifikasi) — see Config\AuthRoutes.
 service('auth')->routes($routes);
 
-$routes->group('admin', ['filter' => 'session'], static function (RouteCollection $routes): void {
+// Branding files uploaded in settings (public: shown on the sign-in page and website).
+$routes->get('aset/logo', 'Branding::logo', ['as' => 'aset.logo']);
+$routes->get('aset/favicon', 'Branding::favicon', ['as' => 'aset.favicon']);
+
+// Staff area. Filters for the whole group are set in Config\Filters::$filters.
+$routes->group('admin', static function (RouteCollection $routes): void {
     $routes->get('/', 'Admin\Dashboard::index', ['as' => 'admin.dasbor', 'filter' => 'permission:dasbor.view']);
+    $routes->get('akses-ditolak', 'Admin\Dashboard::denied', ['as' => 'admin.akses-ditolak']);
 });
+
+// Routes of enabled feature modules (app/Modules/<Name>/Config/Routes.php).
+foreach (service('modules')->enabled() as $module) {
+    $file = service('modules')->file($module, 'Config/Routes.php');
+
+    if ($file !== null) {
+        require $file;
+    }
+}

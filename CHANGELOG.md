@@ -19,10 +19,26 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `php spark spmb:install` installer (idempotent) and demo account seeder for development.
 - `School` config for white-label identity defaults; protected `/admin` dashboard placeholder.
 - Tests: roles/permissions matrix, audit trail, 2FA, demo seeder, auth routes (29 tests on MySQL).
+- Frontend build: Tailwind CSS v4, Flowbite, ApexCharts (`package.json`, `resources/`, output `public/build/`);
+  primary colour scale derived from the school's colour setting.
+- Layouts `admin` (full width, collapsible sidebar, mobile drawer, user menu, breadcrumbs, toasts),
+  `auth` and `public`; partials for breadcrumbs, toasts, empty state, form field, status badge, pagination; dark mode.
+- Indonesian sign-in screen and two-step verification step (`/verifikasi`) with Google Authenticator codes or recovery codes.
+- Profile pages: change password, set up / turn off two-step verification with QR code, recovery codes shown once.
+- School identity settings (`/admin/pengaturan/sekolah`) with logo and favicon upload; security policy
+  (`/admin/pengaturan/keamanan`) to require two-step verification per role; permission `sistem.keamanan`.
+- User management (`/admin/pengguna`): search, filters, create with temporary password, edit roles,
+  deactivate/activate, reset password, reset two-step verification.
+- Module registry (enable/disable via settings) and sidebar menu built from module menus and permissions.
+- Guide pages `/panduan` and `/panduan/<peran>` assembled from module `Guide/` Markdown files.
+- Public home page placeholder; friendly "no access" page.
+- Tests for two-step flow, user management, settings, guides and UI helpers (71 tests).
 
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
 - Project licence is now proprietary (© Arumi Studios), replacing the inherited CodeIgniter MIT notice (D-017).
+- CSRF protection and secure headers enabled for every request; sign-in and verification are rate limited.
+- `composer test` runs PHPUnit without coverage (same as CI).
 - Locale `id`, time zone `Asia/Jakarta`, Indonesian framework messages (`codeigniter4/translations`); URLs without `index.php`.
 - Switched from the CodeIgniter framework distribution to the appstarter layout; framework 4.7 installed via Composer.

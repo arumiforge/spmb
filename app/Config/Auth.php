@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Config;
 
+use App\Authentication\Actions\TotpAction;
 use App\Models\UserModel;
 use CodeIgniter\Shield\Authentication\Actions\ActionInterface;
 use CodeIgniter\Shield\Authentication\AuthenticatorInterface;
@@ -46,9 +47,9 @@ class Auth extends ShieldAuth
      * --------------------------------------------------------------------
      */
     public array $views = [
-        'login'                       => '\CodeIgniter\Shield\Views\login',
+        'login'                       => 'auth/login',
         'register'                    => '\CodeIgniter\Shield\Views\register',
-        'layout'                      => '\CodeIgniter\Shield\Views\layout',
+        'layout'                      => 'layouts/auth',
         'action_email_2fa'            => '\CodeIgniter\Shield\Views\email_2fa_show',
         'action_email_2fa_verify'     => '\CodeIgniter\Shield\Views\email_2fa_verify',
         'action_email_2fa_email'      => '\CodeIgniter\Shield\Views\Email\email_2fa_email',
@@ -77,9 +78,9 @@ class Auth extends ShieldAuth
         'register'          => '/',
         'login'             => 'admin',
         'logout'            => 'masuk',
-        'force_reset'       => '/',
-        'permission_denied' => '/',
-        'group_denied'      => '/',
+        'force_reset'       => 'admin/profil/kata-sandi',
+        'permission_denied' => 'admin/akses-ditolak',
+        'group_denied'      => 'admin/akses-ditolak',
     ];
 
     /**
@@ -105,7 +106,7 @@ class Auth extends ShieldAuth
      */
     public array $actions = [
         'register' => null,
-        'login'    => null,
+        'login'    => TotpAction::class, // two-step verification, only for users who turned it on
     ];
 
     /**

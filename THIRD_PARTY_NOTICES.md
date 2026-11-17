@@ -15,11 +15,17 @@ Refresh this list when dependencies change:
 | codeigniter4/shield | MIT |
 | codeigniter4/settings | MIT |
 | codeigniter4/translations | MIT |
+| chillerlan/php-qrcode | MIT / Apache-2.0 (dual) |
+| chillerlan/php-settings-container | MIT |
+| dflydev/dot-access-data | MIT |
+| league/commonmark | BSD-3-Clause |
+| league/config | BSD-3-Clause |
 | laminas/laminas-escaper | BSD-3-Clause |
+| nette/schema, nette/utils | BSD-3-Clause (dual-licensed with GPL; used under BSD-3-Clause) |
 | paragonie/constant_time_encoding | MIT |
 | pragmarx/google2fa | MIT |
-| psr/log | MIT |
-| symfony/polyfill-ctype, symfony/polyfill-mbstring | MIT |
+| psr/event-dispatcher, psr/log | MIT |
+| symfony/deprecation-contracts, symfony/polyfill-ctype, symfony/polyfill-mbstring, symfony/polyfill-php80 | MIT |
 
 Development-only Composer packages (PHPUnit, PHP CS Fixer, Faker, ...) are MIT or
 BSD-3-Clause and are not deployed (`composer install --no-dev`).

@@ -86,3 +86,40 @@ Status: accepted
 Context: SPMB is a developer asset of Arumi Studios, sold/licensed to schools as a white-label product and worked on with outside collaborators. The root `LICENSE` was CodeIgniter's MIT notice inherited from the starter.
 Decision: Root `LICENSE` is a proprietary "all rights reserved" licence (`LicenseRef-ArumiStudios-Proprietary`): use only under a written agreement with Arumi Studios; collaborators may use the code only for work for Arumi Studios and must keep it confidential; customer data belongs to the school; Indonesian law. `composer.json` uses `proprietary`, `package.json` uses `UNLICENSED` with `private: true`. Third-party licences are listed in `THIRD_PARTY_NOTICES.md`, including the MIT notice for files from the CodeIgniter starter.
 Consequences: Every school deployment needs a signed licence/service agreement; collaborators need a written agreement covering confidentiality and ownership of their work (have a lawyer review both templates). Proof of the Flowbite Pro licence is kept by Arumi Studios outside the repository. ApexCharts v4 licence terms must be checked before launch.
+
+## D-018 — Flowbite Pro as markup reference (2026-11-17)
+Status: accepted (refines D-010)
+Context: The user chose Flowbite Pro for the UI. The licensed templates (admin dashboard v2.2.0, landing pages v1.1.0) are Hugo sources in `flowbite/`.
+Decision: Use them only as a markup reference: copy and adapt the minimum markup into `app/Views`, never publish Pro source or assets, never modify `flowbite/`. The repository stays private. Runtime uses only the open-source `flowbite` npm package. Tailwind source detection is disabled (`source(none)`) so `flowbite/` is never compiled into our CSS.
+Consequences: Making the repository public requires removing `flowbite/` first (and from history).
+
+## D-019 — Frontend build and white-label colours (2026-11-17)
+Status: accepted
+Decision: `@tailwindcss/cli` for CSS and esbuild for JS (`app.js` everywhere, `charts.js` with ApexCharts only on chart pages), output in git-ignored `public/build/`. The primary colour scale is derived in the browser from one `--brand` variable (`color-mix()` in `@theme`), set from `setting('School.primaryColor')`.
+Consequences: No per-school CSS build; requires browsers with `color-mix()` (all evergreen browsers since 2023, same baseline as Tailwind v4).
+
+## D-020 — Module registry, menus and guides (2026-11-17)
+Status: accepted
+Decision: Modules are discovered from `app/Modules/*`; enabled unless listed in `setting('Features.disabled')`; Pengaturan, Pengguna, Profil and Panduan are core. Each module may provide `Config/Routes.php`, `Config/Menu.php`, `Language/id/<Name>.php` and `Guide/<peran>.md` (`semua-petugas.md` applies to every staff role). Permission keys stay in `Config\AuthGroups` (one place, tested) rather than per-module files.
+Consequences: A UI to switch modules (`sistem.modul`) still has to be built; guides are versioned with the code.
+
+## D-021 — Staff account lifecycle (2026-11-17)
+Status: accepted
+Decision: Admins never type passwords for others: creating an account or resetting a password generates a one-time temporary password (shown once) and forces a change at next sign-in. Deactivation uses Shield's ban status (data kept, sign-in refused, reversible); there is no hard delete in the UI. Super Admin and Admin Sekolah accounts and roles can only be managed with `pengguna.kelola-admin` (Super Admin). Admins cannot deactivate themselves or change their own roles. An admin can turn off a user's 2FA when the phone and recovery codes are lost.
+Consequences: Without email delivery, temporary passwords are handed over in person.
+
+## D-022 — Two-step verification enforcement (2026-11-17)
+Status: accepted (implements D-006)
+Decision: `TotpAction` (Shield login action) asks for a code only from users who turned 2FA on. Super Admin chooses roles that must use it (`setting('TwoFactor.requiredRoles')`, permission `sistem.keamanan`); members of those roles are redirected to the setup page until it is on, and cannot turn it off. Five wrong codes cancel the pending sign-in. Recovery codes are shown once after setup or regeneration.
+Consequences: Enforcement happens after the first password sign-in (setup cannot be done before signing in).
+
+## D-023 — CSRF and security headers globally (2026-11-17)
+Status: accepted
+Decision: `csrf` (session token) and `secureheaders` run on every request; `auth-rates` throttles `/masuk` and `/verifikasi`. In the `testing` environment CSRF and throttling are skipped so feature tests can post forms.
+Consequences: Every form must include `csrf_field()`.
+
+## D-024 — Admin Sekolah may manage other Admin Sekolah accounts (2026-11-17)
+Status: accepted (supersedes the Admin Sekolah part of D-021)
+Context: D-021 reserved both Super Admin and Admin Sekolah accounts for Super Admin. The user confirmed that Admin Sekolah should be able to create other admins.
+Decision: Only the Super Admin role and Super Admin accounts need `pengguna.kelola-admin` (Super Admin only). Admin Sekolah can create, edit, deactivate and reset other Admin Sekolah accounts and assign the Admin Sekolah role. Nobody can deactivate themselves or change their own roles.
+Consequences: A school can run without Super Admin involvement for staff changes; Super Admin stays the only role that can create or manage Super Admins.

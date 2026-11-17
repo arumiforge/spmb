@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\StaffArea;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -34,6 +35,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'staff'         => StaffArea::class,
     ];
 
     /**
@@ -73,12 +75,12 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             // 'honeypot',
-            // 'csrf',
+            'csrf',
             // 'invalidchars',
         ],
         'after' => [
             // 'honeypot',
-            // 'secureheaders',
+            'secureheaders',
         ],
     ];
 
@@ -106,5 +108,22 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        // Staff area: signed in, then forced password change / 2FA required by role.
+        'session' => ['before' => ['admin', 'admin/*']],
+        'staff'   => ['before' => ['admin', 'admin/*']],
+        // Throttle sign-in and verification attempts per IP address.
+        'auth-rates' => ['before' => ['masuk', 'verifikasi', 'verifikasi/*']],
+    ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Feature tests post forms without a CSRF token; the filter itself is framework-tested.
+        if (ENVIRONMENT === 'testing') {
+            $this->globals['before'] = array_values(array_diff($this->globals['before'], ['csrf']));
+            unset($this->filters['auth-rates']);
+        }
+    }
 }

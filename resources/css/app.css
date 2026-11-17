@@ -1,0 +1,115 @@
+/*
+ * SPMB stylesheet (Tailwind CSS v4 + Flowbite).
+ *
+ * Automatic source detection is off so the licensed reference templates in
+ * flowbite/ are never scanned; only our own views are.
+ */
+@import "tailwindcss" source(none);
+@import "flowbite/src/themes/default";
+
+@plugin "flowbite/plugin";
+
+@source "../../app/Views";
+@source "../../app/Modules";
+@source "../../node_modules/flowbite/dist/flowbite.js";
+@source "./safelist.txt";
+@source "../js";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * White label: the layout sets --brand from setting('School.primaryColor').
+ * The whole primary scale is derived from that one colour in the browser,
+ * with the brand colour itself at step 600 (Flowbite buttons use 600-700).
+ */
+@theme {
+    --color-primary-50: color-mix(in oklab, var(--brand, #2563eb) 6%, white);
+    --color-primary-100: color-mix(in oklab, var(--brand, #2563eb) 12%, white);
+    --color-primary-200: color-mix(in oklab, var(--brand, #2563eb) 25%, white);
+    --color-primary-300: color-mix(in oklab, var(--brand, #2563eb) 42%, white);
+    --color-primary-400: color-mix(in oklab, var(--brand, #2563eb) 62%, white);
+    --color-primary-500: color-mix(in oklab, var(--brand, #2563eb) 82%, white);
+    --color-primary-600: var(--brand, #2563eb);
+    --color-primary-700: color-mix(in oklab, var(--brand, #2563eb) 85%, black);
+    --color-primary-800: color-mix(in oklab, var(--brand, #2563eb) 70%, black);
+    --color-primary-900: color-mix(in oklab, var(--brand, #2563eb) 55%, black);
+    --color-primary-950: color-mix(in oklab, var(--brand, #2563eb) 40%, black);
+
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+@layer base {
+    [x-cloak], [data-cloak] {
+        display: none !important;
+    }
+}
+
+/* Admin sidebar collapsed to icons on large screens (toggled in app.js). */
+@media (width >= 64rem) {
+    .sidebar-collapsed #sidebar {
+        width: 4rem;
+    }
+
+    .sidebar-collapsed #main-content {
+        margin-inline-start: 4rem;
+    }
+
+    .sidebar-collapsed #sidebar [data-sidebar-label] {
+        display: none;
+    }
+}
+
+@media print {
+    #sidebar, nav, [data-no-print] {
+        display: none !important;
+    }
+
+    #main-content {
+        margin: 0 !important;
+        padding-top: 0 !important;
+    }
+}
+
+/* Guide pages (/panduan): Markdown rendered from module Guide/ folders. */
+@layer components {
+    .guide h2 {
+        @apply mt-10 mb-3 scroll-mt-24 border-b border-gray-200 pb-2 text-2xl font-bold text-gray-900 dark:border-gray-700 dark:text-white;
+    }
+
+    .guide h3 {
+        @apply mt-6 mb-2 text-lg font-semibold text-gray-900 dark:text-white;
+    }
+
+    .guide p {
+        @apply my-3 leading-relaxed text-gray-700 dark:text-gray-300;
+    }
+
+    .guide ul {
+        @apply my-3 list-disc space-y-1 ps-6 text-gray-700 dark:text-gray-300;
+    }
+
+    .guide ol {
+        @apply my-3 list-decimal space-y-2 ps-6 text-gray-700 dark:text-gray-300;
+    }
+
+    .guide a {
+        @apply font-medium text-primary-700 underline hover:no-underline dark:text-primary-400;
+    }
+
+    .guide strong {
+        @apply font-semibold text-gray-900 dark:text-white;
+    }
+
+    .guide code {
+        @apply rounded bg-gray-100 px-1.5 py-0.5 text-sm dark:bg-gray-800;
+    }
+
+    /* "> **Tips:** ..." becomes a tip box */
+    .guide blockquote {
+        @apply my-4 rounded-lg border-s-4 border-primary-500 bg-primary-50 px-4 py-1 dark:bg-gray-800;
+    }
+
+    .guide blockquote p {
+        @apply text-gray-800 dark:text-gray-200;
+    }
+}
