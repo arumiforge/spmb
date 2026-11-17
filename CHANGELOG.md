@@ -34,7 +34,10 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - Public home page placeholder; friendly "no access" page.
 - Tests for two-step flow, user management, settings, guides and UI helpers (71 tests).
 
+- `THIRD_PARTY_NOTICES.md` listing third-party licences.
+
 ### Changed
+- Project licence is now proprietary (© Arumi Studios), replacing the inherited CodeIgniter MIT notice (D-017).
 - CSRF protection and secure headers enabled for every request; sign-in and verification are rate limited.
 - `composer test` runs PHPUnit without coverage (same as CI).
 - Locale `id`, time zone `Asia/Jakarta`, Indonesian framework messages (`codeigniter4/translations`); URLs without `index.php`.

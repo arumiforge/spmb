@@ -1,22 +1,66 @@
-The MIT License (MIT)
+SPMB — Proprietary Software License
 
-Copyright (c) 2014-2019 British Columbia Institute of Technology
-Copyright (c) 2019-present CodeIgniter Foundation
+Copyright (c) 2026 Arumi Studios. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+SPDX-License-Identifier: LicenseRef-ArumiStudios-Proprietary
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+1. Ownership
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+   This software, including its source code, database schema, documentation,
+   designs, illustrations, prompts and other materials in this repository
+   (the "Software"), is the confidential property of Arumi Studios. It is
+   licensed, not sold.
+
+2. No licence without a written agreement
+
+   No right to use, copy, modify, merge, publish, distribute, sublicense,
+   sell, host for others, or create derivative works of the Software is
+   granted, except under a separate written agreement signed by Arumi Studios
+   (for example a licence or service agreement with a school). Such an
+   agreement sets the permitted installations, users and duration; anything
+   it does not expressly grant is reserved.
+
+3. Collaborators and contractors
+
+   People given access to this repository to work for Arumi Studios may use
+   the Software only to perform that work, must keep it confidential, and
+   may not copy it, or any part of it, to other projects or share it with
+   third parties. Ownership of contributions is governed by their written
+   agreement with Arumi Studios. Access ends when the work ends.
+
+4. Restrictions
+
+   Unless the written agreement allows it, you may not: remove or alter
+   copyright notices or this licence; reverse engineer, decompile or
+   disassemble any distributed form of the Software; rebrand or resell the
+   Software as your own product; or use it to build a competing product.
+
+5. Customer data
+
+   Data entered into an installation of the Software (for example applicant,
+   parent and staff data) belongs to the school or organisation that
+   operates that installation and is not covered by this licence.
+
+6. Third-party components
+
+   The Software includes or depends on third-party components that remain
+   under their own licences, listed in THIRD_PARTY_NOTICES.md. Commercial
+   components used by Arumi Studios under its own licence (such as Flowbite
+   Pro) are not sublicensed by this licence and may not be extracted,
+   reused or redistributed.
+
+7. No warranty
+
+   Except as stated in a written agreement, the Software is provided "as is",
+   without warranty of any kind, express or implied, including fitness for
+   a particular purpose and non-infringement. To the extent permitted by
+   law, Arumi Studios is not liable for any claim, damage or other liability
+   arising from the use of the Software.
+
+8. Governing law
+
+   This licence is governed by the laws of the Republic of Indonesia.
+
+9. Contact
+
+   Licensing enquiries: Arumi Studios, arumiforge@gmail.com
