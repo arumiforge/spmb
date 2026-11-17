@@ -27,5 +27,5 @@ Nonaktifkan akun petugas yang sudah tidak bertugas. Datanya tetap tersimpan dan 
 1. Buka halaman **Ubah** untuk petugas tersebut.
 2. Tekan **Nonaktifkan Akun**, lalu pilih **OK**.
 
-- Jika tombol peran Super Admin atau Admin Sekolah tidak bisa dicentang, maka hanya Super Admin yang boleh memberi peran tersebut.
+- Jika peran Super Admin tidak bisa dicentang, maka hanya Super Admin yang boleh memberi peran tersebut. Admin Sekolah boleh menambah Admin Sekolah lain.
 - Jika petugas kehilangan ponsel untuk verifikasi dua langkah, maka tekan **Matikan Verifikasi Dua Langkah** di halaman **Ubah**.

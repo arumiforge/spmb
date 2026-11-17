@@ -64,6 +64,6 @@ return [
     'resetTwoFactorConfirm' => 'Matikan verifikasi dua langkah untuk {0}?',
     'twoFactorReset'        => 'Verifikasi dua langkah untuk {0} sudah dimatikan.',
     'cannotSelf'            => 'Tindakan ini tidak bisa dilakukan pada akun Anda sendiri.',
-    'protectedAccount'      => 'Akun Admin Sekolah dan Super Admin hanya bisa diubah oleh Super Admin.',
+    'protectedAccount'      => 'Akun Super Admin hanya bisa diubah oleh Super Admin.',
     'notFound'              => 'Pengguna tidak ditemukan.',
 ];

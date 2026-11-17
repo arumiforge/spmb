@@ -88,7 +88,7 @@ class AuthGroups extends ShieldAuthGroups
         'pengguna.create'       => 'Menambah pengguna',
         'pengguna.edit'         => 'Mengubah pengguna',
         'pengguna.delete'       => 'Menghapus pengguna',
-        'pengguna.kelola-admin' => 'Mengelola akun Admin Sekolah dan Super Admin',
+        'pengguna.kelola-admin' => 'Mengelola akun Super Admin',
 
         'audit.view' => 'Melihat riwayat perubahan data',
 

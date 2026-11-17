@@ -111,3 +111,9 @@ Consequences: Enforcement happens after the first password sign-in (setup cannot
 Status: accepted
 Decision: `csrf` (session token) and `secureheaders` run on every request; `auth-rates` throttles `/masuk` and `/verifikasi`. In the `testing` environment CSRF and throttling are skipped so feature tests can post forms.
 Consequences: Every form must include `csrf_field()`.
+
+## D-024 — Admin Sekolah may manage other Admin Sekolah accounts (2026-11-17)
+Status: accepted (supersedes the Admin Sekolah part of D-021)
+Context: D-021 reserved both Super Admin and Admin Sekolah accounts for Super Admin. The user confirmed that Admin Sekolah should be able to create other admins.
+Decision: Only the Super Admin role and Super Admin accounts need `pengguna.kelola-admin` (Super Admin only). Admin Sekolah can create, edit, deactivate and reset other Admin Sekolah accounts and assign the Admin Sekolah role. Nobody can deactivate themselves or change their own roles.
+Consequences: A school can run without Super Admin involvement for staff changes; Super Admin stays the only role that can create or manage Super Admins.

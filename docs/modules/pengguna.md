@@ -11,7 +11,7 @@ Staff accounts and roles. Core module.
 | `POST /admin/pengguna/{id}/nonaktifkan`, `…/aktifkan` | `pengguna.edit` | Deactivate (Shield ban) / reactivate |
 | `POST /admin/pengguna/{id}/matikan-dua-langkah` | `pengguna.edit` | Turn off a user's 2FA (lost phone) |
 
-Rules (D-021): accounts holding, and the assignment of, `superadmin` or `admin` need
-`pengguna.kelola-admin`; locked roles a user already has are kept on save. Users cannot deactivate,
+Rules (D-021, D-024): accounts holding, and the assignment of, `superadmin` need
+`pengguna.kelola-admin` (Super Admin only); Admin Sekolah may create and manage other Admin Sekolah accounts; locked roles a user already has are kept on save. Users cannot deactivate,
 reset or change roles of their own account. Audit events: `user_roles_changed`, `user_deactivated`,
 `user_activated`, `password_reset`, plus model-level changes through `Auditable`.

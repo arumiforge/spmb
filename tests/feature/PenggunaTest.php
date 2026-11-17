@@ -105,6 +105,24 @@ final class PenggunaTest extends CIUnitTestCase
         $this->assertFalse(model(UserModel::class, false)->findById($super->id)->isBanned());
     }
 
+    public function testAdminCanCreateAndManageAnotherAdmin(): void
+    {
+        $admin = $this->makeUser('admin1', 'admin');
+        $this->actingAs($admin)->post('admin/pengguna/tambah', [
+            'full_name' => 'Admin Kedua',
+            'username'  => 'admin2',
+            'email'     => 'admin2@example.test',
+            'roles'     => ['admin'],
+        ])->assertRedirect();
+
+        $second = model(UserModel::class, false)->findByCredentials(['email' => 'admin2@example.test']);
+        $this->assertSame(['admin'], $second->getGroups());
+
+        $this->withSession()->get("admin/pengguna/{$second->id}/ubah")->assertOK();
+        $this->withSession()->post("admin/pengguna/{$second->id}/nonaktifkan")->assertRedirectTo(site_url("admin/pengguna/{$second->id}/ubah"));
+        $this->assertTrue(model(UserModel::class, false)->findById($second->id)->isBanned());
+    }
+
     public function testSuperAdminCanManageAdmins(): void
     {
         $super = $this->makeUser('super1', 'superadmin');

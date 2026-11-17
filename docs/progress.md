@@ -42,12 +42,12 @@ create your own branch from `main` instead.
 ## Blockers / waiting on
 
 - Interview round 1 answers (tenancy, timeline, applicant access, roles, chat, analytics, school data, branding). Defaults in use: D-004, D-008, D-009, D-014.
-- Admin Sekolah cannot create other Admin Sekolah accounts (`pengguna.kelola-admin` is Super Admin only, per the permission description). Confirm with the school whether that is wanted.
 - Licence choice for the project (root `LICENSE` is still CodeIgniter's MIT notice).
 - Dev environment network does not allow `dapo.kemendikdasmen.go.id` / `sekolah.data.kemendikdasmen.go.id` (needed in phase 2).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-17 · session 2 · `feat/phase-1-ui` — Admin Sekolah may manage other Admin Sekolah accounts (D-024, confirmed by the user); CI fix for routes before migrations.
 - 2026-11-17 · session 2 · `feat/phase-1-ui` — Phase 1 UI: frontend build, layouts, Indonesian sign-in, 2FA step + setup, settings (identity, security), user management, module registry/menu, Panduan; docs D-018…D-023; PR #2. Next: module on/off UI, audit viewer.
 - 2026-11-17 · session 1 · `nty/gracious-dirac-v4pink` — Dev install (MySQL 8, `.env`), phase 1 core: Shield + roles, Indonesian auth routes, audit trail, TOTP service, migrations, installer + demo accounts, tests. Next: frontend build and layouts.
 - 2026-11-17 · session 1 · `nty/gracious-dirac-v4pink` — Phase 0: appstarter layout, CI/commit-policy/deploy workflows, commit-msg hook, CLAUDE.md, 8 skills, docs, `ai/` prompts, interview round 1. Next: merge PR #1, interview answers.

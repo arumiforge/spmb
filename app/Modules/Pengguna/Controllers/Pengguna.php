@@ -14,15 +14,16 @@ use CodeIgniter\Shield\Entities\User;
  * Staff account management: list, create, edit, roles, deactivate, reset
  * password and reset two-step verification.
  *
- * Accounts with a protected role (Super Admin, Admin Sekolah) and those roles
- * themselves can only be managed with the pengguna.kelola-admin permission.
+ * Super Admin accounts and the Super Admin role can only be managed with the
+ * pengguna.kelola-admin permission (Super Admin). Admin Sekolah may manage
+ * other Admin Sekolah accounts (D-024).
  */
 class Pengguna extends BaseController
 {
     /**
      * Roles that need pengguna.kelola-admin to assign or manage.
      */
-    public const PROTECTED_ROLES = ['superadmin', 'admin'];
+    public const PROTECTED_ROLES = ['superadmin'];
 
     private const PER_PAGE = 20;
 

@@ -123,7 +123,7 @@ sign-in (`TwoFactor.maxAttempts`).
 | Admin area | `/admin` dashboard (placeholder stats), `/admin/akses-ditolak` |
 | Profile | `/admin/profil`, `/admin/profil/kata-sandi`, `/admin/profil/verifikasi-dua-langkah` (module Profil) |
 | School settings | `/admin/pengaturan/sekolah` (`pengaturan.sekolah`), `/admin/pengaturan/keamanan` (`sistem.keamanan`) |
-| Users | `/admin/pengguna` (`pengguna.view/create/edit`; protected roles need `pengguna.kelola-admin`) |
+| Users | `/admin/pengguna` (`pengguna.view/create/edit`; Super Admin accounts need `pengguna.kelola-admin`) |
 | Guides | `/panduan`, `/panduan/<peran>` (public) |
 | Branding files | `writable/uploads/branding/`, served by `/aset/logo`, `/aset/favicon` |
 
