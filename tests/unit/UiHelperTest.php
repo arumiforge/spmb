@@ -26,6 +26,39 @@ final class UiHelperTest extends CIUnitTestCase
         $this->assertNull(valid_hex_color('#123456;}'));
     }
 
+    public function testIllustrationIncludesDarkVariantWhenPresent(): void
+    {
+        $html = illustration('state/kosong-data', 'Belum ada data.', 'h-32');
+
+        $this->assertStringContainsString('assets/img/state/kosong-data.webp', $html);
+        $this->assertStringContainsString('assets/img/state/kosong-data-dark.webp', $html);
+        $this->assertStringContainsString('alt="Belum ada data."', $html);
+        $this->assertStringContainsString('class="h-32 dark:hidden"', $html);
+        $this->assertStringContainsString('class="h-32 hidden dark:block"', $html);
+        $this->assertMatchesRegularExpression('/width="\d+" height="\d+"/', $html);
+    }
+
+    public function testIllustrationWithoutDarkVariantIsOneImage(): void
+    {
+        $html = illustration('hero/hero-beranda', 'Hero');
+
+        $this->assertSame(1, substr_count($html, '<img'));
+        $this->assertStringNotContainsString('dark:hidden', $html);
+    }
+
+    public function testIllustrationRejectsMissingOrUnsafePaths(): void
+    {
+        $this->assertSame('', illustration('state/tidak-ada', 'x'));
+        $this->assertSame('', illustration('../app/Config', 'x'));
+    }
+
+    public function testEveryInstalledIllustrationExists(): void
+    {
+        foreach (['hero/hero-beranda', 'auth/masuk-dasbor', 'state/kosong-data', 'state/kosong-pencarian', 'state/tidak-ditemukan', 'state/gangguan-sistem', 'state/kosong-riwayat', 'state/fitur-tambahan', 'guide/panduan-petugas', 'guide/panduan-calon-murid'] as $path) {
+            $this->assertFileExists(FCPATH . 'assets/img/' . $path . '.webp');
+        }
+    }
+
     public function testInitials(): void
     {
         $this->assertSame('SA', initials('Siti Aminah Rahma'));

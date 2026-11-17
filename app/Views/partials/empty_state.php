@@ -2,13 +2,20 @@
 /**
  * Friendly empty state with one clear action.
  *
- * @var array{title: string, text?: string, icon?: string, action?: array{label: string, url: string}} $empty
+ * image: painted illustration path for illustration(), e.g. 'state/kosong-data' (preferred over icon).
+ *
+ * @var array{title: string, text?: string, icon?: string, image?: string, imageAlt?: string, action?: array{label: string, url: string}} $empty
  */
+$picture = empty($empty['image']) ? '' : illustration($empty['image'], $empty['imageAlt'] ?? '', 'mx-auto h-32 w-auto sm:h-40');
 ?>
 <div class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white px-6 py-12 text-center dark:border-gray-600 dark:bg-gray-800">
-    <span class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400">
-        <?= icon($empty['icon'] ?? 'inbox', 'h-7 w-7') ?>
-    </span>
+    <?php if ($picture !== '') : ?>
+        <div class="mb-4"><?= $picture ?></div>
+    <?php else : ?>
+        <span class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400">
+            <?= icon($empty['icon'] ?? 'inbox', 'h-7 w-7') ?>
+        </span>
+    <?php endif ?>
     <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white"><?= esc($empty['title']) ?></h3>
     <?php if (! empty($empty['text'])) : ?>
         <p class="mb-5 max-w-md text-sm text-gray-500 dark:text-gray-400"><?= esc($empty['text']) ?></p>

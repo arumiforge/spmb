@@ -57,7 +57,7 @@ $me = (int) auth()->id();
 
     <?php if ($users === []) : ?>
         <div class="p-4">
-            <?= view('partials/empty_state', ['empty' => ['title' => lang('Pengguna.emptyTitle'), 'text' => lang('Pengguna.emptyText'), 'icon' => 'users']]) ?>
+            <?= view('partials/empty_state', ['empty' => ['title' => lang('Pengguna.emptyTitle'), 'text' => lang('Pengguna.emptyText'), 'icon' => 'users', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]]) ?>
         </div>
     <?php else : ?>
         <!-- Table on md and up -->

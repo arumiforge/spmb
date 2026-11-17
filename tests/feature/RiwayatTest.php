@@ -127,8 +127,13 @@ final class RiwayatTest extends CIUnitTestCase
         $admin = $this->makeUser('admin', 'Siti Aminah');
         db_connect()->table('audit_logs')->truncate();
 
-        $this->actingAs($admin)->get('admin/riwayat')->assertSee(lang('Riwayat.emptyTitle'));
-        $this->actingAs($admin)->get('admin/riwayat?kegiatan=deleted')->assertSee(lang('Riwayat.emptyFilteredTitle'));
+        $empty = $this->actingAs($admin)->get('admin/riwayat');
+        $empty->assertSee(lang('Riwayat.emptyTitle'));
+        $empty->assertSee('state/kosong-riwayat.webp');
+
+        $filtered = $this->actingAs($admin)->get('admin/riwayat?kegiatan=deleted');
+        $filtered->assertSee(lang('Riwayat.emptyFilteredTitle'));
+        $filtered->assertSee('state/kosong-pencarian.webp');
     }
 
     public function testListIsPaginated(): void

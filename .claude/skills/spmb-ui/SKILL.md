@@ -19,6 +19,9 @@ description: Build views for SPMB with Tailwind v4 + Flowbite — full-width res
   because CI shares view data between renders; never rely on loose variables in a partial.
 - Admin pages pass `title`, optional `subtitle`, `breadcrumbs`; buttons next to the title go in
   section `actions`. Destructive forms use `data-confirm="..."`; copy buttons `data-copy="..."`.
+- Illustrations: `illustration('state/kosong-data', lang('App.altNoData'), 'h-32 w-auto')` prints the painted
+  WebP and its dark variant; empty states pass `'image' => 'state/...'` to `partials/empty_state`. New images
+  are requested through `spmb-ai-image`.
 - Icons: `icon('users', 'h-5 w-5')` (Flowbite Icons, MIT) from `ui_helper`. Dates: `tanggal_indo()`.
 - After adding classes in views run `npm run build` (Tailwind scans `app/Views`, `app/Modules`).
 

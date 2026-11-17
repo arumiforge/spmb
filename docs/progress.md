@@ -11,7 +11,7 @@ personal data.
 [PR #1](https://github.com/arumiforge/spmb/pull/1); **phase 1 UI** merged in
 [PR #2](https://github.com/arumiforge/spmb/pull/2); **phase 1 finish** (Fitur page, audit log viewer,
 404/500 pages, illustration prompts) merged in [PR #4](https://github.com/arumiforge/spmb/pull/4). Only the illustrations themselves remain
-(originals delivered by ChatGPT in `ai/generated/`, PR #7; installation pending).
+(installed on the home page, sign-in, empty states, error and guide pages; 002/006 wait for phase 2).
 
 Done in phase 1: Shield auth with 7 roles, audit trail, TOTP 2FA (service, sign-in step, setup UI,
 per-role enforcement), installer, frontend build (Tailwind v4 + Flowbite), admin/auth/public layouts,
@@ -33,7 +33,7 @@ create your own branch from `main` instead.
 
 1. New session: branch from `origin/main`, then `composer install`, `npm ci && npm run build`,
    create `.env` and run `php spark spmb:install --demo` per `docs/development.md` (no new migrations since PR #1).
-2. Install the illustration originals in `ai/generated/` (001–012 + dark variants, reviewed: fine): convert them (spmb-ai-image) and wire them into the empty states, sign-in, error pages (`errors/friendly`) and guide pages.
+2. Phase 2 pages use the prepared assets `form/daftar-online.webp` (registration form) and `state/sukses-pendaftaran.webp` (success page); set briefs 002/006 to `done` then.
 3. Phase 2 (registration): waves, online/offline form, numbering, school reference data, uploads,
    PDF card + QR — start with `docs/interview/` answers on waves and documents. Each new module adds
    `Config/Module.php` (D-025) and its audit labels in `app/Modules/Riwayat/Language/id/Riwayat.php`.
@@ -46,6 +46,7 @@ create your own branch from `main` instead.
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-17 · session 3 · `feat/illustrations` — illustrations 001–012 converted to WebP and installed with dark variants (`illustration()` helper); checked at 360/1280 px light and dark. Next: phase 2.
 - 2026-11-17 · session 3 · `docs/chatgpt-delivery-folder` — ChatGPT's role limited to making images and opening a PR into `ai/generated/`; Claude reviews and installs (D-028). Originals 001–012 merged (PR #7). Next: install them.
 - 2026-11-17 · session 3 · `feat/phase-1-finish` — Fitur page (`sistem.modul`), Riwayat Perubahan audit viewer (`audit.view`), friendly 404/500 pages with fallback, illustration prompts 008–012; D-025, D-026; merged as PR #4; painted illustration style and ChatGPT instructions `ai/CHATGPT.md` (D-027). Next: images, then phase 2.
 - 2026-11-17 · session 2 · `feat/phase-1-ui` — Admin Sekolah may manage other Admin Sekolah accounts (D-024, confirmed by the user); CI fix for routes before migrations.

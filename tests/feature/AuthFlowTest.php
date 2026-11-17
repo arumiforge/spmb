@@ -36,7 +36,9 @@ final class AuthFlowTest extends CIUnitTestCase
 
     public function testLoginPageUsesIndonesianSlug(): void
     {
-        $this->get('masuk')->assertOK();
+        $result = $this->get('masuk');
+        $result->assertOK();
+        $result->assertSee('assets/img/auth/masuk-dasbor.webp');
     }
 
     public function testEnglishAndRegistrationRoutesAreNotExposed(): void

@@ -16,8 +16,15 @@ $card   = static fn (string $slug, array $role, bool $highlight): string => '<a 
 
 <?= $this->section('content') ?>
 <div class="mx-auto max-w-screen-xl px-4 py-8 sm:py-12">
-    <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white"><?= lang('Panduan.title') ?></h1>
-    <p class="mt-2 max-w-2xl text-gray-500 dark:text-gray-400"><?= lang('Panduan.intro') ?></p>
+    <div class="grid items-center gap-6 md:grid-cols-[1fr_minmax(0,20rem)]">
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white"><?= lang('Panduan.title') ?></h1>
+            <p class="mt-2 max-w-2xl text-gray-500 dark:text-gray-400"><?= lang('Panduan.intro') ?></p>
+        </div>
+        <div class="hidden overflow-hidden rounded-2xl bg-white md:block">
+            <?= illustration('guide/panduan-calon-murid', lang('App.altGuideApplicant'), 'h-auto w-full', false) ?>
+        </div>
+    </div>
 
     <h2 class="mb-4 mt-10 text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Panduan.forPublic') ?></h2>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">

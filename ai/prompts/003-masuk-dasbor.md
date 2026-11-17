@@ -7,7 +7,7 @@ shape: portrait
 size: 1024x1536
 background: transparent
 variants: light+dark
-status: generated
+status: done
 ---
 
 # 003 — masuk-dasbor

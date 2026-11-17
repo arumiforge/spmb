@@ -17,6 +17,48 @@ if (! function_exists('asset_url')) {
     }
 }
 
+if (! function_exists('illustration')) {
+    /**
+     * Painted illustration from public/assets/img (D-027), with its dark-mode variant
+     * (<name>-dark.webp) when one exists. $path is relative and without extension,
+     * e.g. 'state/kosong-data'. Returns '' when the file is missing. Pass $lazy = false for
+     * images visible without scrolling (hero, sign-in, error and guide covers).
+     */
+    function illustration(string $path, string $alt, string $class = '', bool $lazy = true): string
+    {
+        $path = trim($path, '/');
+
+        if (preg_match('#\A[a-z0-9-]+/[a-z0-9-]+\z#', $path) !== 1) {
+            return '';
+        }
+
+        $tag = static function (string $file, string $extra) use ($alt, $class, $lazy): string {
+            $full = FCPATH . 'assets/img/' . $file . '.webp';
+
+            if (! is_file($full)) {
+                return '';
+            }
+
+            [$width, $height] = getimagesize($full) ?: [0, 0];
+
+            // HTML escaping is enough inside double-quoted attributes and keeps the markup readable.
+            return '<img src="' . esc(base_url('assets/img/' . $file . '.webp') . '?v=' . filemtime($full)) . '"'
+                . ' alt="' . esc($alt) . '" width="' . $width . '" height="' . $height . '"'
+                . ($lazy ? ' loading="lazy"' : '') . ' decoding="async" class="' . esc(trim($class . ' ' . $extra)) . '">';
+        };
+
+        $light = $tag($path, '');
+
+        if ($light === '') {
+            return '';
+        }
+
+        $dark = $tag($path . '-dark', 'hidden dark:block');
+
+        return $dark === '' ? $light : $tag($path, 'dark:hidden') . $dark;
+    }
+}
+
 if (! function_exists('valid_hex_color')) {
     /**
      * Normalises a #RGB or #RRGGBB colour to lowercase #rrggbb, or returns null.
