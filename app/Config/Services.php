@@ -2,7 +2,12 @@
 
 namespace Config;
 
+use App\Libraries\AuditLogger;
+use App\Libraries\TwoFactor;
+use App\Models\AuditLogModel;
+use App\Models\UserTwoFactorModel;
 use CodeIgniter\Config\BaseService;
+use PragmaRX\Google2FA\Google2FA;
 
 /**
  * Services Configuration file.
@@ -19,14 +24,34 @@ use CodeIgniter\Config\BaseService;
  */
 class Services extends BaseService
 {
-    /*
-     * public static function example($getShared = true)
-     * {
-     *     if ($getShared) {
-     *         return static::getSharedInstance('example');
-     *     }
-     *
-     *     return new \CodeIgniter\Example();
-     * }
+    /**
+     * Audit trail writer.
      */
+    public static function audit(bool $getShared = true): AuditLogger
+    {
+        if ($getShared) {
+            return static::getSharedInstance('audit');
+        }
+
+        return new AuditLogger(model(AuditLogModel::class, false), config('Audit'));
+    }
+
+    /**
+     * Optional TOTP two-factor authentication.
+     */
+    public static function twoFactor(bool $getShared = true): TwoFactor
+    {
+        if ($getShared) {
+            return static::getSharedInstance('twoFactor');
+        }
+
+        $issuer = (string) (setting('School.shortName') ?: 'SPMB');
+
+        return new TwoFactor(
+            model(UserTwoFactorModel::class, false),
+            new Google2FA(),
+            service('encrypter'),
+            $issuer,
+        );
+    }
 }
