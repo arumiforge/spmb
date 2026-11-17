@@ -52,9 +52,54 @@ class ModuleRegistry
         return array_values(array_filter($this->all(), $this->isEnabled(...)));
     }
 
-    public function isEnabled(string $name): bool
+    /**
+     * A module is on unless it is switched off, or a module it requires
+     * (Config/Module.php 'requires') is off or missing. Core modules are always on.
+     *
+     * @param list<string> $seen Guards against circular requirements
+     */
+    public function isEnabled(string $name, array $seen = []): bool
     {
-        return in_array($name, $this->core, true) || ! in_array($name, $this->disabled, true);
+        if (in_array($name, $this->core, true)) {
+            return true;
+        }
+
+        if (in_array($name, $this->disabled, true) || in_array($name, $seen, true)) {
+            return false;
+        }
+
+        foreach ($this->requires($name) as $required) {
+            if (! is_dir(rtrim($this->path, '/') . '/' . $required) || ! $this->isEnabled($required, [...$seen, $name])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Modules this one needs (Config/Module.php 'requires').
+     *
+     * @return list<string>
+     */
+    public function requires(string $name): array
+    {
+        $requires = $this->meta($name)['requires'] ?? [];
+
+        return is_array($requires) ? array_values(array_filter($requires, is_string(...))) : [];
+    }
+
+    /**
+     * Raw Config/Module.php array of a module (empty when missing).
+     *
+     * @return array<string, mixed>
+     */
+    private function meta(string $name): array
+    {
+        $file = rtrim($this->path, '/') . '/' . $name . '/Config/Module.php';
+        $meta = is_file($file) ? require $file : [];
+
+        return is_array($meta) ? $meta : [];
     }
 
     public function isCore(string $name): bool
@@ -66,13 +111,11 @@ class ModuleRegistry
      * Label, description and icon of a module from its Config/Module.php
      * (read even while the module is switched off). Falls back to the folder name.
      *
-     * @return array{name: string, label: string, description: string, icon: string, core: bool, enabled: bool}
+     * @return array{name: string, label: string, description: string, icon: string, core: bool, enabled: bool, requires: list<string>}
      */
     public function info(string $name): array
     {
-        $file = rtrim($this->path, '/') . '/' . $name . '/Config/Module.php';
-        $meta = is_file($file) ? require $file : [];
-        $meta = is_array($meta) ? $meta : [];
+        $meta = $this->meta($name);
 
         return [
             'name'        => $name,
@@ -81,6 +124,7 @@ class ModuleRegistry
             'icon'        => (string) ($meta['icon'] ?? 'grid'),
             'core'        => $this->isCore($name),
             'enabled'     => $this->isEnabled($name),
+            'requires'    => $this->requires($name),
         ];
     }
 
@@ -92,6 +136,56 @@ class ModuleRegistry
     public function disabled(): array
     {
         return array_values(array_filter($this->all(), fn (string $name): bool => ! $this->isEnabled($name)));
+    }
+
+    /**
+     * Entries of a list-returning config file (e.g. Config/PublicMenu.php) from
+     * every enabled module, each tagged with 'module'.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function collect(string $relative): array
+    {
+        $items = [];
+
+        foreach ($this->enabled() as $module) {
+            $file = $this->file($module, $relative);
+
+            if ($file === null) {
+                continue;
+            }
+
+            $entries = require $file;
+
+            foreach (is_array($entries) ? $entries : [] as $entry) {
+                if (is_array($entry)) {
+                    $items[] = $entry + ['module' => $module];
+                }
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * View names of a panel that enabled modules provide in Views/panels/<name>.php,
+     * e.g. panels('applicant_admin') → ['Modules\Berkas\Views\panels\applicant_admin', ...].
+     * Lets one module's page show sections owned by other modules without
+     * depending on them (docs/phase-2-plan.md, "Panels").
+     *
+     * @return list<string>
+     */
+    public function panels(string $name): array
+    {
+        $views = [];
+
+        foreach ($this->enabled() as $module) {
+            if ($this->file($module, 'Views/panels/' . $name . '.php') !== null) {
+                $views[] = 'Modules\\' . $module . '\\Views\\panels\\' . $name;
+            }
+        }
+
+        return $views;
     }
 
     /**

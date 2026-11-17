@@ -91,4 +91,11 @@ final class UiHelperTest extends CIUnitTestCase
         $this->assertSame('Dasbor', $items[0]['label']);
         $this->assertContains('Pengguna', array_column($items, 'label'));
     }
+
+    public function testStatusBadgeForSharedCodes(): void
+    {
+        $this->assertSame(['label' => 'Lengkap', 'color' => 'green'], status_badge_for('documents', 'complete'));
+        $this->assertSame(['label' => 'Di sekolah', 'color' => 'gray'], status_badge_for('method', 'offline'));
+        $this->assertSame(['label' => 'aneh', 'color' => 'gray'], status_badge_for('applicant', 'aneh'));
+    }
 }

@@ -36,23 +36,7 @@ class Menu
      */
     public function items(): array
     {
-        $items = $this->coreItems;
-
-        foreach ($this->modules->enabled() as $module) {
-            $file = $this->modules->file($module, 'Config/Menu.php');
-
-            if ($file === null) {
-                continue;
-            }
-
-            $entries = require $file;
-
-            foreach (is_array($entries) ? $entries : [] as $entry) {
-                $items[] = $entry + ['module' => $module];
-            }
-        }
-
-        return $items;
+        return [...$this->coreItems, ...$this->modules->collect('Config/Menu.php')];
     }
 
     /**

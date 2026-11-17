@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Libraries\ApplicantAccess;
 use App\Libraries\AuditLogger;
 use App\Libraries\Menu;
 use App\Libraries\ModuleRegistry;
@@ -79,6 +80,18 @@ class Services extends BaseService
         }
 
         return new ModuleRegistry(APPPATH . 'Modules', $config->core, is_array($disabled) ? $disabled : $config->disabled);
+    }
+
+    /**
+     * Which applicant the current visitor proved to be (public pages, D-008).
+     */
+    public static function applicantAccess(bool $getShared = true): ApplicantAccess
+    {
+        if ($getShared) {
+            return static::getSharedInstance('applicantAccess');
+        }
+
+        return new ApplicantAccess(service('session'), max(1, (int) setting('Pendaftaran.applicantSessionMinutes')));
     }
 
     /**

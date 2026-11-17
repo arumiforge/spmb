@@ -7,10 +7,13 @@
  * @var string|null                               $title
  * @var list<array{label: string, url?: string}>  $breadcrumbs
  */
+// Home and Panduan are fixed; enabled modules add links in Config/PublicMenu.php.
 $nav = [
-    ['label' => lang('App.home'), 'url' => '/'],
-    ['label' => lang('App.guide'), 'url' => 'panduan'],
+    ['label' => lang('App.home'), 'url' => '/', 'order' => 0],
+    ['label' => lang('App.guide'), 'url' => 'panduan', 'order' => 90],
+    ...service('modules')->collect('Config/PublicMenu.php'),
 ];
+usort($nav, static fn (array $a, array $b): int => ($a['order'] ?? 50) <=> ($b['order'] ?? 50));
 $current = trim(uri_string(), '/');
 $address = (string) setting('School.address');
 $phone   = (string) setting('School.phone');

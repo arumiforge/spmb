@@ -21,6 +21,7 @@ class Audit extends BaseConfig
         'token',
         'recovery_codes',
         'remember_token',
+        'access_token_hash',
     ];
 
     /**

@@ -196,3 +196,51 @@ if (! function_exists('icon')) {
         return '<svg class="' . esc($class, 'attr') . '" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">' . $body . '</svg>';
     }
 }
+
+if (! function_exists('module_panels')) {
+    /**
+     * Renders the panel <name> of every enabled module that provides
+     * Views/panels/<name>.php, in module order. Each panel receives $data
+     * (e.g. ['applicant' => [...], 'context' => 'admin']) and must render
+     * nothing when it has nothing to show. See docs/phase-2-plan.md, "Panels".
+     *
+     * @param array<string, mixed> $data
+     */
+    function module_panels(string $name, array $data = []): string
+    {
+        $html = '';
+
+        foreach (service('modules')->panels($name) as $view) {
+            $html .= view($view, $data, ['saveData' => false]);
+        }
+
+        return $html;
+    }
+}
+
+if (! function_exists('status_badge_for')) {
+    /**
+     * Badge data for a shared status code, for partials/status_badge:
+     * view('partials/status_badge', ['badge' => status_badge_for('documents', 'complete')]).
+     *
+     * @param string $type applicant | documents | document | method
+     *
+     * @return array{label: string, color: string}
+     */
+    function status_badge_for(string $type, string $code): array
+    {
+        $colors = [
+            'applicant' => ['registered' => 'blue', 'verified' => 'green', 'cancelled' => 'red'],
+            'documents' => ['incomplete' => 'red', 'pending' => 'yellow', 'to_follow' => 'yellow', 'complete' => 'green'],
+            'document'  => ['pending' => 'yellow', 'valid' => 'green', 'invalid' => 'red', 'to_follow' => 'gray'],
+            'method'    => ['online' => 'primary', 'offline' => 'gray'],
+        ];
+        $key   = 'Status.' . $type . '.' . $code;
+        $label = lang($key);
+
+        return [
+            'label' => $label === $key ? $code : $label,
+            'color' => $colors[$type][$code] ?? 'gray',
+        ];
+    }
+}

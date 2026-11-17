@@ -92,7 +92,7 @@ return [
         'disabled'       => 'Fitur yang dimatikan',
         'password'       => 'Kata sandi',
         'password_hash'  => 'Kata sandi',
-        'name'           => 'Nama sekolah',
+        'name'           => 'Nama',
         'shortName'      => 'Nama singkat',
         'tagline'        => 'Judul halaman depan',
         'address'        => 'Alamat',
