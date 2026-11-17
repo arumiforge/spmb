@@ -19,7 +19,7 @@ class Features extends BaseConfig
      *
      * @var list<string>
      */
-    public array $core = ['Pengaturan', 'Pengguna', 'Profil', 'Panduan'];
+    public array $core = ['Pengaturan', 'Pengguna', 'Profil', 'Panduan', 'Riwayat'];
 
     /**
      * Names of disabled modules, e.g. ['Chat'].

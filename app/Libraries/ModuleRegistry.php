@@ -63,6 +63,38 @@ class ModuleRegistry
     }
 
     /**
+     * Label, description and icon of a module from its Config/Module.php
+     * (read even while the module is switched off). Falls back to the folder name.
+     *
+     * @return array{name: string, label: string, description: string, icon: string, core: bool, enabled: bool}
+     */
+    public function info(string $name): array
+    {
+        $file = rtrim($this->path, '/') . '/' . $name . '/Config/Module.php';
+        $meta = is_file($file) ? require $file : [];
+        $meta = is_array($meta) ? $meta : [];
+
+        return [
+            'name'        => $name,
+            'label'       => (string) ($meta['label'] ?? $name),
+            'description' => (string) ($meta['description'] ?? ''),
+            'icon'        => (string) ($meta['icon'] ?? 'grid'),
+            'core'        => $this->isCore($name),
+            'enabled'     => $this->isEnabled($name),
+        ];
+    }
+
+    /**
+     * Disabled module names that still exist and are not core.
+     *
+     * @return list<string>
+     */
+    public function disabled(): array
+    {
+        return array_values(array_filter($this->all(), fn (string $name): bool => ! $this->isEnabled($name)));
+    }
+
+    /**
      * Absolute path of a file inside an enabled module, or null.
      */
     public function file(string $module, string $relative): ?string

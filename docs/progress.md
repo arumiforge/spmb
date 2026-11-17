@@ -9,12 +9,14 @@ personal data.
 
 **Phase 0 — Foundation**: done. **Phase 1 — Platform core**: core merged in
 [PR #1](https://github.com/arumiforge/spmb/pull/1); **phase 1 UI** merged in
-[PR #2](https://github.com/arumiforge/spmb/pull/2). Remaining phase 1 items are listed under Next steps.
+[PR #2](https://github.com/arumiforge/spmb/pull/2); **phase 1 finish** (Fitur page, audit log viewer,
+404/500 pages, illustration prompts) on `feat/phase-1-finish`, [PR #4](https://github.com/arumiforge/spmb/pull/4). Only the illustrations themselves remain.
 
 Done in phase 1: Shield auth with 7 roles, audit trail, TOTP 2FA (service, sign-in step, setup UI,
 per-role enforcement), installer, frontend build (Tailwind v4 + Flowbite), admin/auth/public layouts,
 school identity + branding settings, user management, module registry + permission-based sidebar,
-Panduan skeleton. 72 tests green on MySQL 8.0.
+Panduan skeleton, Fitur page (module on/off), Riwayat Perubahan (audit log viewer), friendly 404/500 pages.
+95 tests green on MySQL 8.0.
 
 ## Active work
 
@@ -24,16 +26,17 @@ create your own branch from `main` instead.
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
 | `feat/phase-1-ui` | session 2 | Phase 1 UI: frontend build, layouts, login/2FA screens, settings, users, panduan | merged (PR #2) |
+| `feat/phase-1-finish` | session 3 | Finish phase 1: module on/off page, audit log viewer, 404/500 pages, illustration prompts | PR open |
 
 ## Next steps
 
 1. New session: branch from `origin/main`, then `composer install`, `npm ci && npm run build`,
-   create `.env` and run `php spark spmb:install --demo` per `docs/development.md` (no new migrations in PR #2).
-2. Finish phase 1: Super Admin page to switch modules on/off (`sistem.modul`, `setting('Features.disabled')`),
-   audit log viewer (`audit.view`), friendly Indonesian 404/500 pages in the public layout.
-3. Illustrations: write prompts in `ai/` (spmb-ai-image) for the empty states, sign-in and guide pages.
-4. Phase 2 (registration): waves, online/offline form, numbering, school reference data, uploads,
-   PDF card + QR — start with `docs/interview/` answers on waves and documents.
+   create `.env` and run `php spark spmb:install --demo` per `docs/development.md` (no new migrations since PR #1).
+2. After the phase 1 finish PR is merged: when the user delivers images for `ai/prompts/001`–`012`,
+   convert them (spmb-ai-image) and wire them into the empty states, sign-in, error pages (`errors/friendly`) and guide pages.
+3. Phase 2 (registration): waves, online/offline form, numbering, school reference data, uploads,
+   PDF card + QR — start with `docs/interview/` answers on waves and documents. Each new module adds
+   `Config/Module.php` (D-025) and its audit labels in `app/Modules/Riwayat/Language/id/Riwayat.php`.
 
 ## Blockers / waiting on
 
@@ -43,6 +46,7 @@ create your own branch from `main` instead.
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-17 · session 3 · `feat/phase-1-finish` — Fitur page (`sistem.modul`), Riwayat Perubahan audit viewer (`audit.view`), friendly 404/500 pages with fallback, illustration prompts 008–012; D-025, D-026. Next: merge, then images and phase 2.
 - 2026-11-17 · session 2 · `feat/phase-1-ui` — Admin Sekolah may manage other Admin Sekolah accounts (D-024, confirmed by the user); CI fix for routes before migrations.
 - 2026-11-17 · session 2 · `feat/phase-1-ui` — Phase 1 UI: frontend build, layouts, Indonesian sign-in, 2FA step + setup, settings (identity, security), user management, module registry/menu, Panduan; docs D-018…D-023; PR #2. Next: module on/off UI, audit viewer.
 - 2026-11-17 · session 1 · `nty/gracious-dirac-v4pink` — Proprietary `LICENSE` + `THIRD_PARTY_NOTICES.md` (D-017); Flowbite Pro licence proof kept outside the repo; reseller shortcuts removed. Next: check ApexCharts v4 licence terms before launch.

@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\UserModel;
-use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\Shield\Entities\User;
 use CodeIgniter\Shield\Test\AuthenticationTesting;
 use CodeIgniter\Test\CIUnitTestCase;
@@ -43,12 +42,7 @@ final class AuthFlowTest extends CIUnitTestCase
     public function testEnglishAndRegistrationRoutesAreNotExposed(): void
     {
         foreach (['login', 'register', 'logout', 'login/magic-link'] as $path) {
-            try {
-                $this->get($path);
-                $this->fail("Route {$path} should not exist");
-            } catch (PageNotFoundException) {
-                $this->addToAssertionCount(1);
-            }
+            $this->get($path)->assertStatus(404);
         }
     }
 

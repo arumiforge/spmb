@@ -72,7 +72,10 @@ flowbite/              Flowbite Pro templates — markup reference only (private
 
 `service('modules')` (`App\Libraries\ModuleRegistry`) lists folders in `app/Modules`. A module is
 enabled unless it is in `setting('Features.disabled')`; `Config\Features::$core` (Pengaturan, Pengguna,
-Profil, Panduan) cannot be disabled. `app/Config/Routes.php` loads `Config/Routes.php` of enabled modules
+Profil, Panduan, Riwayat) cannot be disabled. Super Admin switches modules on the **Fitur** page
+(`/admin/pengaturan/fitur`, permission `sistem.modul`); each change is audited as `features_changed`.
+Each module describes itself for that page in `Config/Module.php` (`label`, `description`, `icon`;
+D-025), read with `service('modules')->info($name)` even while the module is off. `app/Config/Routes.php` loads `Config/Routes.php` of enabled modules
 only, so a disabled module's URLs return 404. Each module is also registered as namespace
 `Modules\<Name>` (in `Config\Autoload`), so `Language/id/<Name>.php` and `Views` resolve.
 
@@ -91,6 +94,26 @@ Permissions stay declared centrally in `Config\AuthGroups` (tested by `AuthGroup
 - Dark mode via `.dark` on `<html>` (toggle, remembered per browser).
 - Partials receive one array (`field`, `badge`, `empty`, `brand`) because CI view data is shared
   between renders (`saveData`); a partial must not rely on loose variables.
+
+### Audit log viewer (Riwayat)
+
+`/admin/riwayat` (permission `audit.view`: Super Admin, Admin Sekolah) lists `audit_logs` newest first,
+25 per page, with filters in the query string: `pengguna` (user id or `sistem`), `kegiatan` (event),
+`data` (subject type), `id` (subject id), `dari` / `sampai` (`YYYY-MM-DD`, whole days; a reversed range is
+swapped, an invalid date is ignored with a hint). `/admin/riwayat/<id>` shows before/after values.
+`Modules\Riwayat\Libraries\AuditPresenter` turns raw rows into Indonesian: labels for events, subject
+types, settings groups and fields live in `Language/id/Riwayat.php` (`events`, `subjects`,
+`settingGroups`, `fields`); unknown keys fall back to a tidied key, so a new module should add its labels
+there. Role keys are shown as role titles, redacted values as "(disembunyikan)".
+
+### Error pages
+
+`Config\Routing::$override404` is `App\Controllers\Errors::notFound`, so unknown URLs and
+`PageNotFoundException` from controllers render a friendly 404 (status 404): admin layout for signed-in
+staff, public layout otherwise. With `display_errors` off, `app/Views/errors/html/production.php` renders
+the 500 page the same way. If the layout cannot render (e.g. database down, routes not loaded),
+`Errors::fallback()` returns a self-contained Indonesian page with inline CSS (D-026). In development
+CodeIgniter's detailed exception page is unchanged.
 
 ### Request pipeline
 

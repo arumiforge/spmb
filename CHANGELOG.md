@@ -32,8 +32,12 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - Module registry (enable/disable via settings) and sidebar menu built from module menus and permissions.
 - Guide pages `/panduan` and `/panduan/<peran>` assembled from module `Guide/` Markdown files.
 - Public home page placeholder; friendly "no access" page.
-- Tests for two-step flow, user management, settings, guides and UI helpers (71 tests).
+- Tests for two-step flow, user management, settings, guides and UI helpers (71 tests); phase 1 finish brings the suite to 95 tests.
 
+- Fitur page (`/admin/pengaturan/fitur`, `sistem.modul`) to switch feature modules on/off, audited; core modules always on; module `Config/Module.php` metadata (D-025).
+- Audit log viewer Riwayat Perubahan (`/admin/riwayat`, `audit.view`): filters by staff, activity, data type, record and date range in the query string, pagination, detail page with readable before/after values, stacked cards on mobile.
+- Friendly Indonesian 404 and 500 pages in the public layout, admin variant for signed-in staff, self-contained fallback (D-026).
+- Guide sections for Fitur (Super Admin) and Riwayat Perubahan (Admin Sekolah); icons `grid`, `clock`, `compass`, `arrow-right`.
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed

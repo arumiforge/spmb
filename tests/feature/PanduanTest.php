@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
 use CodeIgniter\Test\FeatureTestTrait;
@@ -56,8 +55,7 @@ final class PanduanTest extends CIUnitTestCase
 
     public function testUnknownRoleIsNotFound(): void
     {
-        $this->expectException(PageNotFoundException::class);
-        $this->get('panduan/tidak-ada');
+        $this->get('panduan/tidak-ada')->assertStatus(404);
     }
 
     public function testHeadingsGetAnchors(): void
