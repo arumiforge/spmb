@@ -26,5 +26,10 @@ Style rules: [style-guide.md](style-guide.md). New prompts: copy [prompts/_templ
 | 005 | kosong-pencarian.png | No search results | 1024×1024 | requested |
 | 006 | sukses-pendaftaran.png | Registration success | 1024×1024 | requested |
 | 007 | tidak-ditemukan.png | 404 page | 1024×1024 | requested |
+| 008 | gangguan-sistem.png | 500 page | 1024×1024 | requested |
+| 009 | kosong-riwayat.png | Riwayat Perubahan empty state | 1024×1024 | requested |
+| 010 | fitur-tambahan.png | Fitur page empty state | 1024×1024 | requested |
+| 011 | panduan-petugas.png | Staff guide cover | 1792×1024 | requested |
+| 012 | panduan-calon-murid.png | Applicant guide cover | 1792×1024 | requested |
 
-Guide covers per role (`/panduan/...`) will be added once roles are confirmed.
+Guide covers: one shared staff cover (011) and one applicant cover (012); per-role covers can follow once roles are confirmed.
