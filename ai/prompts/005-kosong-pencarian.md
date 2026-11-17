@@ -7,7 +7,7 @@ shape: square
 size: 1024x1024
 background: transparent
 variants: light+dark
-status: requested
+status: generated
 ---
 
 # 005 — kosong-pencarian

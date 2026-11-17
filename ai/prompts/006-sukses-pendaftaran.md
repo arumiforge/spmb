@@ -7,7 +7,7 @@ shape: square
 size: 1024x1024
 background: transparent
 variants: light
-status: requested
+status: generated
 ---
 
 # 006 — sukses-pendaftaran
