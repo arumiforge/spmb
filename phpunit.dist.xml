@@ -2,7 +2,7 @@
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-    bootstrap="system/Test/bootstrap.php"
+    bootstrap="vendor/codeigniter4/framework/system/Test/bootstrap.php"
     backupGlobals="false"
     beStrictAboutOutputDuringTests="true"
     colors="true"
@@ -51,6 +51,8 @@
         <const name="CONFIGPATH" value="./app/Config/"/>
         <!-- Directory containing the front controller (index.php) -->
         <const name="PUBLICPATH" value="./public/"/>
+        <!-- Test-only key; real keys live in .env and are never committed -->
+        <env name="encryption.key" value="hex2bin:5f2a7c1e9b3d4f6a8c0e2b4d6f8a1c3e5b7d9f0a2c4e6b8d1f3a5c7e9b0d2f4a"/>
         <!-- Database configuration -->
         <!-- Uncomment to provide your own database for testing
             <env name="database.tests.hostname" value="localhost"/>
