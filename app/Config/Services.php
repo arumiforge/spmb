@@ -10,6 +10,7 @@ use App\Models\AuditLogModel;
 use App\Models\UserTwoFactorModel;
 use CodeIgniter\Config\BaseService;
 use PragmaRX\Google2FA\Google2FA;
+use Throwable;
 
 /**
  * Services Configuration file.
@@ -67,7 +68,15 @@ class Services extends BaseService
         }
 
         $config   = config('Features');
-        $disabled = function_exists('setting') ? setting('Features.disabled') : null;
+        $disabled = null;
+
+        // Routes are loaded before migrations on a fresh install (and in the test
+        // bootstrap), when the settings table does not exist yet: use the defaults.
+        try {
+            $disabled = function_exists('setting') ? setting('Features.disabled') : null;
+        } catch (Throwable) {
+            $disabled = null;
+        }
 
         return new ModuleRegistry(APPPATH . 'Modules', $config->core, is_array($disabled) ? $disabled : $config->disabled);
     }

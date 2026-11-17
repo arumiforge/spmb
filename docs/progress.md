@@ -31,8 +31,12 @@ create your own branch from `main` instead.
    `php spark spmb:install` (applies nothing new; no migrations were added).
 2. Finish phase 1: Super Admin page to switch modules on/off (`sistem.modul`, `setting('Features.disabled')`),
    audit log viewer (`audit.view`), friendly Indonesian 404/500 pages in the public layout.
-3. Illustrations: write prompts in `ai/` (spmb-ai-image) for the empty states, sign-in and guide pages.
-4. Phase 2 (registration): waves, online/offline form, numbering, school reference data, uploads,
+3. After PR #3 (licence) is merged into this branch or main: add the phase 1 dependencies to
+   `THIRD_PARTY_NOTICES.md` — `chillerlan/php-qrcode` (MIT/Apache-2.0) + `chillerlan/php-settings-container` (MIT),
+   `league/commonmark` and its deps `league/config`, `dflydev/dot-access-data`, `nette/schema`,
+   `nette/utils` (all MIT or BSD-3-Clause; nette is dual BSD-3/GPL, used under BSD-3-Clause).
+4. Illustrations: write prompts in `ai/` (spmb-ai-image) for the empty states, sign-in and guide pages.
+5. Phase 2 (registration): waves, online/offline form, numbering, school reference data, uploads,
    PDF card + QR — start with `docs/interview/` answers on waves and documents.
 
 ## Blockers / waiting on
@@ -44,6 +48,6 @@ create your own branch from `main` instead.
 
 ## Session log (newest first, keep the last 10)
 
-- 2026-11-17 · session 2 · `feat/phase-1-ui` — Phase 1 UI: frontend build, layouts, Indonesian sign-in, 2FA step + setup, settings (identity, security), user management, module registry/menu, Panduan; docs D-017…D-022; PR #2. Next: module on/off UI, audit viewer.
+- 2026-11-17 · session 2 · `feat/phase-1-ui` — Phase 1 UI: frontend build, layouts, Indonesian sign-in, 2FA step + setup, settings (identity, security), user management, module registry/menu, Panduan; docs D-018…D-023; PR #2. Next: module on/off UI, audit viewer.
 - 2026-11-17 · session 1 · `nty/gracious-dirac-v4pink` — Dev install (MySQL 8, `.env`), phase 1 core: Shield + roles, Indonesian auth routes, audit trail, TOTP service, migrations, installer + demo accounts, tests. Next: frontend build and layouts.
 - 2026-11-17 · session 1 · `nty/gracious-dirac-v4pink` — Phase 0: appstarter layout, CI/commit-policy/deploy workflows, commit-msg hook, CLAUDE.md, 8 skills, docs, `ai/` prompts, interview round 1. Next: merge PR #1, interview answers.
