@@ -27,7 +27,7 @@ create your own branch from `main` instead.
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
 | `feat/phase-1-ui` | session 2 | Phase 1 UI: frontend build, layouts, login/2FA screens, settings, users, panduan | merged (PR #2) |
-| `feat/phase-1-finish` | session 3 | Finish phase 1: module on/off page, audit log viewer, 404/500 pages, illustration prompts | PR open |
+| `feat/phase-1-finish` | session 3 | Finish phase 1: module on/off page, audit log viewer, 404/500 pages, illustration prompts | merged (PR #4) |
 
 ## Next steps
 
