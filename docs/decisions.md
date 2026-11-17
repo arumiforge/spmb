@@ -80,3 +80,9 @@ Consequences: Writes that bypass models (raw query builder) are not audited — 
 Status: accepted
 Decision: `user_two_factor` table: TOTP secret encrypted with the app key, 8 single-use recovery codes stored as password hashes, last used time step stored to block code replay. Codes accepted within ±1 time step (30 s).
 Consequences: Rotating `encryption.key` invalidates all 2FA setups — document in the key rotation procedure.
+
+## D-017 — Proprietary licence for the repository (2026-11-17)
+Status: accepted
+Context: SPMB is a developer asset of Arumi Studios, sold/licensed to schools as a white-label product and worked on with outside collaborators. The root `LICENSE` was CodeIgniter's MIT notice inherited from the starter.
+Decision: Root `LICENSE` is a proprietary "all rights reserved" licence (`LicenseRef-ArumiStudios-Proprietary`): use only under a written agreement with Arumi Studios; collaborators may use the code only for work for Arumi Studios and must keep it confidential; customer data belongs to the school; Indonesian law. `composer.json` uses `proprietary`, `package.json` uses `UNLICENSED` with `private: true`. Third-party licences are listed in `THIRD_PARTY_NOTICES.md`, including the MIT notice for files from the CodeIgniter starter.
+Consequences: Every school deployment needs a signed licence/service agreement; collaborators need a written agreement covering confidentiality and ownership of their work (have a lawyer review both templates). Proof of the Flowbite Pro licence is kept by Arumi Studios outside the repository. ApexCharts v4 licence terms must be checked before launch.
