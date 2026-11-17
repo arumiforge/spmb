@@ -42,15 +42,47 @@ class AuditPresenter
     private const BOOL_FIELDS = ['active'];
 
     /**
-     * @param array<string, string> $roleTitles Role key => title (Config\AuthGroups)
+     * @param array<string, string>                $roleTitles   Role key => title (Config\AuthGroups)
+     * @param array<string, array<string, string>> $moduleLabels Labels from modules' Config/Audit.php,
+     *                                                           by section (events, subjects, settingGroups, fields,
+     *                                                           eventColors, boolFields)
      */
-    public function __construct(private readonly array $roleTitles = [])
+    public function __construct(private readonly array $roleTitles = [], private readonly array $moduleLabels = [])
     {
     }
 
     public static function fromConfig(): self
     {
-        return new self(array_map(static fn (array $g): string => $g['title'], config('AuthGroups')->groups));
+        return new self(
+            array_map(static fn (array $g): string => $g['title'], config('AuthGroups')->groups),
+            self::moduleLabels(service('modules')->all()),
+        );
+    }
+
+    /**
+     * Collects Config/Audit.php of every module, switched on or off (old
+     * history must stay readable). Riwayat's own language file wins on a clash.
+     *
+     * @param list<string> $modules
+     *
+     * @return array<string, array<string, string>>
+     */
+    public static function moduleLabels(array $modules, string $path = APPPATH . 'Modules'): array
+    {
+        $labels = [];
+
+        foreach ($modules as $module) {
+            $file = rtrim($path, '/') . '/' . $module . '/Config/Audit.php';
+            $data = is_file($file) ? require $file : [];
+
+            foreach (is_array($data) ? $data : [] as $section => $entries) {
+                if (is_array($entries)) {
+                    $labels[$section] = ($labels[$section] ?? []) + array_map('strval', $entries);
+                }
+            }
+        }
+
+        return $labels;
     }
 
     public function eventLabel(string $event): string
@@ -60,7 +92,7 @@ class AuditPresenter
 
     public function eventColor(string $event): string
     {
-        return self::EVENT_COLORS[$event] ?? 'gray';
+        return self::EVENT_COLORS[$event] ?? $this->moduleLabels['eventColors'][$event] ?? 'gray';
     }
 
     public function subjectLabel(?string $type): string
@@ -184,7 +216,7 @@ class AuditPresenter
             return lang('Riwayat.hidden');
         }
 
-        if (in_array($field, self::BOOL_FIELDS, true) && in_array((string) $value, ['0', '1'], true)) {
+        if ((in_array($field, self::BOOL_FIELDS, true) || in_array($field, $this->moduleLabels['boolFields'] ?? [], true)) && in_array((string) $value, ['0', '1'], true)) {
             $value = (string) $value === '1';
         }
 
@@ -217,6 +249,14 @@ class AuditPresenter
     {
         $text = lang($key);
 
-        return $text === $key ? ucfirst(str_replace(['_', '-', '.'], ' ', $fallback)) : $text;
+        if ($text !== $key) {
+            return $text;
+        }
+
+        // Riwayat.<section>.<name>: fall back to the labels a module declares.
+        $parts = explode('.', $key, 3);
+
+        return $this->moduleLabels[$parts[1] ?? ''][$parts[2] ?? '']
+            ?? ucfirst(str_replace(['_', '-', '.'], ' ', $fallback));
     }
 }

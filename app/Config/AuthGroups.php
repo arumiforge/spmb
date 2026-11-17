@@ -100,7 +100,9 @@ class AuthGroups extends ShieldAuthGroups
         'pendaftar.export'     => 'Mengunduh data pendaftar (Excel/PDF)',
         'pendaftar.import'     => 'Mengunggah data pendaftar dari Excel',
 
-        'kartu.cetak' => 'Mencetak kartu pendaftaran',
+        'kartu.cetak' => 'Mencetak dan memeriksa kartu pendaftaran',
+
+        'referensi.kelola' => 'Mengelola daftar sekolah asal dan mengimpor data sekolah',
 
         'tes.atur'      => 'Mengatur jadwal, ruang, dan kuota tes',
         'tes.kehadiran' => 'Mencatat kehadiran dan menjadwalkan ulang tes',
@@ -124,14 +126,14 @@ class AuthGroups extends ShieldAuthGroups
     public array $matrix = [
         'superadmin' => [
             'dasbor.*', 'sistem.*', 'pengaturan.*', 'pengguna.*', 'audit.*',
-            'pendaftar.*', 'kartu.*', 'tes.*', 'daftar-ulang.*', 'seragam.*',
+            'pendaftar.*', 'kartu.*', 'referensi.*', 'tes.*', 'daftar-ulang.*', 'seragam.*',
             'laporan.*', 'situs.*', 'analitik.*', 'chat.*',
         ],
         'admin' => [
             'dasbor.view', 'pengaturan.*',
             'pengguna.view', 'pengguna.create', 'pengguna.edit', 'pengguna.delete',
             'audit.view',
-            'pendaftar.*', 'kartu.*', 'tes.*', 'daftar-ulang.*', 'seragam.*',
+            'pendaftar.*', 'kartu.*', 'referensi.*', 'tes.*', 'daftar-ulang.*', 'seragam.*',
             'laporan.*', 'situs.*', 'analitik.*', 'chat.*',
         ],
         'kepsek' => [

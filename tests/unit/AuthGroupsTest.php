@@ -66,6 +66,28 @@ final class AuthGroupsTest extends CIUnitTestCase
         }
     }
 
+    /**
+     * Phase 2 (registration) permissions: who may do what (docs/phase-2-plan.md).
+     */
+    public function testRegistrationPermissions(): void
+    {
+        $holders = function (string $permission): array {
+            $scope = explode('.', $permission)[0] . '.*';
+
+            return array_keys(array_filter(
+                $this->config->matrix,
+                static fn (array $list): bool => in_array($permission, $list, true) || in_array($scope, $list, true),
+            ));
+        };
+
+        $this->assertSame(['superadmin', 'admin'], $holders('referensi.kelola'));
+        $this->assertSame(['superadmin', 'admin'], $holders('pengaturan.pendaftaran'));
+        $this->assertSame(['superadmin', 'admin', 'panitia'], $holders('pendaftar.create'));
+        $this->assertSame(['superadmin', 'admin', 'panitia'], $holders('pendaftar.verifikasi'));
+        $this->assertSame(['superadmin', 'admin', 'panitia', 'petugas-tes'], $holders('kartu.cetak'));
+        $this->assertSame(['superadmin', 'admin'], $holders('pendaftar.delete'));
+    }
+
     public function testDefaultGroupExists(): void
     {
         $this->assertArrayHasKey($this->config->defaultGroup, $this->config->groups);

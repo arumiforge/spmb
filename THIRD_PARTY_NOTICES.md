@@ -24,6 +24,9 @@ Refresh this list when dependencies change:
 | nette/schema, nette/utils | BSD-3-Clause (dual-licensed with GPL; used under BSD-3-Clause) |
 | paragonie/constant_time_encoding | MIT |
 | pragmarx/google2fa | MIT |
+| setasign/fpdf | MIT |
+| phpoffice/phpspreadsheet | MIT |
+| maennchen/zipstream-php, markbaker/complex, markbaker/matrix, composer/pcre, psr/simple-cache | MIT |
 | psr/event-dispatcher, psr/log | MIT |
 | symfony/deprecation-contracts, symfony/polyfill-ctype, symfony/polyfill-mbstring, symfony/polyfill-php80 | MIT |
 

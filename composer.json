@@ -18,7 +18,9 @@
         "codeigniter4/shield": "^1.2",
         "codeigniter4/translations": "^4.7",
         "league/commonmark": "^2.7",
-        "pragmarx/google2fa": "^8.0"
+        "phpoffice/phpspreadsheet": "^5.0",
+        "pragmarx/google2fa": "^8.0",
+        "setasign/fpdf": "^1.8"
     },
     "require-dev": {
         "codeigniter/coding-standard": "^1.8",

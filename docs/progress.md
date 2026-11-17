@@ -7,6 +7,10 @@ personal data.
 
 ## Current phase
 
+**Phase 2 — Registration**: in progress on integration branch `phase-2` with parallel sessions
+(`docs/coordination.md`, plan in `docs/phase-2-plan.md`). Foundation (shared schema, models,
+permissions, settings, extension points) lands first; then work packages A–D run in parallel.
+
 **Phase 0 — Foundation**: done. **Phase 1 — Platform core**: core merged in
 [PR #1](https://github.com/arumiforge/spmb/pull/1); **phase 1 UI** merged in
 [PR #2](https://github.com/arumiforge/spmb/pull/2); **phase 1 finish** (Fitur page, audit log viewer,
@@ -28,9 +32,17 @@ create your own branch from `main` instead.
 | --- | --- | --- | --- |
 | `feat/phase-1-ui` | session 2 | Phase 1 UI: frontend build, layouts, login/2FA screens, settings, users, panduan | merged (PR #2) |
 | `feat/phase-1-finish` | session 3 | Finish phase 1: module on/off page, audit log viewer, 404/500 pages, illustration prompts | merged (PR #4) |
+| `phase-2` | coordinator | Phase 2 integration branch; only the coordinator commits/merges here | in progress |
+| `feat/p2-foundation` | coordinator | Phase 2 foundation (schema, models, permissions, settings, plan) | PR open → `phase-2` |
+| `feat/p2-referensi` | worker A | Previous-school reference data + importer | planned |
+| `feat/p2-pendaftaran` | worker B | Waves, numbering, online/offline form, duplicates, status check | planned |
+| `feat/p2-berkas` | worker C | Document types, upload/resize/storage, verification | planned |
+| `feat/p2-kartu-situs` | worker D | PDF card + QR, card check page, public pages | planned |
 
 ## Next steps
 
+0. Phase 2: follow `docs/phase-2-plan.md`; workers PR into `phase-2`, the coordinator merges; one PR
+   `phase-2` → `main` at the end, merged by the user.
 1. New session: branch from `origin/main`, then `composer install`, `npm ci && npm run build`,
    create `.env` and run `php spark spmb:install --demo` per `docs/development.md` (no new migrations since PR #1).
 2. Phase 2 pages use the prepared assets `form/daftar-online.webp` (registration form) and `state/sukses-pendaftaran.webp` (success page); set briefs 002/006 to `done` then.
@@ -42,10 +54,11 @@ create your own branch from `main` instead.
 
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
 - Interview round 1 answers (tenancy, timeline, applicant access, roles, chat, analytics, school data, branding). Defaults in use: D-004, D-008, D-009, D-014.
-- Dev environment network does not allow `dapo.kemendikdasmen.go.id` / `sekolah.data.kemendikdasmen.go.id` (needed in phase 2).
+- School committee answers (waves, documents, card rule, number format, form fields): defaults in `docs/phase-2-plan.md` (D-031, D-035, D-036, D-037).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-17 · coordinator · `feat/p2-foundation` — phase 2 foundation: shared migrations/models, settings, `referensi.kelola`, extension points (D-033), FPDF + PhpSpreadsheet (D-030), coordination protocol and plan (D-029…D-038). Next: workers A–D.
 - 2026-11-17 · session 3 · `feat/illustrations` — illustrations 001–012 converted to WebP and installed with dark variants (`illustration()` helper); checked at 360/1280 px light and dark. Next: phase 2.
 - 2026-11-17 · session 3 · `docs/chatgpt-delivery-folder` — ChatGPT's role limited to making images and opening a PR into `ai/generated/`; Claude reviews and installs (D-028). Originals 001–012 merged (PR #7). Next: install them.
 - 2026-11-17 · session 3 · `feat/phase-1-finish` — Fitur page (`sistem.modul`), Riwayat Perubahan audit viewer (`audit.view`), friendly 404/500 pages with fallback, illustration prompts 008–012; D-025, D-026; merged as PR #4; painted illustration style and ChatGPT instructions `ai/CHATGPT.md` (D-027). Next: images, then phase 2.

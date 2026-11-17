@@ -5,6 +5,13 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Phase 2 foundation: modules Referensi, Pendaftaran, Berkas, Kartu and Situs (registry entries, menus, public
+  navigation, audit labels); migrations for `ref_sekolah`, `waves`, `registration_counters`, `applicants`,
+  `document_types`, `applicant_documents`, `card_tokens` with audited models; settings defaults
+  `Pendaftaran`, `Berkas`, `Kartu`, `Referensi`; permission `referensi.kelola`; applicant session grant
+  (`service('applicantAccess')`); module `requires`, panels (`module_panels()`), `Config/PublicMenu.php`,
+  `Config/Audit.php` and installer seeders (D-033); `docs/coordination.md` and `docs/phase-2-plan.md`.
+- Dependencies `setasign/fpdf` and `phpoffice/phpspreadsheet` (MIT, D-030).
 - Phase 0 foundation: project rules (`CLAUDE.md`), repo agent skills (`.claude/skills/`),
   staged documentation (`docs/`), interview round 1, AI image prompt workflow (`ai/`).
 - `docs/progress.md` and the `spmb-session` skill for handoff between sessions and Claude accounts.

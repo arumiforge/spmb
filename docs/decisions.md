@@ -146,3 +146,51 @@ Status: accepted (refines D-027)
 Context: The user wants ChatGPT to do only the image work and hand it over through the repository, with installation left to Claude. The first delivery (PR #7) put the PNG originals in `ai/generated/`.
 Decision: ChatGPT adds the PNG originals to `ai/generated/` (with its README as the delivery table) on a branch `art/illustrations-<date>`, may only set the status of delivered briefs to `generated`, and opens one pull request into `main` without merging it or adding AI attribution. Claude reviews the images, installs the approved ones (WebP under `public/assets/img/`, views) in its own pull request and sets the status to `done`. The originals stay in `ai/generated/` as the source for later re-exports.
 Consequences: ChatGPT needs write access to the repository acting as the `arumiforge` account, or the commit-policy check fails; without it the user uploads the files on GitHub. The originals (about 27 MB for 001–012) are part of the repository history.
+
+## D-029 — Parallel sessions with an integration branch per phase (2026-11-17)
+Status: accepted
+Context: Phase 2 has four fairly independent parts; the user asked for one coordinator session and parallel worker sessions.
+Decision: Process in `docs/coordination.md`: integration branch `phase-2` from `main`; the coordinator lands a shared foundation (migrations, models, permissions, settings, menus, extension points, plan) before workers start; each worker owns a disjoint file set (`docs/phase-2-plan.md`) and opens a PR into `phase-2`; only the coordinator edits shared docs and merges into `phase-2`; the user merges `phase-2` into `main`.
+Consequences: Workers ask the coordinator for changes to shared files instead of making them; one `composer.lock` writer.
+
+## D-030 — Card PDF with FPDF; PhpSpreadsheet for XLSX (2026-11-17)
+Status: proposed (replaces the PDF part of D-007)
+Context: Dompdf (D-007) is LGPL-2.1, outside the MIT/BSD/Apache/ISC rule that needs no extra approval. The card is a small fixed layout.
+Decision: `setasign/fpdf` (MIT) draws the registration card; the QR is a PNG from `chillerlan/php-qrcode`. `phpoffice/phpspreadsheet` (MIT) reads XLSX/CSV imports. Revisit Dompdf (or another library) for HTML-based report PDFs in phase 4 with the user's approval.
+Consequences: Card text uses FPDF core fonts (Latin-1): text is converted from UTF-8; characters outside Latin-1 are transliterated.
+
+## D-031 — Registration numbers (2026-11-17)
+Status: proposed (FR-REG-03; the school confirms the format and yearly reset)
+Decision: Format from `setting('Pendaftaran.numberFormat')` (default `PMB-{YEAR}-{0000}`; tokens `{YEAR}`, `{YY}`, `{0000}` = zero-padded sequence). One counter row per scope in `registration_counters` (scope = academic year by default, `numberScope = never` for one endless sequence), incremented inside the registration transaction with `SELECT … FOR UPDATE`. The number is assigned when the form is submitted, shared by online and offline, unique, immutable and never reused (deleted applicants keep their number).
+Consequences: Gaps appear when an applicant is deleted; that is intended.
+
+## D-032 — Duplicate warnings without leaking data (2026-11-17)
+Status: proposed (FR-REG-05)
+Decision: `DuplicateChecker` matches NIK, NISN, and normalised name + birth date. On the public form a match never blocks registration and never shows the other record: the applicant gets a neutral hint to use "Cek Status" if they registered before, and the new record is flagged `possible_duplicate` for the committee. Staff entering an offline registration see the matching records and must confirm before saving. Committee review is audited (`duplicate_reviewed`).
+Consequences: Real duplicates are cleaned up by staff, not prevented online.
+
+## D-033 — Module extension points (2026-11-17)
+Status: accepted (extends D-020, D-025)
+Decision: A module's `Config/Module.php` may list `requires` (a module is off while a required module is off). Modules may provide `Config/PublicMenu.php` (public navigation), `Config/Audit.php` (Riwayat labels: events, subjects, settingGroups, fields, eventColors, boolFields), `Views/panels/<slot>.php` rendered by `module_panels('<slot>', $data)` on another module's page (slots `applicant_admin`, `applicant_public`), and idempotent `Database/Seeds/InstallSeeder` / `DemoSeeder` run by `spmb:install` (`--demo`).
+Consequences: Pages compose sections from modules without hard dependencies; Riwayat's language file stays small.
+
+## D-034 — Applicant access without an account (2026-11-17)
+Status: proposed (implements D-008)
+Decision: After a successful status check (registration number + date of birth, throttled per IP, one generic error message) or opening the private link `/tautan/<token>`, the visitor's session holds a grant for that applicant (`service('applicantAccess')`), sliding, `Pendaftaran.applicantSessionMinutes` (30) of inactivity. The private-link token is shown once after registration and stored only as a SHA-256 hash. Card QR tokens are stored as issued (needed to reprint the same QR) and are revocable; they open only a minimal check page.
+Consequences: A lost private link cannot be shown again; the number + birth date check still works.
+
+## D-035 — Card available immediately by default (2026-11-17)
+Status: proposed (FR-CARD-04; committee decision pending)
+Decision: `setting('Kartu.availableWhen')` = `immediately` (default) or `verified` (after the committee sets the applicant to "Sudah diperiksa"). Staff with `kartu.cetak` can always print.
+
+## D-036 — Uploaded documents (2026-11-17)
+Status: proposed (FR-DOC-01…04)
+Decision: Files live in `writable/uploads/berkas/<yyyy>/<random>.<ext>` and are served only by controllers that check `pendaftar.view` or the applicant grant. Extension, real MIME type and size are checked per document type. Images are resized to at most `Berkas.imageMaxEdge` (1600 px) on the longest side and saved as JPEG at `Berkas.imageQuality` (80) without EXIF; PDFs are kept as uploaded within the size limit. Replacing a file keeps the old row soft-deleted. Applicant document status: incomplete / pending / to_follow / complete, recomputed after each change.
+
+## D-037 — Applicant form fields are settings (2026-11-17)
+Status: proposed (school's field list pending)
+Decision: The `applicants` table holds the superset of likely fields; `Pendaftaran.requiredFields` and `Pendaftaran.hiddenFields` decide what the form asks. Defaults: name, gender, birth place and date, address, parent/guardian name and WhatsApp number, previous school required; NISN required; NIK optional; KK number and parent occupations hidden; no income field (UU PDP: minimum data). NIK is stored in plain text for exact duplicate checks, masked in lists and visible only with `pendaftar.view`.
+
+## D-038 — Table names (2026-11-17)
+Status: accepted
+Decision: New tables use English names (`waves`, `applicants`, `registration_counters`, `document_types`, `applicant_documents`, `card_tokens`), like the phase 1 tables; the school list keeps the name `ref_sekolah` from D-012. Status codes are stored in English and labelled in Indonesian (`app/Language/id/Status.php`).
