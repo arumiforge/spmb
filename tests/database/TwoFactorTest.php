@@ -21,6 +21,8 @@ final class TwoFactorTest extends CIUnitTestCase
     private TwoFactor $twoFactor;
     private Google2FA $google2fa;
     private int $userId;
+    private string $secret           = '';
+    private string $confirmationCode = '';
 
     protected function setUp(): void
     {
@@ -71,15 +73,17 @@ final class TwoFactorTest extends CIUnitTestCase
 
     public function testCodeUsedForConfirmationCannotBeReused(): void
     {
-        $secret = $this->enable(returnSecret: true);
+        $this->enable();
 
-        $this->assertFalse($this->twoFactor->verify($this->userId, $this->google2fa->getCurrentOtp($secret)));
+        // Replay the exact code used for confirmation (not a freshly computed one,
+        // which may belong to the next 30 s step on a slow runner).
+        $this->assertFalse($this->twoFactor->verify($this->userId, $this->confirmationCode));
     }
 
     public function testNextTimeStepCodeIsAccepted(): void
     {
-        $secret = $this->enable(returnSecret: true);
-        $next   = $this->google2fa->oathTotp($secret, $this->google2fa->getTimestamp() + 1);
+        $this->enable();
+        $next = $this->google2fa->oathTotp($this->secret, $this->google2fa->getTimestamp() + 1);
 
         $this->assertTrue($this->twoFactor->verify($this->userId, $next));
         $this->assertFalse($this->twoFactor->verify($this->userId, $next), 'replay must fail');
@@ -103,15 +107,18 @@ final class TwoFactorTest extends CIUnitTestCase
     }
 
     /**
-     * @return list<string>|string Recovery codes, or the secret when $returnSecret is true.
+     * Enables 2FA; keeps the secret and the confirmation code for the test.
+     *
+     * @return list<string> Recovery codes
      */
-    private function enable(bool $returnSecret = false): array|string
+    private function enable(): array
     {
-        $secret = $this->twoFactor->beginSetup($this->userId, 'siti@example.test')['secret'];
-        $codes  = $this->twoFactor->confirmSetup($this->userId, $this->google2fa->getCurrentOtp($secret));
+        $this->secret           = $this->twoFactor->beginSetup($this->userId, 'siti@example.test')['secret'];
+        $this->confirmationCode = $this->google2fa->getCurrentOtp($this->secret);
+        $codes                  = $this->twoFactor->confirmSetup($this->userId, $this->confirmationCode);
 
         $this->assertIsArray($codes);
 
-        return $returnSecret ? $secret : $codes;
+        return $codes;
     }
 }
