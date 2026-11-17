@@ -2,7 +2,7 @@
 
 ## Dev install
 
-Requirements: PHP 8.3 (intl, mbstring, mysqli, gd, zip), Composer 2, MySQL 8.0.
+Requirements: PHP 8.3 (intl, mbstring, mysqli, gd, zip), Composer 2, MySQL 8.0, Node.js 22 + npm.
 
 ```bash
 git clone git@github.com:arumiforge/spmb.git && cd spmb
@@ -50,12 +50,21 @@ Then:
 ```bash
 php spark key:generate                 # writes encryption.key into .env
 php spark spmb:install --demo          # migrations + first Super Admin (prompted) + demo accounts
+npm ci && npm run build                # Tailwind/Flowbite assets into public/build/
 php spark serve                        # http://localhost:8080/masuk
 ```
 
 `spmb:install` is idempotent: run it again after pulling to apply new migrations.
 Options: `--username --email --name --password` (non-interactive), `--demo`,
-`--demo-password`. Demo accounts are refused in production.
+`--demo-password`. Demo accounts are refused in production. CodeIgniter options take
+the value after a **space** (`--username superadmin`, not `--username=superadmin`);
+otherwise the installer falls back to prompting. The password must not contain parts of
+the username, email or name. Non-interactive example:
+
+```bash
+php spark spmb:install --demo --username superadmin --email super@demo.test \
+  --name "Pengelola Sistem" --password 'Pilih-Sandi-Kuat-2027!' </dev/null
+```
 
 ### Demo accounts (`--demo`, development only)
 
@@ -97,7 +106,9 @@ A session then only needs `.env` (see above), `php spark key:generate` and
 
 | Command | Purpose |
 | --- | --- |
-| `composer test` | PHPUnit |
+| `composer test` | PHPUnit (`--no-coverage`, as in CI) |
+| `npm run build` | Build CSS/JS into `public/build/` (run after changing views: Tailwind scans them) |
+| `npm run dev` | Rebuild CSS/JS on change |
 | `composer lint` / `composer fix` | Check / apply CodeIgniter coding standard |
 | `php spark routes` | List routes (check Indonesian slugs) |
 | `php spark spmb:install` | Migrations (all namespaces) + first Super Admin; idempotent |
@@ -115,5 +126,8 @@ A session then only needs `.env` (see above), `php spark key:generate` and
 - Docs and code comments: English. UI, URLs, guides: friendly Indonesian.
 - Module structure, permissions, uploads, exports: `.claude/skills/spmb-module/SKILL.md`.
 - Views, layout, breadcrumbs, theming: `.claude/skills/spmb-ui/SKILL.md`.
+- Composer as root (cloud containers): `export COMPOSER_ALLOW_SUPERUSER=1`.
+- Feature tests that span requests (sign-in → verification) call `$this->withSession()` before each
+  follow-up request to carry `$_SESSION` forward (see `tests/feature/TwoFactorFlowTest.php`).
 - UI wording and glossary: `.claude/skills/spmb-copy/SKILL.md`.
 - Illustrations: `ai/README.md`.

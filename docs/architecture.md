@@ -1,6 +1,6 @@
 # Architecture
 
-> Stage: foundation. Sections marked *(planned)* describe the target design and
+> Stage: phase 1 (platform core and UI). Sections marked *(planned)* describe the target design and
 > become descriptive as modules are built.
 
 ## Stack
@@ -12,37 +12,50 @@
 | Web server | Nginx + PHP-FPM 8.3 on Ubuntu Server 24.04 LTS |
 | Edge | Cloudflare (DNS, TLS, WAF) via Cloudflare Tunnel (`cloudflared`), no inbound ports |
 | Remote access | SSH through Cloudflare Access (`cloudflared access ssh`) |
-| Frontend | Tailwind CSS v4 + Flowbite, ApexCharts, built with npm *(planned, phase 1)* |
+| Frontend | Tailwind CSS v4 + Flowbite, ApexCharts, built with npm (esbuild) |
 | CI/CD | GitHub Actions: lint, tests on MySQL, commit policy, manual release deploy |
 
 Installed: CodeIgniter Shield 1.4 (auth, groups, permissions) with `codeigniter4/settings`,
 `pragmarx/google2fa` (TOTP), `codeigniter4/translations` (Indonesian framework messages).
-Planned (added in the phase that needs them, see `decisions.md`): `dompdf/dompdf` (PDF), `phpoffice/phpspreadsheet` (XLSX import/export),
-`chillerlan/php-qrcode` (QR), CI4 Image library with GD (resize, WebP).
+In use: `chillerlan/php-qrcode` (QR, inline SVG), `league/commonmark` (guide Markdown), CI4 Image with GD (logo resize).
+Planned (added in the phase that needs them, see `decisions.md`): `dompdf/dompdf` (PDF), `phpoffice/phpspreadsheet` (XLSX import/export).
+
+Frontend (`package.json`): Tailwind CSS v4 (`@tailwindcss/cli`), Flowbite 3 (open-source package), ApexCharts,
+bundled with esbuild. Sources in `resources/css/app.css` and `resources/js/{app,charts}.js`; `npm run build`
+writes `public/build/` (git-ignored; built by CI and the deploy workflow). Automatic class detection is off
+(`source(none)`), so only `app/Views`, `app/Modules` and `resources/js` are scanned — never `flowbite/`.
 
 ## Code layout
 
 ```
 app/
 ├── Config/            framework + app config (Autoload registers Modules\)
+├── Authentication/    Shield login action for TOTP (TotpAction)
+├── Filters/           StaffArea (forced password change, 2FA required by role)
+├── Helpers/ui_helper  asset_url, brand_color, icon, tanggal_indo, initials
+├── Libraries/         AuditLogger, TwoFactor, QrCode, ModuleRegistry, Menu
 ├── Modules/<Name>/    feature modules — see .claude/skills/spmb-module
-├── Views/layouts/     admin (full width) · public · auth            (planned)
-├── Views/partials/    breadcrumbs, flash, empty-state, table, form   (planned)
-public/                web root (index.php, built assets)
+├── Views/layouts/     admin (full width) · public · auth
+├── Views/partials/    head, breadcrumbs, flash, empty_state, form_field, status_badge, pagination
+resources/             frontend sources (Tailwind CSS, JS)
+public/                web root (index.php, build/ = compiled assets)
 writable/              logs, cache, sessions, uploads (private)
 deploy/activate.sh     server-side release activation
 ai/                    ChatGPT image prompts and raw outputs
 flowbite/              Flowbite Pro templates — markup reference only (private repo)
 ```
 
-## Modules *(planned)*
+## Modules
 
 | Module | Responsibility | Phase |
 | --- | --- | --- |
 | Core | Layouts, breadcrumbs, settings, white label, module registry, menu | 1 |
 | Auth | Login, roles/permissions, optional TOTP 2FA, user management | 1 |
 | Audit | Change and login logs | 1 |
-| Panduan | Role-based Indonesian guide pages assembled from module `Guide/` | 1 |
+| Panduan | Role-based Indonesian guide pages assembled from module `Guide/` | 1 (built) |
+| Profil | Own profile, password change, 2FA setup | 1 (built) |
+| Pengaturan | School identity / branding, security policy | 1 (built) |
+| Pengguna | Staff accounts and roles | 1 (built) |
 | Referensi | Normalised schools (SD/MI), regions; import from public data | 2 |
 | Pendaftaran | Waves, online/offline form, numbering, duplicates, status check | 2 |
 | Berkas | Required documents, uploads, resize, verification | 2 |
@@ -55,7 +68,48 @@ flowbite/              Flowbite Pro templates — markup reference only (private
 | Analitik | Light visitor tracking | 5 |
 | Chat | Interactive chat (scope pending) | 5 |
 
-## Implemented core (phase 1, in progress)
+### Module registry and menu
+
+`service('modules')` (`App\Libraries\ModuleRegistry`) lists folders in `app/Modules`. A module is
+enabled unless it is in `setting('Features.disabled')`; `Config\Features::$core` (Pengaturan, Pengguna,
+Profil, Panduan) cannot be disabled. `app/Config/Routes.php` loads `Config/Routes.php` of enabled modules
+only, so a disabled module's URLs return 404. Each module is also registered as namespace
+`Modules\<Name>` (in `Config\Autoload`), so `Language/id/<Name>.php` and `Views` resolve.
+
+`service('menu')` builds the sidebar from each enabled module's `Config/Menu.php`
+(`label`, `url`, `icon`, `permission`, `group`, `order`) and keeps only entries the user can access.
+Permissions stay declared centrally in `Config\AuthGroups` (tested by `AuthGroupsTest`).
+
+### Layouts and theming
+
+- `layouts/admin`: full width, sidebar collapsible to icons (`html.sidebar-collapsed`, remembered in
+  `localStorage`), Flowbite drawer below `lg`, user menu, breadcrumb bar, toasts. Controllers pass
+  `title`, optional `subtitle`, `breadcrumbs`; views fill sections `content` and optional `actions`.
+- `layouts/auth`: sign-in and verification card (also Shield's layout); `layouts/public`: website and guides.
+- White label: `partials/head` prints `:root{--brand:#rrggbb}` from `setting('School.primaryColor')`
+  (validated hex). `@theme` derives `primary-50…950` from `--brand` with `color-mix()`.
+- Dark mode via `.dark` on `<html>` (toggle, remembered per browser).
+- Partials receive one array (`field`, `badge`, `empty`, `brand`) because CI view data is shared
+  between renders (`saveData`); a partial must not rely on loose variables.
+
+### Request pipeline
+
+Global filters: `csrf` (session-based token; skipped only when `ENVIRONMENT === 'testing'`) and
+`secureheaders`. `/admin/*`: `session` then `staff` (`App\Filters\StaffArea`): accounts flagged for a
+password change go to `/admin/profil/kata-sandi`; users whose role is in
+`setting('TwoFactor.requiredRoles')` without 2FA go to `/admin/profil/verifikasi-dua-langkah`.
+Routes add `permission:<key>`; a denied permission redirects to `/admin/akses-ditolak`.
+`auth-rates` throttles `/masuk` and `/verifikasi`.
+
+### Two-step sign-in
+
+`Config\Auth::$actions['login'] = TotpAction`. The action applies only to users with confirmed 2FA.
+After the password, Shield stores a marker identity (`totp_2fa`) and the user is "pending" until a
+code passes `service('twoFactor')->verify()` (TOTP or recovery code). The marker stays in the
+database until then, so a remember-me cookie cannot skip the step. Five wrong codes cancel the
+sign-in (`TwoFactor.maxAttempts`).
+
+## Implemented core (phase 1)
 
 | Piece | Where |
 | --- | --- |
@@ -66,7 +120,12 @@ flowbite/              Flowbite Pro templates — markup reference only (private
 | Audit trail | `audit_logs`, `App\Libraries\AuditLogger` (`service('audit')`), `App\Models\Concerns\Auditable` |
 | Two-factor (TOTP) | `user_two_factor`, `App\Libraries\TwoFactor` (`service('twoFactor')`) |
 | Installer | `php spark spmb:install` (`app/Commands/Install.php`), `DemoUserSeeder` |
-| Admin area | `/admin` (filters `session` + `permission:dasbor.view`) |
+| Admin area | `/admin` dashboard (placeholder stats), `/admin/akses-ditolak` |
+| Profile | `/admin/profil`, `/admin/profil/kata-sandi`, `/admin/profil/verifikasi-dua-langkah` (module Profil) |
+| School settings | `/admin/pengaturan/sekolah` (`pengaturan.sekolah`), `/admin/pengaturan/keamanan` (`sistem.keamanan`) |
+| Users | `/admin/pengguna` (`pengguna.view/create/edit`; protected roles need `pengguna.kelola-admin`) |
+| Guides | `/panduan`, `/panduan/<peran>` (public) |
+| Branding files | `writable/uploads/branding/`, served by `/aset/logo`, `/aset/favicon` |
 
 ### Tables
 

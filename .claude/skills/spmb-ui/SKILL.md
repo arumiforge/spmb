@@ -13,8 +13,14 @@ description: Build views for SPMB with Tailwind v4 + Flowbite — full-width res
 - `app/Views/layouts/public.php` — public site for parents/students: header,
   footer, large tap targets, mobile first.
 - `app/Views/layouts/auth.php` — login, 2FA, password reset.
-- Shared partials in `app/Views/partials/` (breadcrumbs, flash, empty-state,
-  data-table, form-field, status-badge, pagination, confirm-modal).
+- Shared partials in `app/Views/partials/`: `breadcrumbs`, `flash`, `empty_state`,
+  `form_field`, `status_badge`, `pagination`, `school_brand`, `head`. Each takes **one array**
+  (`view('partials/form_field', ['field' => [...]])`, `['badge' => ...]`, `['empty' => ...]`)
+  because CI shares view data between renders; never rely on loose variables in a partial.
+- Admin pages pass `title`, optional `subtitle`, `breadcrumbs`; buttons next to the title go in
+  section `actions`. Destructive forms use `data-confirm="..."`; copy buttons `data-copy="..."`.
+- Icons: `icon('users', 'h-5 w-5')` (Flowbite Icons, MIT) from `ui_helper`. Dates: `tanggal_indo()`.
+- After adding classes in views run `npm run build` (Tailwind scans `app/Views`, `app/Modules`).
 
 ## Breadcrumbs (required on every page except the home page)
 
