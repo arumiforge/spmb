@@ -141,3 +141,9 @@ Context: The user does not want semi-realistic or 3D-looking images, and wants C
 Decision: All illustrations use a hand-painted gouache/watercolour storybook style with stylised characters (not realistic, not 3D), a muted warm palette with one blue accent, and a recurring cast for consistency. Each image has a detailed brief and a ready prompt in `ai/prompts/`; ChatGPT follows `ai/CHATGPT.md` (started with the prompt in `ai/README.md`) and generates the queue one image at a time. Requested sizes follow ChatGPT's shapes (1024², 1536×1024, 1024×1536); Claude crops to the final assets.
 Consequences: ChatGPT needs read access to the repository (GitHub connector) or the `ai/` files attached. Images come back to Claude through the chat, since `ai/output/` is git-ignored.
 
+## D-028 — ChatGPT delivers illustrations by pull request into `ai/incoming/`; Claude installs (2026-11-17)
+Status: accepted (refines D-027)
+Context: The user wants ChatGPT to do only the image work and hand it over through the repository, with installation left to Claude.
+Decision: ChatGPT may only add files to `ai/incoming/` on a branch `art/illustrations-<date>` and opens one pull request into `main` (with `ai/incoming/DELIVERY.md`), never merging and adding no AI attribution. Claude reviews the images in that pull request, installs the approved ones (WebP under `public/assets/img/`, views, queue status) on the same branch, deletes the originals from `ai/incoming/` and squash-merges after CI and the user's go-ahead.
+Consequences: ChatGPT needs write access to the repository (GitHub connector with write access or ChatGPT agent/Codex) acting as the `arumiforge` account, or the commit-policy check fails; without it the user uploads the files to `ai/incoming/` on GitHub. Squash merges keep the large originals out of `main`'s history.
+

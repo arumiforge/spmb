@@ -1,51 +1,73 @@
 # Instructions for ChatGPT: generate the SPMB illustrations
 
 You are helping Arumi Studios create the illustrations for SPMB, a school admission web app for
-Indonesian junior high schools. Everything you need is in this repository's `ai/` folder. Follow
-these steps exactly.
+Indonesian junior high schools. **Your job is only to make the images and deliver them in one pull
+request.** Checking, converting and placing them in the app is done afterwards by Claude, the
+developer agent of this repository.
+
+## Your scope (strict)
+
+- You may add files **only inside `ai/incoming/`**. Do not change, move or delete any other file
+  (no views, no `public/`, no README, no queue status, no prompts).
+- Work on a new branch named `art/illustrations-<YYYYMMDD>` (today's date), created from `main`.
+- Open **one pull request** into `main` with all images. **Never merge it.**
+- If you cannot create branches or pull requests, stop after generating the images and tell the user
+  to upload them (see "If you cannot open a pull request").
 
 ## 1. Read first
 
-1. `ai/style-guide.md`: the painted storybook style, palette, the recurring cast of characters,
-   the rules for every image and the dark-variant rule. This style is mandatory for every image.
-2. `ai/README.md`: the queue table. Work only on rows with status `requested`, in ID order.
-3. For each image, its file `ai/prompts/<ID>-<name>.md`: purpose, composition, characters,
-   setting, colours, things to avoid, the ready prompt and, for some, a dark variant prompt.
+1. `ai/style-guide.md`: the painted storybook style, palette, the recurring cast, the rules for every
+   image and the dark-variant rule. This style is mandatory for every image.
+2. `ai/README.md`: the queue table. Make only the rows with status `requested`, in ID order.
+3. For each image, its brief `ai/prompts/<ID>-<name>.md`: purpose, composition, characters, setting,
+   colours, things to avoid, the ready prompt and, for some, a dark variant prompt.
 
 ## 2. For each image, in ID order
 
 1. Tell the user in one short line (in Indonesian) which image you are making: ID, file name and where
    it is used.
-2. Generate the image from the **Prompt** section of its file, using the shape it names
-   (square 1024×1024, landscape 1536×1024, portrait 1024×1536) and its background
-   (`transparent` = real transparent PNG with alpha; `white` = plain white). Respect the
-   Composition and Avoid sections too; they are part of the brief.
-3. Check the result yourself against this list before showing it as done:
+2. Generate the image from the **Prompt** section of its brief, in the shape it names (square 1024×1024,
+   landscape 1536×1024, portrait 1024×1536) and with its background (`transparent` = real transparent PNG
+   with alpha; `white` = plain white). The Composition and Avoid sections are part of the brief.
+3. Check the result yourself before accepting it:
    - painted gouache/watercolour storybook look; people stylised, not realistic, not 3D;
    - no text, letters, numbers, logos or signatures anywhere (screens, papers, signs, cards, patterns);
-   - the empty area for UI text is really empty (heroes and guide covers);
+   - the area kept empty for page text is really empty (heroes and guide covers);
    - only one small blue accent (#2563EB), otherwise the muted palette;
    - the transparent background is real (no drawn checkerboard, no paper texture outside the subject);
-   - characters match the cast description (hijab, uniform colours, clothing).
-   If any check fails, regenerate once with a short correction and say what you fixed.
-4. If the file has a **Dark variant prompt**, generate the dark version right after the light one
-   is accepted, from the same image.
-5. Tell the user the exact file names to save: `<name>.png` and, if made, `<name>-dark.png`
-   (names are in each file's front matter, field `file`).
-6. Ask the user: "Lanjut ke gambar berikutnya?" and wait. If the user asks for changes, revise the
-   same image until they accept it, keeping the style.
+   - characters match the cast (hijab, uniform colours, clothing) and look the same as in earlier images.
+   If a check fails, regenerate once with a short correction.
+4. If the brief has a **Dark variant prompt**, generate the dark version from the accepted light image.
+5. Show the image(s) to the user and ask "Lanjut ke gambar berikutnya?". If the user asks for changes,
+   revise until they accept it, keeping the style.
 
-Keep characters consistent between images: the same Aisyah, Raka, Ibu Sari, Pak Hadi, Bu Nur and
-Pak Budi every time they appear.
+## 3. Deliver in one pull request
 
-## 3. Talking to the user
+When all queued images are accepted (or the user says to deliver what is done):
 
-- Write to the user in friendly Indonesian, short messages.
-- Never invent new images or change the scene beyond the brief; if something in a brief is unclear,
-  choose the calmer, simpler option and mention it.
-- You cannot change the repository. The user downloads each image and gives it to Claude
-  (the developer agent), which resizes it and places it in the app.
+1. Save every image into `ai/incoming/` using the exact name from the brief's `file` field
+   (e.g. `ai/incoming/hero-beranda.png`) and `<name>-dark.png` for dark variants. Keep PNG; if a file is
+   larger than 2 MB, save it as high-quality WebP with the same name and `.webp`, keeping transparency.
+2. Add `ai/incoming/DELIVERY.md` with a table: ID, file name(s), shape, background, and notes
+   (e.g. "regenerated once: removed text on sign", "user asked for warmer colours").
+3. Commit with a Conventional Commit message in English, for example
+   `chore(ai): add illustrations 001-012`. **No AI attribution of any kind** in commits or in the pull
+   request: no `Co-authored-by` lines, no "Generated by ChatGPT/Codex" lines, no tool footers.
+4. Open the pull request into `main`:
+   - Title: `chore(ai): add illustrations <first ID>-<last ID>`
+   - Body: the same table as `DELIVERY.md`, plus "Ready for Claude to review and install." and nothing else.
+5. Give the user the pull request link. Do not merge it and do not change it afterwards unless the
+   user asks you to replace specific images (then push the new files to the same branch).
 
-## 4. When all images are done
+## If you cannot open a pull request
 
-Give the user a summary table: ID, file name(s), and any notes (e.g. "regenerated once: removed text on sign").
+Tell the user (in Indonesian) to download the images with the file names above and either attach them in
+the Claude Code chat, or upload them on GitHub into `ai/incoming/` on a new branch
+(Add file → Upload files → "Create a new branch" → Propose changes → Create pull request).
+
+## Talking to the user
+
+- Friendly Indonesian, short messages.
+- Never add new images or change scenes beyond the briefs. If a brief is unclear, choose the calmer,
+  simpler option and mention it.
+- At the end, summarise: images delivered, images skipped and why, and the pull request link.

@@ -5,27 +5,31 @@ prompts in this folder, then optimised into `public/assets/img/`.
 
 ## Workflow
 
-1. Prompt files are added to `prompts/` (by the developer or Claude, see `.claude/skills/spmb-ai-image`)
-   and listed in the queue below. Each file has a detailed brief and a ready prompt.
-2. In ChatGPT (with access to this repository), paste the starter prompt from the "ChatGPT" section below.
-   ChatGPT follows [CHATGPT.md](CHATGPT.md): it reads the style guide and generates the queued images one
-   by one, including dark variants (`<name>-dark.png`).
-3. Download each image under the file name ChatGPT gives (the `file` field of the prompt) and send the
-   images to Claude in the Claude Code chat. `output/` is git-ignored; originals stay local.
-4. Claude resizes/converts them to WebP at `target`, wires them into the views with the Indonesian alt
-   text, and marks the row `done`.
+Roles are split (D-028):
 
-Style rules: [style-guide.md](style-guide.md) (painted storybook look, D-027). New prompts: copy
-[prompts/_template.md](prompts/_template.md).
+1. **Briefs** — the developer or Claude adds a brief to `prompts/` (see `.claude/skills/spmb-ai-image`)
+   and lists it in the queue below with status `requested`.
+2. **ChatGPT makes the images** — paste the starter prompt below into ChatGPT. It follows
+   [CHATGPT.md](CHATGPT.md): reads the style guide and briefs, generates the queued images one by one
+   (with dark variants `<name>-dark.png`), and opens **one pull request** that only adds files to
+   [`incoming/`](incoming/) on a branch `art/illustrations-<date>`. It never merges.
+3. **Claude installs them** — Claude reviews the images in that pull request (style, no text, empty
+   areas, transparency), asks for regenerations if needed, converts the approved ones to WebP at each
+   brief's `target`, wires them into the views with the Indonesian alt text, marks the queue rows `done`,
+   removes the originals from `incoming/` and squash-merges once CI is green and the user agrees.
+
+Style rules: [style-guide.md](style-guide.md) (painted storybook look, D-027). New briefs: copy
+[prompts/_template.md](prompts/_template.md). `output/` is a git-ignored scratch folder for local work.
 
 ## ChatGPT starter prompt
 
-Requires the GitHub connector in ChatGPT with access to `arumiforge/spmb`. Without it, attach
-`ai/CHATGPT.md`, `ai/style-guide.md`, `ai/README.md` and the `ai/prompts/` files to the chat instead
-and replace the first sentence with "Use the attached files".
+Needs ChatGPT with GitHub access to `arumiforge/spmb` that can create a branch and a pull request
+(GitHub connector with write access, or ChatGPT agent/Codex). The commits must be made as the
+`arumiforge` account, or the commit-policy check fails. Without write access ChatGPT still makes the
+images and tells you how to upload them.
 
 ```
-Open the GitHub repository arumiforge/spmb (branch main) and read ai/CHATGPT.md. Follow it exactly: read ai/style-guide.md and the queue in ai/README.md, then generate the images listed as "requested" one at a time, in ID order, using each file in ai/prompts/. Use the painted storybook style from the style guide for every image: hand-painted gouache/watercolour, stylised characters, not realistic, not 3D, and no text in any image. Talk to me in Indonesian. Start with image 001 and wait for my "lanjut" after each image.
+Open the GitHub repository arumiforge/spmb (branch main) and read ai/CHATGPT.md. Follow it exactly. Your only job is to make the illustrations and deliver them: generate the images listed as "requested" in ai/README.md one at a time, in ID order, from the briefs in ai/prompts/, in the painted storybook style of ai/style-guide.md (hand-painted gouache/watercolour, stylised characters, not realistic, not 3D, no text in any image). Then put them only in the folder ai/incoming/ on a new branch art/illustrations-<today's date> and open one pull request into main. Do not change any other file, do not merge, and add no AI attribution. Talk to me in Indonesian. Start with image 001 and wait for my "lanjut" after each image.
 ```
 
 ## Queue
