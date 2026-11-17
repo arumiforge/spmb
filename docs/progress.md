@@ -7,8 +7,8 @@ personal data.
 
 ## Current phase
 
-**Phase 0 — Foundation**: done. **Phase 1 — Platform core**: in progress on the same
-branch / [PR #1](https://github.com/arumiforge/spmb/pull/1).
+**Phase 0 — Foundation**: done. **Phase 1 — Platform core**: core merged in
+[PR #1](https://github.com/arumiforge/spmb/pull/1); **phase 1 UI** in progress on `feat/phase-1-ui`.
 
 Done in phase 1: Shield auth with 7 roles and permission matrix, Indonesian auth URLs,
 audit trail, TOTP 2FA service, migrations, `php spark spmb:install` (+ `--demo`),
@@ -21,7 +21,8 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `nty/gracious-dirac-v4pink` | session 1 | Phase 0 + phase 1 core (auth, audit, 2FA, installer) | PR #1 open |
+| `nty/gracious-dirac-v4pink` | session 1 | Phase 0 + phase 1 core (auth, audit, 2FA, installer) | merged (PR #1) |
+| `feat/phase-1-ui` | session 2 | Phase 1 UI: frontend build, layouts, login/2FA screens, settings, users, panduan | in progress |
 
 ## Next steps
 
