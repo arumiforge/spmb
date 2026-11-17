@@ -33,11 +33,11 @@ create your own branch from `main` instead.
 | `feat/phase-1-ui` | session 2 | Phase 1 UI: frontend build, layouts, login/2FA screens, settings, users, panduan | merged (PR #2) |
 | `feat/phase-1-finish` | session 3 | Finish phase 1: module on/off page, audit log viewer, 404/500 pages, illustration prompts | merged (PR #4) |
 | `phase-2` | coordinator | Phase 2 integration branch; only the coordinator commits/merges here | in progress |
-| `feat/p2-foundation` | coordinator | Phase 2 foundation (schema, models, permissions, settings, plan) | PR open → `phase-2` |
-| `feat/p2-referensi` | worker A | Previous-school reference data + importer | planned |
-| `feat/p2-pendaftaran` | worker B | Waves, numbering, online/offline form, duplicates, status check | planned |
-| `feat/p2-berkas` | worker C | Document types, upload/resize/storage, verification | planned |
-| `feat/p2-kartu-situs` | worker D | PDF card + QR, card check page, public pages | planned |
+| `feat/p2-foundation` | coordinator | Phase 2 foundation (schema, models, permissions, settings, plan) | merged into `phase-2` (PR #9) |
+| `feat/p2-referensi` | worker A | Previous-school reference data + importer | in progress |
+| `feat/p2-pendaftaran` | worker B | Waves, numbering, online/offline form, duplicates, status check | in progress |
+| `feat/p2-berkas` | worker C | Document types, upload/resize/storage, verification | in progress |
+| `feat/p2-kartu-situs` | worker D | PDF card + QR, card check page, public pages | in progress |
 
 ## Next steps
 
