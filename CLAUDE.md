@@ -59,6 +59,7 @@ The framework is a Composer dependency (`vendor/codeigniter4/framework`); never 
 ```bash
 composer install
 php spark serve                 # local dev server
+php spark spmb:install --demo   # migrations + Super Admin + demo accounts (dev)
 php spark migrate --all         # run all module migrations
 composer test                   # PHPUnit
 composer lint                   # php-cs-fixer dry run

@@ -31,7 +31,7 @@ Status: accepted
 Decision: Features live in `app/Modules/<Name>` under namespace `Modules\`, with routes, permissions, menu, migrations, language files and guides per module; modules can be disabled.
 
 ## D-006 — Authentication and 2FA (2026-11-17)
-Status: proposed
+Status: accepted (implemented in phase 1: Shield 1.4, TOTP service; login screen wiring pending)
 Decision: CodeIgniter Shield for sessions, groups and permissions; custom TOTP action using `pragmarx/google2fa`; 2FA optional per user, enforceable per role by Super Admin; recovery codes.
 
 ## D-007 — Documents, export and QR libraries (2026-11-17)
@@ -59,3 +59,24 @@ Consequences: Server needs no GitHub access and no open inbound ports; rollback 
 ## D-012 — Previous-school normalisation (2026-11-17)
 Status: proposed
 Decision: `ref_sekolah` table seeded from public Dapodik data at https://dapo.kemendikdasmen.go.id/ (SD, Central Java) or https://sekolah.data.kemendikdasmen.go.id/ (alternative source) and an XLSX import for MI and out-of-province schools; free-text fallback mapped later by admins.
+
+## D-013 — Indonesian locale and staff-only accounts (2026-11-17)
+Status: accepted
+Decision: App locale `id`, time zone `Asia/Jakarta`, `codeigniter4/translations` for framework messages. Shield routes moved to `/masuk`, `/keluar`, `/verifikasi` (route names unchanged). Self-registration and magic-link login are disabled; staff accounts are created by an admin or `spmb:install`.
+Consequences: Password reset for staff is done by an admin until email delivery is configured (magic link can be enabled then).
+
+## D-014 — Roles are configuration, assignments are data (2026-11-17)
+Status: proposed
+Context: FR asks that Admin Sekolah can edit role permissions. Shield defines groups and the permission matrix in `Config\AuthGroups`; user ↔ role assignments and per-user extra permissions are stored in the database.
+Decision: For launch, roles and their permissions are fixed in config (reviewed with the school); Admin Sekolah assigns roles and can grant individual extra permissions per user. A database-backed role editor is deferred.
+Consequences: Changing what a role can do requires a release; adding a role is a small code change with tests (`AuthGroupsTest`).
+
+## D-015 — Audit trail through model callbacks (2026-11-17)
+Status: accepted
+Decision: `audit_logs` table; models opt in with the `Auditable` trait (insert/update/delete with only changed columns as old/new JSON); explicit events via `service('audit')->log()`. Passwords, secrets and tokens are redacted.
+Consequences: Writes that bypass models (raw query builder) are not audited — modules must write applicant data through models.
+
+## D-016 — Two-factor storage (2026-11-17)
+Status: accepted
+Decision: `user_two_factor` table: TOTP secret encrypted with the app key, 8 single-use recovery codes stored as password hashes, last used time step stored to block code replay. Codes accepted within ±1 time step (30 s).
+Consequences: Rotating `encryption.key` invalidates all 2FA setups — document in the key rotation procedure.

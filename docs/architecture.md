@@ -15,9 +15,9 @@
 | Frontend | Tailwind CSS v4 + Flowbite, ApexCharts, built with npm *(planned, phase 1)* |
 | CI/CD | GitHub Actions: lint, tests on MySQL, commit policy, manual release deploy |
 
-Planned libraries (added in the phase that needs them, see `decisions.md`):
-CodeIgniter Shield (auth, groups, permissions), `pragmarx/google2fa` (TOTP),
-`dompdf/dompdf` (PDF), `phpoffice/phpspreadsheet` (XLSX import/export),
+Installed: CodeIgniter Shield 1.4 (auth, groups, permissions) with `codeigniter4/settings`,
+`pragmarx/google2fa` (TOTP), `codeigniter4/translations` (Indonesian framework messages).
+Planned (added in the phase that needs them, see `decisions.md`): `dompdf/dompdf` (PDF), `phpoffice/phpspreadsheet` (XLSX import/export),
 `chillerlan/php-qrcode` (QR), CI4 Image library with GD (resize, WebP).
 
 ## Code layout
@@ -54,6 +54,28 @@ flowbite/              Flowbite Pro templates — markup reference only (private
 | Situs | Public pages and announcements | 2 → 5 |
 | Analitik | Light visitor tracking | 5 |
 | Chat | Interactive chat (scope pending) | 5 |
+
+## Implemented core (phase 1, in progress)
+
+| Piece | Where |
+| --- | --- |
+| Roles, permissions, Indonesian titles | `app/Config/AuthGroups.php` |
+| Auth routes `/masuk`, `/keluar`, `/verifikasi` | `app/Config/AuthRoutes.php` |
+| Staff user model (+ `full_name`, `phone`, audited) | `app/Models/UserModel.php` |
+| School identity defaults (white label) | `app/Config/School.php` → `setting('School.*')` |
+| Audit trail | `audit_logs`, `App\Libraries\AuditLogger` (`service('audit')`), `App\Models\Concerns\Auditable` |
+| Two-factor (TOTP) | `user_two_factor`, `App\Libraries\TwoFactor` (`service('twoFactor')`) |
+| Installer | `php spark spmb:install` (`app/Commands/Install.php`), `DemoUserSeeder` |
+| Admin area | `/admin` (filters `session` + `permission:dasbor.view`) |
+
+### Tables
+
+| Table | Source | Purpose |
+| --- | --- | --- |
+| `users`, `auth_identities`, `auth_logins`, `auth_token_logins`, `auth_remember_tokens`, `auth_groups_users`, `auth_permissions_users` | Shield | Staff accounts, credentials, login log, role assignments |
+| `settings` | codeigniter4/settings | White-label and runtime configuration |
+| `audit_logs` | App | Who changed what and when |
+| `user_two_factor` | App | Optional TOTP per user |
 
 ## Key design rules
 

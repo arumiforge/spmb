@@ -18,7 +18,8 @@ IDs are stable; reference them in commits, PRs and tests (`FR-REG-03`).
 | Petugas Seragam **[proposed]** | Uniform officers | Update uniform status | Non-technical |
 | Calon Murid / Orang Tua | Public | Register online, check status, correct data, download card | Non-technical |
 
-Access is permission-based; roles are permission bundles editable by Admin Sekolah
+Access is permission-based (`Config\AuthGroups`, D-014). Admin Sekolah assigns roles and
+extra per-user permissions; changing a role's permission set is a configuration change
 (Super Admin only for system permissions). One user may hold several roles.
 
 ## 2. Functional requirements

@@ -12,5 +12,14 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `.githooks/commit-msg` enforcing Arumi Studios authorship and no AI attribution.
 - `Modules\` namespace for feature modules (`app/Modules`).
 
+- Auth with CodeIgniter Shield: seven staff roles with Indonesian titles, permission matrix, routes `/masuk`, `/keluar`, `/verifikasi`; self-registration and magic links disabled.
+- Migrations: profile fields on `users`, `audit_logs`, `user_two_factor` (plus Shield and Settings tables).
+- Audit trail service and `Auditable` model trait (old/new values, redaction of secrets).
+- TOTP two-factor service with encrypted secret, replay protection and single-use recovery codes.
+- `php spark spmb:install` installer (idempotent) and demo account seeder for development.
+- `School` config for white-label identity defaults; protected `/admin` dashboard placeholder.
+- Tests: roles/permissions matrix, audit trail, 2FA, demo seeder, auth routes (29 tests on MySQL).
+
 ### Changed
+- Locale `id`, time zone `Asia/Jakarta`, Indonesian framework messages (`codeigniter4/translations`); URLs without `index.php`.
 - Switched from the CodeIgniter framework distribution to the appstarter layout; framework 4.7 installed via Composer.

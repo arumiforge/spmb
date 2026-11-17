@@ -21,6 +21,8 @@ No inbound ports open on the server firewall (`ufw default deny incoming`).
 3. Sudoers rule for reloads only: `deploy ALL=NOPASSWD: /usr/bin/systemctl reload php8.3-fpm`.
 4. Directories: `/var/www/spmb/{releases,shared/writable}`; create `/var/www/spmb/shared/.env` from `env` with production values (`CI_ENVIRONMENT = production`, `app.baseURL`, database credentials, `encryption.key` from `php spark key:generate --show`).
 5. MySQL: database `spmb`, user with privileges on that database only, `utf8mb4_unicode_ci`.
+   After the first release is uploaded, run `php spark spmb:install` once in `current/`
+   to create the first Super Admin (later deploys only run migrations).
 6. Nginx server block: `root /var/www/spmb/current/public;` `try_files $uri $uri/ /index.php?$query_string;`, PHP via FPM socket, deny dotfiles, `client_max_body_size` matching the upload limit, `real_ip_header CF-Connecting-IP` with Cloudflare ranges.
 7. Cloudflare Tunnel: ingress `https://<domain>` → `http://localhost:80` and `ssh://<ssh-host>` → `ssh://localhost:22`; protect the SSH hostname with a Cloudflare Access application allowing a **service token** (for CI) and the admins' emails.
 
