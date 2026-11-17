@@ -123,3 +123,15 @@ Status: accepted (supersedes the Admin Sekolah part of D-021)
 Context: D-021 reserved both Super Admin and Admin Sekolah accounts for Super Admin. The user confirmed that Admin Sekolah should be able to create other admins.
 Decision: Only the Super Admin role and Super Admin accounts need `pengguna.kelola-admin` (Super Admin only). Admin Sekolah can create, edit, deactivate and reset other Admin Sekolah accounts and assign the Admin Sekolah role. Nobody can deactivate themselves or change their own roles.
 Consequences: A school can run without Super Admin involvement for staff changes; Super Admin stays the only role that can create or manage Super Admins.
+
+## D-025 — Module self-description and the Riwayat core module (2026-11-17)
+Status: accepted (extends D-020)
+Context: The Fitur page (`sistem.modul`) needs a readable name and description for each module, also while it is switched off. The audit log viewer needed a home.
+Decision: Each module may provide `Config/Module.php` returning `label`, `description` and `icon` (Indonesian); a test requires it for every module in `app/Modules`. The audit log viewer is the module `Riwayat` and is core: the audit trail is a security requirement, so its viewer cannot be switched off. Disabling a module only hides routes, menu and guide sections; its data is kept.
+Consequences: New modules add `Config/Module.php` and their audit labels in `Riwayat`'s language file. In phase 1 every module is core, so the Fitur page shows an empty optional list until phase 2 modules arrive.
+
+## D-026 — Friendly error pages with a no-dependency fallback (2026-11-17)
+Status: accepted
+Decision: 404s go through a route override (`App\Controllers\Errors::notFound`); 500s in production use `errors/html/production.php`. Both render `errors/friendly` in the admin layout for signed-in staff and the public layout otherwise, with a fresh view renderer. If rendering fails, open output buffers are discarded and a self-contained page (inline CSS, no settings or database) is returned. Visitors see the school's WhatsApp link on error pages when it is set. No technical details are ever shown outside development.
+Consequences: Feature tests receive a 404 response instead of a thrown `PageNotFoundException` (tests assert the status).
+

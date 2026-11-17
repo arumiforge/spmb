@@ -10,4 +10,6 @@ $routes->group('admin/pengaturan', ['namespace' => 'Modules\Pengaturan\Controlle
     $routes->post('sekolah', 'Sekolah::update', ['filter' => 'permission:pengaturan.sekolah']);
     $routes->get('keamanan', 'Keamanan::index', ['as' => 'pengaturan.keamanan', 'filter' => 'permission:sistem.keamanan']);
     $routes->post('keamanan', 'Keamanan::update', ['filter' => 'permission:sistem.keamanan']);
+    $routes->get('fitur', 'Fitur::index', ['as' => 'pengaturan.fitur', 'filter' => 'permission:sistem.modul']);
+    $routes->post('fitur', 'Fitur::update', ['filter' => 'permission:sistem.modul']);
 });

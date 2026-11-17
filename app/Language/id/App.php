@@ -37,4 +37,15 @@ return [
     'footerRights'   => 'Hak cipta dilindungi.',
     'publicNavLabel' => 'Navigasi situs',
     'staffLogin'     => 'Masuk Petugas',
+
+    'notFoundTitle'    => 'Halaman tidak ditemukan',
+    'notFoundText'     => 'Alamat yang Anda buka mungkin salah ketik, sudah dipindahkan, atau tidak tersedia lagi. Periksa kembali alamatnya, atau kembali ke halaman utama.',
+    'serverErrorTitle' => 'Maaf, ada gangguan di sistem',
+    'serverErrorText'  => 'Halaman ini belum bisa ditampilkan. Coba muat ulang beberapa saat lagi. Jika masih terjadi, hubungi panitia sekolah.',
+    'errorCode'        => 'Kode {0}',
+    'backHome'         => 'Kembali ke Beranda',
+    'backDashboard'    => 'Kembali ke Dasbor',
+    'reload'           => 'Muat Ulang Halaman',
+    'readGuide'        => 'Baca Panduan',
+    'contactWhatsapp'  => 'Hubungi Panitia lewat WhatsApp',
 ];

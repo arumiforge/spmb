@@ -107,6 +107,19 @@ function initPasswordToggle() {
     });
 }
 
+/* Switch label next to a toggle: <label><span data-toggle-text data-on="Menyala" data-off="Mati"></span><input type="checkbox"></label>. */
+function initToggleText() {
+    document.querySelectorAll('[data-toggle-text]').forEach((text) => {
+        const input = text.closest('label')?.querySelector('input[type="checkbox"]');
+        if (!input) {
+            return;
+        }
+        input.addEventListener('change', () => {
+            text.textContent = input.checked ? text.dataset.on : text.dataset.off;
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();
     initSidebarCollapse();
@@ -114,4 +127,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initConfirm();
     initCopy();
     initPasswordToggle();
+    initToggleText();
 });
