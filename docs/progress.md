@@ -16,7 +16,7 @@ Done in phase 1: Shield auth with 7 roles, audit trail, TOTP 2FA (service, sign-
 per-role enforcement), installer, frontend build (Tailwind v4 + Flowbite), admin/auth/public layouts,
 school identity + branding settings, user management, module registry + permission-based sidebar,
 Panduan skeleton, Fitur page (module on/off), Riwayat Perubahan (audit log viewer), friendly 404/500 pages.
-98 tests green on MySQL 8.0.
+95 tests green on MySQL 8.0.
 
 ## Active work
 
