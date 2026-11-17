@@ -70,6 +70,29 @@ Password `Demo-SPMB-2027` unless `--demo-password` is given. Sign in with the em
 | petugasdaftarulang@demo.test | Petugas Daftar Ulang |
 | petugasseragam@demo.test | Petugas Seragam |
 
+## Claude cloud environment (per account)
+
+Environments are per Claude account and are not stored in the repo. In each account,
+create a personal environment (Settings → Environments) named `spmb`, attached to
+`arumiforge/spmb`, with package managers allowed, these hosts allowed:
+`github.com`, `api.github.com`, `codeload.github.com`, `dapo.kemendikdasmen.go.id`,
+`sekolah.data.kemendikdasmen.go.id`, and this setup script:
+
+```bash
+set -e
+apt-get update -qq
+DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mysql-server
+service mysql start
+mysql -e "CREATE DATABASE IF NOT EXISTS spmb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+mysql -e "CREATE DATABASE IF NOT EXISTS spmb_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+mysql -e "CREATE USER IF NOT EXISTS 'spmb'@'localhost' IDENTIFIED BY 'spmb'"
+mysql -e "GRANT ALL ON spmb.* TO 'spmb'@'localhost'; GRANT ALL ON spmb_test.* TO 'spmb'@'localhost'"
+if [ -d spmb ]; then (cd spmb && composer install --no-interaction --no-progress); fi
+```
+
+A session then only needs `.env` (see above), `php spark key:generate` and
+`php spark spmb:install --demo`.
+
 ## Commands
 
 | Command | Purpose |
