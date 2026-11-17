@@ -91,12 +91,18 @@ jobs:
   assets:
     name: Frontend build
     runs-on: ubuntu-24.04
-    if: ${{ hashFiles('package.json') != '' }}
+    # hashFiles() is only available at step level, so each step checks for package.json.
     steps:
       - uses: actions/checkout@v4
+      - name: No frontend yet
+        if: ${{ hashFiles('package.json') == '' }}
+        run: echo "package.json not found; skipping frontend build."
       - uses: actions/setup-node@v4
+        if: ${{ hashFiles('package.json') != '' }}
         with:
           node-version: '22'
           cache: npm
-      - run: npm ci
-      - run: npm run build
+      - if: ${{ hashFiles('package.json') != '' }}
+        run: npm ci
+      - if: ${{ hashFiles('package.json') != '' }}
+        run: npm run build
