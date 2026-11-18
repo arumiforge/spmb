@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\Berkas\Services;
 
-use Config\Services;
 use finfo;
+use GdImage;
+use RuntimeException;
 use Modules\Berkas\Models\DocumentTypeModel;
 use Throwable;
 
@@ -156,7 +157,7 @@ class DocumentStorage
     }
 
     /**
-     * Upright, resized, EXIF-free JPEG via CodeIgniter's image service (GD).
+     * Upright, resized, EXIF-free JPEG (GD).
      *
      * @throws UploadRejected
      */
@@ -175,30 +176,122 @@ class DocumentStorage
         $maxEdge = max(200, (int) setting('Berkas.imageMaxEdge'));
         $quality = min(100, max(10, (int) setting('Berkas.imageQuality')));
 
+        $previousLimit = ini_get('memory_limit');
+        $needed        = (int) ($info[0] * $info[1] * 5 * 2 / 1024 / 1024) + 64;
+
+        if ($previousLimit !== '-1' && $this->toMegabytes((string) $previousLimit) < $needed) {
+            ini_set('memory_limit', $needed . 'M');
+        }
+
         try {
-            $image = Services::image(null, null, false)->withFile($source);
-            $image->reorient(true);
+            $image = $this->decode($source, (int) $info[2]);
+            $image = $this->upright($image, $info[2] === IMAGETYPE_JPEG ? $this->orientation($source) : 1);
 
-            $width  = $image->getWidth();
-            $height = $image->getHeight();
+            $width  = imagesx($image);
+            $height = imagesy($image);
+            $scale  = min(1, $maxEdge / max($width, $height));
+            $newW   = max(1, (int) round($width * $scale));
+            $newH   = max(1, (int) round($height * $scale));
 
-            if ($width > $maxEdge || $height > $maxEdge) {
-                $scale = $maxEdge / max($width, $height);
-                $image->resize(max(1, (int) round($width * $scale)), max(1, (int) round($height * $scale)));
+            // White canvas (transparent PNGs), resample, then JPEG: GD writes no metadata.
+            $canvas = imagecreatetruecolor($newW, $newH);
+            imagefill($canvas, 0, 0, (int) imagecolorallocate($canvas, 255, 255, 255));
+            imagecopyresampled($canvas, $image, 0, 0, 0, 0, $newW, $newH, $width, $height);
+            imagedestroy($image);
+
+            $saved = imagejpeg($canvas, $target, $quality);
+            imagedestroy($canvas);
+
+            if (! $saved) {
+                throw new RuntimeException('imagejpeg failed');
             }
-
-            // White background for transparent PNGs, then JPEG without metadata.
-            $image->flatten(255, 255, 255)->convert(IMAGETYPE_JPEG)->save($target, $quality);
         } catch (Throwable $e) {
             @unlink($target);
             log_message('error', 'Berkas: image processing failed: ' . $e->getMessage());
 
             throw new UploadRejected(lang('Berkas.errUnreadable'));
+        } finally {
+            ini_set('memory_limit', (string) $previousLimit);
         }
 
         if (! is_file($target)) {
             throw new UploadRejected(lang('Berkas.errUploadFailed'));
         }
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    private function decode(string $path, int $imageType): GdImage
+    {
+        $image = match ($imageType) {
+            IMAGETYPE_JPEG => @imagecreatefromjpeg($path),
+            IMAGETYPE_PNG  => @imagecreatefrompng($path),
+            default        => false,
+        };
+
+        if (! $image instanceof GdImage) {
+            throw new RuntimeException('cannot decode image');
+        }
+
+        return $image;
+    }
+
+    /**
+     * EXIF orientation of a JPEG (1 = upright, also when unknown).
+     */
+    private function orientation(string $path): int
+    {
+        if (! function_exists('exif_read_data')) {
+            return 1;
+        }
+
+        $exif = @exif_read_data($path);
+
+        return is_array($exif) && isset($exif['Orientation']) ? (int) $exif['Orientation'] : 1;
+    }
+
+    /**
+     * Applies an EXIF orientation so the picture is stored the way it looks.
+     */
+    private function upright(GdImage $image, int $orientation): GdImage
+    {
+        // Rotate first, then mirror (EXIF 2, 4, 5 and 7 are mirrored).
+        $angle = match ($orientation) {
+            3, 4    => 180,
+            5, 6    => 270,
+            7, 8    => 90,
+            default => 0,
+        };
+
+        if ($angle !== 0) {
+            $rotated = imagerotate($image, $angle, 0);
+
+            if (! $rotated instanceof GdImage) {
+                throw new RuntimeException('cannot rotate image');
+            }
+
+            imagedestroy($image);
+            $image = $rotated;
+        }
+
+        if (in_array($orientation, [2, 4, 5, 7], true)) {
+            imageflip($image, IMG_FLIP_HORIZONTAL);
+        }
+
+        return $image;
+    }
+
+    private function toMegabytes(string $value): int
+    {
+        $number = (int) $value;
+
+        return match (strtolower(substr(trim($value), -1))) {
+            'g'     => $number * 1024,
+            'm'     => $number,
+            'k'     => intdiv($number, 1024),
+            default => intdiv($number, 1024 * 1024),
+        };
     }
 
     /**
@@ -212,7 +305,7 @@ class DocumentStorage
 
         $mb = $kb / 1024;
 
-        return (floor($mb) === $mb ? (string) (int) $mb : number_format($mb, 1, ',', '')) . ' MB';
+        return ($kb % 1024 === 0 ? (string) intdiv($kb, 1024) : number_format($mb, 1, ',', '')) . ' MB';
     }
 
     /**
