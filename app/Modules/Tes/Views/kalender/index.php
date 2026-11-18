@@ -45,7 +45,7 @@ sort($listed);
                     <span class="sr-only"><?= lang('TesJadwal.calendarNext') ?></span><?= icon('chevron', 'h-4 w-4') ?>
                 </a>
                 <?php if ($month !== $thisMonth) : ?>
-                    <a href="<?= url_to('tes.kalender') ?>" class="ms-1 rounded-lg px-3 py-2 text-sm font-medium text-primary-700 hover:underline dark:text-primary-400"><?= lang('TesJadwal.calendarToday') ?></a>
+                    <a href="<?= url_to('tes.kalender') ?>" class="ms-1 whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-primary-700 hover:underline dark:text-primary-400"><?= lang('TesJadwal.calendarToday') ?></a>
                 <?php endif ?>
             </div>
             <form method="get" action="<?= url_to('tes.kalender') ?>" class="flex gap-2">

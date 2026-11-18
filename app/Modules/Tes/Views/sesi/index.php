@@ -174,7 +174,7 @@ $totalQuota  = array_sum(array_map('intval', array_column($sessions, 'quota')));
                                     <p class="text-gray-900 dark:text-white"><?= esc($s['room_name']) ?></p>
                                     <?php if (($s['room_location'] ?? '') !== '') : ?><p class="text-gray-500 dark:text-gray-400"><?= esc($s['room_location']) ?></p><?php endif ?>
                                 </td>
-                                <td class="px-4 py-3"><?= esc($wave($s)) ?></td>
+                                <td class="whitespace-nowrap px-4 py-3"><?= esc($wave($s)) ?></td>
                                 <td class="px-4 py-3"><?= $bar($s) ?></td>
                                 <td class="px-4 py-3"><?= $badges($s) ?></td>
                                 <td class="px-4 py-3"><div class="flex justify-end gap-2"><?= $actions($s, true) ?></div></td>

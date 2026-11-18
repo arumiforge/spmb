@@ -199,7 +199,7 @@ class SessionGenerator
                 'rooms'     => implode(', ', array_values(array_unique(array_column($preview['sessions'], 'room_name')))),
                 'slots'     => implode(', ', array_map(static fn (array $s): string => substr($s['start'], 0, 5) . '–' . substr($s['end'], 0, 5), $in['slots'])),
                 'wave_id'   => $in['wave_id'],
-            ], lang('TesJadwal.genAudit', [$preview['count']]), $staffId);
+            ], lang('TesJadwal.genAudit', [$preview['count']]), $staffId > 0 ? $staffId : null);
 
             $db->transCommit();
         } catch (Throwable $e) {
