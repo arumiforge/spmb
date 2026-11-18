@@ -49,7 +49,12 @@ Open the GitHub repository arumiforge/spmb (branch main) and read ai/CHATGPT.md.
 | 010 | [fitur-tambahan.png](generated/fitur-tambahan.png) ([dark](generated/fitur-tambahan-dark.png)) | Fitur page empty state | 1024×1024 | done |
 | 011 | [panduan-petugas.png](generated/panduan-petugas.png) | Staff guide cover | 1536×1024 | done |
 | 012 | [panduan-calon-murid.png](generated/panduan-calon-murid.png) | Applicant guide cover | 1536×1024 | done |
+| 013 | [aksen-hijau](prompts/013-aksen-hijau.md) — `<name>-hijau.png` for 001–012 | Green-accent set (setting "Warna aksen ilustrasi") | same as originals | requested |
+| 014 | [varian-gelap](prompts/014-varian-gelap.md) — `<name>-dark.png` for 001, 002, 006, 011, 012 | Dark mode of hero, form, success, guide covers | same as originals | requested |
 
 002 and 006 are used on `/daftar` and `/daftar/selesai` (phase 2).
+
+013 and 014 are edits of the delivered originals (image editing), not new paintings: upload the original to
+ChatGPT with the brief's prompt.
 
 Guide covers: one shared staff cover (011) and one applicant cover (012); per-role covers can follow once roles are confirmed.

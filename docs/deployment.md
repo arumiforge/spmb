@@ -64,7 +64,27 @@ on the server and copied off-site; monthly restore drill on staging.
 | Domain | `spmbsmpnualmarufkudusweb.id` (`app.baseURL = 'https://spmbsmpnualmarufkudusweb.id/'`) |
 | School name (Pengaturan → Identitas Sekolah) | SMP NU Al Ma'ruf Kudus |
 | Installation | One installation and database for this school (D-050) |
-| Still needed | Logo files, primary colour, owner of the Cloudflare account (interview round 1, Q8) |
+| Cloudflare | Arumi Studios' account (developer); the domain's nameservers point there |
+| Branding pack | `clients/smp-nu-al-maruf-kudus/branding` (logos, favicon, app icon, share image, green `#005c2f`, LP Ma'arif NU footer logo) |
 
-Set the school identity after `php spark spmb:install` in the admin; it is not hard-coded.
+## Go-live for the school's review (first client)
+
+The school checks the site on its own domain before registration opens; it enters its waves itself
+(no wave = the online form shows "pendaftaran belum dibuka").
+
+| # | Step | Who |
+| --- | --- | --- |
+| 1 | Merge the phase 2 PR (`phase-2` → `main`) | Arumi Studios |
+| 2 | A VPS with Ubuntu Server 24.04 (2 vCPU, 2–4 GB RAM, 40 GB disk is enough for the first year) | Arumi Studios |
+| 3 | Add `spmbsmpnualmarufkudusweb.id` to the developer's Cloudflare account and set the registrar's nameservers to Cloudflare's | Arumi Studios |
+| 4 | On the server: `sudo DOMAIN=spmbsmpnualmarufkudusweb.id bash deploy/provision.sh` (copy the script from the repo) | Arumi Studios / Claude with SSH access |
+| 5 | Cloudflare Zero Trust → Tunnels: create a tunnel, install it on the server, public hostnames `spmbsmpnualmarufkudusweb.id` → `http://localhost:80` and `ssh.spmbsmpnualmarufkudusweb.id` → `ssh://localhost:22`; Access application with a service token on the SSH hostname; SSL/TLS "Full", "Always Use HTTPS" on | Arumi Studios |
+| 6 | GitHub → Environments → `production`: variables and secrets from the table above | Arumi Studios |
+| 7 | Actions → Deploy → Run workflow on `main` | Arumi Studios |
+| 8 | On the server in `/var/www/spmb/current`: `php spark spmb:install` (Super Admin), then `php spark spmb:branding clients/smp-nu-al-maruf-kudus/branding` | Arumi Studios |
+| 9 | Create the Admin Sekolah account (Pengguna → Tambah), hand over the temporary password in person; the school fills in address/contact, waves, documents and card settings | School |
+
+While the school reviews, no wave is open, so nobody can register by accident. Do not use `--demo` on
+the server. Later schools get their own `clients/<school>/` folder; when there are several, deploy only
+the school's own folder with its installation.
 

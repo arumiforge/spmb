@@ -26,6 +26,11 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - School answers: quota behaviour per wave (information only / close online / separate online limit), optional random
   code at the end of registration numbers (`{ACAK:n}`, max 5), KK number and parent/guardian occupation and income
   dropdowns (editable lists), field mode "Hanya diisi petugas" (D-047…D-049).
+- Brand images: landscape logo (light/dark), app icon, link-preview image, parent organisation name and logo in the
+  footer, Open Graph tags; `php spark spmb:branding` loads a school's branding pack; branding pack for SMP NU Al Ma'ruf
+  Kudus (green `#005c2f`, LP Ma'arif NU); optional green illustration accent; `deploy/provision.sh` and a go-live
+  checklist (D-054…D-056).
+- Dark mode: lighter accent text tints so dark brand colours stay readable.
 - Panitia Pendaftaran may also record test attendance, re-registration and uniform pickup (D-051).
 - Dashboard shows real registration counts (total, today, per wave against quota, online/offline, documents complete).
 - Situs: public pages `/persyaratan` and `/jadwal`; home page shows "Daftar Sekarang" while registration is open (FR-WEB-01, FR-WEB-02).

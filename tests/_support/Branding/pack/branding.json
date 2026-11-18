@@ -1,0 +1,4 @@
+{
+    "settings": {"name": "SMP Contoh Kudus", "shortName": "SMP Contoh", "primaryColor": "#005c2f", "partnerName": "Lembaga Contoh", "unknownKey": "x"},
+    "images": {"logo": "logo.png", "logoWide": "wide.png", "logoWideDark": "wide-dark.png", "partnerLogo": "partner.png", "shareImage": "share.png", "favicon": "favicon.png"}
+}

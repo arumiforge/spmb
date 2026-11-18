@@ -18,7 +18,7 @@
     </div>
     <div class="w-full max-w-md">
         <div class="mb-6 flex items-center justify-between">
-            <?= view('partials/school_brand', ['brand' => ['size' => 'h-10 w-10']]) ?>
+            <?= view('partials/school_brand', ['brand' => ['size' => 'h-10 w-10', 'wide' => true, 'wideSize' => 'h-12']]) ?>
             <?= view('partials/theme_toggle') ?>
         </div>
         <div class="rounded-lg bg-white p-5 shadow-sm sm:p-8 dark:bg-gray-800">

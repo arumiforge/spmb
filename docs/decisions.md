@@ -258,3 +258,18 @@ Decision: The student account used by parents is the existing no-password access
 ## D-053 — Compact visitor analytics (2026-11-18)
 Status: accepted (refines D-009; interview round 1, Q5)
 Decision: Built-in, no third-party script, deliberately simple: page views and unique visitors per day, top pages, and simple totals for referrers and device type. No per-visitor detail.
+
+## D-054 — Brand images and school branding packs (2026-11-18)
+Status: accepted (extends D-019, FR-PLT-01)
+Context: The first client delivered a square logo, a landscape logo for light and dark backgrounds, and the logo of its parent organisation (LP Ma'arif NU), and asked for a favicon and a link-preview image.
+Decision: Brand images are settings, never code: square logo, landscape logo (light) and its dark-mode version, app icon (512 px), link-preview image (1200 × 630), favicon, and the parent organisation's name and logo for the website footer ("Di bawah naungan"). They are uploaded in Pengaturan → Identitas Sekolah or loaded from a branding pack with `php spark spmb:branding clients/<school>/branding` (branding.json + images); `App\Libraries\BrandingAssets` stores them in `writable/uploads/branding/` and `/aset/<slug>` serves them. Pages carry Open Graph / Twitter tags, `theme-color` and `apple-touch-icon`. Each client's originals and pack live in `clients/<school>/` (data, not code).
+Consequences: The public and sign-in headers show the landscape logo (swapping to the dark version in dark mode) when set; otherwise logo + name as before. In dark mode the accent text tints are lighter so dark brand colours stay readable.
+
+## D-055 — Optional illustration accent set (2026-11-18)
+Status: accepted (refines D-027)
+Decision: `School.illustrationAccent` ('' = blue default, 'hijau' = green) makes `illustration()` use `<name>-hijau.webp` (and `<name>-dark-hijau.webp`) when present and fall back to the default painting otherwise. ChatGPT makes the green set by editing the originals (brief 013); brief 014 adds the missing dark versions. SMP NU Al Ma'ruf Kudus uses the green set (#005c2f brand, logo green and NU green).
+
+## D-056 — Go-live for the school's review (2026-11-18)
+Status: accepted (interview round 1, Q2 and Q8)
+Decision: Go live as soon as possible on `spmbsmpnualmarufkudusweb.id` so the school can check it; the school enters wave 1 dates itself. Cloudflare (DNS, tunnel, Access) runs on the developer's (Arumi Studios') account. `deploy/provision.sh` prepares a fresh Ubuntu 24.04 server; the checklist is in `docs/deployment.md` ("Go-live").
+Consequences: Arumi Studios provides the VPS and keeps the Cloudflare account; transfer to the school later is a DNS/account change, not a code change.
