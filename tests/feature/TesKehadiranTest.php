@@ -38,7 +38,7 @@ final class TesKehadiranTest extends CIUnitTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $_SESSION = [];
+        $_SESSION    = [];
         $this->staff = [];
         $this->resetServices();
         service('routes')->loadRoutes();
