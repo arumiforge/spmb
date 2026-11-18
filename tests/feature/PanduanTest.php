@@ -26,13 +26,15 @@ final class PanduanTest extends CIUnitTestCase
 
         $result->assertOK();
         $result->assertSee('Calon Murid dan Orang Tua');
-        $result->assertSee('Panitia Pendaftaran');
+        $result->assertSee('Panitia');
+        $result->assertDontSee('Petugas Tes');
+        $result->assertDontSee('Kepala Sekolah');
         $result->assertSee('Super Admin');
     }
 
     public function testStaffGuideIncludesSharedSections(): void
     {
-        $result = $this->get('panduan/panitia-pendaftaran');
+        $result = $this->get('panduan/panitia');
 
         $result->assertOK();
         $result->assertSee('Apa yang bisa Anda lakukan');
@@ -57,7 +59,7 @@ final class PanduanTest extends CIUnitTestCase
     {
         $this->get('panduan')->assertSee('guide/panduan-calon-murid.webp');
         $this->get('panduan/calon-murid')->assertSee('guide/panduan-calon-murid.webp');
-        $this->get('panduan/panitia-pendaftaran')->assertSee('guide/panduan-petugas.webp');
+        $this->get('panduan/panitia')->assertSee('guide/panduan-petugas.webp');
     }
 
     public function testUnknownRoleIsNotFound(): void
@@ -72,5 +74,12 @@ final class PanduanTest extends CIUnitTestCase
 
         $this->assertNotEmpty($guide['toc']);
         $this->assertStringContainsString('<h2 id="' . $guide['toc'][0]['id'] . '">', $guide['html']);
+    }
+
+    public function testOldRoleGuidesRedirect(): void
+    {
+        $this->get('panduan/panitia-pendaftaran')->assertRedirectTo(site_url('panduan/panitia'));
+        $this->get('panduan/petugas-tes')->assertRedirectTo(site_url('panduan/panitia'));
+        $this->get('panduan/kepala-sekolah')->assertRedirectTo(site_url('panduan/admin-sekolah'));
     }
 }

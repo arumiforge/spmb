@@ -24,7 +24,7 @@ class AuthGroups extends ShieldAuthGroups
      * Public registration is disabled; accounts are created by an admin who
      * picks the role. This fallback is the least-privileged staff role.
      */
-    public string $defaultGroup = 'petugas-seragam';
+    public string $defaultGroup = 'panitia';
 
     /**
      * --------------------------------------------------------------------
@@ -32,6 +32,10 @@ class AuthGroups extends ShieldAuthGroups
      * --------------------------------------------------------------------
      * Titles and descriptions are shown to school staff, so they are in
      * plain Indonesian. See docs/requirements.md section 1.
+     *
+     * Only three roles (D-063): Admin Sekolah and Panitia for school staff,
+     * and Siswa, the no-password applicant access (not a Shield group, D-052).
+     * Super Admin is the developer's technical account.
      *
      * @var array<string, array<string, string>>
      */
@@ -44,25 +48,9 @@ class AuthGroups extends ShieldAuthGroups
             'title'       => 'Admin Sekolah',
             'description' => 'Mengatur data sekolah, gelombang, jadwal tes, pengguna, dan semua data pendaftar.',
         ],
-        'kepsek' => [
-            'title'       => 'Kepala Sekolah',
-            'description' => 'Melihat ringkasan dan laporan pendaftaran.',
-        ],
         'panitia' => [
-            'title'       => 'Panitia Pendaftaran',
-            'description' => 'Mengurus pendaftaran: pendaftar offline, pemeriksaan berkas, kartu, kehadiran tes, daftar ulang, dan seragam.',
-        ],
-        'petugas-tes' => [
-            'title'       => 'Petugas Tes',
-            'description' => 'Mencatat kehadiran tes pemetaan.',
-        ],
-        'petugas-daftar-ulang' => [
-            'title'       => 'Petugas Daftar Ulang',
-            'description' => 'Memproses daftar ulang calon murid.',
-        ],
-        'petugas-seragam' => [
-            'title'       => 'Petugas Seragam',
-            'description' => 'Mencatat status pengambilan seragam.',
+            'title'       => 'Panitia',
+            'description' => 'Mengurus semua pekerjaan panitia: pendaftar offline, pemeriksaan berkas, kartu, kehadiran tes, daftar ulang, seragam, dan pesan dari orang tua.',
         ],
     ];
 
@@ -136,23 +124,11 @@ class AuthGroups extends ShieldAuthGroups
             'pendaftar.*', 'kartu.*', 'referensi.*', 'tes.*', 'daftar-ulang.*', 'seragam.*',
             'laporan.*', 'situs.*', 'analitik.*', 'chat.*',
         ],
-        'kepsek' => [
-            'dasbor.view', 'pendaftar.view', 'laporan.*', 'analitik.view',
-        ],
         'panitia' => [
             'dasbor.view', 'pendaftar.view', 'pendaftar.create', 'pendaftar.edit',
             'pendaftar.verifikasi', 'kartu.cetak', 'chat.balas',
-            // D-051: the committee also runs test attendance, re-registration and uniform pickup.
+            // D-051, D-063: one committee role for registration, test attendance, re-registration and uniform pickup.
             'tes.kehadiran', 'daftar-ulang.proses', 'seragam.proses',
-        ],
-        'petugas-tes' => [
-            'dasbor.view', 'pendaftar.view', 'kartu.cetak', 'tes.kehadiran',
-        ],
-        'petugas-daftar-ulang' => [
-            'dasbor.view', 'pendaftar.view', 'daftar-ulang.proses',
-        ],
-        'petugas-seragam' => [
-            'dasbor.view', 'pendaftar.view', 'seragam.proses',
         ],
     ];
 }

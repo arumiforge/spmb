@@ -94,5 +94,5 @@ Phone photos are larger than PHP's default 2 MB upload limit. Set
 ## Guides
 
 `Guide/calon-murid.md` (upload, menyusul, statuses, problems),
-`Guide/panitia-pendaftaran.md` (checking, uploading for applicants),
+`Guide/panitia.md` (checking, uploading for applicants),
 `Guide/admin-sekolah.md` (document list, image settings).

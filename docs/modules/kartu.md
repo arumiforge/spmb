@@ -71,7 +71,7 @@ FPDF core fonts; long values shrink to 7 pt and are then shortened. Rendering ne
 
 ## Guides
 
-`Guide/panitia-pendaftaran.md` (print, renew, check), `Guide/petugas-tes.md` (scan the
+`Guide/panitia.md` (print, renew, check, scan the
 QR), `Guide/calon-murid.md` (download and print), `Guide/admin-sekolah.md` (settings).
 
 ## Tests

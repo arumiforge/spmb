@@ -48,7 +48,7 @@ final class PenggunaTest extends CIUnitTestCase
     {
         $admin = $this->makeUser('admin1', 'admin');
         $this->makeUser('siti', 'panitia');
-        $this->makeUser('joko', 'petugas-tes');
+        $this->makeUser('joko', 'admin');
 
         $result = $this->actingAs($admin)->get('admin/pengguna?q=siti');
 
@@ -56,7 +56,7 @@ final class PenggunaTest extends CIUnitTestCase
         $result->assertSee('Siti Test');
         $result->assertDontSee('Joko Test');
 
-        $byRole = $this->actingAs($admin)->get('admin/pengguna?peran=petugas-tes');
+        $byRole = $this->actingAs($admin)->get('admin/pengguna?peran=admin');
         $byRole->assertSee('Joko Test');
         $byRole->assertDontSee('Siti Test');
     }
@@ -68,7 +68,7 @@ final class PenggunaTest extends CIUnitTestCase
             'full_name' => 'Rina Kartika',
             'username'  => 'rina',
             'email'     => 'rina@example.test',
-            'roles'     => ['panitia', 'petugas-tes'],
+            'roles'     => ['panitia'],
         ]);
 
         $result->assertRedirect();
@@ -76,7 +76,7 @@ final class PenggunaTest extends CIUnitTestCase
 
         $user = model(UserModel::class, false)->findByCredentials(['email' => 'rina@example.test']);
         $this->assertInstanceOf(User::class, $user);
-        $this->assertEqualsCanonicalizing(['panitia', 'petugas-tes'], $user->getGroups());
+        $this->assertEqualsCanonicalizing(['panitia'], $user->getGroups());
         $this->assertTrue($user->requiresPasswordReset());
         $this->assertTrue(service('passwords')->verify($_SESSION['temp_password'], $user->password_hash));
     }
@@ -132,13 +132,13 @@ final class PenggunaTest extends CIUnitTestCase
             'full_name' => 'Admin Baru',
             'username'  => 'admin1',
             'email'     => 'admin1@example.test',
-            'roles'     => ['admin', 'kepsek'],
+            'roles'     => ['admin', 'panitia'],
         ]);
 
         $result->assertRedirectTo(site_url("admin/pengguna/{$admin->id}/ubah"));
         $user = model(UserModel::class, false)->findById($admin->id);
         $this->assertSame('Admin Baru', $user->full_name);
-        $this->assertEqualsCanonicalizing(['admin', 'kepsek'], $user->getGroups());
+        $this->assertEqualsCanonicalizing(['admin', 'panitia'], $user->getGroups());
     }
 
     public function testEditKeepsLockedRolesAndChangesEmail(): void
@@ -150,11 +150,11 @@ final class PenggunaTest extends CIUnitTestCase
             'full_name' => 'Budi Baru',
             'username'  => 'budi',
             'email'     => 'budi.baru@example.test',
-            'roles'     => ['petugas-seragam'],
+            'roles'     => ['panitia'],
         ])->assertRedirect();
 
         $user = model(UserModel::class, false)->findById($staff->id);
-        $this->assertSame(['petugas-seragam'], $user->getGroups());
+        $this->assertSame(['panitia'], $user->getGroups());
         $this->assertSame('budi.baru@example.test', $user->email);
     }
 
