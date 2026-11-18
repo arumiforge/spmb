@@ -69,7 +69,7 @@ $owners = ['' => lang('Referensi.chooseOwnership'), 'negeri' => lang('Referensi.
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?= lang('Referensi.mapAddText') ?></p>
         </div>
         <?= view('partials/form_field', ['field' => ['name' => 'name', 'label' => lang('Referensi.field.name'), 'required' => true, 'value' => SchoolModel::normaliseName($map['name']), 'attrs' => ['maxlength' => '150']]]) ?>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 items-end gap-4">
             <?= view('partials/form_field', ['field' => ['name' => 'level', 'label' => lang('Referensi.field.level'), 'type' => 'select', 'required' => true, 'options' => $levels, 'value' => str_starts_with(mb_strtoupper(SchoolModel::normaliseName($map['name'])), 'MI') ? 'MI' : 'SD']]) ?>
             <?= view('partials/form_field', ['field' => ['name' => 'ownership', 'label' => lang('Referensi.field.ownership'), 'type' => 'select', 'options' => $owners, 'value' => '']]) ?>
         </div>

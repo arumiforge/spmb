@@ -143,7 +143,15 @@ class SchoolModel extends Model
         }
 
         $phrase = $this->db->escapeLikeString(implode(' ', $words));
+        // Words hold only letters and digits (searchWords), so they are safe inside these LIKE strings.
+        $inName = array_map(function (string $word): string {
+            $like = $this->db->escapeLikeString($word);
+
+            return "(name LIKE '" . $like . "%' ESCAPE '!' OR name LIKE '% " . $like . "%' ESCAPE '!')";
+        }, $words);
+
         $builder->orderBy("CASE WHEN name LIKE '" . $phrase . "%' ESCAPE '!' THEN 0 ELSE 1 END", '', false)
+            ->orderBy('(' . implode(' + ', $inName) . ')', 'DESC', false)
             ->orderBy('name', 'ASC')
             ->limit(max(1, min($limit, self::SEARCH_LIMIT)));
 

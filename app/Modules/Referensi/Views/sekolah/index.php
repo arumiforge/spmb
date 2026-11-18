@@ -100,7 +100,7 @@ $filtered = array_filter($filters) !== [];
                         <tr class="border-b border-gray-100 last:border-0 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700/50">
                             <td class="px-4 py-3 font-medium text-gray-900 dark:text-white"><?= esc($s['name']) ?></td>
                             <td class="whitespace-nowrap px-4 py-3 font-mono"><?= $s['npsn'] !== null ? esc($s['npsn']) : '<span class="font-sans text-gray-400">' . lang('Referensi.noNpsn') . '</span>' ?></td>
-                            <td class="px-4 py-3"><?= esc($s['level']) ?><?php if ($s['ownership'] !== null) : ?> <span class="text-gray-500 dark:text-gray-400">· <?= esc(lang('Referensi.ownership.' . $s['ownership'])) ?></span><?php endif ?></td>
+                            <td class="whitespace-nowrap px-4 py-3"><?= esc($s['level']) ?><?php if ($s['ownership'] !== null) : ?> <span class="text-gray-500 dark:text-gray-400">· <?= esc(lang('Referensi.ownership.' . $s['ownership'])) ?></span><?php endif ?></td>
                             <td class="px-4 py-3"><?= esc($place($s)) ?></td>
                             <td class="hidden px-4 py-3 lg:table-cell"><?= esc(lang('Referensi.source.' . $s['source'])) ?></td>
                             <td class="px-4 py-3"><?= view('partials/status_badge', ['badge' => $status($s)]) ?></td>
