@@ -39,8 +39,8 @@ $select   = static function (string $name, string $all, array $options) use ($fi
 
 <?= $this->section('content') ?>
 <div class="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-    <form method="get" action="<?= url_to('pendaftar') ?>" class="grid grid-cols-1 gap-3 border-b border-gray-200 p-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 dark:border-gray-700" role="search">
-        <div class="relative sm:col-span-2 lg:col-span-3 2xl:col-span-2">
+    <form method="get" action="<?= url_to('pendaftar') ?>" class="grid grid-cols-1 gap-3 border-b border-gray-200 p-4 sm:grid-cols-2 lg:grid-cols-4 dark:border-gray-700" role="search">
+        <div class="relative sm:col-span-2 lg:col-span-4">
             <label for="q" class="sr-only"><?= lang('Pendaftaran.searchLabel') ?></label>
             <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-gray-500 dark:text-gray-400"><?= icon('search', 'h-4 w-4') ?></span>
             <input type="search" id="q" name="q" value="<?= esc($filters['q'], 'attr') ?>" placeholder="<?= lang('Pendaftaran.searchLabel') ?>" class="<?= $input ?> ps-9">
@@ -49,7 +49,7 @@ $select   = static function (string $name, string $all, array $options) use ($fi
         <div><?= $select('cara', lang('Pendaftaran.filterMethod'), lang('Status.method')) ?></div>
         <div><?= $select('status', lang('Pendaftaran.filterStatus'), lang('Status.applicant')) ?></div>
         <div><?= $select('berkas', lang('Pendaftaran.filterDocs'), lang('Status.documents')) ?></div>
-        <div class="flex items-center gap-3 sm:col-span-2 lg:col-span-3 2xl:col-span-6">
+        <div class="flex items-center gap-3 sm:col-span-2 lg:col-span-4">
             <label class="inline-flex flex-1 items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                 <input type="checkbox" name="ganda" value="1" <?= $filters['ganda'] === '1' ? 'checked' : '' ?> class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700">
                 <?= lang('Pendaftaran.filterDuplicate') ?>
@@ -88,10 +88,13 @@ $select   = static function (string $name, string $all, array $options) use ($fi
                             <td class="whitespace-nowrap px-4 py-3 font-mono text-gray-900 dark:text-white"><?= esc($a['registration_number']) ?></td>
                             <td class="px-4 py-3">
                                 <a href="<?= url_to('pendaftar.detail', $a['id']) ?>" class="font-medium text-gray-900 hover:text-primary-700 hover:underline dark:text-white dark:hover:text-primary-400"><?= esc($a['full_name']) ?></a>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">NIK <?= esc(ApplicantModel::maskNik($a['nik'])) ?> · NISN <?= esc($a['nisn'] ?: '-') ?></p>
+                                <p class="whitespace-nowrap text-xs text-gray-500 dark:text-gray-400">
+                                    <?php if (! empty($a['nisn'])) : ?><span class="block">NISN <?= esc($a['nisn']) ?></span><?php endif ?>
+                                    <?php if (! empty($a['nik'])) : ?><span class="block">NIK <?= esc(ApplicantModel::maskNik($a['nik'])) ?></span><?php endif ?>
+                                </p>
                                 <?php if ((int) $a['possible_duplicate'] === 1) : ?><div class="mt-1"><?= $dupBadge ?></div><?php endif ?>
                             </td>
-                            <td class="px-4 py-3"><?= esc($waveName($a)) ?></td>
+                            <td class="whitespace-nowrap px-4 py-3"><?= esc($waveName($a)) ?></td>
                             <td class="px-4 py-3"><?= $badge('method', $a['method']) ?></td>
                             <td class="px-4 py-3"><?= $badge('applicant', $a['status']) ?></td>
                             <td class="px-4 py-3"><?= $badge('documents', $a['document_status']) ?></td>

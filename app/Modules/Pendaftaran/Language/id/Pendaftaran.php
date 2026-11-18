@@ -159,7 +159,7 @@ return [
     'statusInvalid'          => 'Pilihan status belum sesuai.',
     'statusChanged'          => 'Status pendaftar diubah menjadi "{0}".',
     'statusTitle'            => 'Status pendaftaran',
-    'statusNote'             => 'Catatan (tidak wajib)',
+    'statusNote'             => 'Catatan',
     'statusSave'             => 'Ubah Status',
     'duplicateConfirmNeeded' => 'Ada data yang mirip dengan pendaftar lain. Periksa daftarnya, lalu centang konfirmasi jika ingin tetap menyimpan.',
     'duplicateTitle'         => 'Ada data yang mirip',
