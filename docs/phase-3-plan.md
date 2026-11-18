@@ -7,6 +7,10 @@ every schedule change logged (who, when, from → to, reason). Requirements FR-T
 Process: `docs/coordination.md`. Decisions: D-059 … D-062.
 
 Integration branch: **`phase-3`**. Coordinator session label: `spmb:coordinator`.
+
+**Status: done.** Foundation #18, three roles #19 (D-063), B #20, A #22, C #21 merged into `phase-3`; 424 tests.
+As built: `assign()` also takes `$allowOverQuota` (walk-ins); `assign()`/`move()` return `TestAssignmentModel::forApplicant()`;
+details settled during the build are in D-064.
 Module: **`Tes`** (`app/Modules/Tes`, label "Tes Penempatan", requires Pendaftaran).
 
 ## What the foundation already provides
@@ -118,7 +122,7 @@ Requirements: FR-TEST-02, FR-TEST-04, D-060, D-062.
     order; `seat_number` continues after the session's highest. Never moves anyone already
     scheduled. Lock the sessions (`SELECT … FOR UPDATE`) in one transaction. Report:
     `['placed' => int, 'unplaced' => int, 'sessions' => list<['session_id', 'label', 'count', 'first_number', 'last_number']>, 'unplacedNumbers' => list<string>]`.
-  - `assign(int $applicantId, int $sessionId, int $staffId, ?string $reason = null): array` — first
+  - `assign(int $applicantId, int $sessionId, int $staffId, ?string $reason = null, bool $allowOverQuota = false): array` — first
     seat (kind `assigned`, status pending).
   - `move(int $applicantId, int $sessionId, int $staffId, string $reason, bool $allowOverQuota = false): array`
     — reason required (min 5 characters); status becomes `rescheduled`; attendance fields cleared;

@@ -44,10 +44,10 @@ extra per-user permissions; changing a role's permission set is a configuration 
 - FR-CARD-04 Availability rule configurable: immediately or after initial verification (committee decision pending). **[built in phase 2]**
 
 ### Placement test (TEST)
-- FR-TEST-01 Calendar of test days (holidays excluded), sessions, rooms, quotas.
-- FR-TEST-02 Automatic allocation by registration number order, online and offline equal.
-- FR-TEST-03 Attendance via QR scan or search: Belum Tes / Hadir / Tidak Hadir / Dijadwalkan Ulang.
-- FR-TEST-04 Every schedule change logged (who, when, from → to, reason).
+- FR-TEST-01 Calendar of test days (holidays excluded), sessions, rooms, quotas. **[built in phase 3: rooms, calendar with holidays, sessions + generator, D-059, D-064]**
+- FR-TEST-02 Automatic allocation by registration number order, online and offline equal. **[built in phase 3, D-060]**
+- FR-TEST-03 Attendance via QR scan or search: Belum Tes / Hadir / Tidak Hadir / Dijadwalkan Ulang. **[built in phase 3: camera/USB scan, search, card check page, D-061]**
+- FR-TEST-04 Every schedule change logged (who, when, from → to, reason). **[built in phase 3: `test_schedule_changes` + Riwayat Jadwal page]**
 
 ### Re-registration & uniform (DU, SRG)
 - FR-DU-01 Lookup by QR or number shows data and test status; status Belum / Sedang diproses (optional) / Sudah, with date and officer.

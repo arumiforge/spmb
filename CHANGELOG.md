@@ -5,6 +5,14 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Tes, rooms and schedule: test rooms, test calendar with holidays, sessions (add, edit, deactivate, delete), creating many
+  sessions at once with a preview, and Pengaturan → Tes (FR-TEST-01).
+- Tes, allocation: automatic test seating with preview (registration order, waves, holidays), participant list,
+  giving/moving/removing a test seat with a reason, schedule change log, and the test schedule on the applicant's page
+  and the staff detail page (FR-TEST-02, FR-TEST-04).
+- Tes, attendance: day overview, session roster with Hadir / Tidak hadir / undo, camera and USB card scanning, moving a
+  walk-in into the session, marking the rest absent after the session, printable attendance sheet (PDF), test schedule
+  and "Catat Hadir" on the card check page and card lookup, "Tes hari ini" on the dashboard (FR-TEST-03).
 - Phase 3 foundation: module Tes (rooms, test holidays, sessions, assignments, schedule change log), settings `Tes`,
   test status labels, schedule on the registration card, panel slots `card_check`, `card_lookup` and `dashboard`,
   guide sections from `Guide/<audience>/*.md`, camera QR scanner bundle (`qr-scanner`, MIT), `docs/phase-3-plan.md`

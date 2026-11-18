@@ -45,3 +45,14 @@ No row = "Belum dijadwalkan".
 | `requireCompleteDocuments` | false | Only applicants with complete documents get a seat automatically |
 | `instructions` | "Datang 30 menit …" | Shown to applicants with their schedule |
 | `defaultDurationMinutes` | 120 | Session length suggested by the session generator |
+
+## Pages (details in the package pages)
+
+| Page | Permission | Package |
+| --- | --- | --- |
+| `/admin/tes/ruang`, `/admin/tes/kalender`, `/admin/tes/sesi` (+ `buat-banyak`), `/admin/pengaturan/tes` | `tes.atur` | A, `tes-jadwal.md` |
+| `/admin/tes/penjadwalan`, POST `/admin/pendaftar/{id}/tes/hapus` | `tes.atur` | B, `tes-penjadwalan.md` |
+| `/admin/tes/peserta`, `/admin/tes/riwayat-jadwal`, `/admin/pendaftar/{id}/tes` | `tes.kehadiran` | B |
+| `/admin/tes/kehadiran` (+ `sesi/{id}`, `catat`, scan, move here, mark the rest absent), `/admin/tes/sesi/{id}/daftar-hadir` | `tes.kehadiran` | C, `tes-kehadiran.md` |
+
+Demo data (`spmb:install --demo`): 4 rooms, 2 holidays, 48 sessions, demo applicants seated automatically.
