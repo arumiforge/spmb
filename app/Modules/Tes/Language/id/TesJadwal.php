@@ -20,6 +20,7 @@ return [
     'all'        => 'Semua',
     'holiday'    => 'Hari libur',
     'actions'    => 'Pilihan',
+    'yearLabel'  => 'Tahun ajaran {0}',
 
     // Rooms
     'roomsTitle'          => 'Ruang Tes',
