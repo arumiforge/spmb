@@ -190,7 +190,7 @@ existing signatures, `composer.json/.lock`, `package*.json`, `resources/**`,
 `.github/**`, and the shared docs (`progress`, `decisions`, `CHANGELOG`,
 `requirements`, `roadmap`, `architecture`, `README`, this plan).
 
-## Open questions for the school (defaults in use)
+## Questions for the school (answered 2026-11-18, see `interview/round-01.md` Outcomes, D-047…D-049)
 
 | Question | Default in use | Setting |
 | --- | --- | --- |

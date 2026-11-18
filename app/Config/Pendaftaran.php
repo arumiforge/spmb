@@ -38,8 +38,8 @@ class Pendaftaran extends BaseConfig
 
     /**
      * Optional applicant fields the school wants required, and fields hidden
-     * from the form altogether (keys = applicants columns). Pending the school's
-     * answer (interview round 1, "data fields required on the form").
+     * from the form altogether (keys = applicants columns). KK number,
+     * occupations and income are optional by default (D-048).
      *
      * @var list<string>
      */
@@ -48,7 +48,37 @@ class Pendaftaran extends BaseConfig
     /**
      * @var list<string>
      */
-    public array $hiddenFields = ['kk_number', 'father_occupation', 'mother_occupation'];
+    public array $hiddenFields = [];
+
+    /**
+     * Fields filled by school staff only: not on the public form, shown on the
+     * staff forms (D-048).
+     *
+     * @var list<string>
+     */
+    public array $staffOnlyFields = [];
+
+    /**
+     * Dropdown list for parent/guardian occupation (Dapodik categories by
+     * default; the school may edit the list). Values are stored as written.
+     *
+     * @var list<string>
+     */
+    public array $occupationOptions = [
+        'Tidak bekerja', 'Nelayan', 'Petani', 'Peternak', 'PNS/TNI/Polri', 'Karyawan Swasta',
+        'Pedagang Kecil', 'Pedagang Besar', 'Wiraswasta', 'Wirausaha', 'Buruh', 'Pensiunan',
+        'Tenaga Kerja Indonesia', 'Karyawan BUMN', 'Sudah Meninggal', 'Lainnya',
+    ];
+
+    /**
+     * Dropdown list for parent/guardian monthly income (Dapodik ranges by default).
+     *
+     * @var list<string>
+     */
+    public array $incomeOptions = [
+        'Tidak berpenghasilan', 'Kurang dari Rp500.000', 'Rp500.000 – Rp999.999', 'Rp1.000.000 – Rp1.999.999',
+        'Rp2.000.000 – Rp4.999.999', 'Rp5.000.000 – Rp20.000.000', 'Lebih dari Rp20.000.000',
+    ];
 
     /**
      * Public status check (D-008): attempts per IP per minute, and minutes an

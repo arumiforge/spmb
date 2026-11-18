@@ -32,4 +32,13 @@ To be answered by the school; send this list back to them.
 
 ## Outcomes
 
-_To be filled after answers arrive._
+Answers from Arumi Studios on behalf of the school (2026-11-18):
+
+- **Waves**: dates are set by the school in the admin (Gelombang); nothing fixed in code.
+- **Tests**: schedule, quota and rooms flexible, set by the school (phase 3).
+- **Documents**: the list is set by the school; each document can be required or not, may follow later (D-036, D-043).
+- **Card**: availability is a setting (immediately or after the first check, D-035).
+- **Number**: restarts each academic year (D-031 confirmed); the format is set by the school and may end with a random code of up to 5 characters, or none (D-049).
+- **KK number, parent occupation and income**: approved by the ethics committee and the education office, with parents' consent; collected as optional fields (dropdowns for occupation and income) that may be left empty or filled by staff later (D-048).
+- **Quota**: chosen per wave — information only, close online at the quota, or a separate online limit (D-047).
+- Still open: Q1, Q2, Q4–Q6, Q8 for Arumi Studios; Dapodik access (D-040).

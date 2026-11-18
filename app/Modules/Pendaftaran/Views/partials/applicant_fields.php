@@ -13,17 +13,22 @@
  */
 
 use Modules\Pendaftaran\Controllers\Concerns\HandlesApplicantForm;
+use Modules\Pendaftaran\Libraries\ApplicantForm;
 
 $form   = $applicantForm['form'];
 $values = $applicantForm['values'] ?? [];
-$only   = $applicantForm['fields'] ?? $form->visible();
 $card   = $applicantForm['card'] ?? 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800';
 $waves  = $applicantForm['waves'] ?? null;
+// Staff forms (with a wave choice) also show the fields set to "Hanya diisi petugas".
+$only = $applicantForm['fields'] ?? $form->visible($waves !== null);
 
 $sections = [
     'sectionStudent' => ['full_name', 'gender', 'birth_place', 'birth_date', 'nisn', 'nik', 'kk_number', 'religion', 'phone'],
     'sectionAddress' => ['address', 'village', 'district', 'regency', 'province'],
-    'sectionParents' => ['father_name', 'father_occupation', 'mother_name', 'mother_occupation', 'guardian_name', 'guardian_relation', 'parent_phone', 'parent_email'],
+    'sectionParents' => [
+        'father_name', 'father_occupation', 'father_income', 'mother_name', 'mother_occupation', 'mother_income',
+        'guardian_name', 'guardian_relation', 'guardian_occupation', 'guardian_income', 'parent_phone', 'parent_email',
+    ],
     'sectionSchool'  => ['previous_school_name', 'graduation_year'],
 ];
 $types = [
@@ -40,6 +45,17 @@ $types = [
     'full_name'       => ['attrs' => ['autocomplete' => 'name']],
     'graduation_year' => ['type' => 'number', 'attrs' => ['inputmode' => 'numeric', 'min' => '2000', 'max' => '2100']],
 ];
+foreach (array_keys(ApplicantForm::LISTS) as $listField) {
+    $options = ApplicantForm::options($listField) ?? [];
+    // Keep a value saved earlier even when it was removed from the list since.
+    $saved = (string) ($values[$listField] ?? '');
+
+    if ($saved !== '' && ! in_array($saved, $options, true)) {
+        $options[] = $saved;
+    }
+
+    $types[$listField] = ['type' => 'select', 'options' => ['' => lang('Pendaftaran.chooseOption')] + array_combine($options, $options)];
+}
 $wide = ['full_name', 'address', 'previous_school_name'];
 
 $field = static function (string $name) use ($form, $values, $types): string {

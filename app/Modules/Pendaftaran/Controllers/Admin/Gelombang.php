@@ -148,11 +148,13 @@ class Gelombang extends BaseController
     private function save(?array $wave): RedirectResponse
     {
         $rules = [
-            'name'        => ['label' => lang('Pendaftaran.waveName'), 'rules' => 'required|max_length[60]'],
-            'starts_on'   => ['label' => lang('Pendaftaran.waveStartsOn'), 'rules' => 'required|valid_date[Y-m-d]'],
-            'ends_on'     => ['label' => lang('Pendaftaran.waveEndsOn'), 'rules' => 'required|valid_date[Y-m-d]'],
-            'quota'       => ['label' => lang('Pendaftaran.waveQuota'), 'rules' => 'permit_empty|is_natural_no_zero|less_than[100000]'],
-            'description' => ['label' => lang('Pendaftaran.waveDescription'), 'rules' => 'permit_empty|max_length[1000]'],
+            'name'         => ['label' => lang('Pendaftaran.waveName'), 'rules' => 'required|max_length[60]'],
+            'starts_on'    => ['label' => lang('Pendaftaran.waveStartsOn'), 'rules' => 'required|valid_date[Y-m-d]'],
+            'ends_on'      => ['label' => lang('Pendaftaran.waveEndsOn'), 'rules' => 'required|valid_date[Y-m-d]'],
+            'quota'        => ['label' => lang('Pendaftaran.waveQuota'), 'rules' => 'permit_empty|is_natural_no_zero|less_than[100000]'],
+            'quota_mode'   => ['label' => lang('Pendaftaran.waveQuotaMode'), 'rules' => 'required|in_list[none,close,online_limit]'],
+            'online_quota' => ['label' => lang('Pendaftaran.waveOnlineQuota'), 'rules' => 'permit_empty|is_natural_no_zero|less_than[100000]'],
+            'description'  => ['label' => lang('Pendaftaran.waveDescription'), 'rules' => 'permit_empty|max_length[1000]'],
         ];
 
         if (! $this->validate($rules)) {
@@ -166,9 +168,23 @@ class Gelombang extends BaseController
             'starts_on'     => (string) $this->request->getPost('starts_on'),
             'ends_on'       => (string) $this->request->getPost('ends_on'),
             'quota'         => ($q = trim((string) $this->request->getPost('quota'))) === '' ? null : (int) $q,
+            'quota_mode'    => (string) $this->request->getPost('quota_mode'),
+            'online_quota'  => ($o = trim((string) $this->request->getPost('online_quota'))) === '' ? null : (int) $o,
             'description'   => trim((string) $this->request->getPost('description')) ?: null,
             'is_active'     => $this->request->getPost('is_active') === '1' ? 1 : 0,
         ];
+
+        if ($data['quota_mode'] === 'close' && $data['quota'] === null) {
+            return redirect()->back()->withInput()->with('errors', ['quota' => lang('Pendaftaran.waveQuotaNeeded')]);
+        }
+
+        if ($data['quota_mode'] === 'online_limit' && $data['online_quota'] === null) {
+            return redirect()->back()->withInput()->with('errors', ['online_quota' => lang('Pendaftaran.waveOnlineQuotaNeeded')]);
+        }
+
+        if ($data['quota_mode'] !== 'online_limit') {
+            $data['online_quota'] = null;
+        }
 
         if ($data['ends_on'] < $data['starts_on']) {
             return redirect()->back()->withInput()->with('errors', ['ends_on' => lang('Pendaftaran.waveEndBeforeStart')]);

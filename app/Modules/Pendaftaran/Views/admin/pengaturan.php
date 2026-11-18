@@ -17,7 +17,7 @@ $card    = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gr
 $h2      = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
 $oldYear = (string) old('academicYear', $values['academicYear']);
 $example = RegistrationNumber::isValidFormat((string) old('numberFormat', $values['numberFormat']))
-    ? RegistrationNumber::format((string) old('numberFormat', $values['numberFormat']), $oldYear, 12)
+    ? RegistrationNumber::format((string) old('numberFormat', $values['numberFormat']), $oldYear, 12, static fn (int $n): string => substr('K7Q2M', 0, $n))
     : '–';
 $posted  = old('fields');
 $labels  = lang('Pendaftaran.fieldModes');
@@ -75,6 +75,15 @@ $labels  = lang('Pendaftaran.fieldModes');
         </div>
     </section>
 
+    <section class="<?= $card ?>">
+        <h2 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Pendaftaran.sectionLists') ?></h2>
+        <p class="mb-4 text-sm text-gray-500 dark:text-gray-400"><?= lang('Pendaftaran.sectionListsIntro') ?></p>
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <?= $f('occupationOptions', ['type' => 'textarea', 'rows' => 10, 'required' => true]) ?>
+            <?= $f('incomeOptions', ['type' => 'textarea', 'rows' => 10, 'required' => true]) ?>
+        </div>
+    </section>
+
     <div class="flex justify-end">
         <button type="submit" class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 sm:w-auto dark:focus:ring-primary-800"><?= lang('Pendaftaran.save') ?></button>
     </div>
@@ -90,9 +99,15 @@ $labels  = lang('Pendaftaran.fieldModes');
     const render = () => {
         const format = input.value.trim();
         const y = String(parseInt((year && year.value) || '', 10) || new Date().getFullYear());
-        const valid = /^(?:[A-Za-z0-9./_-]|\{YEAR\}|\{YY\}|\{0+\})+$/.test(format) && (format.match(/\{0+\}/g) || []).length === 1;
+        const valid = /^(?:[A-Za-z0-9./_-]|\{YEAR\}|\{YY\}|\{0+\}|\{ACAK(?::[1-5])?\})+$/.test(format)
+            && (format.match(/\{0+\}/g) || []).length === 1
+            && (format.match(/\{ACAK(?::[1-5])?\}/g) || []).length <= 1;
+        // The random part differs per applicant; the example shows sample characters.
         out.textContent = valid
-            ? format.replace(/\{(YEAR|YY|0+)\}/g, (m, t) => t === 'YEAR' ? y : (t === 'YY' ? y.slice(-2) : '12'.padStart(t.length, '0')))
+            ? format.replace(/\{(YEAR|YY|0+|ACAK(?::([1-5]))?)\}/g, (m, t, n) => t === 'YEAR' ? y
+                : (t === 'YY' ? y.slice(-2)
+                : (t.startsWith('ACAK') ? 'K7Q2M'.slice(0, n ? parseInt(n, 10) : <?= RegistrationNumber::RANDOM_DEFAULT_LENGTH ?>)
+                : '12'.padStart(t.length, '0'))))
             : '–';
     };
     input.addEventListener('input', render);

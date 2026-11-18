@@ -20,7 +20,18 @@ class RegistrationNumber
     /**
      * Allowed format: letters, digits, - / . _ and the tokens {YEAR}, {YY}, {0…0}.
      */
-    private const FORMAT_PATTERN = '#\A(?:[A-Za-z0-9./_-]|\{YEAR\}|\{YY\}|\{0+\})+\z#';
+    private const FORMAT_PATTERN = '#\A(?:[A-Za-z0-9./_-]|\{YEAR\}|\{YY\}|\{0+\}|\{ACAK(?::[1-5])?\})+\z#';
+
+    /**
+     * Characters of the random part: uppercase letters and digits without
+     * look-alikes (no O, I, L, 0, 1), easy to read aloud and type (D-049).
+     */
+    public const RANDOM_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+
+    /**
+     * Length of {ACAK} without a number; {ACAK:n} sets 1–5.
+     */
+    public const RANDOM_DEFAULT_LENGTH = 4;
 
     private BaseConnection $db;
 
@@ -84,26 +95,48 @@ class RegistrationNumber
     }
 
     /**
-     * Applies the format: {YEAR} → 2027, {YY} → 27, {0000} → 0012.
+     * Applies the format: {YEAR} → 2027, {YY} → 27, {0000} → 0012,
+     * {ACAK} / {ACAK:n} → n random characters from RANDOM_ALPHABET (n ≤ 5).
+     *
+     * @param (callable(int): string)|null $random Generates n random characters (tests pass a fixed one)
      */
-    public static function format(string $format, string $academicYear, int $sequence): string
+    public static function format(string $format, string $academicYear, int $sequence, ?callable $random = null): string
     {
         $year = (string) (int) substr($academicYear, 0, 4);
+        $random ??= self::random(...);
 
         return (string) preg_replace_callback(
-            '/\{(YEAR|YY|0+)\}/',
+            '/\{(YEAR|YY|0+|ACAK(?::([1-5]))?)\}/',
             static fn (array $m): string => match (true) {
-                $m[1] === 'YEAR' => $year,
-                $m[1] === 'YY'   => substr($year, -2),
-                default          => str_pad((string) $sequence, strlen($m[1]), '0', STR_PAD_LEFT),
+                $m[1] === 'YEAR'               => $year,
+                $m[1] === 'YY'                 => substr($year, -2),
+                str_starts_with($m[1], 'ACAK') => $random(isset($m[2]) && $m[2] !== '' ? (int) $m[2] : self::RANDOM_DEFAULT_LENGTH),
+                default                        => str_pad((string) $sequence, strlen($m[1]), '0', STR_PAD_LEFT),
             },
             $format,
         );
     }
 
     /**
+     * $length characters from RANDOM_ALPHABET (cryptographically random).
+     */
+    public static function random(int $length): string
+    {
+        $length = max(1, min(5, $length));
+        $max    = strlen(self::RANDOM_ALPHABET) - 1;
+        $out    = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $out .= self::RANDOM_ALPHABET[random_int(0, $max)];
+        }
+
+        return $out;
+    }
+
+    /**
      * A format is valid when it uses only allowed characters, has exactly one
-     * sequence token and its numbers fit the column (30 characters).
+     * sequence token, at most one random token, and its numbers fit the
+     * column (30 characters).
      */
     public static function isValidFormat(string $format): bool
     {
@@ -111,7 +144,11 @@ class RegistrationNumber
             return false;
         }
 
-        return strlen(self::format($format, '2027/2028', 99999)) <= 30;
+        if (preg_match_all('/\{ACAK(?::[1-5])?\}/', $format) > 1) {
+            return false;
+        }
+
+        return strlen(self::format($format, '2027/2028', 99999, static fn (int $n): string => str_repeat('X', $n))) <= 30;
     }
 
     private function exists(string $number): bool

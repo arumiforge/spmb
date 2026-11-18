@@ -228,3 +228,17 @@ Decision: Duplicate checks run within the same academic year. Offline duplicates
 ## D-046 — Staff can issue a new private link (2026-11-18)
 Status: proposed (refines D-034)
 Decision: `POST /admin/pendaftar/<id>/tautan` (`pendaftar.edit`, audited `private_link_created`) replaces the applicant's private link; the old link stops working and the new one is shown once with a WhatsApp share button. Always-required form fields: name, gender, birth place and date, address, parent WhatsApp number, previous school, and at least one of father/mother/guardian name. NIK and KK are masked on the applicant's own page.
+
+## D-047 — Quota behaviour per wave (2026-11-18)
+Status: accepted (answered by the user; replaces D-044)
+Decision: Each wave has `quota_mode`: `none` (the quota is information only), `close` (online registration closes when the wave's applicants reach the quota) or `online_limit` (online registration closes when online applicants reach `online_quota`, e.g. quota 200, online limit 150). Staff can always register offline. Cancelled and deleted applicants do not count.
+
+## D-048 — KK number, parent occupation and income (2026-11-18)
+Status: accepted (answered by the user; replaces the KK/occupation/income part of D-037)
+Context: The ethics committee and the education office approved collecting the KK number, parent occupation and income; parents and the school agreed.
+Decision: KK number, father/mother/guardian occupation and father/mother/guardian monthly income are optional fields by default. Occupation and income are dropdowns whose lists are settings (`Pendaftaran.occupationOptions`, `incomeOptions`; Dapodik categories by default, editable by Admin Sekolah); the chosen text is stored. Each configurable field can be Wajib, Tidak wajib, Hanya diisi petugas (`staffOnlyFields`: not on the public form, filled by staff) or Tidak ditampilkan.
+Consequences: Retention and access rules of UU PDP apply to these fields as to the rest of the applicant data (visible only with `pendaftar.view`, audited).
+
+## D-049 — Random code at the end of registration numbers (2026-11-18)
+Status: accepted (answered by the user; extends D-031)
+Decision: The number format may contain one `{ACAK}` (4 characters) or `{ACAK:n}` token (n = 1…5), normally at the end, e.g. `PMB-{YEAR}-{0000}-{ACAK:3}` → PMB-2027-0001-K7Q. Characters: uppercase letters and digits without look-alikes (no O, I, L, 0, 1), from `random_int`. Without the token there is no random part. Numbers still restart every academic year (D-031 confirmed) and are never reused.

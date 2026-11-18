@@ -50,9 +50,14 @@ Audit events: `applicant_registered`, `applicant_status_changed`, `duplicate_rev
 
 ## Settings (`setting('Pendaftaran.*')`, defaults in `app/Config/Pendaftaran.php`)
 
-`academicYear`, `numberFormat` (`{YEAR}`, `{YY}`, `{0…0}`; one sequence token, max 30
-characters), `numberScope` (`year` | `never` → counter scope `all`), `onlineOpen`,
-`requiredFields`, `hiddenFields`, `statusCheckAttempts`, `applicantSessionMinutes`.
+`academicYear`, `numberFormat` (`{YEAR}`, `{YY}`, `{0…0}`, optional `{ACAK}`/`{ACAK:1…5}` random
+characters without look-alikes; one sequence token, at most one random token, max 30 characters, D-049),
+`numberScope` (`year` default, restarts each academic year | `never` → counter scope `all`), `onlineOpen`,
+`requiredFields`, `hiddenFields`, `staffOnlyFields` (not on the public form, filled by staff), `occupationOptions`,
+`incomeOptions` (dropdown lists, Dapodik categories by default, D-048), `statusCheckAttempts`, `applicantSessionMinutes`.
+
+Waves carry `quota`, `quota_mode` (`none` information only | `close` online closes at the quota | `online_limit`
+online closes at `online_quota`; D-047) and `online_quota`.
 
 Always required: full name, gender, birth place and date, address, parent WhatsApp
 number, previous school (list entry or free text) and at least one of father,
@@ -60,7 +65,7 @@ mother or guardian name (one of the three always stays on the form).
 
 ## Rules worth knowing
 
-- Online registration is closed when the current wave's quota is reached; staff can still register offline.
+- Online registration closes per the wave's `quota_mode` (D-047); staff can always register offline.
 - The public form never shows another applicant's data: a possible duplicate is only flagged (`possible_duplicate`) and every success page carries the same neutral hint (D-032).
 - The private-link token (32 random bytes, base64url) is shown once; only its SHA-256 is stored. Staff can issue a new one.
 - Applicants see NIK and KK numbers masked on their own page; staff lists mask NIK, the detail page shows it (`pendaftar.view`).

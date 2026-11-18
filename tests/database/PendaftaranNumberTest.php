@@ -110,4 +110,25 @@ final class PendaftaranNumberTest extends CIUnitTestCase
         $this->dontSeeInDatabase('registration_counters', ['scope' => '2027/2028', 'last_number' => 1]);
         $this->assertSame('PMB-2027-0001', (new RegistrationNumber())->next('2027/2028'));
     }
+
+    public function testRandomSuffix(): void
+    {
+        $fixed = static fn (int $n): string => substr('ABCDE', 0, $n);
+
+        $this->assertSame('PMB-2027-0012-ABC', RegistrationNumber::format('PMB-{YEAR}-{0000}-{ACAK:3}', '2027/2028', 12, $fixed));
+        $this->assertSame('PMB-2027-0012-ABCD', RegistrationNumber::format('PMB-{YEAR}-{0000}-{ACAK}', '2027/2028', 12, $fixed));
+        $this->assertTrue(RegistrationNumber::isValidFormat('PMB-{YEAR}-{0000}-{ACAK:5}'));
+        $this->assertTrue(RegistrationNumber::isValidFormat('PMB-{YEAR}-{0000}'));
+        $this->assertFalse(RegistrationNumber::isValidFormat('PMB-{YEAR}-{0000}-{ACAK:6}'));
+        $this->assertFalse(RegistrationNumber::isValidFormat('{ACAK:2}-{0000}-{ACAK:2}'));
+
+        foreach ([1, 3, 5] as $n) {
+            $this->assertMatchesRegularExpression('/\A[ABCDEFGHJKMNPQRSTUVWXYZ2-9]{' . $n . '}\z/', RegistrationNumber::random($n));
+        }
+
+        setting('Pendaftaran.numberFormat', 'PMB-{YEAR}-{0000}-{ACAK:5}');
+        $number = (new RegistrationNumber())->next('2027/2028');
+        $this->assertMatchesRegularExpression('/\APMB-2027-0001-[A-Z2-9]{5}\z/', $number);
+        $this->assertDoesNotMatchRegularExpression('/[OIL01]\z/', substr($number, -5));
+    }
 }
