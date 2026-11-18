@@ -62,7 +62,7 @@ final class AuthFlowTest extends CIUnitTestCase
 
         $result->assertOK();
         $result->assertSee('Ani Wijaya');
-        $result->assertSee('Panitia Pendaftaran');
+        $result->assertSee('Panitia');
     }
 
     public function testUserWithoutPermissionIsTurnedAway(): void

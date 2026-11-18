@@ -21,12 +21,8 @@ class DemoUserSeeder extends Seeder
      * username => group
      */
     public const ACCOUNTS = [
-        'admin'              => 'admin',
-        'kepsek'             => 'kepsek',
-        'panitia'            => 'panitia',
-        'petugastes'         => 'petugas-tes',
-        'petugasdaftarulang' => 'petugas-daftar-ulang',
-        'petugasseragam'     => 'petugas-seragam',
+        'admin'   => 'admin',
+        'panitia' => 'panitia',
     ];
 
     public function run(): void

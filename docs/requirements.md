@@ -11,13 +11,11 @@ IDs are stable; reference them in commits, PRs and tests (`FR-REG-03`).
 | --- | --- | --- | --- |
 | Super Admin | Arumi Studios | Everything: modules on/off, white-label, system settings, backups, logs, users of all roles | Technical allowed |
 | Admin Sekolah | School IT/operator | Everything for the school: identity, waves, test schedule, documents list, uniform settings, users (except super admin), all data and reports **[confirmed, D-051]** | Non-technical |
-| Kepala Sekolah **[optional, unused by default]** | Principal | Read-only dashboard and reports | Non-technical |
-| Panitia Pendaftaran | Registration committee | Registration work only: offline applicants, data edits, document checks, cards, test attendance, re-registration, uniform pickup; no settings **[confirmed, D-051]** | Non-technical |
-| Petugas Tes **[optional]** | Test officers | Scan card / search, record attendance, reschedule | Non-technical |
-| Petugas Daftar Ulang **[optional]** | Re-registration officers | Process re-registration | Non-technical |
-| Petugas Seragam **[optional]** | Uniform officers | Update uniform status | Non-technical |
-| Calon Murid / Orang Tua ("akun siswa") | Public, used by parents | Register online, check status, correct data, download card, send messages/criticism/suggestions — no password: registration number + birth date or private link **[confirmed, D-008, D-052]** | Non-technical |
+| Panitia | School committee (one role for all committee work) | Offline applicants, data edits, document checks, cards, test attendance and moving a test seat, re-registration, uniform pickup, replies to parents' messages; no settings **[confirmed, D-051, D-063]** | Non-technical |
+| Siswa — Calon Murid / Orang Tua ("akun siswa") | Public, used by parents | Register online, check status, correct data, download card, send messages/criticism/suggestions — no password: registration number + birth date or private link **[confirmed, D-008, D-052]** | Non-technical |
 
+Only three roles are used by the school: Admin Sekolah, Panitia and Siswa (D-063); Super Admin is the
+developer's technical account. Kepala Sekolah, Petugas Tes, Petugas Daftar Ulang and Petugas Seragam were removed.
 Access is permission-based (`Config\AuthGroups`, D-014). Admin Sekolah assigns roles and
 extra per-user permissions; changing a role's permission set is a configuration change
 (Super Admin only for system permissions). One user may hold several roles.

@@ -28,3 +28,15 @@ Jika kartu hilang atau dipakai orang lain, buat kartu baru. Kartu lama langsung 
 3. Tekan **Periksa**. Data singkat calon murid dan status kartunya akan tampil.
 
 > **Tips:** Anda juga bisa memindai kode QR dengan kamera HP. Jika HP sudah masuk ke dasbor, halaman pemeriksaan menampilkan tombol **Buka Data Pendaftar**.
+
+## Memeriksa kartu peserta tes
+
+Saat tes, pindai kode QR di kartu untuk memastikan kartu asli dan masih berlaku.
+
+1. Buka kamera HP, lalu arahkan ke kode QR di kartu.
+2. Ketuk tautan yang muncul. Halaman **Pemeriksaan Kartu** terbuka.
+3. Cocokkan nomor pendaftaran dan nama di layar dengan kartu dan peserta.
+4. Jika tertulis **Kartu sah**, peserta boleh mengikuti tes.
+
+- Jika tertulis **Kartu tidak berlaku**, minta peserta menunjukkan kartu terbaru.
+- Jika kode QR tidak terbaca, pilih **Periksa Kartu** di menu kiri, lalu ketik nomor pendaftaran.

@@ -24,7 +24,7 @@ Module: **`Tes`** (`app/Modules/Tes`, label "Tes Penempatan", requires Pendaftar
 | Settings | `app/Config/Tes.php` → `setting('Tes.scheduleVisible')`, `eligibleStatuses`, `requireCompleteDocuments`, `instructions`, `defaultDurationMinutes` |
 | Status labels and badges | `lang('Status.test.<code>')` (`unscheduled`, `pending`, `present`, `absent`, `rescheduled`); `status_badge_for('test', $code)` |
 | Shared strings | `Language/id/Tes.php` (`lang('Tes.room')`, `Tes.change.moved`, …) |
-| Permissions (already in `AuthGroups`) | `tes.atur` (Super Admin, Admin Sekolah), `tes.kehadiran` (+ Panitia Pendaftaran, Petugas Tes) |
+| Permissions (already in `AuthGroups`) | `tes.atur` (Super Admin, Admin Sekolah), `tes.kehadiran` (+ Panitia) — only three roles (D-063): tests use `admin`/`panitia`, and `Tests\Support\ViewerAccounts::viewer()` for a staff account with chosen permissions only |
 | Camera QR scanner | `public/build/scanner.js` (`resources/js/scanner.js`, `qr-scanner` MIT): `SpmbScanner.start(video, onText) → Promise<stop>`, `SpmbScanner.cardCode(text)`, `SpmbScanner.hasCamera()` |
 | Guide sections | `GuideBuilder` also reads `Guide/<audience>/*.md` (file name order) after `Guide/<audience>.md`, so packages own separate files |
 | Test fixtures | `tests/_support/Tes/TesFixtures.php`: `makeWave`, `makeApplicant`, `makeRoom`, `makeSession`, `makeAssignment`, `makeStaff` |
@@ -148,7 +148,7 @@ Requirements: FR-TEST-02, FR-TEST-04, D-060, D-062.
   `Config/Routes/penjadwalan.php`, `Language/id/TesPenjadwalan.php`,
   `Models/{TestAssignmentModel,TestScheduleChangeModel}.php` (add methods only),
   `Database/Seeds/DemoAllocationSeeder.php`, migrations in B's range, `Guide/admin-sekolah/20-penjadwalan.md`,
-  `Guide/panitia-pendaftaran/20-jadwal-tes.md`, `Guide/calon-murid.md`, `tests/**/TesPenjadwalan*`,
+  `Guide/panitia/20-jadwal-tes.md`, `Guide/calon-murid.md`, `tests/**/TesPenjadwalan*`,
   `docs/modules/tes-penjadwalan.md`.
 
 ### C — Kehadiran (attendance, scan, attendance sheet, dashboard) · branch `feat/p3-kehadiran`
@@ -186,7 +186,7 @@ Requirements: FR-TEST-03, D-061.
 - Files: `app/Modules/Tes/Controllers/{Kehadiran,DaftarHadir}.php`, `Views/kehadiran/**`,
   `Views/panels/{card_check,card_lookup,dashboard}.php`, `Services/Attendance.php`,
   `Libraries/AttendanceSheetPdf.php`, `Config/Routes/kehadiran.php`, `Language/id/TesKehadiran.php`,
-  migrations in C's range, `Guide/petugas-tes.md`, `Guide/panitia-pendaftaran/30-kehadiran.md`,
+  migrations in C's range, `Guide/panitia/30-kehadiran.md`,
   `Guide/admin-sekolah/30-kehadiran.md`, `tests/**/TesKehadiran*`, `docs/modules/tes-kehadiran.md`.
 
 ## Dependencies between packages

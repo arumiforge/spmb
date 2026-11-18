@@ -74,4 +74,4 @@ mother or guardian name (one of the three always stays on the form).
 
 ## Guides
 
-`Guide/calon-murid.md`, `Guide/panitia-pendaftaran.md`, `Guide/admin-sekolah.md`.
+`Guide/calon-murid.md`, `Guide/panitia.md`, `Guide/admin-sekolah.md`.

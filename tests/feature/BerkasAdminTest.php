@@ -10,6 +10,7 @@ use Modules\Berkas\Models\ApplicantDocumentModel;
 use Modules\Berkas\Services\DocumentService;
 use Modules\Pendaftaran\Models\ApplicantModel;
 use Tests\Support\Berkas\BerkasTestHelpers;
+use Tests\Support\ViewerAccounts;
 
 /**
  * Staff side of documents: queue, review, view, verify, upload on behalf, panel.
@@ -22,6 +23,7 @@ final class BerkasAdminTest extends CIUnitTestCase
     use BerkasTestHelpers;
     use DatabaseTestTrait;
     use FeatureTestTrait;
+    use ViewerAccounts;
 
     protected $namespace;
     protected $refresh = true;
@@ -63,7 +65,7 @@ final class BerkasAdminTest extends CIUnitTestCase
         $this->uploaded($newer);
 
         $this->get('admin/berkas')->assertRedirectTo(site_url('masuk'));
-        $this->actingAs($this->makeUser('kepsek1', 'kepsek'))->get('admin/berkas')->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $this->actingAs($this->viewer('lihat1'))->get('admin/berkas')->assertRedirectTo(site_url('admin/akses-ditolak'));
 
         $page = $this->actingAs($this->makeUser('panitia1', 'panitia'))->get('admin/berkas');
         $page->assertOK();
@@ -86,9 +88,9 @@ final class BerkasAdminTest extends CIUnitTestCase
         $doc       = $this->uploaded($applicant);
 
         $this->get("admin/berkas/{$doc['id']}/lihat")->assertRedirectTo(site_url('masuk'));
-        $this->actingAs($this->makeUser('seragam1', 'petugas-seragam'))->get("admin/berkas/{$doc['id']}/lihat")->assertOK();
+        $this->actingAs($this->viewer('lihat3'))->get("admin/berkas/{$doc['id']}/lihat")->assertOK();
 
-        $result = $this->actingAs($this->makeUser('kepsek1', 'kepsek'))->get("admin/berkas/{$doc['id']}/lihat");
+        $result = $this->actingAs($this->viewer('lihat1'))->get("admin/berkas/{$doc['id']}/lihat");
         $result->assertOK();
         $result->assertHeader('Content-Type', 'image/jpeg');
         $result->assertHeader('X-Content-Type-Options', 'nosniff');
@@ -96,7 +98,7 @@ final class BerkasAdminTest extends CIUnitTestCase
         $this->assertStringStartsWith('inline; filename="kk-PMB-', $result->response()->getHeaderLine('Content-Disposition'));
         $this->assertStringStartsWith("\xFF\xD8", (string) $result->response()->getBody());
 
-        $this->actingAs($this->makeUser('kepsek2', 'kepsek'))->get('admin/berkas/99999/lihat')->assertStatus(404);
+        $this->actingAs($this->viewer('lihat2'))->get('admin/berkas/99999/lihat')->assertStatus(404);
     }
 
     public function testReviewScreenAndVerifyFromQueue(): void
@@ -107,7 +109,7 @@ final class BerkasAdminTest extends CIUnitTestCase
         $doc2   = $this->uploaded($second, 'akta', 'sample.pdf');
         $staff  = $this->makeUser('panitia1', 'panitia');
 
-        $this->actingAs($this->makeUser('kepsek1', 'kepsek'))->get("admin/berkas/{$doc1['id']}/periksa")->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $this->actingAs($this->viewer('lihat1'))->get("admin/berkas/{$doc1['id']}/periksa")->assertRedirectTo(site_url('admin/akses-ditolak'));
 
         $page = $this->actingAs($staff)->get("admin/berkas/{$doc1['id']}/periksa");
         $page->assertOK();
@@ -144,7 +146,7 @@ final class BerkasAdminTest extends CIUnitTestCase
         $this->actingAs($this->makeUser('panitia1', 'panitia'))->post("admin/berkas/{$doc['id']}/periksa", ['status' => 'valid', 'kembali' => 'pendaftar'])
             ->assertRedirectTo(site_url("admin/pendaftar/{$applicant['id']}") . '#berkas-' . $doc['document_type_id']);
         $this->actingAs($this->makeUser('admin1', 'admin'))->post("admin/berkas/{$doc['id']}/periksa", ['status' => 'valid'])->assertRedirect();
-        $this->actingAs($this->makeUser('tes1', 'petugas-tes'))->post("admin/berkas/{$doc['id']}/periksa", ['status' => 'valid'])->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $this->actingAs($this->viewer('lihat4', ['dasbor.view', 'pendaftar.view', 'kartu.cetak', 'tes.kehadiran']))->post("admin/berkas/{$doc['id']}/periksa", ['status' => 'valid'])->assertRedirectTo(site_url('admin/akses-ditolak'));
     }
 
     public function testStaffUploadsOnBehalfAndReplaces(): void
@@ -157,7 +159,7 @@ final class BerkasAdminTest extends CIUnitTestCase
         $this->post("admin/pendaftar/{$applicant['id']}/berkas/{$foto['id']}")->assertRedirectTo(site_url('masuk'));
 
         $this->fakeUpload('camera-rotated.jpg', 'foto.jpg');
-        $this->actingAs($this->makeUser('kepsek1', 'kepsek'))->post("admin/pendaftar/{$applicant['id']}/berkas/{$foto['id']}")->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $this->actingAs($this->viewer('lihat1'))->post("admin/pendaftar/{$applicant['id']}/berkas/{$foto['id']}")->assertRedirectTo(site_url('admin/akses-ditolak'));
 
         $this->fakeUpload('camera-rotated.jpg', 'foto.jpg');
         $this->actingAs($staff)->post("admin/pendaftar/{$applicant['id']}/berkas/{$foto['id']}")
@@ -264,12 +266,12 @@ final class BerkasAdminTest extends CIUnitTestCase
         $this->assertStringNotContainsString('<section', view('Modules\Berkas\Views\panels\applicant_admin', ['applicant' => null], ['saveData' => false]));
     }
 
-    public function testKepsekPanelHasNoUploadOrVerifyControls(): void
+    public function testReadOnlyPanelHasNoUploadOrVerifyControls(): void
     {
         $applicant = $this->makeApplicant();
         $doc       = $this->uploaded($applicant);
 
-        $this->actingAs($this->makeUser('kepsek1', 'kepsek'));
+        $this->actingAs($this->viewer('lihat1'));
         $this->loadRoutes();
         $html = view('Modules\Berkas\Views\panels\applicant_admin', ['applicant' => $applicant], ['saveData' => false]);
 

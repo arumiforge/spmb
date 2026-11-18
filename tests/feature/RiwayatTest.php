@@ -69,7 +69,7 @@ final class RiwayatTest extends CIUnitTestCase
 
     public function testRolesWithoutPermissionAreTurnedAway(): void
     {
-        foreach (['kepsek', 'panitia', 'petugas_tes'] as $group) {
+        foreach (['panitia'] as $group) {
             if (! isset(config('AuthGroups')->groups[$group])) {
                 continue;
             }
@@ -175,8 +175,7 @@ final class RiwayatTest extends CIUnitTestCase
         $result->assertOK();
         $result->assertSee('Detail Perubahan');
         $result->assertSee('Peran');
-        $result->assertSee('Panitia Pendaftaran');
-        $result->assertSee('Admin Sekolah, Panitia Pendaftaran');
+        $result->assertSee('Admin Sekolah, Panitia');
         $result->assertSee('(disembunyikan)');
         $result->assertSee('10.0.0.7');
         $result->assertSee('Pengguna · Siti Aminah');

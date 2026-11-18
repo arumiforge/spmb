@@ -80,6 +80,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
+- Only three roles: Admin Sekolah, Panitia (one committee role) and Siswa (applicant access); Kepala Sekolah, Petugas Tes,
+  Petugas Daftar Ulang and Petugas Seragam removed and their accounts moved to Panitia; guide `/panduan/panitia` (D-063).
 - Project licence is now proprietary (© Arumi Studios), replacing the inherited CodeIgniter MIT notice (D-017).
 - CSRF protection and secure headers enabled for every request; sign-in and verification are rate limited.
 - `composer test` runs PHPUnit without coverage (same as CI).
