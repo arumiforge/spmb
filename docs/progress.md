@@ -34,10 +34,10 @@ create your own branch from `main` instead.
 | `feat/phase-1-finish` | session 3 | Finish phase 1: module on/off page, audit log viewer, 404/500 pages, illustration prompts | merged (PR #4) |
 | `phase-2` | coordinator | Phase 2 integration branch; only the coordinator commits/merges here | in progress |
 | `feat/p2-foundation` | coordinator | Phase 2 foundation (schema, models, permissions, settings, plan) | merged into `phase-2` (PR #9) |
-| `feat/p2-referensi` | worker A | Previous-school reference data + importer | in progress |
-| `feat/p2-pendaftaran` | worker B | Waves, numbering, online/offline form, duplicates, status check | in progress |
-| `feat/p2-berkas` | worker C | Document types, upload/resize/storage, verification | in progress |
-| `feat/p2-kartu-situs` | worker D | PDF card + QR, card check page, public pages | in progress |
+| `feat/p2-referensi` | worker A | Previous-school reference data + importer | merged into `phase-2` (PR #12) |
+| `feat/p2-pendaftaran` | worker B | Waves, numbering, online/offline form, duplicates, status check | PR #10 open → `phase-2`, integrating A/C/D |
+| `feat/p2-berkas` | worker C | Document types, upload/resize/storage, verification | merged into `phase-2` (PR #13) |
+| `feat/p2-kartu-situs` | worker D | PDF card + QR, card check page, public pages | merged into `phase-2` (PR #11) |
 
 ## Next steps
 
@@ -52,12 +52,14 @@ create your own branch from `main` instead.
 
 ## Blockers / waiting on
 
+- Dapodik API needs a bearer key (D-040): decide whether the importer may use the portal's published key; until then schools come from CSV/XLSX.
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
 - Interview round 1 answers (tenancy, timeline, applicant access, roles, chat, analytics, school data, branding). Defaults in use: D-004, D-008, D-009, D-014.
 - School committee answers (waves, documents, card rule, number format, form fields): defaults in `docs/phase-2-plan.md` (D-031, D-035, D-036, D-037).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-18 · coordinator · `phase-2` — workers resumed after the usage limit; merged D (#11), A (#12), C (#13) after local tests on the combined branch (240 tests); decisions D-039…D-043; Dapodik key question open (D-040). Next: B (#10), then PR `phase-2` → `main`.
 - 2026-11-17 · coordinator · `feat/p2-foundation` — phase 2 foundation: shared migrations/models, settings, `referensi.kelola`, extension points (D-033), FPDF + PhpSpreadsheet (D-030), coordination protocol and plan (D-029…D-038). Next: workers A–D.
 - 2026-11-17 · session 3 · `feat/illustrations` — illustrations 001–012 converted to WebP and installed with dark variants (`illustration()` helper); checked at 360/1280 px light and dark. Next: phase 2.
 - 2026-11-17 · session 3 · `docs/chatgpt-delivery-folder` — ChatGPT's role limited to making images and opening a PR into `ai/generated/`; Claude reviews and installs (D-028). Originals 001–012 merged (PR #7). Next: install them.

@@ -12,6 +12,14 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   (`service('applicantAccess')`); module `requires`, panels (`module_panels()`), `Config/PublicMenu.php`,
   `Config/Audit.php` and installer seeders (D-033); `docs/coordination.md` and `docs/phase-2-plan.md`.
 - Dependencies `setasign/fpdf` and `phpoffice/phpspreadsheet` (MIT, D-030).
+- Referensi: previous-school list for admins (search, filters, add, edit, deactivate), CSV/XLSX import with a row report,
+  mapping of schools typed by applicants, public school search `/sekolah-asal/cari` and the school picker,
+  `php spark referensi:import` (Dapodik/file), demo schools (FR-REG-06).
+- Berkas: required documents settings (`/admin/pengaturan/berkas`), document upload by applicants and staff, document check
+  queue and review screen (`/admin/berkas`), photo resizing with EXIF removal, applicant document status (FR-DOC-01…04).
+- Kartu: registration card PDF with random QR token, card check page `/kartu/<token>`, applicant card download, staff card
+  lookup and card settings (FR-CARD-01…04).
+- Situs: public pages `/persyaratan` and `/jadwal`; home page shows "Daftar Sekarang" while registration is open (FR-WEB-01, FR-WEB-02).
 - Phase 0 foundation: project rules (`CLAUDE.md`), repo agent skills (`.claude/skills/`),
   staged documentation (`docs/`), interview round 1, AI image prompt workflow (`ai/`).
 - `docs/progress.md` and the `spmb-session` skill for handoff between sessions and Claude accounts.

@@ -194,3 +194,25 @@ Decision: The `applicants` table holds the superset of likely fields; `Pendaftar
 ## D-038 — Table names (2026-11-17)
 Status: accepted
 Decision: New tables use English names (`waves`, `applicants`, `registration_counters`, `document_types`, `applicant_documents`, `card_tokens`), like the phase 1 tables; the school list keeps the name `ref_sekolah` from D-012. Status codes are stored in English and labelled in Indonesian (`app/Language/id/Status.php`).
+
+## D-039 — Previous-school import rules (2026-11-18)
+Status: proposed
+Decision: Imports upsert by NPSN, otherwise by name + district + regency; they never delete, never change `is_active`, and empty cells never wipe data. Bulk writes skip per-row audit and log one `schools_imported` event. MI come from EMIS files (`spark referensi:import --file=`), not Dapodik.
+
+## D-040 — Dapodik access needs a decision (2026-11-18)
+Status: open (question for Arumi Studios)
+Context: The Dapodik portal is now a single-page app; its API (`/api/progress-pengiriman/...`) requires an `Authorization: Bearer` key that the portal publishes in its own `/env.js`. The importer was built against the endpoints and field names read from the portal's public bundle, but was not run against live data.
+Decision: The importer sends a key only when the operator sets `referensi.dapodikToken` in `.env`; until the owner decides whether using that key is acceptable, previous schools are loaded with the CSV/XLSX import.
+
+## D-041 — Registration card layout (2026-11-18)
+Status: proposed
+Decision: The card is printed on the top half of an A4 sheet with a cut line (A5 landscape area), black on white, with a box for a glued 3×4 photo. The QR is drawn as vector shapes from the QR matrix (sharper print, no temporary files).
+
+## D-042 — Semantic audit events for cards and documents (2026-11-18)
+Status: accepted (extends D-015)
+Decision: Card and document writes run with model callbacks off and log one meaningful event each instead of generic created/updated rows: `card_issued`, `card_revoked`, `card_printed` (subject: the applicant) and `document_uploaded`, `document_replaced`, `document_to_follow`, `document_verified` (with old/new values). Card scan times (`last_seen_at`) are not audited.
+
+## D-043 — Document upload rules (2026-11-18)
+Status: proposed (refines D-036)
+Decision: Images are accepted up to `Berkas.imageUploadLimitKb` (10 MB, phone cameras) and the type's `max_size_kb` applies to the resized JPEG; for PDFs it applies to the uploaded file. Images are processed with GD directly (EXIF orientation applied, white background, JPEG re-encode removes metadata). Applicants cannot replace a document already marked valid or change a cancelled registration; staff can. "Menyusul" only for `may_follow` types without a usable document. A document type can be deleted only if never used; otherwise it is hidden.
+Consequences: Server limits must allow 10 MB uploads (`docs/deployment.md`).

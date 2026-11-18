@@ -23,7 +23,7 @@ No inbound ports open on the server firewall (`ufw default deny incoming`).
 5. MySQL: database `spmb`, user with privileges on that database only, `utf8mb4_unicode_ci`.
    After the first release is uploaded, run `php spark spmb:install` once in `current/`
    to create the first Super Admin (later deploys only run migrations).
-6. Nginx server block: `root /var/www/spmb/current/public;` `try_files $uri $uri/ /index.php?$query_string;`, PHP via FPM socket, deny dotfiles, `client_max_body_size` matching the upload limit, `real_ip_header CF-Connecting-IP` with Cloudflare ranges.
+6. Nginx server block: `root /var/www/spmb/current/public;` `try_files $uri $uri/ /index.php?$query_string;`, PHP via FPM socket, deny dotfiles, `client_max_body_size 12m;` matching the upload limit (php-fpm: `upload_max_filesize = 10M`, `post_max_size = 12M`, in line with `Berkas.imageUploadLimitKb` — phone photos are 3–8 MB), `real_ip_header CF-Connecting-IP` with Cloudflare ranges.
 7. Cloudflare Tunnel: ingress `https://<domain>` → `http://localhost:80` and `ssh://<ssh-host>` → `ssh://localhost:22`; protect the SSH hostname with a Cloudflare Access application allowing a **service token** (for CI) and the admins' emails.
 
 ## GitHub configuration
