@@ -10,6 +10,7 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Modules\Pendaftaran\Models\WaveModel;
 use Modules\Referensi\Models\SchoolModel;
+use Modules\Tes\Libraries\TestSchedule;
 use Throwable;
 
 /**
@@ -55,7 +56,9 @@ class CardPdf
             'school'       => $school === '' ? '-' : $school,
             'method'       => lang($method) === $method ? '-' : lang($method),
             'academicYear' => (string) $applicant['academic_year'],
-            'testStatus'   => lang('Kartu.testNotScheduled'),
+            'testStatus'   => service('modules')->isEnabled('Tes')
+                ? (new TestSchedule())->cardLine((int) $applicant['id'])
+                : lang('Kartu.testNotScheduled'),
         ];
     }
 

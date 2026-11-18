@@ -1,0 +1,273 @@
+{
+  "version": "2026-11-18",
+  "description": "SD and MI in Indonesia, one file per province (public data, no personal data).",
+  "schools": 177422,
+  "files": [
+    {
+      "file": "aceh.json.gz",
+      "province": "Aceh",
+      "schools": 4223,
+      "sd": 3600,
+      "mi": 623
+    },
+    {
+      "file": "bali.json.gz",
+      "province": "Bali",
+      "schools": 2499,
+      "sd": 2400,
+      "mi": 99
+    },
+    {
+      "file": "banten.json.gz",
+      "province": "Banten",
+      "schools": 5873,
+      "sd": 4698,
+      "mi": 1175
+    },
+    {
+      "file": "bengkulu.json.gz",
+      "province": "Bengkulu",
+      "schools": 1582,
+      "sd": 1423,
+      "mi": 159
+    },
+    {
+      "file": "di-yogyakarta.json.gz",
+      "province": "D.I. Yogyakarta",
+      "schools": 2053,
+      "sd": 1840,
+      "mi": 213
+    },
+    {
+      "file": "dki-jakarta.json.gz",
+      "province": "D.K.I. Jakarta",
+      "schools": 2652,
+      "sd": 2172,
+      "mi": 480
+    },
+    {
+      "file": "gorontalo.json.gz",
+      "province": "Gorontalo",
+      "schools": 1036,
+      "sd": 937,
+      "mi": 99
+    },
+    {
+      "file": "jambi.json.gz",
+      "province": "Jambi",
+      "schools": 2814,
+      "sd": 2500,
+      "mi": 314
+    },
+    {
+      "file": "jawa-barat.json.gz",
+      "province": "Jawa Barat",
+      "schools": 24079,
+      "sd": 19754,
+      "mi": 4325
+    },
+    {
+      "file": "jawa-tengah.json.gz",
+      "province": "Jawa Tengah",
+      "schools": 22918,
+      "sd": 18560,
+      "mi": 4358
+    },
+    {
+      "file": "jawa-timur.json.gz",
+      "province": "Jawa Timur",
+      "schools": 26728,
+      "sd": 19017,
+      "mi": 7711
+    },
+    {
+      "file": "kalimantan-barat.json.gz",
+      "province": "Kalimantan Barat",
+      "schools": 4940,
+      "sd": 4482,
+      "mi": 458
+    },
+    {
+      "file": "kalimantan-selatan.json.gz",
+      "province": "Kalimantan Selatan",
+      "schools": 3504,
+      "sd": 2946,
+      "mi": 558
+    },
+    {
+      "file": "kalimantan-tengah.json.gz",
+      "province": "Kalimantan Tengah",
+      "schools": 2980,
+      "sd": 2681,
+      "mi": 299
+    },
+    {
+      "file": "kalimantan-timur.json.gz",
+      "province": "Kalimantan Timur",
+      "schools": 2136,
+      "sd": 1983,
+      "mi": 153
+    },
+    {
+      "file": "kalimantan-utara.json.gz",
+      "province": "Kalimantan Utara",
+      "schools": 534,
+      "sd": 497,
+      "mi": 37
+    },
+    {
+      "file": "kepulauan-bangka-belitung.json.gz",
+      "province": "Kepulauan Bangka Belitung",
+      "schools": 880,
+      "sd": 837,
+      "mi": 43
+    },
+    {
+      "file": "kepulauan-riau.json.gz",
+      "province": "Kepulauan Riau",
+      "schools": 1070,
+      "sd": 1000,
+      "mi": 70
+    },
+    {
+      "file": "lampung.json.gz",
+      "province": "Lampung",
+      "schools": 5603,
+      "sd": 4789,
+      "mi": 814
+    },
+    {
+      "file": "maluku.json.gz",
+      "province": "Maluku",
+      "schools": 1997,
+      "sd": 1853,
+      "mi": 144
+    },
+    {
+      "file": "maluku-utara.json.gz",
+      "province": "Maluku Utara",
+      "schools": 1485,
+      "sd": 1345,
+      "mi": 140
+    },
+    {
+      "file": "nusa-tenggara-barat.json.gz",
+      "province": "Nusa Tenggara Barat",
+      "schools": 4321,
+      "sd": 3425,
+      "mi": 896
+    },
+    {
+      "file": "nusa-tenggara-timur.json.gz",
+      "province": "Nusa Tenggara Timur",
+      "schools": 5470,
+      "sd": 5287,
+      "mi": 183
+    },
+    {
+      "file": "papua.json.gz",
+      "province": "Papua",
+      "schools": 896,
+      "sd": 864,
+      "mi": 32
+    },
+    {
+      "file": "papua-barat.json.gz",
+      "province": "Papua Barat",
+      "schools": 627,
+      "sd": 601,
+      "mi": 26
+    },
+    {
+      "file": "papua-barat-daya.json.gz",
+      "province": "Papua Barat Daya",
+      "schools": 600,
+      "sd": 573,
+      "mi": 27
+    },
+    {
+      "file": "papua-pegunungan.json.gz",
+      "province": "Papua Pegunungan",
+      "schools": 703,
+      "sd": 700,
+      "mi": 3
+    },
+    {
+      "file": "papua-selatan.json.gz",
+      "province": "Papua Selatan",
+      "schools": 643,
+      "sd": 631,
+      "mi": 12
+    },
+    {
+      "file": "papua-tengah.json.gz",
+      "province": "Papua Tengah",
+      "schools": 599,
+      "sd": 584,
+      "mi": 15
+    },
+    {
+      "file": "riau.json.gz",
+      "province": "Riau",
+      "schools": 4457,
+      "sd": 3909,
+      "mi": 548
+    },
+    {
+      "file": "sulawesi-barat.json.gz",
+      "province": "Sulawesi Barat",
+      "schools": 1506,
+      "sd": 1337,
+      "mi": 169
+    },
+    {
+      "file": "sulawesi-selatan.json.gz",
+      "province": "Sulawesi Selatan",
+      "schools": 7253,
+      "sd": 6521,
+      "mi": 732
+    },
+    {
+      "file": "sulawesi-tengah.json.gz",
+      "province": "Sulawesi Tengah",
+      "schools": 3186,
+      "sd": 2970,
+      "mi": 216
+    },
+    {
+      "file": "sulawesi-tenggara.json.gz",
+      "province": "Sulawesi Tenggara",
+      "schools": 2554,
+      "sd": 2371,
+      "mi": 183
+    },
+    {
+      "file": "sulawesi-utara.json.gz",
+      "province": "Sulawesi Utara",
+      "schools": 2318,
+      "sd": 2219,
+      "mi": 99
+    },
+    {
+      "file": "sumatera-barat.json.gz",
+      "province": "Sumatera Barat",
+      "schools": 4440,
+      "sd": 4272,
+      "mi": 168
+    },
+    {
+      "file": "sumatera-selatan.json.gz",
+      "province": "Sumatera Selatan",
+      "schools": 5397,
+      "sd": 4790,
+      "mi": 607
+    },
+    {
+      "file": "sumatera-utara.json.gz",
+      "province": "Sumatera Utara",
+      "schools": 10866,
+      "sd": 9761,
+      "mi": 1105
+    }
+  ]
+}

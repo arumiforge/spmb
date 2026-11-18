@@ -62,6 +62,7 @@ $cards  = [
                     <div><dt class="text-sm text-gray-500 dark:text-gray-400"><?= lang('Kartu.method') ?></dt><dd class="font-medium text-gray-900 dark:text-white"><?= esc($details['method']) ?></dd></div>
                     <div><dt class="text-sm text-gray-500 dark:text-gray-400"><?= lang('Kartu.testStatus') ?></dt><dd class="font-medium text-gray-900 dark:text-white"><?= esc($details['testStatus']) ?></dd></div>
                 </dl>
+                <?= module_panels('card_lookup', ['applicant' => $applicant]) ?>
                 <div class="flex flex-col gap-3 border-t border-gray-200 p-5 sm:flex-row dark:border-gray-700">
                     <?php if (auth()->user()->can('pendaftar.view')) : ?>
                         <a href="<?= site_url('admin/pendaftar/' . $applicant['id']) ?>" class="<?= $button ?> bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800">

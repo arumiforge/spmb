@@ -25,6 +25,8 @@ ln -sfn "$SHARED/writable" "$RELEASE_DIR/writable"
 
 cd "$RELEASE_DIR"
 php spark migrate --all
+# Loads the bundled national SD/MI list once per list version (D-058); a no-op otherwise.
+php spark referensi:import --bawaan
 php spark optimize || true
 
 ln -sfn "$RELEASE_DIR" "$DEPLOY_PATH/current.tmp"

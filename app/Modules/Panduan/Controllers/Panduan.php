@@ -6,10 +6,22 @@ namespace Modules\Panduan\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use CodeIgniter\HTTP\RedirectResponse;
 use Modules\Panduan\Libraries\GuideBuilder;
 
 class Panduan extends BaseController
 {
+    /**
+     * Guides of roles merged into Panitia or Admin Sekolah (D-063) => new slug.
+     */
+    private const MOVED = [
+        'panitia-pendaftaran'  => 'panitia',
+        'petugas-tes'          => 'panitia',
+        'petugas-daftar-ulang' => 'panitia',
+        'petugas-seragam'      => 'panitia',
+        'kepala-sekolah'       => 'admin-sekolah',
+    ];
+
     private GuideBuilder $guides;
 
     public function __construct()
@@ -37,8 +49,12 @@ class Panduan extends BaseController
         ]);
     }
 
-    public function show(string $slug): string
+    public function show(string $slug): RedirectResponse|string
     {
+        if (isset(self::MOVED[$slug])) {
+            return redirect()->to(site_url('panduan/' . self::MOVED[$slug]), 301);
+        }
+
         $roles = $this->guides->roles();
 
         if (! isset($roles[$slug])) {

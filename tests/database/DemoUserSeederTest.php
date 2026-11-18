@@ -24,9 +24,9 @@ final class DemoUserSeederTest extends CIUnitTestCase
         $this->assertCount(count(DemoUserSeeder::ACCOUNTS), $seeder->createAll('Demo-SPMB-2027'));
         $this->assertSame([], $seeder->createAll('Demo-SPMB-2027'));
 
-        $user = model(UserModel::class, false)->where('username', 'petugastes')->first();
+        $user = model(UserModel::class, false)->where('username', 'panitia')->first();
 
-        $this->assertTrue($user->inGroup('petugas-tes'));
+        $this->assertTrue($user->inGroup('panitia'));
         $this->assertTrue($user->can('tes.kehadiran'));
         $this->assertFalse($user->can('pendaftar.delete'));
         $this->assertTrue($user->isActivated());

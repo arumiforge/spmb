@@ -6,12 +6,13 @@
   "scripts": {
     "build": "npm run build:css && npm run build:js",
     "build:css": "tailwindcss -i resources/css/app.css -o public/build/app.css --minify",
-    "build:js": "esbuild resources/js/app.js resources/js/charts.js --bundle --minify --format=iife --target=es2020 --outdir=public/build",
+    "build:js": "esbuild resources/js/app.js resources/js/charts.js resources/js/scanner.js --bundle --minify --format=iife --target=es2020 --outdir=public/build",
     "dev": "npm run build:css -- --watch & npm run build:js -- --watch"
   },
   "dependencies": {
     "apexcharts": "^4.7.0",
-    "flowbite": "^3.1.2"
+    "flowbite": "^3.1.2",
+    "qr-scanner": "^1.4.2"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.11",

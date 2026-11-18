@@ -11,13 +11,11 @@ IDs are stable; reference them in commits, PRs and tests (`FR-REG-03`).
 | --- | --- | --- | --- |
 | Super Admin | Arumi Studios | Everything: modules on/off, white-label, system settings, backups, logs, users of all roles | Technical allowed |
 | Admin Sekolah | School IT/operator | Everything for the school: identity, waves, test schedule, documents list, uniform settings, users (except super admin), all data and reports **[confirmed, D-051]** | Non-technical |
-| Kepala Sekolah **[optional, unused by default]** | Principal | Read-only dashboard and reports | Non-technical |
-| Panitia Pendaftaran | Registration committee | Registration work only: offline applicants, data edits, document checks, cards, test attendance, re-registration, uniform pickup; no settings **[confirmed, D-051]** | Non-technical |
-| Petugas Tes **[optional]** | Test officers | Scan card / search, record attendance, reschedule | Non-technical |
-| Petugas Daftar Ulang **[optional]** | Re-registration officers | Process re-registration | Non-technical |
-| Petugas Seragam **[optional]** | Uniform officers | Update uniform status | Non-technical |
-| Calon Murid / Orang Tua ("akun siswa") | Public, used by parents | Register online, check status, correct data, download card, send messages/criticism/suggestions — no password: registration number + birth date or private link **[confirmed, D-008, D-052]** | Non-technical |
+| Panitia | School committee (one role for all committee work) | Offline applicants, data edits, document checks, cards, test attendance and moving a test seat, re-registration, uniform pickup, replies to parents' messages; no settings **[confirmed, D-051, D-063]** | Non-technical |
+| Siswa — Calon Murid / Orang Tua ("akun siswa") | Public, used by parents | Register online, check status, correct data, download card, send messages/criticism/suggestions — no password: registration number + birth date or private link **[confirmed, D-008, D-052]** | Non-technical |
 
+Only three roles are used by the school: Admin Sekolah, Panitia and Siswa (D-063); Super Admin is the
+developer's technical account. Kepala Sekolah, Petugas Tes, Petugas Daftar Ulang and Petugas Seragam were removed.
 Access is permission-based (`Config\AuthGroups`, D-014). Admin Sekolah assigns roles and
 extra per-user permissions; changing a role's permission set is a configuration change
 (Super Admin only for system permissions). One user may hold several roles.
@@ -30,7 +28,7 @@ extra per-user permissions; changing a role's permission set is a configuration 
 - FR-REG-03 One shared sequence and number format (default `PMB-{YEAR}-{0000}`, configurable); unique, immutable, never reused. [confirmed] **[built in phase 2]**
 - FR-REG-04 Wave assigned from the registration date; waves and dates configurable. [confirmed] **[built in phase 2]**
 - FR-REG-05 Duplicate warning on NIK/NISN (and similar name + birth date). [confirmed] **[built in phase 2]**
-- FR-REG-06 Previous school chosen from a normalised list (public SD/MI data, Central Java first) with a fallback "other school" entry that admins can map later. [confirmed] **[built in phase 2; live Dapodik import pending D-040, CSV/XLSX import works]**
+- FR-REG-06 Previous school chosen from a normalised list (public SD/MI data, Central Java first) with a fallback "other school" entry that admins can map later. [confirmed] **[built in phase 2; national SD/MI list ships as default data (D-058); CSV/XLSX/JSON import works]**
 - FR-REG-07 Public status check and data correction **[proposed: number + date of birth, no account]**. **[built in phase 2: D-008, D-034]**
 
 ### Documents (DOC)
@@ -46,10 +44,10 @@ extra per-user permissions; changing a role's permission set is a configuration 
 - FR-CARD-04 Availability rule configurable: immediately or after initial verification (committee decision pending). **[built in phase 2]**
 
 ### Placement test (TEST)
-- FR-TEST-01 Calendar of test days (holidays excluded), sessions, rooms, quotas.
-- FR-TEST-02 Automatic allocation by registration number order, online and offline equal.
-- FR-TEST-03 Attendance via QR scan or search: Belum Tes / Hadir / Tidak Hadir / Dijadwalkan Ulang.
-- FR-TEST-04 Every schedule change logged (who, when, from → to, reason).
+- FR-TEST-01 Calendar of test days (holidays excluded), sessions, rooms, quotas. **[built in phase 3: rooms, calendar with holidays, sessions + generator, D-059, D-064]**
+- FR-TEST-02 Automatic allocation by registration number order, online and offline equal. **[built in phase 3, D-060]**
+- FR-TEST-03 Attendance via QR scan or search: Belum Tes / Hadir / Tidak Hadir / Dijadwalkan Ulang. **[built in phase 3: camera/USB scan, search, card check page, D-061]**
+- FR-TEST-04 Every schedule change logged (who, when, from → to, reason). **[built in phase 3: `test_schedule_changes` + Riwayat Jadwal page]**
 
 ### Re-registration & uniform (DU, SRG)
 - FR-DU-01 Lookup by QR or number shows data and test status; status Belum / Sedang diproses (optional) / Sudah, with date and officer.

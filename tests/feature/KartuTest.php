@@ -10,6 +10,7 @@ use CodeIgniter\Test\FeatureTestTrait;
 use Modules\Kartu\Controllers\Periksa;
 use Modules\Kartu\Services\CardTokenService;
 use Tests\Support\Kartu\KartuFixtures;
+use Tests\Support\ViewerAccounts;
 
 /**
  * Card routes: staff print/renew/lookup/settings, the public QR check page
@@ -23,6 +24,7 @@ final class KartuTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
     use KartuFixtures;
+    use ViewerAccounts;
 
     protected $namespace;
     protected $refresh = true;
@@ -112,8 +114,8 @@ final class KartuTest extends CIUnitTestCase
     {
         $applicant = $this->makeApplicant();
 
-        foreach (['kepsek', 'petugas-daftar-ulang'] as $group) {
-            $user = $this->makeUser($group);
+        foreach ([['dasbor.view', 'pendaftar.view'], ['dasbor.view', 'pendaftar.view', 'daftar-ulang.proses']] as $i => $permissions) {
+            $user = $this->viewer('lihat' . $i, $permissions);
             $this->actingAs($user)->get('admin/pendaftar/' . $applicant['id'] . '/kartu')->assertRedirectTo(site_url('admin/akses-ditolak'));
             $this->actingAs($user)->post('admin/pendaftar/' . $applicant['id'] . '/kartu/baru')->assertRedirectTo(site_url('admin/akses-ditolak'));
             $this->actingAs($user)->get('admin/kartu')->assertRedirectTo(site_url('admin/akses-ditolak'));
@@ -157,7 +159,7 @@ final class KartuTest extends CIUnitTestCase
         $applicant = $this->makeApplicant();
         $token     = (new CardTokenService())->tokenFor((int) $applicant['id']);
 
-        $this->actingAs($this->makeUser('petugas-tes'))->get('kartu/' . $token)->assertSee(site_url('admin/pendaftar/' . $applicant['id']));
+        $this->actingAs($this->makeUser('panitia'))->get('kartu/' . $token)->assertSee(site_url('admin/pendaftar/' . $applicant['id']));
     }
 
     public function testUnknownAndCancelledCards(): void
@@ -275,7 +277,7 @@ final class KartuTest extends CIUnitTestCase
     {
         $applicant = $this->makeApplicant();
 
-        $this->actingAs($this->makeUser('kepsek'));
+        $this->actingAs($this->viewer('lihat'));
         $this->assertSame('', $this->panel('applicant_admin', $applicant));
 
         $_SESSION = [];

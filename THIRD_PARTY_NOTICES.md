@@ -41,12 +41,19 @@ BSD-3-Clause and are not deployed (`composer install --no-dev`).
 | tailwindcss, @tailwindcss/cli | MIT | Build tool |
 | esbuild | MIT | Build tool |
 | apexcharts | ApexCharts licence (v4+) | **Verify** the current terms on apexcharts.com: v4 is free only below a revenue threshold for the licensee; buy a licence if Arumi Studios or a client exceeds it, or switch charts library |
+| qr-scanner (nimiq) | MIT | Camera QR scanning for test attendance (phase 3, `resources/js/scanner.js`) |
 
 ## Commercial
 
 | Component | Licence | Note |
 | --- | --- | --- |
 | Flowbite Pro (admin dashboard v2.2.0, landing pages v1.1.0) | Flowbite commercial licence held by Arumi Studios | Licence proof is kept by Arumi Studios outside this repository. Source in `flowbite/` is a markup reference only: the repository must stay private and Pro source must never be published, extracted or given to clients. |
+
+## Data
+
+| Data | Source | Note |
+| --- | --- | --- |
+| National SD/MI list (`app/Modules/Referensi/Database/Data/sekolah-sd-mi/`) | Public school reference data (Kemendikdasmen / Kemenag), compiled by Arumi Studios | Public data, no personal data (D-058) |
 
 ## CodeIgniter application starter
 

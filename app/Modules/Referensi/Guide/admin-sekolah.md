@@ -2,6 +2,8 @@
 
 Daftar sekolah asal berisi SD dan MI yang bisa dipilih calon murid saat mendaftar. Dengan daftar ini, nama sekolah tertulis rapi dan sama untuk semua pendaftar.
 
+Daftar ini sudah terisi semua SD dan MI di seluruh Indonesia sejak aplikasi dipasang, jadi Anda tidak perlu mengisinya sendiri. Anda cukup menambah sekolah yang belum ada atau memperbaiki data yang keliru.
+
 1. Di menu kiri, pilih **Sekolah Asal**.
 2. Ketik nama sekolah, NPSN, atau kecamatan di kotak pencarian, lalu tekan **Terapkan**.
 3. Untuk menambah satu sekolah, tekan **Tambah Sekolah**, isi nama dan jenjangnya, lalu tekan **Simpan Sekolah**.

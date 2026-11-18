@@ -64,6 +64,16 @@ class GuideBuilder
                 if ($file !== null) {
                     $files[] = $file;
                 }
+
+                // Optional sections in Guide/<audience>/*.md, in file name order, so
+                // several work packages can each own one part of a module's guide.
+                $folder = $this->modules->directory($module, 'Guide/' . $audience);
+
+                if ($folder !== null) {
+                    $parts = glob($folder . '/*.md') ?: [];
+                    sort($parts);
+                    array_push($files, ...$parts);
+                }
             }
         }
 
