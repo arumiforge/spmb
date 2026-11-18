@@ -10,6 +10,7 @@ return [
     'eventColors' => [
         'card_issued'  => 'green',
         'card_revoked' => 'yellow',
+        'card_printed' => 'blue',
     ],
     'subjects' => [
         'card_tokens' => 'Kartu',
@@ -19,6 +20,7 @@ return [
     ],
     'fields' => [
         'token'         => 'Kode kartu',
+        'card'          => 'Nomor kartu',
         'revoked_at'    => 'Waktu dinonaktifkan',
         'availableWhen' => 'Kartu bisa dicetak',
         'headerText'    => 'Judul kartu',
