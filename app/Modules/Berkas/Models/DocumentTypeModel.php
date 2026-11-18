@@ -18,6 +18,19 @@ class DocumentTypeModel extends Model
 {
     use Auditable;
 
+    /**
+     * File formats an admin can allow, keyed by the value stored in
+     * document_types.extensions (csv), with the real MIME types they accept.
+     *
+     * @var array<string, list<string>>
+     */
+    public const FORMATS = [
+        'jpg'  => ['image/jpeg'],
+        'jpeg' => ['image/jpeg'],
+        'png'  => ['image/png'],
+        'pdf'  => ['application/pdf'],
+    ];
+
     protected $table          = 'document_types';
     protected $primaryKey     = 'id';
     protected $returnType     = 'array';
@@ -30,5 +43,118 @@ class DocumentTypeModel extends Model
     protected function initialize(): void
     {
         $this->registerAuditCallbacks();
+    }
+
+    /**
+     * Active document types in display order (for /persyaratan, the upload
+     * panels and the status computation).
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function active(): array
+    {
+        return $this->where('is_active', 1)
+            ->orderBy('sort_order', 'ASC')
+            ->orderBy('id', 'ASC')
+            ->findAll();
+    }
+
+    /**
+     * Every type (active or not) in display order, for the settings page.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function ordered(): array
+    {
+        return $this->orderBy('sort_order', 'ASC')->orderBy('id', 'ASC')->findAll();
+    }
+
+    public function nextSortOrder(): int
+    {
+        $row = $this->builder()->selectMax('sort_order', 'max')->get()->getRowArray();
+
+        return (int) ($row['max'] ?? 0) + 10;
+    }
+
+    /**
+     * Allowed extensions of a type, lowercase.
+     *
+     * @param array<string, mixed> $type
+     *
+     * @return list<string>
+     */
+    public static function extensionsOf(array $type): array
+    {
+        $list = array_map(static fn (string $e): string => strtolower(trim($e)), explode(',', (string) ($type['extensions'] ?? '')));
+
+        return array_values(array_unique(array_filter($list, static fn (string $e): bool => isset(self::FORMATS[$e]))));
+    }
+
+    /**
+     * Real MIME types accepted for a type.
+     *
+     * @param array<string, mixed> $type
+     *
+     * @return list<string>
+     */
+    public static function mimesOf(array $type): array
+    {
+        $mimes = [];
+
+        foreach (self::extensionsOf($type) as $ext) {
+            array_push($mimes, ...self::FORMATS[$ext]);
+        }
+
+        return array_values(array_unique($mimes));
+    }
+
+    /**
+     * Value for the accept attribute of a file input. Images accept image/* so
+     * phones offer the camera; the server still checks the real format.
+     *
+     * @param array<string, mixed> $type
+     */
+    public static function acceptOf(array $type): string
+    {
+        $accept = [];
+        $mimes  = self::mimesOf($type);
+
+        if (array_intersect($mimes, ['image/jpeg', 'image/png']) !== []) {
+            $accept[] = 'image/*';
+        }
+
+        foreach (self::extensionsOf($type) as $ext) {
+            $accept[] = '.' . $ext;
+        }
+
+        if (in_array('application/pdf', $mimes, true)) {
+            $accept[] = 'application/pdf';
+        }
+
+        return implode(',', $accept);
+    }
+
+    /**
+     * Friendly list of formats, e.g. "JPG, PNG, atau PDF".
+     *
+     * @param array<string, mixed> $type
+     */
+    public static function formatLabel(array $type): string
+    {
+        $labels = [];
+
+        foreach (self::extensionsOf($type) as $ext) {
+            $labels[] = $ext === 'jpeg' ? 'JPG' : strtoupper($ext);
+        }
+
+        $labels = array_values(array_unique($labels));
+
+        if (count($labels) <= 1) {
+            return $labels[0] ?? '-';
+        }
+
+        $last = array_pop($labels);
+
+        return implode(', ', $labels) . ' ' . lang('Berkas.or') . ' ' . $last;
     }
 }
