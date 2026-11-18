@@ -1,6 +1,6 @@
 # Architecture
 
-> Stage: phase 1 (platform core and UI). Sections marked *(planned)* describe the target design and
+> Stage: phase 2 (registration) built; see `phase-2-plan.md` for the module interfaces. Sections marked *(planned)* describe the target design and
 > become descriptive as modules are built.
 
 ## Stack
@@ -18,7 +18,7 @@
 Installed: CodeIgniter Shield 1.4 (auth, groups, permissions) with `codeigniter4/settings`,
 `pragmarx/google2fa` (TOTP), `codeigniter4/translations` (Indonesian framework messages).
 In use: `chillerlan/php-qrcode` (QR, inline SVG), `league/commonmark` (guide Markdown), CI4 Image with GD (logo resize).
-Planned (added in the phase that needs them, see `decisions.md`): `dompdf/dompdf` (PDF), `phpoffice/phpspreadsheet` (XLSX import/export).
+Phase 2 added `setasign/fpdf` (card PDF) and `phpoffice/phpspreadsheet` (XLSX/CSV import) (D-030). PDF reports for phase 4 are still to be decided.
 
 Frontend (`package.json`): Tailwind CSS v4 (`@tailwindcss/cli`), Flowbite 3 (open-source package), ApexCharts,
 bundled with esbuild. Sources in `resources/css/app.css` and `resources/js/{app,charts}.js`; `npm run build`
@@ -56,15 +56,15 @@ flowbite/              Flowbite Pro templates — markup reference only (private
 | Profil | Own profile, password change, 2FA setup | 1 (built) |
 | Pengaturan | School identity / branding, security policy | 1 (built) |
 | Pengguna | Staff accounts and roles | 1 (built) |
-| Referensi | Normalised schools (SD/MI), regions; import from public data | 2 |
-| Pendaftaran | Waves, online/offline form, numbering, duplicates, status check | 2 |
-| Berkas | Required documents, uploads, resize, verification | 2 |
-| Kartu | PDF card, QR token, verification page | 2 |
+| Referensi | Normalised schools (SD/MI), regions; import from public data | 2 (built, `modules/referensi.md`) |
+| Pendaftaran | Waves, online/offline form, numbering, duplicates, status check | 2 (built, `modules/pendaftaran.md`) |
+| Berkas | Required documents, uploads, resize, verification | 2 (built, `modules/berkas.md`) |
+| Kartu | PDF card, QR token, verification page | 2 (built, `modules/kartu.md`) |
 | JadwalTes | Calendar, sessions, rooms, allocation, attendance, reschedule log | 3 |
 | DaftarUlang | Re-registration processing | 4 |
 | Seragam | Uniform status (stock/packages later) | 4 |
 | Laporan | Dashboard stats, filters, XLSX/CSV/PDF export, XLSX import | 4 |
-| Situs | Public pages and announcements | 2 → 5 |
+| Situs | Public pages and announcements | 2 (Persyaratan, Jadwal) → 5 |
 | Analitik | Light visitor tracking | 5 |
 | Chat | Interactive chat (scope pending) | 5 |
 
@@ -161,6 +161,14 @@ sign-in (`TwoFactor.maxAttempts`).
 | `settings` | codeigniter4/settings | White-label and runtime configuration |
 | `audit_logs` | App | Who changed what and when |
 | `user_two_factor` | App | Optional TOTP per user |
+| `ref_sekolah` | Referensi | Previous schools (D-012, D-039) |
+| `waves`, `registration_counters`, `applicants` | Pendaftaran | Waves, numbering (D-031), applicants (D-037) |
+| `document_types`, `applicant_documents` | Berkas | Required documents and uploads (D-036, D-043) |
+| `card_tokens` | Kartu | Revocable QR tokens (D-034) |
+
+Module extension points (D-033): `Config/Module.php` `requires`, `Config/PublicMenu.php`, `Config/Audit.php`,
+`Views/panels/<slot>.php` rendered with `module_panels()`, and `InstallSeeder`/`DemoSeeder` run by `spmb:install`.
+The public applicant session is `service('applicantAccess')` (D-034).
 
 ## Key design rules
 

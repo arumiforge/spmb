@@ -25,25 +25,25 @@ extra per-user permissions; changing a role's permission set is a configuration 
 ## 2. Functional requirements
 
 ### Registration (REG)
-- FR-REG-01 Online registration form: identity, parents/guardian, previous school, contacts, documents. [confirmed]
-- FR-REG-02 Offline registration by an officer using the same form; method recorded automatically. [confirmed]
-- FR-REG-03 One shared sequence and number format (default `PMB-{YEAR}-{0000}`, configurable); unique, immutable, never reused. [confirmed]
-- FR-REG-04 Wave assigned from the registration date; waves and dates configurable. [confirmed]
-- FR-REG-05 Duplicate warning on NIK/NISN (and similar name + birth date). [confirmed]
-- FR-REG-06 Previous school chosen from a normalised list (public SD/MI data, Central Java first) with a fallback "other school" entry that admins can map later. [confirmed]
-- FR-REG-07 Public status check and data correction **[proposed: number + date of birth, no account]**.
+- FR-REG-01 Online registration form: identity, parents/guardian, previous school, contacts, documents. [confirmed] **[built in phase 2]**
+- FR-REG-02 Offline registration by an officer using the same form; method recorded automatically. [confirmed] **[built in phase 2]**
+- FR-REG-03 One shared sequence and number format (default `PMB-{YEAR}-{0000}`, configurable); unique, immutable, never reused. [confirmed] **[built in phase 2]**
+- FR-REG-04 Wave assigned from the registration date; waves and dates configurable. [confirmed] **[built in phase 2]**
+- FR-REG-05 Duplicate warning on NIK/NISN (and similar name + birth date). [confirmed] **[built in phase 2]**
+- FR-REG-06 Previous school chosen from a normalised list (public SD/MI data, Central Java first) with a fallback "other school" entry that admins can map later. [confirmed] **[built in phase 2; live Dapodik import pending D-040, CSV/XLSX import works]**
+- FR-REG-07 Public status check and data correction **[proposed: number + date of birth, no account]**. **[built in phase 2: D-008, D-034]**
 
 ### Documents (DOC)
-- FR-DOC-01 Required documents list configurable (type, required/optional, max size, formats).
-- FR-DOC-02 Images resized/compressed on upload; PDFs size-limited.
-- FR-DOC-03 Files stored outside the public web root, served only to authorised users.
-- FR-DOC-04 Verification status per document and per applicant (complete / incomplete / to follow).
+- FR-DOC-01 Required documents list configurable (type, required/optional, max size, formats). **[built in phase 2]**
+- FR-DOC-02 Images resized/compressed on upload; PDFs size-limited. **[built in phase 2]**
+- FR-DOC-03 Files stored outside the public web root, served only to authorised users. **[built in phase 2]**
+- FR-DOC-04 Verification status per document and per applicant (complete / incomplete / to follow). **[built in phase 2]**
 
 ### Card (CARD)
-- FR-CARD-01 PDF card: number, name, wave, previous school, method, test status/schedule, QR.
-- FR-CARD-02 QR holds a random token (never NIK/NISN) resolving to a verification page/officer lookup.
-- FR-CARD-03 Reprint any time; always shows current schedule; never creates new data.
-- FR-CARD-04 Availability rule configurable: immediately or after initial verification (committee decision pending).
+- FR-CARD-01 PDF card: number, name, wave, previous school, method, test status/schedule, QR. **[built in phase 2]**
+- FR-CARD-02 QR holds a random token (never NIK/NISN) resolving to a verification page/officer lookup. **[built in phase 2]**
+- FR-CARD-03 Reprint any time; always shows current schedule; never creates new data. **[built in phase 2]**
+- FR-CARD-04 Availability rule configurable: immediately or after initial verification (committee decision pending). **[built in phase 2]**
 
 ### Placement test (TEST)
 - FR-TEST-01 Calendar of test days (holidays excluded), sessions, rooms, quotas.
@@ -63,7 +63,7 @@ extra per-user permissions; changing a role's permission set is a configuration 
 - FR-RPT-04 XLSX import (e.g. bulk offline data, reference schools) with row-level validation report.
 
 ### Public website (WEB)
-- FR-WEB-01 Pages: Beranda, Profil, Persyaratan, Jadwal Gelombang, Pengumuman, Kontak/Bantuan — content editable by Admin Sekolah.
+- FR-WEB-01 Pages: Beranda, Profil, Persyaratan, Jadwal Gelombang, Pengumuman, Kontak/Bantuan — content editable by Admin Sekolah. **[phase 2: Beranda actions, Persyaratan, Jadwal Gelombang; the rest and editing in phase 5]**
 - FR-WEB-02 Indonesian, friendly, readable URLs (`/daftar`, `/cek-status`, `/persyaratan`).
 
 ### Platform (PLT)

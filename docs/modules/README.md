@@ -9,6 +9,7 @@ exports, and which role guides cover it.
 | Berkas | [berkas.md](berkas.md) |
 | Kartu | [kartu.md](kartu.md) |
 | Panduan | [panduan.md](panduan.md) |
+| Pendaftaran | [pendaftaran.md](pendaftaran.md) |
 | Pengaturan | [pengaturan.md](pengaturan.md) |
 | Pengguna | [pengguna.md](pengguna.md) |
 | Profil | [profil.md](profil.md) |

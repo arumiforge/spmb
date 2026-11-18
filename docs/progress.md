@@ -7,9 +7,9 @@ personal data.
 
 ## Current phase
 
-**Phase 2 — Registration**: in progress on integration branch `phase-2` with parallel sessions
-(`docs/coordination.md`, plan in `docs/phase-2-plan.md`). Foundation (shared schema, models,
-permissions, settings, extension points) lands first; then work packages A–D run in parallel.
+**Phase 2 — Registration**: built on integration branch `phase-2` (foundation #9, packages A–D #10–#13,
+`docs/phase-2-plan.md`); one PR `phase-2` → `main` waits for the user. 282 tests green.
+Modules: Referensi, Pendaftaran, Berkas, Kartu, Situs (`docs/modules/`).
 
 **Phase 0 — Foundation**: done. **Phase 1 — Platform core**: core merged in
 [PR #1](https://github.com/arumiforge/spmb/pull/1); **phase 1 UI** merged in
@@ -32,17 +32,17 @@ create your own branch from `main` instead.
 | --- | --- | --- | --- |
 | `feat/phase-1-ui` | session 2 | Phase 1 UI: frontend build, layouts, login/2FA screens, settings, users, panduan | merged (PR #2) |
 | `feat/phase-1-finish` | session 3 | Finish phase 1: module on/off page, audit log viewer, 404/500 pages, illustration prompts | merged (PR #4) |
-| `phase-2` | coordinator | Phase 2 integration branch; only the coordinator commits/merges here | in progress |
+| `phase-2` | coordinator | Phase 2 integration branch; only the coordinator commits/merges here | PR open → `main` (user merges) |
 | `feat/p2-foundation` | coordinator | Phase 2 foundation (schema, models, permissions, settings, plan) | merged into `phase-2` (PR #9) |
 | `feat/p2-referensi` | worker A | Previous-school reference data + importer | merged into `phase-2` (PR #12) |
-| `feat/p2-pendaftaran` | worker B | Waves, numbering, online/offline form, duplicates, status check | PR #10 open → `phase-2`, integrating A/C/D |
+| `feat/p2-pendaftaran` | worker B | Waves, numbering, online/offline form, duplicates, status check | merged into `phase-2` (PR #10) |
 | `feat/p2-berkas` | worker C | Document types, upload/resize/storage, verification | merged into `phase-2` (PR #13) |
 | `feat/p2-kartu-situs` | worker D | PDF card + QR, card check page, public pages | merged into `phase-2` (PR #11) |
 
 ## Next steps
 
-0. Phase 2: follow `docs/phase-2-plan.md`; workers PR into `phase-2`, the coordinator merges; one PR
-   `phase-2` → `main` at the end, merged by the user.
+0. Phase 2 is complete on `phase-2`: after the user merges it into `main`, start phase 3 (placement test) with the same
+   coordination protocol (`docs/coordination.md`). Card "Belum dijadwalkan" line gets the test schedule in phase 3.
 1. New session: branch from `origin/main`, then `composer install`, `npm ci && npm run build`,
    create `.env` and run `php spark spmb:install --demo` per `docs/development.md` (no new migrations since PR #1).
 2. Phase 2 pages use the prepared assets `form/daftar-online.webp` (registration form) and `state/sukses-pendaftaran.webp` (success page); set briefs 002/006 to `done` then.
@@ -59,6 +59,7 @@ create your own branch from `main` instead.
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-18 · coordinator · `phase-2` — merged B (#10) after integration with A/C/D (282 tests); docs: requirements status, roadmap, architecture tables, D-044…D-046; opened PR `phase-2` → `main`; workers archived. Next: user merges, then phase 3.
 - 2026-11-18 · coordinator · `phase-2` — workers resumed after the usage limit; merged D (#11), A (#12), C (#13) after local tests on the combined branch (240 tests); decisions D-039…D-043; Dapodik key question open (D-040). Next: B (#10), then PR `phase-2` → `main`.
 - 2026-11-17 · coordinator · `feat/p2-foundation` — phase 2 foundation: shared migrations/models, settings, `referensi.kelola`, extension points (D-033), FPDF + PhpSpreadsheet (D-030), coordination protocol and plan (D-029…D-038). Next: workers A–D.
 - 2026-11-17 · session 3 · `feat/illustrations` — illustrations 001–012 converted to WebP and installed with dark variants (`illustration()` helper); checked at 360/1280 px light and dark. Next: phase 2.

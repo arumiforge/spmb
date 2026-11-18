@@ -7,7 +7,7 @@ docs, guides, changelog and a demo on staging.
 | --- | --- | --- |
 | 0 — Foundation | Repo layout, git rules, CI/CD workflows, agent skills, docs skeleton, `ai/` prompts, interview round 1 | done (PR #1) |
 | 1 — Platform core | Frontend build (Tailwind v4 + Flowbite), layouts (admin full width, public, auth), breadcrumbs, settings + white label, module registry, auth + roles/permissions, optional 2FA, audit log, Panduan skeleton | **finishing** (`feat/phase-1-finish`) — done: auth + roles, audit log + viewer, 2FA service and screens, installer, frontend build, layouts, settings + white label, user management, module registry/menu + on/off page, Panduan skeleton, friendly 404/500; remaining: illustrations (prompts in `ai/`) |
-| 2 — Registration | Waves, online + offline form, numbering, duplicate check, school reference data, document upload/resize/verification, PDF card + QR, status check, basic public pages | planned |
+| 2 — Registration | Waves, online + offline form, numbering, duplicate check, school reference data, document upload/resize/verification, PDF card + QR, status check, basic public pages | **done on `phase-2`** (PRs #9–#13), waiting for merge into `main`; open: Dapodik access (D-040), school answers |
 | 3 — Placement test | Test calendar, sessions/rooms/quotas, automatic allocation, QR/search attendance, rescheduling log | planned |
 | 4 — Re-registration & reports | Re-registration, uniform status, dashboard stats, filters, XLSX/CSV/PDF export, XLSX import | planned |
 | 5 — Engagement | Public site content and announcements, visitor analytics, interactive chat | planned |

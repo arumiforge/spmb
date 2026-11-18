@@ -19,6 +19,11 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   queue and review screen (`/admin/berkas`), photo resizing with EXIF removal, applicant document status (FR-DOC-01…04).
 - Kartu: registration card PDF with random QR token, card check page `/kartu/<token>`, applicant card download, staff card
   lookup and card settings (FR-CARD-01…04).
+- Pendaftaran: registration waves and settings (academic year, number format, required/hidden fields); online form `/daftar`
+  with success page, private link and duplicate flagging; public status check `/cek-status`, applicant page, contact/address
+  correction and private link `/tautan/<token>`; staff applicant list, offline registration, detail, edit, status change,
+  duplicate review, new private link and delete (FR-REG-01…07).
+- Dashboard shows real registration counts (total, today, per wave against quota, online/offline, documents complete).
 - Situs: public pages `/persyaratan` and `/jadwal`; home page shows "Daftar Sekarang" while registration is open (FR-WEB-01, FR-WEB-02).
 - Phase 0 foundation: project rules (`CLAUDE.md`), repo agent skills (`.claude/skills/`),
   staged documentation (`docs/`), interview round 1, AI image prompt workflow (`ai/`).

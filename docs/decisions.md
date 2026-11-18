@@ -216,3 +216,15 @@ Decision: Card and document writes run with model callbacks off and log one mean
 Status: proposed (refines D-036)
 Decision: Images are accepted up to `Berkas.imageUploadLimitKb` (10 MB, phone cameras) and the type's `max_size_kb` applies to the resized JPEG; for PDFs it applies to the uploaded file. Images are processed with GD directly (EXIF orientation applied, white background, JPEG re-encode removes metadata). Applicants cannot replace a document already marked valid or change a cancelled registration; staff can. "Menyusul" only for `may_follow` types without a usable document. A document type can be deleted only if never used; otherwise it is hidden.
 Consequences: Server limits must allow 10 MB uploads (`docs/deployment.md`).
+
+## D-044 — Online registration closes when the wave quota is full (2026-11-18)
+Status: proposed
+Decision: The public form closes when no wave covers today, when `Pendaftaran.onlineOpen` is off, or when the current wave's quota is reached. Staff can still register offline above the quota.
+
+## D-045 — Duplicate check scope (2026-11-18)
+Status: proposed (refines D-032)
+Decision: Duplicate checks run within the same academic year. Offline duplicates confirmed by staff are still flagged `possible_duplicate` for committee review.
+
+## D-046 — Staff can issue a new private link (2026-11-18)
+Status: proposed (refines D-034)
+Decision: `POST /admin/pendaftar/<id>/tautan` (`pendaftar.edit`, audited `private_link_created`) replaces the applicant's private link; the old link stops working and the new one is shown once with a WhatsApp share button. Always-required form fields: name, gender, birth place and date, address, parent WhatsApp number, previous school, and at least one of father/mother/guardian name. NIK and KK are masked on the applicant's own page.
