@@ -7,6 +7,7 @@ use CodeIgniter\Test\DatabaseTestTrait;
 use Modules\Kartu\Services\CardAvailability;
 use Modules\Kartu\Services\CardPdf;
 use Modules\Kartu\Services\CardTokenService;
+use Modules\Pendaftaran\Models\ApplicantModel;
 use Tests\Support\Kartu\KartuFixtures;
 
 /**
@@ -92,7 +93,7 @@ final class KartuServicesTest extends CIUnitTestCase
         $this->assertSame($applicant['registration_number'], $service->resolve($token)['registration_number']);
         $this->assertNotNull(db_connect()->table('card_tokens')->get()->getRowArray()['last_seen_at']);
 
-        model(Modules\Pendaftaran\Models\ApplicantModel::class)->delete($applicant['id']);
+        model(ApplicantModel::class)->delete($applicant['id']);
         $this->assertNull($service->resolve($token));
     }
 

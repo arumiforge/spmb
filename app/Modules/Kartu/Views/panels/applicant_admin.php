@@ -42,11 +42,11 @@ $button    = 'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2
             <p class="text-gray-500 dark:text-gray-400"><?= CardAvailability::allows($applicant) ? lang('Kartu.applicantRule') : lang('Kartu.applicantWaits') ?></p>
         </div>
         <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <a href="<?= url_to('kartu.cetak', $applicant['id']) ?>" target="_blank" rel="noopener" class="<?= $button ?> bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800">
+            <a href="<?= site_url('admin/pendaftar/' . (int) $applicant['id'] . '/kartu') ?>" target="_blank" rel="noopener" class="<?= $button ?> bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800">
                 <?= icon('clipboard', 'h-4 w-4') ?><?= lang('Kartu.print') ?>
             </a>
             <?php if ($token !== null) : ?>
-                <form method="post" action="<?= url_to('kartu.baru', $applicant['id']) ?>" data-confirm="<?= esc(lang('Kartu.renewConfirm', [(string) $applicant['full_name']]), 'attr') ?>">
+                <form method="post" action="<?= site_url('admin/pendaftar/' . (int) $applicant['id'] . '/kartu/baru') ?>" data-confirm="<?= esc(lang('Kartu.renewConfirm', [(string) $applicant['full_name']]), 'attr') ?>">
                     <?= csrf_field() ?>
                     <button type="submit" class="<?= $button ?> w-full border border-gray-300 bg-white text-gray-900 hover:bg-gray-100 focus:ring-gray-100 sm:w-auto dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
                         <?= icon('key', 'h-4 w-4') ?><?= lang('Kartu.renew') ?>

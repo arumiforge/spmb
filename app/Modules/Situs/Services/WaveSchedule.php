@@ -25,7 +25,7 @@ class WaveSchedule
     public static function forYear(?string $academicYear = null, ?string $today = null): array
     {
         $academicYear ??= (string) setting('Pendaftaran.academicYear');
-        $today        ??= Time::today()->toDateString();
+        $today ??= Time::today()->toDateString();
 
         $waves = model(WaveModel::class)
             ->where('academic_year', $academicYear)
@@ -97,7 +97,7 @@ class WaveSchedule
      * Registration state for banners on the home and schedule pages.
      *
      * @return array{state: string, text: string, wave: array<string, mixed>|null}
-     *               state: open (online form open) | offline (wave running, online form off) | upcoming | closed
+     *                                                                             state: open (online form open) | offline (wave running, online form off) | upcoming | closed
      */
     public static function banner(?string $today = null): array
     {

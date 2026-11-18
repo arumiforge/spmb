@@ -239,7 +239,7 @@ final class KartuTest extends CIUnitTestCase
         $result->assertSee($applicant['full_name']);
         $result->assertSee('Calon murid ini belum punya kartu.');
 
-        $old = $service->tokenFor((int) $applicant['id']);
+        $old    = $service->tokenFor((int) $applicant['id']);
         $result = $this->actingAs($panitia)->get('admin/kartu?q=' . rawurlencode(site_url('kartu/' . $old)));
         $result->assertSee($applicant['full_name']);
         $result->assertSee('Kartu aktif');
@@ -278,6 +278,8 @@ final class KartuTest extends CIUnitTestCase
         $this->actingAs($this->makeUser('kepsek'));
         $this->assertSame('', $this->panel('applicant_admin', $applicant));
 
+        $_SESSION = [];
+        $this->resetServices();
         $this->actingAs($this->makeUser('panitia'));
         $html = view('Modules\Kartu\Views\panels\applicant_admin', ['applicant' => $applicant], ['saveData' => false]);
         $this->assertStringContainsString('Cetak Kartu', $html);
