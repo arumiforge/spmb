@@ -29,10 +29,12 @@ class Pengaturan extends BaseController
             'subtitle'    => lang('Pendaftaran.settingsIntro'),
             'breadcrumbs' => [['label' => 'Dasbor', 'url' => 'admin'], ['label' => 'Pengaturan'], ['label' => 'Pendaftaran']],
             'values'      => [
-                'academicYear' => (string) setting('Pendaftaran.academicYear'),
-                'onlineOpen'   => setting('Pendaftaran.onlineOpen') ? '1' : '0',
-                'numberFormat' => (string) setting('Pendaftaran.numberFormat'),
-                'numberScope'  => (string) setting('Pendaftaran.numberScope'),
+                'academicYear'      => (string) setting('Pendaftaran.academicYear'),
+                'onlineOpen'        => setting('Pendaftaran.onlineOpen') ? '1' : '0',
+                'numberFormat'      => (string) setting('Pendaftaran.numberFormat'),
+                'numberScope'       => (string) setting('Pendaftaran.numberScope'),
+                'occupationOptions' => implode("\n", ApplicantForm::options('father_occupation') ?? []),
+                'incomeOptions'     => implode("\n", ApplicantForm::options('father_income') ?? []),
             ],
             'modes' => $modes,
         ]);
@@ -62,6 +64,19 @@ class Pengaturan extends BaseController
             $errors['numberFormat'] = lang('Pendaftaran.numberFormatInvalid');
         }
 
+        $lists = [];
+
+        foreach (['occupationOptions', 'incomeOptions'] as $key) {
+            $lines = preg_split('/\R/', (string) $this->request->getPost($key)) ?: [];
+            $lines = array_values(array_unique(array_filter(array_map(static fn (string $l): string => mb_substr(trim($l), 0, 60), $lines), static fn (string $l): bool => $l !== '')));
+
+            if ($lines === []) {
+                $errors[$key] = lang('Pendaftaran.listEmpty');
+            }
+
+            $lists[$key] = $lines;
+        }
+
         if ($errors !== []) {
             return redirect()->back()->withInput()->with('errors', $errors);
         }
@@ -69,6 +84,7 @@ class Pengaturan extends BaseController
         $posted   = (array) $this->request->getPost('fields');
         $required = [];
         $hidden   = [];
+        $staff    = [];
 
         foreach (ApplicantForm::CONFIGURABLE as $field) {
             $mode = $posted[$field] ?? 'optional';
@@ -77,6 +93,8 @@ class Pengaturan extends BaseController
                 $required[] = $field;
             } elseif ($mode === 'hidden') {
                 $hidden[] = $field;
+            } elseif ($mode === 'staff') {
+                $staff[] = $field;
             }
         }
 
@@ -86,12 +104,15 @@ class Pengaturan extends BaseController
         }
 
         $values = [
-            'academicYear'   => $year,
-            'onlineOpen'     => $this->request->getPost('onlineOpen') === '1',
-            'numberFormat'   => $format,
-            'numberScope'    => (string) $this->request->getPost('numberScope'),
-            'requiredFields' => $required,
-            'hiddenFields'   => $hidden,
+            'academicYear'      => $year,
+            'onlineOpen'        => $this->request->getPost('onlineOpen') === '1',
+            'numberFormat'      => $format,
+            'numberScope'       => (string) $this->request->getPost('numberScope'),
+            'requiredFields'    => $required,
+            'hiddenFields'      => $hidden,
+            'staffOnlyFields'   => $staff,
+            'occupationOptions' => $lists['occupationOptions'],
+            'incomeOptions'     => $lists['incomeOptions'],
         ];
 
         $old = [];

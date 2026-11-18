@@ -22,6 +22,7 @@ trait PendaftaranFixtures
      */
     protected array $pendaftaranSettings = [
         'academicYear', 'numberFormat', 'numberScope', 'onlineOpen', 'requiredFields', 'hiddenFields', 'statusCheckAttempts',
+        'staffOnlyFields', 'occupationOptions', 'incomeOptions',
     ];
 
     /**

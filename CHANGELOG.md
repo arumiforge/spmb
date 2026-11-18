@@ -23,6 +23,9 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   with success page, private link and duplicate flagging; public status check `/cek-status`, applicant page, contact/address
   correction and private link `/tautan/<token>`; staff applicant list, offline registration, detail, edit, status change,
   duplicate review, new private link and delete (FR-REG-01…07).
+- School answers: quota behaviour per wave (information only / close online / separate online limit), optional random
+  code at the end of registration numbers (`{ACAK:n}`, max 5), KK number and parent/guardian occupation and income
+  dropdowns (editable lists), field mode "Hanya diisi petugas" (D-047…D-049).
 - Dashboard shows real registration counts (total, today, per wave against quota, online/offline, documents complete).
 - Situs: public pages `/persyaratan` and `/jadwal`; home page shows "Daftar Sekarang" while registration is open (FR-WEB-01, FR-WEB-02).
 - Phase 0 foundation: project rules (`CLAUDE.md`), repo agent skills (`.claude/skills/`),

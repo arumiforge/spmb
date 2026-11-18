@@ -22,6 +22,8 @@ $action = $wave === null ? url_to('gelombang') : url_to('gelombang.simpan', $wav
             <?= $f('starts_on', lang('Pendaftaran.waveStartsOn'), ['type' => 'date', 'required' => true]) ?>
             <?= $f('ends_on', lang('Pendaftaran.waveEndsOn'), ['type' => 'date', 'required' => true, 'help' => lang('Pendaftaran.waveDatesHelp')]) ?>
             <?= $f('quota', lang('Pendaftaran.waveQuota'), ['type' => 'number', 'help' => lang('Pendaftaran.waveQuotaHelp'), 'attrs' => ['min' => '1', 'inputmode' => 'numeric']]) ?>
+            <div class="sm:col-span-2"><?= $f('quota_mode', lang('Pendaftaran.waveQuotaMode'), ['type' => 'select', 'required' => true, 'options' => lang('Pendaftaran.waveQuotaModes'), 'value' => $wave['quota_mode'] ?? 'none', 'help' => lang('Pendaftaran.waveQuotaModeHelp')]) ?></div>
+            <?= $f('online_quota', lang('Pendaftaran.waveOnlineQuota'), ['type' => 'number', 'help' => lang('Pendaftaran.waveOnlineQuotaHelp'), 'attrs' => ['min' => '1', 'inputmode' => 'numeric']]) ?>
             <div class="sm:col-span-2"><?= $f('description', lang('Pendaftaran.waveDescription'), ['type' => 'textarea']) ?></div>
             <div class="sm:col-span-2"><?= $f('is_active', lang('Pendaftaran.waveActive'), ['type' => 'checkbox', 'value' => $wave === null ? '1' : (string) $wave['is_active']]) ?></div>
         </div>

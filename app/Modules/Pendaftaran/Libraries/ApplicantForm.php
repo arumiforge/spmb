@@ -27,8 +27,23 @@ class ApplicantForm
      */
     public const CONFIGURABLE = [
         'nisn', 'nik', 'kk_number', 'religion', 'village', 'district', 'regency', 'province', 'phone',
-        'father_name', 'father_occupation', 'mother_name', 'mother_occupation', 'guardian_name', 'guardian_relation',
+        'father_name', 'father_occupation', 'father_income', 'mother_name', 'mother_occupation', 'mother_income',
+        'guardian_name', 'guardian_relation', 'guardian_occupation', 'guardian_income',
         'parent_email', 'graduation_year',
+    ];
+
+    /**
+     * Fields answered from a dropdown list kept in settings (D-048).
+     *
+     * @var array<string, string> field => setting key
+     */
+    public const LISTS = [
+        'father_occupation'   => 'occupationOptions',
+        'mother_occupation'   => 'occupationOptions',
+        'guardian_occupation' => 'occupationOptions',
+        'father_income'       => 'incomeOptions',
+        'mother_income'       => 'incomeOptions',
+        'guardian_income'     => 'incomeOptions',
     ];
 
     /**
@@ -58,17 +73,24 @@ class ApplicantForm
     private array $hidden;
 
     /**
-     * @param list<string>|null $required Defaults to setting('Pendaftaran.requiredFields')
-     * @param list<string>|null $hidden   Defaults to setting('Pendaftaran.hiddenFields')
+     * @var list<string>
      */
-    public function __construct(?array $required = null, ?array $hidden = null)
+    private array $staffOnly;
+
+    /**
+     * @param list<string>|null $required  Defaults to setting('Pendaftaran.requiredFields')
+     * @param list<string>|null $hidden    Defaults to setting('Pendaftaran.hiddenFields')
+     * @param list<string>|null $staffOnly Defaults to setting('Pendaftaran.staffOnlyFields')
+     */
+    public function __construct(?array $required = null, ?array $hidden = null, ?array $staffOnly = null)
     {
-        $this->required = array_values(array_intersect($required ?? (array) setting('Pendaftaran.requiredFields'), self::CONFIGURABLE));
-        $this->hidden   = array_values(array_diff(array_intersect($hidden ?? (array) setting('Pendaftaran.hiddenFields'), self::CONFIGURABLE), $this->required));
+        $this->required  = array_values(array_intersect($required ?? (array) setting('Pendaftaran.requiredFields'), self::CONFIGURABLE));
+        $this->hidden    = array_values(array_diff(array_intersect($hidden ?? (array) setting('Pendaftaran.hiddenFields'), self::CONFIGURABLE), $this->required));
+        $this->staffOnly = array_values(array_diff(array_intersect($staffOnly ?? (array) setting('Pendaftaran.staffOnlyFields'), self::CONFIGURABLE), $this->required, $this->hidden));
     }
 
     /**
-     * required | optional | hidden
+     * required | optional | staff (filled by school staff only, not on the public form) | hidden
      */
     public function mode(string $field): string
     {
@@ -80,12 +102,37 @@ class ApplicantForm
             return 'hidden';
         }
 
+        if (in_array($field, $this->staffOnly, true)) {
+            return 'staff';
+        }
+
         return in_array($field, $this->required, true) ? 'required' : 'optional';
     }
 
-    public function shows(string $field): bool
+    /**
+     * Whether the field is on the form: the public form by default, or the staff forms.
+     */
+    public function shows(string $field, bool $staff = false): bool
     {
-        return $this->mode($field) !== 'hidden';
+        $mode = $this->mode($field);
+
+        return $mode !== 'hidden' && ($staff || $mode !== 'staff');
+    }
+
+    /**
+     * Dropdown options of a list field (value = label), or null for other fields.
+     *
+     * @return list<string>|null
+     */
+    public static function options(string $field): ?array
+    {
+        if (! isset(self::LISTS[$field])) {
+            return null;
+        }
+
+        $list = setting('Pendaftaran.' . self::LISTS[$field]);
+
+        return array_values(array_filter(array_map(static fn ($v): string => trim((string) $v), is_array($list) ? $list : []), static fn (string $v): bool => $v !== ''));
     }
 
     public function requires(string $field): bool
@@ -98,9 +145,9 @@ class ApplicantForm
      *
      * @return list<string>
      */
-    public function visible(): array
+    public function visible(bool $staff = false): array
     {
-        return array_values(array_filter([...self::CORE, ...self::CONFIGURABLE], $this->shows(...)));
+        return array_values(array_filter([...self::CORE, ...self::CONFIGURABLE], fn (string $f): bool => $this->shows($f, $staff)));
     }
 
     /**
@@ -177,6 +224,10 @@ class ApplicantForm
             'mother_occupation'    => 'max_length[60]',
             'guardian_name'        => 'max_length[100]',
             'guardian_relation'    => 'max_length[30]',
+            'guardian_occupation'  => 'max_length[60]',
+            'father_income'        => 'max_length[60]',
+            'mother_income'        => 'max_length[60]',
+            'guardian_income'      => 'max_length[60]',
             'parent_phone'         => 'regex_match[/\A(\+62|62|0)8[0-9]{7,12}\z/]',
             'parent_email'         => 'valid_email|max_length[100]',
             'previous_school_name' => 'max_length[150]',
@@ -249,7 +300,13 @@ class ApplicantForm
             }
         }
 
-        $parentFields = array_values(array_filter(self::PARENT_NAMES, fn (string $f): bool => $this->shows($f) && in_array($f, $fields, true)));
+        foreach (array_keys(self::LISTS) as $field) {
+            if (in_array($field, $fields, true) && ! empty($data[$field]) && ! in_array($data[$field], self::options($field) ?? [], true)) {
+                $errors[$field] = lang('Pendaftaran.chooseFromList', ['field' => lang('Pendaftaran.fields.' . $field)]);
+            }
+        }
+
+        $parentFields = array_values(array_filter(self::PARENT_NAMES, fn (string $f): bool => $this->shows($f, true) && in_array($f, $fields, true)));
 
         if ($parentFields !== []) {
             $filled = array_filter($parentFields, static fn (string $f): bool => ! empty($data[$f]));

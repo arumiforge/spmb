@@ -29,7 +29,7 @@ class WaveModel extends Model
     protected $useSoftDeletes = true;
     protected $useTimestamps  = true;
     protected $allowedFields  = [
-        'academic_year', 'name', 'starts_on', 'ends_on', 'quota', 'description', 'is_active',
+        'academic_year', 'name', 'starts_on', 'ends_on', 'quota', 'quota_mode', 'online_quota', 'description', 'is_active',
     ];
 
     protected function initialize(): void
@@ -113,17 +113,39 @@ class WaveModel extends Model
     }
 
     /**
-     * True when the wave has a quota and it has been reached.
+     * Online applicants of a wave (not deleted, not cancelled).
+     */
+    public function onlineCount(int $waveId): int
+    {
+        return $this->db->table('applicants')
+            ->where('wave_id', $waveId)
+            ->where('method', 'online')
+            ->where('deleted_at', null)
+            ->where('status !=', 'cancelled')
+            ->countAllResults();
+    }
+
+    /**
+     * True when the online form must close for this wave (D-047):
+     * quota_mode "close" and the quota is reached, or "online_limit" and the
+     * online applicants reached online_quota. "none" never closes. Staff can
+     * always register offline.
      *
      * @param array<string, mixed> $wave
      */
     public function isFull(array $wave): bool
     {
-        if ($wave['quota'] === null || $wave['quota'] === '') {
-            return false;
+        $mode = (string) ($wave['quota_mode'] ?? 'none');
+
+        if ($mode === 'close' && ($wave['quota'] ?? null) !== null && $wave['quota'] !== '') {
+            return $this->applicantCount((int) $wave['id']) >= (int) $wave['quota'];
         }
 
-        return $this->applicantCount((int) $wave['id']) >= (int) $wave['quota'];
+        if ($mode === 'online_limit' && ($wave['online_quota'] ?? null) !== null && $wave['online_quota'] !== '') {
+            return $this->onlineCount((int) $wave['id']) >= (int) $wave['online_quota'];
+        }
+
+        return false;
     }
 
     /**

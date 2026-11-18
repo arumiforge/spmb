@@ -53,7 +53,7 @@ final class PendaftaranGelombangTest extends CIUnitTestCase
         $admin = $this->makeUser('admin');
 
         $this->actingAs($admin)->post('admin/pengaturan/gelombang', [
-            'name' => 'Gelombang 1', 'starts_on' => '2027-01-04', 'ends_on' => '2027-02-27', 'quota' => '100', 'is_active' => '1',
+            'name' => 'Gelombang 1', 'starts_on' => '2027-01-04', 'ends_on' => '2027-02-27', 'quota' => '100', 'quota_mode' => 'close', 'is_active' => '1',
         ])->assertRedirect();
 
         $wave = model(WaveModel::class)->where('name', 'Gelombang 1')->first();
@@ -68,7 +68,7 @@ final class PendaftaranGelombangTest extends CIUnitTestCase
         $this->actingAs($admin)->get('admin/pengaturan/gelombang/' . $wave['id'] . '/ubah')->assertOK();
 
         $this->actingAs($admin)->post('admin/pengaturan/gelombang/' . $wave['id'], [
-            'name' => 'Gelombang Satu', 'starts_on' => '2027-01-04', 'ends_on' => '2027-03-01', 'quota' => '', 'is_active' => '0',
+            'name' => 'Gelombang Satu', 'starts_on' => '2027-01-04', 'ends_on' => '2027-03-01', 'quota' => '', 'quota_mode' => 'none', 'is_active' => '0',
         ])->assertRedirect();
 
         $wave = model(WaveModel::class)->find($wave['id']);
@@ -86,7 +86,7 @@ final class PendaftaranGelombangTest extends CIUnitTestCase
         $this->makeWave(['name' => 'Gelombang 1', 'starts_on' => '2027-01-04', 'ends_on' => '2027-02-27']);
 
         $result = $this->actingAs($admin)->post('admin/pengaturan/gelombang', [
-            'name' => 'Gelombang 2', 'starts_on' => '2027-02-27', 'ends_on' => '2027-03-31', 'is_active' => '1',
+            'name' => 'Gelombang 2', 'starts_on' => '2027-02-27', 'ends_on' => '2027-03-31', 'quota_mode' => 'none', 'is_active' => '1',
         ]);
 
         $result->assertSessionHas('errors');
@@ -101,7 +101,7 @@ final class PendaftaranGelombangTest extends CIUnitTestCase
     public function testEndBeforeStartIsRejected(): void
     {
         $this->actingAs($this->makeUser('admin'))->post('admin/pengaturan/gelombang', [
-            'name' => 'Gelombang 1', 'starts_on' => '2027-03-01', 'ends_on' => '2027-02-01',
+            'name' => 'Gelombang 1', 'starts_on' => '2027-03-01', 'ends_on' => '2027-02-01', 'quota_mode' => 'none',
         ])->assertSessionHas('errors');
 
         $this->assertSame(0, model(WaveModel::class)->countAllResults());
@@ -133,5 +133,20 @@ final class PendaftaranGelombangTest extends CIUnitTestCase
         $this->assertNull($model->current(new DateTimeImmutable('+25 days')));
         $this->assertSame(['Lama', 'Sekarang', 'Mati'], array_column($model->forYear('2027/2028'), 'name'));
         $this->assertSame([], $model->forYear('2030/2031'));
+    }
+
+    public function testQuotaModesNeedTheirNumbers(): void
+    {
+        $admin = $this->makeUser('admin');
+        $base  = ['name' => 'Gelombang 1', 'starts_on' => '2027-01-04', 'ends_on' => '2027-02-27', 'is_active' => '1'];
+
+        $this->actingAs($admin)->post('admin/pengaturan/gelombang', $base + ['quota_mode' => 'close', 'quota' => ''])->assertSessionHas('errors');
+        $this->actingAs($admin)->post('admin/pengaturan/gelombang', $base + ['quota_mode' => 'online_limit', 'quota' => '200', 'online_quota' => ''])->assertSessionHas('errors');
+        $this->actingAs($admin)->post('admin/pengaturan/gelombang', $base + ['quota_mode' => 'lainnya'])->assertSessionHas('errors');
+        $this->assertSame(0, model(WaveModel::class)->countAllResults());
+
+        $this->actingAs($admin)->post('admin/pengaturan/gelombang', $base + ['quota_mode' => 'online_limit', 'quota' => '200', 'online_quota' => '150'])->assertRedirect();
+        $wave = model(WaveModel::class)->first();
+        $this->assertSame(['online_limit', '150'], [$wave['quota_mode'], (string) $wave['online_quota']]);
     }
 }

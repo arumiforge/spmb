@@ -8,6 +8,7 @@ use CodeIgniter\Test\DatabaseTestTrait;
 use Modules\Pendaftaran\Exceptions\RegistrationClosed;
 use Modules\Pendaftaran\Libraries\ApplicantForm;
 use Modules\Pendaftaran\Models\ApplicantModel;
+use Modules\Pendaftaran\Models\WaveModel;
 use Modules\Pendaftaran\Services\ApplicantService;
 use Modules\Pendaftaran\Services\DuplicateChecker;
 use Tests\Support\Pendaftaran\PendaftaranFixtures;
@@ -73,7 +74,7 @@ final class PendaftaranServiceTest extends CIUnitTestCase
         $service = new ApplicantService();
 
         foreach (['no_wave' => static fn () => null, 'switched_off' => function (): void {
-            $this->makeWave(['quota' => 1]);
+            $this->makeWave(['quota' => 1, 'quota_mode' => 'close']);
             setting('Pendaftaran.onlineOpen', false);
         }, 'full' => function () use ($service): void {
             setting('Pendaftaran.onlineOpen', true);
@@ -196,5 +197,45 @@ final class PendaftaranServiceTest extends CIUnitTestCase
         $this->assertArrayHasKey('birth_date', $errors);
         $this->assertArrayHasKey('previous_school_name', $errors);
         $this->assertArrayHasKey('father_name', $errors);
+    }
+
+    public function testQuotaModesPerWave(): void
+    {
+        $service = new ApplicantService();
+        $waves   = model(WaveModel::class);
+
+        // Information only: never closes.
+        $id = $this->makeWave(['quota' => 1, 'quota_mode' => 'none']);
+        $service->register($this->data(['full_name' => 'Anak Satu', 'nik' => '', 'nisn' => '1111111111']), 'online');
+        $this->assertNull($service->onlineClosedReason());
+
+        // A separate online limit: offline registrations do not count.
+        $waves->update($id, ['quota_mode' => 'online_limit', 'online_quota' => 2]);
+        $service->register($this->data(['full_name' => 'Anak Dua', 'nik' => '', 'nisn' => '2222222222']), 'offline');
+        $this->assertNull($service->onlineClosedReason());
+        $service->register($this->data(['full_name' => 'Anak Tiga', 'nik' => '', 'nisn' => '3333333333']), 'online');
+        $this->assertSame('full', $service->onlineClosedReason());
+
+        // Close at the quota.
+        $waves->update($id, ['quota_mode' => 'close', 'quota' => 10]);
+        $this->assertNull($service->onlineClosedReason());
+    }
+
+    public function testStaffOnlyFieldsAndDropdownLists(): void
+    {
+        $form = new ApplicantForm([], [], ['kk_number', 'father_income']);
+
+        $this->assertSame('staff', $form->mode('father_income'));
+        $this->assertFalse($form->shows('father_income'));
+        $this->assertTrue($form->shows('father_income', true));
+        $this->assertNotContains('kk_number', $form->visible());
+        $this->assertContains('kk_number', $form->visible(true));
+        $this->assertContains('Petani', ApplicantForm::options('mother_occupation'));
+        $this->assertContains('Tidak berpenghasilan', ApplicantForm::options('guardian_income'));
+        $this->assertNull(ApplicantForm::options('religion'));
+
+        $fields = ['father_occupation', 'mother_income'];
+        $this->assertSame([], $form->extraErrors(['father_occupation' => 'Petani', 'mother_income' => null], $fields));
+        $this->assertSame(['father_occupation'], array_keys($form->extraErrors(['father_occupation' => 'Astronot'], $fields)));
     }
 }

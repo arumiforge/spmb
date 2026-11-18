@@ -120,7 +120,7 @@ class Pendaftar extends BaseController
     public function create(): RedirectResponse
     {
         $form            = new ApplicantForm();
-        $fields          = [...$form->visible(), ...ApplicantForm::STAFF_ONLY];
+        $fields          = [...$form->visible(true), ...ApplicantForm::STAFF_ONLY];
         [$data, $errors] = $this->validateApplicant($form, $fields);
         $errors += $this->waveError($data);
 
@@ -296,7 +296,7 @@ class Pendaftar extends BaseController
      */
     private static function editableFields(ApplicantForm $form, array $row): array
     {
-        return [...ApplicantForm::CORE, ...array_values(array_filter(ApplicantForm::CONFIGURABLE, static fn (string $f): bool => $form->shows($f) || ! empty($row[$f])))];
+        return [...ApplicantForm::CORE, ...array_values(array_filter(ApplicantForm::CONFIGURABLE, static fn (string $f): bool => $form->shows($f, true) || ! empty($row[$f])))];
     }
 
     /**

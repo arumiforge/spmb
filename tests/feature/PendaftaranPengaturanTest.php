@@ -39,11 +39,13 @@ final class PendaftaranPengaturanTest extends CIUnitTestCase
     private function post_(array $overrides = []): array
     {
         return $overrides + [
-            'academicYear' => '2028/2029',
-            'onlineOpen'   => '0',
-            'numberFormat' => 'SPMB/{YY}/{000}',
-            'numberScope'  => 'never',
-            'fields'       => ['nik' => 'required', 'nisn' => 'optional', 'kk_number' => 'hidden', 'religion' => 'hidden'],
+            'academicYear'      => '2028/2029',
+            'onlineOpen'        => '0',
+            'numberFormat'      => 'SPMB/{YY}/{000}',
+            'numberScope'       => 'never',
+            'fields'            => ['nik' => 'required', 'nisn' => 'optional', 'kk_number' => 'hidden', 'religion' => 'hidden', 'father_income' => 'staff'],
+            'occupationOptions' => "Petani\nNelayan\n\nPetani",
+            'incomeOptions'     => "Di bawah Rp1 juta\nRp1 juta atau lebih",
         ];
     }
 
@@ -68,6 +70,9 @@ final class PendaftaranPengaturanTest extends CIUnitTestCase
         $this->assertSame('never', setting('Pendaftaran.numberScope'));
         $this->assertSame(['nik'], setting('Pendaftaran.requiredFields'));
         $this->assertSame(['kk_number', 'religion'], setting('Pendaftaran.hiddenFields'));
+        $this->assertSame(['father_income'], setting('Pendaftaran.staffOnlyFields'));
+        $this->assertSame(['Petani', 'Nelayan'], setting('Pendaftaran.occupationOptions'));
+        $this->assertSame(['Di bawah Rp1 juta', 'Rp1 juta atau lebih'], setting('Pendaftaran.incomeOptions'));
         $this->seeInDatabase('audit_logs', ['event' => 'settings_updated', 'subject_id' => 'Pendaftaran']);
     }
 
@@ -95,5 +100,21 @@ final class PendaftaranPengaturanTest extends CIUnitTestCase
         ]));
 
         $this->assertSame(['father_name', 'guardian_name'], setting('Pendaftaran.hiddenFields'));
+    }
+
+    public function testEmptyOptionListIsRejected(): void
+    {
+        $this->actingAs($this->makeUser('admin'))->post('admin/pengaturan/pendaftaran', $this->post_(['incomeOptions' => "  \n "]))
+            ->assertSessionHas('errors');
+        $this->assertSame('2027/2028', setting('Pendaftaran.academicYear'));
+    }
+
+    public function testRandomSuffixFormat(): void
+    {
+        $this->actingAs($this->makeUser('admin'))->post('admin/pengaturan/pendaftaran', $this->post_(['numberFormat' => 'PMB-{YEAR}-{0000}-{ACAK:6}']))
+            ->assertSessionHas('errors');
+        $this->actingAs($this->makeUser('admin'))->post('admin/pengaturan/pendaftaran', $this->post_(['numberFormat' => 'PMB-{YEAR}-{0000}-{ACAK:3}']))
+            ->assertRedirectTo(site_url('admin/pengaturan/pendaftaran'));
+        $this->assertSame('PMB-{YEAR}-{0000}-{ACAK:3}', setting('Pendaftaran.numberFormat'));
     }
 }

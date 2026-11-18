@@ -63,7 +63,10 @@ final class PendaftaranPublicTest extends CIUnitTestCase
         $open = $this->get('daftar');
         $open->assertSee('Formulir Pendaftaran Murid Baru');
         $open->assertSee('assets/img/form/daftar-online.webp');
-        $open->assertDontSee('Nomor Kartu Keluarga');
+        // KK number, occupations and income are optional dropdown/fields on the public form by default (D-048).
+        $open->assertSee('Nomor Kartu Keluarga');
+        $open->assertSee('Penghasilan ayah per bulan');
+        $open->assertSee('Rp1.000.000 – Rp1.999.999');
 
         setting('Pendaftaran.onlineOpen', false);
         $this->get('daftar')->assertSee('Pendaftaran online sedang tidak dibuka');
