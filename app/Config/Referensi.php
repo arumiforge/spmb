@@ -8,7 +8,8 @@ use CodeIgniter\Config\BaseConfig;
 
 /**
  * Previous-school reference data defaults (module Referensi, D-012).
- * Real values: setting('Referensi.<property>').
+ * Real values: setting('Referensi.<property>'). Connection values for the
+ * Dapodik importer come from .env (referensi.dapodikUrl, referensi.dapodikToken).
  */
 class Referensi extends BaseConfig
 {
@@ -25,4 +26,25 @@ class Referensi extends BaseConfig
      * @var list<string>
      */
     public array $levels = ['SD', 'MI'];
+
+    /**
+     * Base URL of the public Dapodik portal (docs/modules/referensi.md).
+     */
+    public string $dapodikUrl = 'https://dapo.kemendikdasmen.go.id';
+
+    /**
+     * Access key for the Dapodik data service, if the operator has one.
+     * Set it in .env as referensi.dapodikToken; never commit it.
+     */
+    public string $dapodikToken = '';
+
+    /**
+     * Pause between two requests to the Dapodik portal, in milliseconds.
+     */
+    public int $importDelayMs = 500;
+
+    /**
+     * School searches allowed per visitor (IP address) per minute.
+     */
+    public int $searchPerMinute = 30;
 }
