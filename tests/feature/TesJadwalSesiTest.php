@@ -45,12 +45,12 @@ final class TesJadwalSesiTest extends CIUnitTestCase
             ['post', 'admin/tes/sesi/buat-banyak/pratinjau'],
             ['post', 'admin/tes/sesi/buat-banyak'],
         ];
-        $petugas = $this->makeStaff('petugas-tes');
+        $panitia = $this->makeStaff('panitia');
 
         foreach ($routes as [$method, $url]) {
             $this->resetTesVisitor();
             $this->{$method}($url)->assertRedirectTo(site_url('masuk'));
-            $this->actingAs($petugas)->{$method}($url)->assertRedirectTo(site_url('admin/akses-ditolak'));
+            $this->actingAs($panitia)->{$method}($url)->assertRedirectTo(site_url('admin/akses-ditolak'));
         }
 
         $admin = $this->makeStaff('admin');

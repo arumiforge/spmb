@@ -30,9 +30,9 @@ final class TesJadwalPengaturanTest extends CIUnitTestCase
         $this->get('admin/pengaturan/tes')->assertRedirectTo(site_url('masuk'));
         $this->post('admin/pengaturan/tes', ['defaultDurationMinutes' => '60'])->assertRedirectTo(site_url('masuk'));
 
-        $petugas = $this->makeStaff('petugas-tes');
-        $this->actingAs($petugas)->get('admin/pengaturan/tes')->assertRedirectTo(site_url('admin/akses-ditolak'));
-        $this->actingAs($petugas)->post('admin/pengaturan/tes', ['defaultDurationMinutes' => '60'])->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $panitia = $this->makeStaff('panitia');
+        $this->actingAs($panitia)->get('admin/pengaturan/tes')->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $this->actingAs($panitia)->post('admin/pengaturan/tes', ['defaultDurationMinutes' => '60'])->assertRedirectTo(site_url('admin/akses-ditolak'));
         $this->assertSame(120, (int) setting('Tes.defaultDurationMinutes'));
 
         $page = $this->actingAs($this->makeStaff('admin'))->get('admin/pengaturan/tes');
