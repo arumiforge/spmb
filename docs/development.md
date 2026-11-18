@@ -73,11 +73,7 @@ Password `Demo-SPMB-2027` unless `--demo-password` is given. Sign in with the em
 | Email | Role |
 | --- | --- |
 | admin@demo.test | Admin Sekolah |
-| kepsek@demo.test | Kepala Sekolah |
-| panitia@demo.test | Panitia Pendaftaran |
-| petugastes@demo.test | Petugas Tes |
-| petugasdaftarulang@demo.test | Petugas Daftar Ulang |
-| petugasseragam@demo.test | Petugas Seragam |
+| panitia@demo.test | Panitia |
 
 ## Claude cloud environment (per account)
 
