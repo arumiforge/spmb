@@ -44,4 +44,14 @@ class TestHolidayModel extends Model
 
         return array_column($rows, null, 'date');
     }
+
+    /**
+     * Holidays from a date on, oldest first (the calendar's list). Package A.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function upcoming(string $from, int $limit = 50): array
+    {
+        return $this->where('date >=', $from)->orderBy('date', 'ASC')->findAll($limit);
+    }
 }
