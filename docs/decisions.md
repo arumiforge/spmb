@@ -200,7 +200,7 @@ Status: proposed
 Decision: Imports upsert by NPSN, otherwise by name + district + regency; they never delete, never change `is_active`, and empty cells never wipe data. Bulk writes skip per-row audit and log one `schools_imported` event. MI come from EMIS files (`spark referensi:import --file=`), not Dapodik.
 
 ## D-040 — Dapodik access needs a decision (2026-11-18)
-Status: open (question for Arumi Studios)
+Status: superseded by D-057 (no key used; national JSON list instead)
 Context: The Dapodik portal is now a single-page app; its API (`/api/progress-pengiriman/...`) requires an `Authorization: Bearer` key that the portal publishes in its own `/env.js`. The importer was built against the endpoints and field names read from the portal's public bundle, but was not run against live data.
 Decision: The importer sends a key only when the operator sets `referensi.dapodikToken` in `.env`; until the owner decides whether using that key is acceptable, previous schools are loaded with the CSV/XLSX import.
 
@@ -273,3 +273,9 @@ Decision: `School.illustrationAccent` ('' = blue default, 'hijau' = green) makes
 Status: accepted (interview round 1, Q2 and Q8)
 Decision: Go live as soon as possible on `spmbsmpnualmarufkudusweb.id` so the school can check it; the school enters wave 1 dates itself. Cloudflare (DNS, tunnel, Access) runs on the developer's (Arumi Studios') account. `deploy/provision.sh` prepares a fresh Ubuntu 24.04 server; the checklist is in `docs/deployment.md` ("Go-live").
 Consequences: Arumi Studios provides the VPS and keeps the Cloudflare account; transfer to the school later is a DNS/account change, not a code change.
+
+## D-057 — National SD/MI list from a JSON file (2026-11-18)
+Status: accepted (resolves D-040)
+Context: Arumi Studios prepares one JSON file with every SD and MI in Indonesia (NPSN, name, village, district, regency, province).
+Decision: `php spark referensi:import --file <list>.json` (also `.json.gz`, NDJSON) loads it with the same upsert rules as D-039; keys are matched by alias, and the level is taken from the school name when the file has none. This is the main source of previous schools; the Dapodik importer stays optional and no portal access key is used. The search still lists the configured provinces (`Referensi.provinces`, Jawa Tengah) first.
+Consequences: Schools from all provinces can be chosen, so fewer "sekolah lain" entries need mapping. The file is kept out of git and imported on the server.

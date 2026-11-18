@@ -130,4 +130,40 @@ final class ReferensiImporterTest extends CIUnitTestCase
 
         (new SchoolImporter())->readFile(self::fixture('sekolah.csv'), 'pdf');
     }
+
+    public function testNationalJsonListWithAliasesAndLevelFromName(): void
+    {
+        $importer = new SchoolImporter();
+        $report   = $importer->import($importer->readJson(SUPPORTPATH . 'Referensi/fixtures/sekolah-nasional.json'), 'import');
+
+        $this->assertSame([4, 0, 2], [$report['created'], $report['updated'], $report['failed']]);
+        $this->assertSame([5, 6], array_column($report['errors'], 'row'));
+
+        $model = model(SchoolModel::class, false);
+        $sd    = $model->where('npsn', '20319201')->first();
+        $this->assertSame(['SD', 'Jati Wetan', 'Jati', 'Kab. Kudus', 'Jawa Tengah'], [$sd['level'], $sd['village'], $sd['district'], $sd['regency'], $sd['province']]);
+        $this->assertSame(['MI', 'swasta'], array_values(array_intersect_key($model->where('npsn', '60713001')->first(), array_flip(['level', 'ownership']))));
+        $this->assertSame('SDLB', $model->where('npsn', '10101010')->first()['level']);
+        $this->assertSame('SD', $model->where('npsn', '50101010')->first()['level']);
+
+        // Running it again changes nothing.
+        $again = (new SchoolImporter())->import((new SchoolImporter())->readJson(SUPPORTPATH . 'Referensi/fixtures/sekolah-nasional.json'), 'import');
+        $this->assertSame([0, 0, 4], [$again['created'], $again['updated'], $again['unchanged']]);
+    }
+
+    public function testJsonLinesGzipIsRead(): void
+    {
+        $rows = iterator_to_array((new SchoolImporter())->readJson(SUPPORTPATH . 'Referensi/fixtures/sekolah-nasional.ndjson.gz'));
+
+        $this->assertCount(2, $rows);
+        $this->assertSame('MI NU Miftahul Ulum', $rows[2]['name']);
+        $this->assertSame('60713001', $rows[2]['npsn']);
+    }
+
+    public function testLevelFromName(): void
+    {
+        foreach (['SDN 1 Kudus' => 'SD', 'SD IT Al Ikhlas' => 'SD', 'MIN 2 Kudus' => 'MI', 'MI. Darul Ulum' => 'MI', 'Madrasah Ibtidaiyah NU' => 'MI', 'SLB Negeri Kudus' => 'SLB', 'SMP NU' => null] as $name => $level) {
+            $this->assertSame($level, SchoolImporter::levelFromName($name), $name);
+        }
+    }
 }

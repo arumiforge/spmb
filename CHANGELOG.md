@@ -30,6 +30,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   footer, Open Graph tags; `php spark spmb:branding` loads a school's branding pack; branding pack for SMP NU Al Ma'ruf
   Kudus (green `#005c2f`, LP Ma'arif NU); optional green illustration accent; `deploy/provision.sh` and a go-live
   checklist (D-054…D-056).
+- Previous schools: `php spark referensi:import --file` reads the national SD/MI JSON list (array, NDJSON or .gz),
+  matches Indonesian/English keys and takes the level from the school name when missing (D-057).
 - Dark mode: lighter accent text tints so dark brand colours stay readable.
 - Panitia Pendaftaran may also record test attendance, re-registration and uniform pickup (D-051).
 - Dashboard shows real registration counts (total, today, per wave against quota, online/offline, documents complete).

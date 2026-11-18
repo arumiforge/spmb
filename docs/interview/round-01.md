@@ -52,4 +52,4 @@ Answers from Arumi Studios (2026-11-18):
 - **Q8 Branding and domain**: school name "SMP NU Al Ma'ruf Kudus", domain `spmbsmpnualmarufkudusweb.id` (D-050).
 - **Q2 Timeline**: go live as soon as possible for the school's review; the school enters wave 1 itself (D-056).
 - **Q8 Branding**: logos delivered (square, landscape light/dark, LP Ma'arif NU for the footer); colours follow the logo and NU green; Cloudflare on the developer's account (D-054…D-056).
-- Still open: Dapodik access (D-040).
+- **Previous schools**: Arumi Studios provides a JSON file with every SD/MI in Indonesia (D-057, replaces the Dapodik key question D-040).

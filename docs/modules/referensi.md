@@ -56,13 +56,44 @@ name + district + regency; a row with an NPSN also completes a school typed earl
 Empty cells never wipe data, `is_active` is never changed, nothing is deleted. Rows with
 problems are skipped and listed with the spreadsheet row number and a plain reason.
 
+## National JSON list (D-057, recommended)
+
+Arumi Studios provides one JSON file with every SD/MI in Indonesia. Load it on the server with:
+
+```bash
+php spark referensi:import --file /path/sekolah-sd-mi.json            # or .json.gz, .ndjson
+php spark referensi:import --file /path/sekolah-sd-mi.json --dry-run  # count only
+```
+
+Note the space after `--file` (CodeIgniter's CLI does not read `--file=…`).
+
+Accepted shapes: an array of objects, `{"data": [ ... ]}`, or one object per line (NDJSON); gzip is
+unpacked. Keys are matched like spreadsheet headers (case, spaces, `_` and `.` ignored):
+
+| Column | Accepted keys |
+| --- | --- |
+| npsn | `npsn` (8 digits; numbers are fine) |
+| name | `nama_sekolah`, `nama`, `sekolah`, `name` |
+| village | `desa`, `kelurahan`, `desa_kelurahan`, `kelurahan_desa`, `village` |
+| district | `kecamatan`, `kec`, `district` |
+| regency | `kabupaten_kota`, `kabupaten`, `kota`, `kab_kota`, `regency` |
+| province | `provinsi`, `prov`, `province` |
+| level (optional) | `jenjang`, `bentuk_pendidikan`, `level` — SD, MI, SDLB, SLB or "Sekolah Dasar"/"Madrasah Ibtidaiyah"; when missing it is taken from the name (SD…, SDN…, MI…, MIN…, SDLB…, SLB…) |
+| ownership (optional) | `status`, `status_sekolah` — negeri/swasta |
+
+Rows are upserted by NPSN (or name + district + regency), never deleted; running it again is quick and changes
+nothing. Rows without a name or a recognisable level are skipped and listed (first 1,000). Measured: 50,000 rows in
+about 15 s; the national list (~170,000 rows) takes about a minute and needs ~1–2 GB memory in the CLI (the command
+raises PHP's limit). The school search stays at ~50 ms with this volume. Keep the file out of git (tens of MB); copy
+it to the server and import there.
+
 ## Dapodik import: `php spark referensi:import`
 
 ```bash
 php spark referensi:import                       # Referensi.provinces, Referensi.levels
 php spark referensi:import --kabupaten=Kudus --dry-run
 php spark referensi:import --provinsi="Jawa Tengah" --delay=1000
-php spark referensi:import --file=emis-mi.xlsx   # MI from EMIS, or any CSV/XLSX
+php spark referensi:import --file emis-mi.xlsx   # MI from EMIS, or any CSV/XLSX/JSON
 ```
 
 Walks provinces → regencies → districts → schools, one request at a time with a pause
