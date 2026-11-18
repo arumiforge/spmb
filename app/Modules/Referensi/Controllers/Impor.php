@@ -116,6 +116,9 @@ class Impor extends BaseController
         $csv = (string) stream_get_contents($handle);
         fclose($handle);
 
-        return $this->response->download('contoh-sekolah-asal.csv', "\xEF\xBB\xBF" . $csv)->setContentType('text/csv');
+        return $this->response
+            ->setContentType('text/csv', 'UTF-8')
+            ->setHeader('Content-Disposition', 'attachment; filename="contoh-sekolah-asal.csv"')
+            ->setBody("\xEF\xBB\xBF" . $csv);
     }
 }

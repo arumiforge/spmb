@@ -51,6 +51,7 @@ class SchoolModel extends Model
         $this->registerAuditCallbacks();
 
         $rules = [
+            'id'        => 'permit_empty|is_natural_no_zero',
             'npsn'      => 'permit_empty|exact_length[8]|numeric|is_unique[ref_sekolah.npsn,id,{id}]',
             'name'      => 'required|max_length[150]',
             'level'     => 'required|in_list[' . implode(',', self::LEVELS) . ']',

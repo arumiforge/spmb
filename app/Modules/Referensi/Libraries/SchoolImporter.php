@@ -95,22 +95,21 @@ class SchoolImporter
     {
         $extension = strtolower($extension);
 
+        if (! in_array($extension, ['csv', 'txt', 'xlsx'], true)) {
+            throw new RuntimeException(lang('Referensi.importBadType'));
+        }
+
         try {
-            if ($extension === 'csv' || $extension === 'txt') {
+            if ($extension === 'xlsx') {
+                $reader = IOFactory::createReader('Xlsx');
+            } else {
                 $reader = new Csv();
                 $reader->setInputEncoding(Csv::GUESS_ENCODING);
                 $reader->setDelimiter(null);
-            } elseif ($extension === 'xlsx') {
-                $reader = IOFactory::createReader('Xlsx');
-            } else {
-                throw new RuntimeException(lang('Referensi.importBadType'));
             }
 
             $reader->setReadDataOnly(true);
-            $sheet = $reader->load($path)->getActiveSheet();
-            $data  = $sheet->toArray(null, false, false, false);
-        } catch (RuntimeException $e) {
-            throw $e;
+            $data = $reader->load($path)->getActiveSheet()->toArray(null, false, false, false);
         } catch (Throwable $e) {
             log_message('warning', 'School import could not read the file: ' . $e->getMessage());
 

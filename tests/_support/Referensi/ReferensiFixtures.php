@@ -17,6 +17,15 @@ trait ReferensiFixtures
 {
     private int $applicantSeq = 0;
 
+    /**
+     * Forgets the signed-in user of a previous test (the session outlives the database refresh).
+     */
+    protected function forgetSignedInUser(): void
+    {
+        $_SESSION = [];
+        $this->resetServices();
+    }
+
     protected static function fixture(string $name): string
     {
         return __DIR__ . '/fixtures/' . $name;
