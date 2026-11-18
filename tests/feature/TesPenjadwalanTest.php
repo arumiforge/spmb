@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Libraries\ApplicantAccess;
+use App\Models\UserModel;
+use CodeIgniter\Shield\Entities\User;
 use CodeIgniter\Shield\Test\AuthenticationTesting;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
@@ -47,6 +49,21 @@ final class TesPenjadwalanTest extends CIUnitTestCase
         parent::tearDown();
     }
 
+    /**
+     * A staff member of $group, or a signed-in user without any group ('').
+     */
+    private function staffOrNobody(string $group): User
+    {
+        if ($group !== '') {
+            return $this->makeStaff($group);
+        }
+
+        $users = model(UserModel::class, false);
+        $users->save(new User(['username' => 'tanpaperan', 'email' => 'tanpa-peran@example.test', 'password' => 'Rahasia-Kuat-2027']));
+
+        return $users->findById($users->getInsertID());
+    }
+
     private function panel(string $name, array $applicant): string
     {
         return trim((string) preg_replace('/<!--.*?-->/s', '', view('Modules\\Tes\\Views\\panels\\' . $name, ['applicant' => $applicant], ['saveData' => false])));
@@ -59,7 +76,7 @@ final class TesPenjadwalanTest extends CIUnitTestCase
         $url       = str_replace('{id}', (string) $applicant['id'], $route);
 
         $this->get($url)->assertRedirectTo(site_url('masuk'));
-        $this->actingAs($this->makeStaff($denied))->get($url)->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $this->actingAs($this->staffOrNobody($denied))->get($url)->assertRedirectTo(site_url('admin/akses-ditolak'));
 
         $_SESSION = [];
         $ok       = $this->actingAs($this->makeStaff($allowed))->get($url);
@@ -74,14 +91,14 @@ final class TesPenjadwalanTest extends CIUnitTestCase
      */
     public static function providePagePermissions(): iterable
     {
-        // route, allowed group, denied group
+        // route, allowed group, denied group ('' = signed in without a group)
         yield 'allocation' => ['admin/tes/penjadwalan', 'admin', 'panitia'];
 
-        yield 'participants' => ['admin/tes/peserta', 'petugas-tes', 'kepsek'];
+        yield 'participants' => ['admin/tes/peserta', 'panitia', ''];
 
-        yield 'change log' => ['admin/tes/riwayat-jadwal', 'panitia', 'kepsek'];
+        yield 'change log' => ['admin/tes/riwayat-jadwal', 'panitia', ''];
 
-        yield 'seat form' => ['admin/pendaftar/{id}/tes', 'petugas-tes', 'petugas-daftar-ulang'];
+        yield 'seat form' => ['admin/pendaftar/{id}/tes', 'panitia', ''];
     }
 
     #[DataProvider('provideWritePermissions')]
@@ -91,7 +108,7 @@ final class TesPenjadwalanTest extends CIUnitTestCase
         $url       = str_replace('{id}', (string) $applicant['id'], $route);
 
         $this->post($url, [])->assertRedirectTo(site_url('masuk'));
-        $this->actingAs($this->makeStaff($denied))->post($url, [])->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $this->actingAs($this->staffOrNobody($denied))->post($url, [])->assertRedirectTo(site_url('admin/akses-ditolak'));
 
         $_SESSION = [];
         $this->actingAs($this->makeStaff($allowed))->post($url, [])->assertRedirect();
@@ -104,9 +121,9 @@ final class TesPenjadwalanTest extends CIUnitTestCase
     {
         yield 'run allocation' => ['admin/tes/penjadwalan', 'admin', 'panitia'];
 
-        yield 'give or move a seat' => ['admin/pendaftar/{id}/tes', 'panitia', 'kepsek'];
+        yield 'give or move a seat' => ['admin/pendaftar/{id}/tes', 'panitia', ''];
 
-        yield 'remove a seat' => ['admin/pendaftar/{id}/tes/hapus', 'admin', 'petugas-tes'];
+        yield 'remove a seat' => ['admin/pendaftar/{id}/tes/hapus', 'admin', 'panitia'];
     }
 
     // --- Allocation --------------------------------------------------------
@@ -163,7 +180,7 @@ final class TesPenjadwalanTest extends CIUnitTestCase
         $this->makeAssignment((int) $scheduled['id'], $session, ['seat_number' => 1, 'status' => 'present']);
         $this->makeApplicant(['full_name' => 'Bunga Lestari']);
         $this->makeApplicant(['full_name' => 'Citra Dibatalkan', 'status' => 'cancelled']);
-        $this->actingAs($this->makeStaff('petugas-tes'));
+        $this->actingAs($this->makeStaff('panitia'));
 
         $all = $this->get('admin/tes/peserta');
         $all->assertSee('Ahmad Fauzi');
@@ -266,7 +283,7 @@ final class TesPenjadwalanTest extends CIUnitTestCase
         $a = $this->makeApplicant();
         $this->makeAssignment((int) $a['id'], $this->makeSession());
 
-        $this->actingAs($this->makeStaff('petugas-tes'))->get('admin/pendaftar/' . $a['id'] . '/tes')->assertDontSee('Keluarkan dari Jadwal');
+        $this->actingAs($this->makeStaff('panitia'))->get('admin/pendaftar/' . $a['id'] . '/tes')->assertDontSee('Keluarkan dari Jadwal');
         $_SESSION = [];
         $this->actingAs($this->makeStaff('admin'))->get('admin/pendaftar/' . $a['id'] . '/tes')->assertSee('Keluarkan dari Jadwal');
     }
@@ -294,16 +311,6 @@ final class TesPenjadwalanTest extends CIUnitTestCase
         $page->assertSee('Gedung B');
         $page->assertSee('Dijadwalkan petugas');
         $page->assertSee('Pendaftar offline');
-    }
-
-    public function testAdminPanelWithoutTesKehadiranHasNoButton(): void
-    {
-        $a = $this->makeApplicant();
-        $this->actingAs($this->makeStaff('kepsek'));
-
-        $page = $this->get('admin/pendaftar/' . $a['id']);
-        $page->assertSee('Jadwal Tes');
-        $page->assertDontSee('Beri Jadwal');
     }
 
     public function testPublicPanel(): void

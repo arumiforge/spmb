@@ -73,7 +73,7 @@ example. Idempotent.
 
 ## Guides
 
-`Guide/admin-sekolah/20-penjadwalan.md`, `Guide/panitia-pendaftaran/20-jadwal-tes.md`,
+`Guide/admin-sekolah/20-penjadwalan.md`, `Guide/panitia/20-jadwal-tes.md`,
 `Guide/calon-murid.md`.
 
 ## Tests

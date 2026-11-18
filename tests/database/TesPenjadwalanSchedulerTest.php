@@ -362,7 +362,7 @@ final class TesPenjadwalanSchedulerTest extends CIUnitTestCase
     public function testAssignOverQuotaWhenConfirmed(): void
     {
         $session = $this->makeSession(['quota' => 1]);
-        $staff   = (int) $this->makeStaff('petugas-tes')->id;
+        $staff   = (int) $this->makeStaff('panitia')->id;
         $this->scheduler->assign((int) $this->makeApplicant()['id'], $session, $staff);
 
         $row = $this->scheduler->assign((int) $this->makeApplicant()['id'], $session, $staff, null, true);
@@ -374,7 +374,7 @@ final class TesPenjadwalanSchedulerTest extends CIUnitTestCase
 
     public function testMoveReschedulesAndClearsAttendance(): void
     {
-        $staff = $this->makeStaff('petugas-tes');
+        $staff = $this->makeStaff('panitia');
         $from  = $this->makeSession();
         $to    = $this->makeSession(['test_date' => '2027-06-13']);
         $a     = $this->makeApplicant();
@@ -398,7 +398,7 @@ final class TesPenjadwalanSchedulerTest extends CIUnitTestCase
 
     public function testMoveRefusals(): void
     {
-        $petugas = (int) $this->makeStaff('petugas-tes')->id;
+        $petugas = (int) $this->makeStaff('panitia')->id;
         $from    = $this->makeSession();
         $full    = $this->makeSession(['test_date' => '2027-06-13', 'quota' => 1]);
         $this->makeAssignment((int) $this->makeApplicant()['id'], $full, ['seat_number' => 1]);
