@@ -37,6 +37,7 @@ $routes->group('admin/pendaftar', ['namespace' => 'Modules\Pendaftaran\Controlle
     $routes->post('(:num)/ubah', 'Pendaftar::update/$1', ['filter' => 'permission:pendaftar.edit']);
     $routes->post('(:num)/status', 'Pendaftar::status/$1', ['as' => 'pendaftar.status', 'filter' => 'permission:pendaftar.edit']);
     $routes->post('(:num)/data-ganda', 'Pendaftar::reviewDuplicate/$1', ['as' => 'pendaftar.data-ganda', 'filter' => 'permission:pendaftar.edit']);
+    $routes->post('(:num)/tautan', 'Pendaftar::privateLink/$1', ['as' => 'pendaftar.tautan', 'filter' => 'permission:pendaftar.edit']);
     $routes->post('(:num)/hapus', 'Pendaftar::delete/$1', ['as' => 'pendaftar.hapus', 'filter' => 'permission:pendaftar.delete']);
 });
 
