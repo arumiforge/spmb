@@ -113,7 +113,7 @@ return [
     'pdfTotals'     => 'Jumlah peserta: {0} (laki-laki {1}, perempuan {2})',
     'pdfFill'       => 'Hadir: ........  Tidak hadir: ........',
     'pdfSupervisor' => 'Pengawas Ruang',
-    'pdfPlace'      => '{0}, ....................',
+    'pdfPlace'      => '...................., ....................',
     'pdfSignLine'   => '(.......................................)',
     'pdfPrinted'    => 'Dicetak {0}',
     'pdfPage'       => 'Halaman {0} dari {1}',

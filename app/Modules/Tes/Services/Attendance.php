@@ -116,7 +116,7 @@ class Attendance
 
         try {
             // Serialise two staff phones scanning the same card at once.
-            $row = $this->db->query('SELECT * FROM test_assignments WHERE applicant_id = ? FOR UPDATE', [$applicantId])->getRowArray();
+            $row = $this->db->query('SELECT * FROM ' . $this->db->protectIdentifiers('test_assignments', true) . ' WHERE applicant_id = ? FOR UPDATE', [$applicantId])->getRowArray();
 
             if ($row === null) {
                 throw new DomainException(lang('TesKehadiran.notScheduled'));
@@ -223,15 +223,16 @@ class Attendance
      */
     private function lockedParticipants(int $sessionId): array
     {
-        return $this->db->query(
-            "SELECT a.id, a.applicant_id, a.status, ap.registration_number
-               FROM test_assignments a
-               JOIN applicants ap ON ap.id = a.applicant_id
-              WHERE a.session_id = ? AND ap.deleted_at IS NULL AND ap.status <> 'cancelled'
-              ORDER BY a.id
-                FOR UPDATE",
-            [$sessionId],
-        )->getResultArray();
+        $sql = $this->db->table('test_assignments a')
+            ->select('a.id, a.applicant_id, a.status, ap.registration_number')
+            ->join('applicants ap', 'ap.id = a.applicant_id')
+            ->where('a.session_id', $sessionId)
+            ->where('ap.deleted_at', null)
+            ->where('ap.status <>', 'cancelled')
+            ->orderBy('a.id', 'ASC')
+            ->getCompiledSelect();
+
+        return $this->db->query($sql . ' FOR UPDATE')->getResultArray();
     }
 
     /**
