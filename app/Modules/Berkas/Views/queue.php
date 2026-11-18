@@ -100,7 +100,7 @@ $check = 'inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary-
                 <li class="p-4">
                     <div class="flex items-start justify-between gap-3">
                         <div class="min-w-0">
-                            <p class="truncate font-medium text-gray-900 dark:text-white"><?= esc($row['full_name']) ?></p>
+                            <p class="break-words font-medium text-gray-900 dark:text-white"><?= esc($row['full_name']) ?></p>
                             <p class="font-mono text-xs text-gray-500 dark:text-gray-400"><?= esc($row['registration_number']) ?></p>
                         </div>
                         <?= view('partials/status_badge', ['badge' => status_badge_for('document', (string) $row['status'])]) ?>

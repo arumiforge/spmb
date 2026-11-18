@@ -31,7 +31,7 @@ $secondary = $btn . ' border border-gray-200 bg-white text-gray-900 hover:bg-gra
 $hint      = lang('Berkas.formatsHint', [DocumentTypeModel::formatLabel($type), DocumentStorage::sizeLabel((int) $type['max_size_kb'])]);
 ?>
 <li id="berkas-<?= $typeId ?>" class="scroll-mt-24 p-4 sm:px-5">
-    <div class="flex items-start justify-between gap-3">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
         <div class="min-w-0">
             <p class="font-medium text-gray-900 dark:text-white">
                 <?= esc($type['name']) ?>
@@ -50,7 +50,7 @@ $hint      = lang('Berkas.formatsHint', [DocumentTypeModel::formatLabel($type), 
                 </p>
             <?php endif ?>
         </div>
-        <div class="shrink-0">
+        <div class="order-first shrink-0 sm:order-none">
             <?= view('partials/status_badge', ['badge' => $status === null ? ['label' => lang('Berkas.notUploaded'), 'color' => (bool) $type['is_required'] ? 'red' : 'gray'] : status_badge_for('document', (string) $status)]) ?>
         </div>
     </div>
@@ -72,7 +72,7 @@ $hint      = lang('Berkas.formatsHint', [DocumentTypeModel::formatLabel($type), 
         </div>
     <?php endif ?>
 
-    <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+    <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start">
         <?php if ($fileUrl !== null) : ?>
             <a href="<?= $fileUrl ?>" target="_blank" rel="noopener" class="<?= $secondary ?>"><?= icon('eye', 'h-4 w-4') ?><?= lang('Berkas.view') ?><span class="sr-only">: <?= esc($type['name']) ?></span></a>
         <?php endif ?>

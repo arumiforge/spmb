@@ -30,7 +30,7 @@ $noteError = is_array($errors) ? ($errors['note'] ?? null) : null;
 
 <?= $this->section('content') ?>
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] xl:grid-cols-[minmax(0,1fr)_26rem]">
-    <section class="<?= $card ?> min-w-0" aria-label="<?= esc($type['name'], 'attr') ?>">
+    <section class="<?= $card ?> min-w-0 self-start" aria-label="<?= esc($type['name'], 'attr') ?>">
         <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white"><?= esc($type['name']) ?></h2>
             <?php if ($hasFile) : ?>
