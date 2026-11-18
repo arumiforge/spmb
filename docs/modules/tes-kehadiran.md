@@ -2,7 +2,7 @@
 
 Part of the [Tes module](tes.md); plan in `docs/phase-3-plan.md` (section C).
 Requirement FR-TEST-03, decision D-061. Permission: `tes.kehadiran` for every route
-(Super Admin, Admin Sekolah, Panitia Pendaftaran, Petugas Tes).
+(Super Admin, Admin Sekolah, Panitia; roles per D-063).
 
 ## Service: `Modules\Tes\Services\Attendance`
 

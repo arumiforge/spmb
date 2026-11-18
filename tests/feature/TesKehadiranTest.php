@@ -11,6 +11,7 @@ use Modules\Kartu\Controllers\Periksa;
 use Modules\Kartu\Services\CardTokenService;
 use Modules\Tes\Services\Scheduler;
 use Tests\Support\Tes\TesFixtures;
+use Tests\Support\ViewerAccounts;
 
 /**
  * Attendance routes (FR-TEST-03, D-061): day overview, session roster,
@@ -26,6 +27,7 @@ final class TesKehadiranTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
     use TesFixtures;
+    use ViewerAccounts;
 
     protected $namespace;
     protected $refresh = true;
@@ -52,6 +54,16 @@ final class TesKehadiranTest extends CIUnitTestCase
 
         // Headers stay between requests in FeatureTestTrait: start each request without JSON.
         return $this->withHeaders([])->actingAs($this->staff[$group]);
+    }
+
+    /**
+     * A signed-in staff account without tes.kehadiran (dashboard and applicant list only).
+     */
+    private function asViewer(): static
+    {
+        $this->staff['viewer'] ??= $this->viewer('pemantau');
+
+        return $this->withHeaders([])->actingAs($this->staff['viewer']);
     }
 
     private function json(): static
@@ -97,14 +109,14 @@ final class TesKehadiranTest extends CIUnitTestCase
         $id      = $fixture['session'];
 
         foreach (['admin/tes/kehadiran', 'admin/tes/kehadiran/sesi/' . $id, 'admin/tes/sesi/' . $id . '/daftar-hadir'] as $url) {
-            $this->as('kepsek')->get($url)->assertRedirectTo(site_url('admin/akses-ditolak'));
+            $this->asViewer()->get($url)->assertRedirectTo(site_url('admin/akses-ditolak'));
         }
 
         foreach (['admin/tes/kehadiran/sesi/' . $id . '/pindai', 'admin/tes/kehadiran/sesi/' . $id . '/pindahkan', 'admin/tes/kehadiran/sesi/' . $id . '/tidak-hadir-semua'] as $url) {
-            $this->as('kepsek')->post($url, ['kode' => 'PMB-2027-0001', 'applicant_id' => $fixture['applicant']['id']])->assertRedirectTo(site_url('admin/akses-ditolak'));
+            $this->asViewer()->post($url, ['kode' => 'PMB-2027-0001', 'applicant_id' => $fixture['applicant']['id']])->assertRedirectTo(site_url('admin/akses-ditolak'));
         }
 
-        $this->as('kepsek')->post('admin/tes/kehadiran/catat', ['applicant_id' => $fixture['applicant']['id'], 'status' => 'present'])->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $this->asViewer()->post('admin/tes/kehadiran/catat', ['applicant_id' => $fixture['applicant']['id'], 'status' => 'present'])->assertRedirectTo(site_url('admin/akses-ditolak'));
         $this->assertSame('pending', $this->assignmentStatus((int) $fixture['applicant']['id']));
     }
 
@@ -113,7 +125,7 @@ final class TesKehadiranTest extends CIUnitTestCase
         $fixture = $this->todayWithParticipant(['room_id' => $this->makeRoom(['name' => 'Lab Bahasa'])]);
         $this->makeSession(['test_date' => '2027-06-12']);
 
-        foreach (['petugas-tes', 'panitia', 'admin'] as $group) {
+        foreach (['panitia', 'admin'] as $group) {
             $result = $this->as($group)->get('admin/tes/kehadiran');
             $result->assertOK();
             $result->assertSee('Lab Bahasa');
@@ -122,16 +134,16 @@ final class TesKehadiranTest extends CIUnitTestCase
             $result->assertSee('12 Juni 2027');
         }
 
-        $other = $this->as('petugas-tes')->get('admin/tes/kehadiran?tanggal=2027-06-12');
+        $other = $this->as('panitia')->get('admin/tes/kehadiran?tanggal=2027-06-12');
         $other->assertSee('Sesi pada Sabtu, 12 Juni 2027');
         $other->assertDontSee('Lab Bahasa');
 
-        $this->as('petugas-tes')->get('admin/tes/kehadiran?tanggal=bukan-tanggal')->assertSee('Sesi hari ini');
+        $this->as('panitia')->get('admin/tes/kehadiran?tanggal=bukan-tanggal')->assertSee('Sesi hari ini');
     }
 
     public function testNoSessionsShowsAFriendlyEmptyState(): void
     {
-        $this->as('petugas-tes')->get('admin/tes/kehadiran')->assertSee('Hari ini tidak ada sesi tes');
+        $this->as('panitia')->get('admin/tes/kehadiran')->assertSee('Hari ini tidak ada sesi tes');
     }
 
     public function testRosterListsParticipants(): void
@@ -140,18 +152,18 @@ final class TesKehadiranTest extends CIUnitTestCase
         $other   = $this->makeApplicant(['full_name' => 'Budi Santoso']);
         $this->makeAssignment((int) $other['id'], $fixture['session'], ['seat_number' => 2]);
 
-        $result = $this->as('petugas-tes')->get('admin/tes/kehadiran/sesi/' . $fixture['session']);
+        $result = $this->as('panitia')->get('admin/tes/kehadiran/sesi/' . $fixture['session']);
         $result->assertOK();
         $result->assertSee($fixture['applicant']['full_name']);
         $result->assertSee('Budi Santoso');
         $result->assertSee('Pindai Kartu');
         $result->assertSee('scanner.js');
 
-        $search = $this->as('petugas-tes')->get('admin/tes/kehadiran/sesi/' . $fixture['session'] . '?q=budi');
+        $search = $this->as('panitia')->get('admin/tes/kehadiran/sesi/' . $fixture['session'] . '?q=budi');
         $search->assertSee('Budi Santoso');
         $search->assertDontSee($fixture['applicant']['full_name']);
 
-        $this->as('petugas-tes')->get('admin/tes/kehadiran/sesi/999')->assertStatus(404);
+        $this->as('panitia')->get('admin/tes/kehadiran/sesi/999')->assertStatus(404);
     }
 
     public function testRecordWithAFormRedirectsBack(): void
@@ -159,7 +171,7 @@ final class TesKehadiranTest extends CIUnitTestCase
         $fixture = $this->todayWithParticipant();
         $id      = (int) $fixture['applicant']['id'];
 
-        $result = $this->as('petugas-tes')->post('admin/tes/kehadiran/catat', [
+        $result = $this->as('panitia')->post('admin/tes/kehadiran/catat', [
             'applicant_id' => $id, 'status' => 'present', 'session_id' => $fixture['session'], 'kembali' => 'admin/tes/kehadiran/sesi/' . $fixture['session'],
         ]);
 
@@ -185,7 +197,7 @@ final class TesKehadiranTest extends CIUnitTestCase
         $fixture = $this->todayWithParticipant();
         $id      = (int) $fixture['applicant']['id'];
 
-        $result = $this->as('petugas-tes')->json()->post('admin/tes/kehadiran/catat', ['applicant_id' => $id, 'status' => 'present', 'session_id' => $fixture['session']]);
+        $result = $this->as('panitia')->json()->post('admin/tes/kehadiran/catat', ['applicant_id' => $id, 'status' => 'present', 'session_id' => $fixture['session']]);
 
         $result->assertOK();
         $data = json_decode($result->getJSON(), true);
@@ -197,7 +209,7 @@ final class TesKehadiranTest extends CIUnitTestCase
         $this->assertArrayHasKey('csrf', $data);
 
         // Undo.
-        $undo = json_decode($this->as('petugas-tes')->json()->post('admin/tes/kehadiran/catat', ['applicant_id' => $id, 'status' => 'pending', 'session_id' => $fixture['session']])->getJSON(), true);
+        $undo = json_decode($this->as('panitia')->json()->post('admin/tes/kehadiran/catat', ['applicant_id' => $id, 'status' => 'pending', 'session_id' => $fixture['session']])->getJSON(), true);
         $this->assertStringContainsString('dibatalkan', $undo['message']);
         $this->assertSame('pending', $this->assignmentStatus($id));
     }
@@ -208,13 +220,13 @@ final class TesKehadiranTest extends CIUnitTestCase
         $other   = $this->makeSession();
         $free    = $this->makeApplicant();
 
-        $wrongSession = $this->as('petugas-tes')->json()->post('admin/tes/kehadiran/catat', ['applicant_id' => $fixture['applicant']['id'], 'status' => 'present', 'session_id' => $other]);
+        $wrongSession = $this->as('panitia')->json()->post('admin/tes/kehadiran/catat', ['applicant_id' => $fixture['applicant']['id'], 'status' => 'present', 'session_id' => $other]);
         $wrongSession->assertStatus(422);
         $this->assertStringContainsString('sesi lain', json_decode($wrongSession->getJSON(), true)['message']);
 
-        $this->as('petugas-tes')->post('admin/tes/kehadiran/catat', ['applicant_id' => $free['id'], 'status' => 'present'])->assertSessionHas('error');
-        $this->as('petugas-tes')->post('admin/tes/kehadiran/catat', ['applicant_id' => $fixture['applicant']['id'], 'status' => 'hapus'])->assertSessionHas('error');
-        $this->as('petugas-tes')->post('admin/tes/kehadiran/catat', ['applicant_id' => 999, 'status' => 'present'])->assertSessionHas('error');
+        $this->as('panitia')->post('admin/tes/kehadiran/catat', ['applicant_id' => $free['id'], 'status' => 'present'])->assertSessionHas('error');
+        $this->as('panitia')->post('admin/tes/kehadiran/catat', ['applicant_id' => $fixture['applicant']['id'], 'status' => 'hapus'])->assertSessionHas('error');
+        $this->as('panitia')->post('admin/tes/kehadiran/catat', ['applicant_id' => 999, 'status' => 'present'])->assertSessionHas('error');
         $this->assertSame('pending', $this->assignmentStatus((int) $fixture['applicant']['id']));
     }
 
@@ -225,7 +237,7 @@ final class TesKehadiranTest extends CIUnitTestCase
         $token   = (new CardTokenService())->tokenFor($id);
         $url     = 'admin/tes/kehadiran/sesi/' . $fixture['session'] . '/pindai';
 
-        $data = json_decode($this->as('petugas-tes')->json()->post($url, ['kode' => site_url('kartu/' . $token)])->getJSON(), true);
+        $data = json_decode($this->as('panitia')->json()->post($url, ['kode' => site_url('kartu/' . $token)])->getJSON(), true);
         $this->assertSame('marked', $data['state']);
         $this->assertTrue($data['ok']);
         $this->assertStringContainsString('tercatat hadir', $data['resultHtml']);
@@ -233,7 +245,7 @@ final class TesKehadiranTest extends CIUnitTestCase
         $this->assertSame(1, $data['counts']['present']);
         $this->assertSame('present', $this->assignmentStatus($id));
 
-        $again = json_decode($this->as('petugas-tes')->json()->post($url, ['kode' => 'pmb-2027-0001'])->getJSON(), true);
+        $again = json_decode($this->as('panitia')->json()->post($url, ['kode' => 'pmb-2027-0001'])->getJSON(), true);
         $this->assertSame('already', $again['state']);
         $this->assertSame(1, db_connect()->table('audit_logs')->where('event', 'test_attendance')->countAllResults());
     }
@@ -273,12 +285,12 @@ final class TesKehadiranTest extends CIUnitTestCase
         ];
 
         foreach ($cases as $code => $state) {
-            $data = json_decode($this->as('petugas-tes')->json()->post($url, ['kode' => $code])->getJSON(), true);
+            $data = json_decode($this->as('panitia')->json()->post($url, ['kode' => $code])->getJSON(), true);
             $this->assertSame($state, $data['state'], (string) $code);
             $this->assertFalse($data['ok']);
         }
 
-        $data = json_decode($this->as('petugas-tes')->json()->post($url, ['kode' => $elsewhere['registration_number']])->getJSON(), true);
+        $data = json_decode($this->as('panitia')->json()->post($url, ['kode' => $elsewhere['registration_number']])->getJSON(), true);
         $this->assertStringContainsString('Sabtu, 12 Juni 2027', $data['resultHtml']);
         $this->assertSame('pending', $this->assignmentStatus((int) $elsewhere['id']));
     }
@@ -292,13 +304,13 @@ final class TesKehadiranTest extends CIUnitTestCase
 
         if (! class_exists(Scheduler::class)) {
             // Package B not merged yet: the action explains it is not available and changes nothing.
-            $this->as('petugas-tes')->post($url, ['applicant_id' => $elsewhere['id']])->assertSessionHas('error', lang('TesKehadiran.moveUnavailable'));
+            $this->as('panitia')->post($url, ['applicant_id' => $elsewhere['id']])->assertSessionHas('error', lang('TesKehadiran.moveUnavailable'));
             $this->assertSame('pending', $this->assignmentStatus((int) $elsewhere['id']));
 
             return;
         }
 
-        $data = json_decode($this->as('petugas-tes')->json()->post($url, ['applicant_id' => $elsewhere['id']])->getJSON(), true);
+        $data = json_decode($this->as('panitia')->json()->post($url, ['applicant_id' => $elsewhere['id']])->getJSON(), true);
         $this->assertSame('marked', $data['state'], $data['message']);
         $this->assertSame('present', $this->assignmentStatus((int) $elsewhere['id']));
         $this->assertSame($fixture['session'], (int) db_connect()->table('test_assignments')->where('applicant_id', $elsewhere['id'])->get()->getRow()->session_id);
@@ -306,7 +318,7 @@ final class TesKehadiranTest extends CIUnitTestCase
 
         // A walk-in without a seat gets one here.
         $walkIn = $this->makeApplicant();
-        $this->as('petugas-tes')->json()->post($url, ['applicant_id' => $walkIn['id']])->assertOK();
+        $this->as('panitia')->json()->post($url, ['applicant_id' => $walkIn['id']])->assertOK();
         $this->assertSame('present', $this->assignmentStatus((int) $walkIn['id']));
     }
 
@@ -315,7 +327,7 @@ final class TesKehadiranTest extends CIUnitTestCase
         $fixture   = $this->todayWithParticipant();
         $cancelled = $this->makeApplicant(['status' => 'cancelled']);
 
-        $this->as('petugas-tes')->post('admin/tes/kehadiran/sesi/' . $fixture['session'] . '/pindahkan', ['applicant_id' => $cancelled['id']])->assertSessionHas('error');
+        $this->as('panitia')->post('admin/tes/kehadiran/sesi/' . $fixture['session'] . '/pindahkan', ['applicant_id' => $cancelled['id']])->assertSessionHas('error');
         $this->dontSeeInDatabase('test_assignments', ['applicant_id' => $cancelled['id']]);
     }
 
@@ -342,12 +354,12 @@ final class TesKehadiranTest extends CIUnitTestCase
     {
         $fixture = $this->todayWithParticipant();
 
-        $result = $this->as('petugas-tes')->get('admin/tes/sesi/' . $fixture['session'] . '/daftar-hadir');
+        $result = $this->as('panitia')->get('admin/tes/sesi/' . $fixture['session'] . '/daftar-hadir');
         $result->assertOK();
         $result->assertHeader('Content-Type', 'application/pdf');
         $this->assertStringStartsWith('%PDF', $result->response()->getBody());
 
-        $this->as('petugas-tes')->get('admin/tes/sesi/999/daftar-hadir')->assertStatus(404);
+        $this->as('panitia')->get('admin/tes/sesi/999/daftar-hadir')->assertStatus(404);
     }
 
     public function testCardCheckPanelRecordsAttendance(): void
@@ -357,17 +369,17 @@ final class TesKehadiranTest extends CIUnitTestCase
         $token   = (new CardTokenService())->tokenFor($id);
 
         $this->get('kartu/' . $token)->assertDontSee('Catat Hadir');
-        $this->as('kepsek')->get('kartu/' . $token)->assertDontSee('Catat Hadir');
+        $this->asViewer()->get('kartu/' . $token)->assertDontSee('Catat Hadir');
 
-        $page = $this->as('petugas-tes')->get('kartu/' . $token);
+        $page = $this->as('panitia')->get('kartu/' . $token);
         $page->assertSee('Catat Hadir');
         $page->assertSee('Belum tes');
 
-        $result = $this->as('petugas-tes')->post('admin/tes/kehadiran/catat', ['applicant_id' => $id, 'status' => 'present', 'kembali' => 'kartu/' . $token]);
+        $result = $this->as('panitia')->post('admin/tes/kehadiran/catat', ['applicant_id' => $id, 'status' => 'present', 'kembali' => 'kartu/' . $token]);
         $result->assertRedirectTo(site_url('kartu/' . $token));
         $this->assertSame('present', $this->assignmentStatus($id));
 
-        $after = $this->as('petugas-tes')->get('kartu/' . $token);
+        $after = $this->as('panitia')->get('kartu/' . $token);
         $after->assertSee('Tercatat hadir pukul');
         $after->assertDontSee('Catat Hadir');
     }
@@ -389,7 +401,7 @@ final class TesKehadiranTest extends CIUnitTestCase
         $this->todayWithParticipant(['room_id' => $this->makeRoom(['name' => 'Ruang Melati'])]);
         $this->makeApplicant();
 
-        $tester = $this->as('petugas-tes')->get('admin');
+        $tester = $this->as('panitia')->get('admin');
         $tester->assertSee('Tes hari ini');
         $tester->assertSee('Ruang Melati');
         $tester->assertDontSee('Pendaftar belum dijadwalkan');
@@ -397,6 +409,6 @@ final class TesKehadiranTest extends CIUnitTestCase
         $admin = $this->as('admin')->get('admin');
         $admin->assertSee('Pendaftar belum dijadwalkan');
 
-        $this->as('kepsek')->get('admin')->assertDontSee('Tes hari ini');
+        $this->asViewer()->get('admin')->assertDontSee('Tes hari ini');
     }
 }

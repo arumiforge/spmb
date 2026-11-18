@@ -28,7 +28,7 @@ final class TesKehadiranServiceTest extends CIUnitTestCase
 
     private function staffId(): int
     {
-        return (int) $this->makeStaff('petugas-tes')->id;
+        return (int) $this->makeStaff('panitia')->id;
     }
 
     private function assignment(int $applicantId): array

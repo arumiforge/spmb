@@ -7,6 +7,6 @@ Dasbor menampilkan kotak **Tes hari ini**: setiap sesi hari ini dengan jumlah pe
 
 > **Tips:** Jika jumlah **Pendaftar belum dijadwalkan** lebih dari nol, tekan **Atur penjadwalan** untuk memberi mereka jadwal.
 
-- Petugas Tes dan Panitia Pendaftaran bisa mencatat kehadiran. Kepala Sekolah tidak.
+- Admin Sekolah dan Panitia bisa mencatat kehadiran.
 - Setiap catatan kehadiran (termasuk yang dibatalkan) tersimpan di **Riwayat** pendaftar: siapa yang mencatat dan kapan.
 - Setelah sesi selesai, gunakan **Tandai Sisanya Tidak Hadir** agar peserta yang tidak datang tercatat.

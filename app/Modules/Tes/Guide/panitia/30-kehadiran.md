@@ -11,7 +11,8 @@ Catat setiap peserta yang datang ke ruang tes. Anda bisa memakai HP atau kompute
 > **Tips:** Tidak ada kamera? Ketik nomor pendaftaran di kotak **Nomor pendaftaran atau kode kartu**, lalu tekan **Catat Hadir**. Alat pemindai USB juga bisa dipakai di kotak yang sama.
 
 - Jika salah mencatat, tekan **Batalkan**. Status peserta kembali menjadi **Belum tes**.
-- Jika kotak kuning muncul dengan tulisan **dijadwalkan di sesi lain**, peserta datang ke sesi yang bukan jadwalnya. Tekan **Pindahkan ke Sesi Ini dan Catat Hadir** jika peserta boleh ikut tes di ruang Anda.
+- Jika kotak kuning muncul dengan tulisan **dijadwalkan di sesi lain**, peserta datang ke sesi yang bukan jadwalnya. Tekan **Pindahkan ke Sesi Ini dan Catat Hadir** jika peserta boleh ikut tes di ruang Anda. Perpindahan ini tercatat di **Riwayat Jadwal** dengan alasan "Hadir di sesi lain".
+- Jika peserta belum punya jadwal, tekan **Masukkan ke Sesi Ini dan Catat Hadir**.
 - Jika muncul **Kartu ini sudah tidak berlaku**, minta peserta menunjukkan kartu terbaru, atau ketik nomor pendaftarannya.
 - Jika kamera tidak mau menyala, periksa izin kamera di pengaturan browser, lalu muat ulang halaman.
 
@@ -38,4 +39,4 @@ Setiap peserta punya tombol **Hadir** dan **Tidak Hadir** yang besar.
 
 ## Mencatat dari halaman pemeriksaan kartu
 
-Jika Anda sudah masuk ke dasbor di HP, pindai kode QR dengan kamera HP biasa. Halaman **Pemeriksaan Kartu** menampilkan jadwal tes peserta dan tombol **Catat Hadir**.
+Saat memeriksa kartu dengan kamera HP atau lewat **Periksa Kartu**, jadwal tes peserta juga tampil bersama tombol **Catat Hadir**.
