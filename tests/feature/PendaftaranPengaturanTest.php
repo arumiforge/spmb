@@ -7,6 +7,7 @@ use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
 use CodeIgniter\Test\FeatureTestTrait;
 use Tests\Support\Pendaftaran\PendaftaranFixtures;
+use Tests\Support\ViewerAccounts;
 
 /**
  * Registration settings page (D-031, D-037).
@@ -19,6 +20,7 @@ final class PendaftaranPengaturanTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
     use PendaftaranFixtures;
+    use ViewerAccounts;
 
     protected $namespace;
     protected $refresh = true;
@@ -53,7 +55,7 @@ final class PendaftaranPengaturanTest extends CIUnitTestCase
     {
         $this->get('admin/pengaturan/pendaftaran')->assertRedirectTo(site_url('masuk'));
         $this->actingAs($this->makeUser('panitia'))->get('admin/pengaturan/pendaftaran')->assertRedirectTo(site_url('admin/akses-ditolak'));
-        $this->actingAs($this->makeUser('kepsek'))->post('admin/pengaturan/pendaftaran', $this->post_())->assertRedirectTo(site_url('admin/akses-ditolak'));
+        $this->actingAs($this->viewer('lihat'))->post('admin/pengaturan/pendaftaran', $this->post_())->assertRedirectTo(site_url('admin/akses-ditolak'));
         $this->assertSame('2027/2028', setting('Pendaftaran.academicYear'));
 
         $this->actingAs($this->makeUser('admin'))->get('admin/pengaturan/pendaftaran')->assertSee('PMB-2027-0012');

@@ -10,6 +10,7 @@ use Modules\Pendaftaran\Libraries\ApplicantForm;
 use Modules\Pendaftaran\Services\ApplicantService;
 use Modules\Pendaftaran\Services\ApplicantStats;
 use Tests\Support\Pendaftaran\PendaftaranFixtures;
+use Tests\Support\ViewerAccounts;
 
 /**
  * Dashboard registration counts (total, today, per wave, method, documents).
@@ -22,6 +23,7 @@ final class DashboardTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
     use PendaftaranFixtures;
+    use ViewerAccounts;
 
     protected $namespace;
     protected $refresh = true;
@@ -73,7 +75,7 @@ final class DashboardTest extends CIUnitTestCase
         $this->assertSame([['name' => 'Gelombang Satu', 'starts_on' => date('Y-m-d', strtotime('-10 days')), 'ends_on' => date('Y-m-d', strtotime('+10 days')), 'quota' => 10, 'count' => 2]], $stats['waves']);
         $this->assertSame(0, $stats['noWave']);
 
-        $page = $this->actingAs($this->makeUser('kepsek'))->get('admin');
+        $page = $this->actingAs($this->viewer('lihat'))->get('admin');
         $page->assertSee('Pendaftar per gelombang');
         $page->assertSee('2 / 10 kuota');
     }

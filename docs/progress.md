@@ -35,7 +35,7 @@ create your own branch from `main` instead.
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
 | `phase-3` | coordinator | Phase 3 integration branch | open |
-| `nty/nifty-mendel-u2jf9s` | coordinator | National SD/MI list as default data (D-058) + phase 3 foundation | PR into `phase-3` |
+| `nty/nifty-mendel-u2jf9s` | coordinator | SD/MI default data + phase 3 foundation (merged, PR #18); only three roles (D-063) | PR into `phase-3` |
 | `feat/p3-jadwal` | worker A | Rooms, calendar/holidays, sessions + generator, Tes settings | in progress |
 | `feat/p3-penjadwalan` | worker B | Allocation, moves, change log, applicant schedule panels | in progress |
 | `feat/p3-kehadiran` | worker C | Attendance roster, QR scan, attendance sheet PDF, dashboard panel | in progress |
@@ -67,6 +67,7 @@ Start a new session from `origin/main` (`spmb-session`; `composer install`, `npm
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-18 · coordinator · `nty/nifty-mendel-u2jf9s` → `phase-3` — only three roles (Admin Sekolah, Panitia, Siswa; D-063): removed Kepala Sekolah and Petugas roles, accounts migrated to Panitia, guide `/panduan/panitia`, tests use per-user permissions for read-only staff; workers told. Next: worker PRs.
 - 2026-11-18 · coordinator · `nty/nifty-mendel-u2jf9s` → `phase-3` — national SD/MI list shipped as default data (D-058, 177,422 schools, loaded by `spmb:install` and deploys); phase 3 foundation (module Tes, D-059…D-062, `phase-3-plan.md`); workers A–C started. Next: review worker PRs.
 - 2026-11-18 · coordinator · `phase-2` → `main` — merged #17 into `phase-2` and PR #14 into `main` (user's request); handoff: JSON import, go-live, illustrations, phase 3. Coordinator session ended.
 - 2026-11-18 · coordinator · `feat/p2-branding` — JSON import for the national SD/MI list (D-057, resolves D-040); brand images + branding pack command, SMP NU Al Ma'ruf Kudus pack (logos, favicon, icon, share image, green), illustration accent setting, ChatGPT briefs 013/014, `deploy/provision.sh` + go-live checklist (D-054…D-056). Next: merge, user merges #14, go-live steps 1–9.
@@ -76,4 +77,3 @@ Start a new session from `origin/main` (`spmb-session`; `composer install`, `npm
 - 2026-11-18 · coordinator · `phase-2` — workers resumed after the usage limit; merged D (#11), A (#12), C (#13) after local tests on the combined branch (240 tests); decisions D-039…D-043; Dapodik key question open (D-040). Next: B (#10), then PR `phase-2` → `main`.
 - 2026-11-17 · coordinator · `feat/p2-foundation` — phase 2 foundation: shared migrations/models, settings, `referensi.kelola`, extension points (D-033), FPDF + PhpSpreadsheet (D-030), coordination protocol and plan (D-029…D-038). Next: workers A–D.
 - 2026-11-17 · session 3 · `feat/illustrations` — illustrations 001–012 converted to WebP and installed with dark variants (`illustration()` helper); checked at 360/1280 px light and dark. Next: phase 2.
-- 2026-11-17 · session 3 · `docs/chatgpt-delivery-folder` — ChatGPT's role limited to making images and opening a PR into `ai/generated/`; Claude reviews and installs (D-028). Originals 001–012 merged (PR #7). Next: install them.
