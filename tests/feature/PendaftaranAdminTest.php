@@ -10,6 +10,7 @@ use Modules\Pendaftaran\Libraries\ApplicantForm;
 use Modules\Pendaftaran\Models\ApplicantModel;
 use Modules\Pendaftaran\Services\ApplicantService;
 use Tests\Support\Pendaftaran\PendaftaranFixtures;
+use Tests\Support\ViewerAccounts;
 
 /**
  * Staff pages for applicants: list, offline form, detail, edit, status,
@@ -23,6 +24,7 @@ final class PendaftaranAdminTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
     use PendaftaranFixtures;
+    use ViewerAccounts;
 
     protected $namespace;
     protected $refresh = true;
@@ -55,7 +57,7 @@ final class PendaftaranAdminTest extends CIUnitTestCase
             $this->get($url)->assertRedirectTo(site_url('masuk'));
         }
 
-        $seragam = $this->makeUser('petugas-seragam');
+        $seragam = $this->viewer('lihat', ['dasbor.view', 'pendaftar.view', 'seragam.proses']);
         $this->actingAs($seragam)->get('admin/pendaftar')->assertOK();
         $this->actingAs($seragam)->get('admin/pendaftar/' . $id)->assertOK();
         $this->actingAs($seragam)->get('admin/pendaftar/tambah')->assertRedirectTo(site_url('admin/akses-ditolak'));
@@ -79,7 +81,7 @@ final class PendaftaranAdminTest extends CIUnitTestCase
         $waveId = $this->makeWave();
         $this->register(['wave_id' => $waveId]);
         $this->register(['full_name' => 'Citra Lestari', 'nik' => '3319000000000009', 'nisn' => '8888888888']);
-        $user = $this->makeUser('kepsek');
+        $user = $this->viewer('lihat');
 
         $all = $this->actingAs($user)->get('admin/pendaftar');
         $all->assertSee('Ahmad Fauzi');

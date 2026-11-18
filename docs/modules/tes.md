@@ -34,7 +34,7 @@ No row = "Belum dijadwalkan".
 
 `tes.atur` — rooms, calendar, sessions, allocation, settings (Super Admin, Admin Sekolah).
 `tes.kehadiran` — attendance, participant list, moving an applicant to another session
-(also Panitia Pendaftaran and Petugas Tes, D-051).
+(also Panitia, D-051, D-063).
 
 ## Settings (`app/Config/Tes.php`, Pengaturan → Tes)
 

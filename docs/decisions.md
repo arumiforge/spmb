@@ -248,7 +248,7 @@ Status: accepted (confirms D-004; interview round 1, Q1)
 Decision: Each school gets its own installation and database. First client: SMP NU Al Ma'ruf Kudus at `spmbsmpnualmarufkudusweb.id`. The school's name, logo and colours are entered in Pengaturan → Identitas Sekolah (white label); nothing school-specific goes into code.
 
 ## D-051 — Roles in use (2026-11-18)
-Status: accepted (interview round 1, Q4; refines D-014)
+Status: accepted (interview round 1, Q4; refines D-014); unused optional roles removed by D-063
 Decision: The school uses Admin Sekolah (everything for the school, including settings for waves, documents, cards, tests and uniforms), Panitia Pendaftaran (registration work only: applicants, documents, cards, test attendance, re-registration and uniform pickup; no settings) and the applicant access used by parents. Panitia gains `tes.kehadiran`, `daftar-ulang.proses` and `seragam.proses`. Kepala Sekolah, Petugas Tes, Petugas Daftar Ulang and Petugas Seragam stay available but unused by default, so tasks can be handed out later without a code change.
 
 ## D-052 — "Akun siswa" without a password; messages instead of live chat (2026-11-18)
@@ -301,3 +301,8 @@ Decision: Panitia Pendaftaran and Petugas Tes (`tes.kehadiran`) record attendanc
 ## D-062 — Schedule shown to applicants (2026-11-18)
 Status: accepted (brief §3: the latest card shows the schedule once set)
 Decision: When `Tes.scheduleVisible` is on (default), the applicant's page shows day, time, room, location, status and the instructions text (`Tes.instructions`), and the PDF card's "Jadwal Tes" line shows the session; otherwise both say "Belum dijadwalkan" / that the schedule will be announced. The card is never regenerated as new data: it reads the current schedule each time it is printed.
+
+## D-063 — Only three roles: Admin Sekolah, Panitia, Siswa (2026-11-18)
+Status: accepted (user's instruction; replaces the "optional roles" part of D-014 and D-051)
+Decision: The school uses exactly three roles: Admin Sekolah (`admin`), Panitia (`panitia`, one role for all committee work: registration, documents, cards, test attendance and seat moves, re-registration, uniform pickup, replies to parents) and Siswa (the no-password applicant access, D-052; not a staff account). Super Admin stays as the developer's technical account. The groups Kepala Sekolah, Petugas Tes, Petugas Daftar Ulang and Petugas Seragam are removed; migration `MergeStaffRolesIntoPanitia` moves any account in them to Panitia and drops them from the two-step verification policy. Guides: `/panduan/panitia` (old role guide URLs redirect). Permissions stay fine-grained, so a role could be split again later without code changes in modules.
+Consequences: Reports (`laporan.*`) are for Admin Sekolah only. Tests that need a read-only staff account use per-user permissions (`Tests\Support\ViewerAccounts`).
