@@ -294,17 +294,18 @@ class Scheduler
 
     /**
      * Sessions an applicant may be given or moved to (for the seat form):
-     * open sessions from today of their year that accept their wave, except
-     * their current one. Full sessions are included (free = 0).
+     * open sessions from today (or every date with $includePast, for moves by
+     * staff with tes.atur) of their year that accept their wave, except their
+     * current one. Full sessions are included (free = 0).
      *
      * @param array<string, mixed> $applicant applicants row
      *
      * @return list<array<string, mixed>>
      */
-    public function choicesFor(array $applicant, ?int $exceptSessionId = null): array
+    public function choicesFor(array $applicant, ?int $exceptSessionId = null, bool $includePast = false): array
     {
         $waveId   = $applicant['wave_id'] === null ? null : (int) $applicant['wave_id'];
-        $sessions = $this->openSessions((string) $applicant['academic_year'], $waveId, date('Y-m-d'));
+        $sessions = $this->openSessions((string) $applicant['academic_year'], $waveId, $includePast ? '1000-01-01' : date('Y-m-d'));
 
         return array_values(array_filter($sessions, static function (array $s) use ($waveId, $exceptSessionId): bool {
             if ($exceptSessionId !== null && (int) $s['id'] === $exceptSessionId) {

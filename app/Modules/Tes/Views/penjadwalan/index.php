@@ -3,15 +3,15 @@
  * Automatic allocation: counts, form (wave, start date), dry-run preview and
  * the confirm button (POST runs Scheduler::allocate()).
  *
- * @var array<int|string, string>   $waves     id => name
- * @var array<string, int>          $counts    wave id ('' = none) => eligible without seat
- * @var int                         $waiting
- * @var int                         $freeSeats
- * @var int                         $openCount
- * @var int|null                    $waveId
- * @var string                      $fromDate
- * @var bool                        $dateError
- * @var array<string, mixed>|null   $preview   Scheduler::allocate() dry-run report
+ * @var array<int|string, string> $waves     id => name
+ * @var array<string, int>        $counts    wave id ('' = none) => eligible without seat
+ * @var int                       $waiting
+ * @var int                       $freeSeats
+ * @var int                       $openCount
+ * @var int|null                  $waveId
+ * @var string                    $fromDate
+ * @var bool                      $dateError
+ * @var array<string, mixed>|null $preview   Scheduler::allocate() dry-run report
  */
 $num    = static fn (int $n): string => number_format($n, 0, ',', '.');
 $card   = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800';
@@ -23,8 +23,8 @@ $tiles  = [
     ['label' => lang('TesPenjadwalan.freeSeatsTitle'), 'value' => $freeSeats, 'icon' => 'grid', 'note' => lang('TesPenjadwalan.freeSeatsHelp', [tanggal_indo($fromDate)])],
     ['label' => lang('TesPenjadwalan.sessionsTitle'), 'value' => $openCount, 'icon' => 'clock', 'note' => lang('TesPenjadwalan.freeSeatsHelp', [tanggal_indo($fromDate)])],
 ];
-$statuses = array_map(static fn (string $s): string => lang('Status.applicant.' . $s), array_values(array_diff((array) setting('Tes.eligibleStatuses'), ['cancelled'])));
-$last     = array_pop($statuses);
+$statuses   = array_map(static fn (string $s): string => lang('Status.applicant.' . $s), array_values(array_diff((array) setting('Tes.eligibleStatuses'), ['cancelled'])));
+$last       = array_pop($statuses);
 $statusText = $statuses === [] ? (string) $last : implode(', ', $statuses) . ' ' . lang('TesPenjadwalan.or') . ' ' . $last;
 $waveLabel  = $waveId === null ? lang('Tes.allWaves') : ($waves[$waveId] ?? lang('Tes.allWaves'));
 ?>
