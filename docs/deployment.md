@@ -56,3 +56,15 @@ Rollback: `ln -sfn /var/www/spmb/releases/<previous> /var/www/spmb/current && su
 
 Daily `mysqldump --single-transaction` + `writable/uploads` archive, kept 14 days
 on the server and copied off-site; monthly restore drill on staging.
+
+## First client: SMP NU Al Ma'ruf Kudus
+
+| Item | Value |
+| --- | --- |
+| Domain | `spmbsmpnualmarufkudusweb.id` (`app.baseURL = 'https://spmbsmpnualmarufkudusweb.id/'`) |
+| School name (Pengaturan → Identitas Sekolah) | SMP NU Al Ma'ruf Kudus |
+| Installation | One installation and database for this school (D-050) |
+| Still needed | Logo files, primary colour, owner of the Cloudflare account (interview round 1, Q8) |
+
+Set the school identity after `php spark spmb:install` in the admin; it is not hard-coded.
+

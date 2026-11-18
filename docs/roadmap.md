@@ -10,7 +10,7 @@ docs, guides, changelog and a demo on staging.
 | 2 — Registration | Waves, online + offline form, numbering, duplicate check, school reference data, document upload/resize/verification, PDF card + QR, status check, basic public pages | **done on `phase-2`** (PRs #9–#13), waiting for merge into `main`; open: Dapodik access (D-040), school answers |
 | 3 — Placement test | Test calendar, sessions/rooms/quotas, automatic allocation, QR/search attendance, rescheduling log | planned |
 | 4 — Re-registration & reports | Re-registration, uniform status, dashboard stats, filters, XLSX/CSV/PDF export, XLSX import | planned |
-| 5 — Engagement | Public site content and announcements, visitor analytics, interactive chat | planned |
+| 5 — Engagement | Public site content and announcements, compact visitor analytics (D-053), messages/criticism/suggestions from parents with committee replies — not live chat (D-052) | planned |
 | 6 — Launch | Server setup, backups + restore drill, security review, load test, role guides complete, staff training | planned |
 | Later | WhatsApp notifications, uniform stock/packages, digital payment, trend analysis, integrations | backlog |
 

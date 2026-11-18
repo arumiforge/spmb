@@ -242,3 +242,19 @@ Consequences: Retention and access rules of UU PDP apply to these fields as to t
 ## D-049 — Random code at the end of registration numbers (2026-11-18)
 Status: accepted (answered by the user; extends D-031)
 Decision: The number format may contain one `{ACAK}` (4 characters) or `{ACAK:n}` token (n = 1…5), normally at the end, e.g. `PMB-{YEAR}-{0000}-{ACAK:3}` → PMB-2027-0001-K7Q. Characters: uppercase letters and digits without look-alikes (no O, I, L, 0, 1), from `random_int`. Without the token there is no random part. Numbers still restart every academic year (D-031 confirmed) and are never reused.
+
+## D-050 — One installation per school (2026-11-18)
+Status: accepted (confirms D-004; interview round 1, Q1)
+Decision: Each school gets its own installation and database. First client: SMP NU Al Ma'ruf Kudus at `spmbsmpnualmarufkudusweb.id`. The school's name, logo and colours are entered in Pengaturan → Identitas Sekolah (white label); nothing school-specific goes into code.
+
+## D-051 — Roles in use (2026-11-18)
+Status: accepted (interview round 1, Q4; refines D-014)
+Decision: The school uses Admin Sekolah (everything for the school, including settings for waves, documents, cards, tests and uniforms), Panitia Pendaftaran (registration work only: applicants, documents, cards, test attendance, re-registration and uniform pickup; no settings) and the applicant access used by parents. Panitia gains `tes.kehadiran`, `daftar-ulang.proses` and `seragam.proses`. Kepala Sekolah, Petugas Tes, Petugas Daftar Ulang and Petugas Seragam stay available but unused by default, so tasks can be handed out later without a code change.
+
+## D-052 — "Akun siswa" without a password; messages instead of live chat (2026-11-18)
+Status: accepted (confirms D-008 and D-034; interview round 1, Q3 and Q6)
+Decision: The student account used by parents is the existing no-password access (registration number + birth date, or the private link). Chat is not live: from that page parents send messages, criticism and suggestions; the committee (`chat.balas`) reads them in an inbox and replies; replies show on the applicant's page (and later via WhatsApp, phase "Later"). No WebSocket or polling server needed. Built in phase 5 (module Chat, renamed in the UI to "Pesan").
+
+## D-053 — Compact visitor analytics (2026-11-18)
+Status: accepted (refines D-009; interview round 1, Q5)
+Decision: Built-in, no third-party script, deliberately simple: page views and unique visitors per day, top pages, and simple totals for referrers and device type. No per-visitor detail.

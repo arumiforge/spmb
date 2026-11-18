@@ -10,13 +10,13 @@ IDs are stable; reference them in commits, PRs and tests (`FR-REG-03`).
 | Role | Who | Main capabilities | Language level |
 | --- | --- | --- | --- |
 | Super Admin | Arumi Studios | Everything: modules on/off, white-label, system settings, backups, logs, users of all roles | Technical allowed |
-| Admin Sekolah | School IT/operator | School identity, waves, test schedule, documents list, users (except super admin), all data and reports | Non-technical |
-| Kepala Sekolah **[proposed]** | Principal | Read-only dashboard and reports | Non-technical |
-| Panitia Pendaftaran | Registration committee | Add offline applicants, edit data, verify documents, print cards | Non-technical |
-| Petugas Tes | Test officers | Scan card / search, record attendance, reschedule | Non-technical |
-| Petugas Daftar Ulang | Re-registration officers | Process re-registration | Non-technical |
-| Petugas Seragam **[proposed]** | Uniform officers | Update uniform status | Non-technical |
-| Calon Murid / Orang Tua | Public | Register online, check status, correct data, download card | Non-technical |
+| Admin Sekolah | School IT/operator | Everything for the school: identity, waves, test schedule, documents list, uniform settings, users (except super admin), all data and reports **[confirmed, D-051]** | Non-technical |
+| Kepala Sekolah **[optional, unused by default]** | Principal | Read-only dashboard and reports | Non-technical |
+| Panitia Pendaftaran | Registration committee | Registration work only: offline applicants, data edits, document checks, cards, test attendance, re-registration, uniform pickup; no settings **[confirmed, D-051]** | Non-technical |
+| Petugas Tes **[optional]** | Test officers | Scan card / search, record attendance, reschedule | Non-technical |
+| Petugas Daftar Ulang **[optional]** | Re-registration officers | Process re-registration | Non-technical |
+| Petugas Seragam **[optional]** | Uniform officers | Update uniform status | Non-technical |
+| Calon Murid / Orang Tua ("akun siswa") | Public, used by parents | Register online, check status, correct data, download card, send messages/criticism/suggestions — no password: registration number + birth date or private link **[confirmed, D-008, D-052]** | Non-technical |
 
 Access is permission-based (`Config\AuthGroups`, D-014). Admin Sekolah assigns roles and
 extra per-user permissions; changing a role's permission set is a configuration change
@@ -73,8 +73,8 @@ extra per-user permissions; changing a role's permission set is a configuration 
 - FR-PLT-04 Audit log of data changes and logins.
 - FR-PLT-05 Breadcrumbs on every page except home; friendly labels.
 - FR-PLT-06 Guide pages per role at `/panduan/<role>` in plain Indonesian.
-- FR-PLT-07 Visitor analytics, light: page views, unique visitors/day, top pages, referrers, device type. [proposed: built-in, no third-party script]
-- FR-PLT-08 Modern interactive chat. [scope pending — interview round 1]
+- FR-PLT-07 Visitor analytics, compact: page views, unique visitors/day, top pages (referrers and device type only as simple totals). [confirmed: built-in, no third-party script, not detailed — D-053]
+- FR-PLT-08 Messages, not live chat: applicants (through their status page) send messages, criticism and suggestions; the committee reads and replies in an inbox; replies appear on the applicant's page. [confirmed, D-052]
 - FR-PLT-09 Notifications via WhatsApp. [later]
 - FR-PLT-10 Digital payment. [later]
 
