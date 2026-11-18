@@ -33,6 +33,7 @@ final class PendaftaranGelombangTest extends CIUnitTestCase
     protected function tearDown(): void
     {
         $this->forgetPendaftaranSettings();
+        $this->resetVisitor();
         parent::tearDown();
     }
 

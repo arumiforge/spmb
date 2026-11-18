@@ -36,6 +36,7 @@ final class PendaftaranAdminTest extends CIUnitTestCase
     protected function tearDown(): void
     {
         $this->forgetPendaftaranSettings();
+        $this->resetVisitor();
         parent::tearDown();
     }
 
