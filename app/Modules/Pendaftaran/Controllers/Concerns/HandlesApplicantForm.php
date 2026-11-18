@@ -27,7 +27,7 @@ trait HandlesApplicantForm
         $rules = $form->rules($fields);
 
         if (in_array('previous_school_name', $fields, true) && self::schoolPickerAvailable()) {
-            $rules['previous_school_id'] = ['label' => lang('Pendaftaran.fields.previous_school_id'), 'rules' => 'permit_empty|is_natural_no_zero|is_not_unique[ref_sekolah.id]'];
+            $rules['previous_school_id'] = ['label' => lang('Pendaftaran.fields.previous_school_id'), 'rules' => 'permit_empty|is_natural'];
         } else {
             unset($data['previous_school_id']);
         }
@@ -36,12 +36,9 @@ trait HandlesApplicantForm
         $validation->run($data);
         $errors = $validation->getErrors() + $form->extraErrors($data, $fields);
 
-        if (! empty($data['previous_school_id'])) {
-            // A school from the list wins over the free text.
-            $data['previous_school_id']   = (int) $data['previous_school_id'];
-            $data['previous_school_name'] = null;
-        } elseif (array_key_exists('previous_school_id', $data)) {
-            $data['previous_school_id'] = null;
+        if (array_key_exists('previous_school_id', $data)) {
+            // The picker posts an id and/or free text; Referensi decides which one counts.
+            $data = model(SchoolModel::class)->fromPicker($data['previous_school_id'], $data['previous_school_name'] ?? null) + $data;
         }
 
         return [$data, $errors];
