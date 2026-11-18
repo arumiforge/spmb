@@ -21,7 +21,7 @@ $button = 'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 
 $tiles  = [
     ['label' => lang('TesPenjadwalan.waitingTitle'), 'value' => $waiting, 'icon' => 'users', 'note' => lang('TesPenjadwalan.waitingHelp')],
     ['label' => lang('TesPenjadwalan.freeSeatsTitle'), 'value' => $freeSeats, 'icon' => 'grid', 'note' => lang('TesPenjadwalan.freeSeatsHelp', [tanggal_indo($fromDate)])],
-    ['label' => lang('TesPenjadwalan.sessionsTitle'), 'value' => $openCount, 'icon' => 'clock', 'note' => lang('TesPenjadwalan.freeSeatsHelp', [tanggal_indo($fromDate)])],
+    ['label' => lang('TesPenjadwalan.sessionsTitle'), 'value' => $openCount, 'icon' => 'clock', 'note' => lang('TesPenjadwalan.sessionsHelp')],
 ];
 $statuses   = array_map(static fn (string $s): string => lang('Status.applicant.' . $s), array_values(array_diff((array) setting('Tes.eligibleStatuses'), ['cancelled'])));
 $last       = array_pop($statuses);
@@ -31,7 +31,7 @@ $waveLabel  = $waveId === null ? lang('Tes.allWaves') : ($waves[$waveId] ?? lang
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('actions') ?>
-<a href="<?= site_url('admin/tes/sesi') ?>" class="<?= $button ?> border border-gray-200 bg-white text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"><?= icon('clock', 'h-4 w-4') ?><?= lang('TesPenjadwalan.manageSessions') ?></a>
+<a href="<?= site_url('admin/tes/sesi') ?>" class="<?= $button ?> whitespace-nowrap border border-gray-200 bg-white text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"><?= icon('clock', 'h-4 w-4') ?><?= lang('TesPenjadwalan.manageSessions') ?></a>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>

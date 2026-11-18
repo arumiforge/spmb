@@ -75,13 +75,13 @@ $change   = static fn (array $r): string => view('Modules\Tes\Views\riwayat_jadw
                 <tbody>
                     <?php foreach ($rows as $r) : ?>
                         <tr class="border-b border-gray-100 align-top last:border-0 dark:border-gray-700">
-                            <td class="whitespace-nowrap px-4 py-3"><?= esc(tanggal_indo($r['created_at'], true)) ?></td>
+                            <td class="whitespace-nowrap px-4 py-3"><span class="text-gray-900 dark:text-white"><?= esc(tanggal_indo($r['created_at'])) ?></span><span class="block text-xs"><?= esc(date('H.i', strtotime((string) $r['created_at'])) . ' ' . setting('School.timezoneLabel')) ?></span></td>
                             <td class="px-4 py-3">
                                 <a href="<?= url_to('pendaftar.detail', $r['applicant_id']) ?>" class="font-medium text-gray-900 hover:text-primary-700 hover:underline dark:text-white dark:hover:text-primary-400"><?= esc($r['full_name']) ?></a>
                                 <p class="font-mono text-xs text-gray-500 dark:text-gray-400"><?= esc($r['registration_number']) ?></p>
                             </td>
                             <td class="px-4 py-3"><?= $kind($r) ?></td>
-                            <td class="px-4 py-3"><?= $change($r) ?></td>
+                            <td class="min-w-64 px-4 py-3"><?= $change($r) ?></td>
                             <td class="px-4 py-3"><?= esc($r['reason'] ?? lang('TesPenjadwalan.none')) ?></td>
                             <td class="px-4 py-3"><?= esc($by($r)) ?></td>
                         </tr>

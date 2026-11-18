@@ -37,6 +37,7 @@ return [
     'freeSeatsTitle'    => 'Kursi kosong',
     'freeSeatsHelp'     => 'Di sesi aktif mulai {0}.',
     'sessionsTitle'     => 'Sesi tersedia',
+    'sessionsHelp'      => 'Sesi yang masih punya kursi kosong.',
     'noWaveApplicants'  => 'Tanpa gelombang',
     'waitingPerWave'    => 'Menunggu jadwal per gelombang',
     'stepOne'           => '1. Pilih pendaftar dan tanggal',
