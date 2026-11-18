@@ -5,6 +5,12 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Phase 3 foundation: module Tes (rooms, test holidays, sessions, assignments, schedule change log), settings `Tes`,
+  test status labels, schedule on the registration card, panel slots `card_check`, `card_lookup` and `dashboard`,
+  guide sections from `Guide/<audience>/*.md`, camera QR scanner bundle (`qr-scanner`, MIT), `docs/phase-3-plan.md`
+  (D-059…D-062).
+- Previous schools: the national SD/MI list (177,422 schools, 38 provinces) ships as default data and is loaded by
+  `spmb:install` and on deploy (`php spark referensi:import --bawaan`, skipped once loaded) (D-058).
 - Phase 2 foundation: modules Referensi, Pendaftaran, Berkas, Kartu and Situs (registry entries, menus, public
   navigation, audit labels); migrations for `ref_sekolah`, `waves`, `registration_counters`, `applicants`,
   `document_types`, `applicant_documents`, `card_tokens` with audited models; settings defaults

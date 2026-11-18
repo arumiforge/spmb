@@ -37,10 +37,11 @@ return [
     'noNpsn'        => 'Tanpa NPSN',
 
     'source' => [
-        'dapodik' => 'Dapodik',
-        'emis'    => 'EMIS',
-        'import'  => 'Berkas impor',
-        'manual'  => 'Ditambah petugas',
+        'dapodik'  => 'Dapodik',
+        'emis'     => 'EMIS',
+        'import'   => 'Berkas impor',
+        'nasional' => 'Daftar nasional',
+        'manual'   => 'Ditambah petugas',
     ],
     'ownership' => [
         'negeri' => 'Negeri',

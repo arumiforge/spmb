@@ -41,6 +41,8 @@ $tiles = $stats === null ? [] : [
 
 <div class="<?= $stats !== null ? 'mt-6 ' : '' ?>grid grid-cols-1 gap-4 xl:grid-cols-3">
     <div class="space-y-4 xl:col-span-2">
+        <?php // Modules add their own summary here (panel slot "dashboard"); each panel checks its permission. ?>
+        <?= module_panels('dashboard', ['user' => $user]) ?>
         <?php if ($stats === null || $stats['total'] === 0) : ?>
             <?= view('partials/empty_state', ['empty' => [
                 'title'    => 'Belum ada pendaftar',

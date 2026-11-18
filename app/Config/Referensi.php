@@ -47,4 +47,10 @@ class Referensi extends BaseConfig
      * School searches allowed per visitor (IP address) per minute.
      */
     public int $searchPerMinute = 30;
+
+    /**
+     * Version of the bundled national SD/MI list already loaded into
+     * ref_sekolah (written by BundledSchools, D-058). Empty = not loaded yet.
+     */
+    public string $bundledVersion = '';
 }

@@ -60,6 +60,8 @@ class Periksa extends BaseController
                 'name'      => $card['name'] ?? null,
                 'wave'      => $card['wave'] ?? null,
                 'staffLink' => $card !== null && $user !== null && $user->can('pendaftar.view') ? site_url('admin/pendaftar/' . $applicant['id']) : null,
+                // Staff only: modules add actions here (panel slot card_check, e.g. test attendance).
+                'applicantId' => $card !== null && $user !== null ? (int) $applicant['id'] : null,
             ],
         ]);
     }

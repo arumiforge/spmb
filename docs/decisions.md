@@ -279,3 +279,25 @@ Status: accepted (resolves D-040)
 Context: Arumi Studios prepares one JSON file with every SD and MI in Indonesia (NPSN, name, village, district, regency, province).
 Decision: `php spark referensi:import --file <list>.json` (also `.json.gz`, NDJSON) loads it with the same upsert rules as D-039; keys are matched by alias, and the level is taken from the school name when the file has none. This is the main source of previous schools; the Dapodik importer stays optional and no portal access key is used. The search still lists the configured provinces (`Referensi.provinces`, Jawa Tengah) first.
 Consequences: Schools from all provinces can be chosen, so fewer "sekolah lain" entries need mapping. The file is kept out of git and imported on the server.
+
+## D-058 — The national SD/MI list ships with SPMB (2026-11-18)
+Status: accepted (user's request; refines D-057)
+Context: Arumi Studios delivered the list as 38 JSON files, one per province (177,422 SD and MI: NPSN, name, level, status, village, district, regency, province). It is public data with no personal data, so it may live in the repository.
+Decision: The list is default data: gzipped per-province files plus a manifest in `app/Modules/Referensi/Database/Data/sekolah-sd-mi/` (2.7 MB). `spmb:install` loads it and every deploy runs `referensi:import --bawaan`, which is skipped while the manifest version equals `Referensi.bundledVersion`. Rows get source `nasional`; D-039 upsert rules apply. Temporary `NP…` numbers are not treated as NPSNs.
+Consequences: Every installation can find any SD/MI in Indonesia without a manual import; the Jawa Tengah-first ordering of the search stays. Updating the list = replace the files, bump the manifest version, deploy. Replaces "keep the file out of git" in D-057.
+
+## D-059 — Placement test model: rooms, calendar, sessions (2026-11-18)
+Status: accepted (phase 3 foundation; the school sets days, rooms and quotas itself, interview round 1)
+Decision: Module `Tes`. A session is one room on one date and time with a quota (default: the room's capacity) and an optional wave (`null` = applicants of every wave, so the school can test per wave or after all waves). Holidays are dates without tests: sessions cannot be created on them and the allocation skips them. Each applicant has at most one current seat (`test_assignments`, status pending/present/absent/rescheduled); every change is also a row in the insert-only `test_schedule_changes` log (FR-TEST-04). A cancelled or deleted applicant frees the seat without deleting the row.
+
+## D-060 — Automatic allocation (2026-11-18)
+Status: accepted (FR-TEST-02, brief §4)
+Decision: Staff with `tes.atur` preview and then run the allocation for one wave or all waves from a start date (default tomorrow). Eligible: applicants of the academic year whose status is in `Tes.eligibleStatuses` (registered, verified), not deleted, without a seat, and with complete documents only when `Tes.requireCompleteDocuments` is on. They are placed in registration order (`applicants.id` within the year, the same order as the numbers; online and offline equal) into active sessions in time order (date, start time, room order) up to the free seats. Running it again only places applicants without a seat; nobody is moved. Applicants left without a seat are reported so the school can add sessions.
+
+## D-061 — Attendance by QR or search (2026-11-18)
+Status: accepted (FR-TEST-03, D-051)
+Decision: Panitia Pendaftaran and Petugas Tes (`tes.kehadiran`) record attendance on the session roster: Hadir / Tidak hadir per row, a camera scanner in the page (`qr-scanner`, MIT; BarcodeDetector where available), a text field for USB scanners and typed numbers, and a "Catat Hadir" button on the card check page `/kartu/<token>` for signed-in staff. Someone who comes to another session is moved there with the reason "Hadir di sesi lain" (logged) and then marked present. After a session, the remaining participants can be marked absent in one step. A mark can be undone (back to "Belum tes"); every mark is audited.
+
+## D-062 — Schedule shown to applicants (2026-11-18)
+Status: accepted (brief §3: the latest card shows the schedule once set)
+Decision: When `Tes.scheduleVisible` is on (default), the applicant's page shows day, time, room, location, status and the instructions text (`Tes.instructions`), and the PDF card's "Jadwal Tes" line shows the session; otherwise both say "Belum dijadwalkan" / that the schedule will be announced. The card is never regenerated as new data: it reads the current schedule each time it is printed.

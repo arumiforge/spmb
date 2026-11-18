@@ -60,7 +60,7 @@ flowbite/              Flowbite Pro templates — markup reference only (private
 | Pendaftaran | Waves, online/offline form, numbering, duplicates, status check | 2 (built, `modules/pendaftaran.md`) |
 | Berkas | Required documents, uploads, resize, verification | 2 (built, `modules/berkas.md`) |
 | Kartu | PDF card, QR token, verification page | 2 (built, `modules/kartu.md`) |
-| JadwalTes | Calendar, sessions, rooms, allocation, attendance, reschedule log | 3 |
+| Tes | Rooms, test calendar and holidays, sessions with quotas, allocation, attendance (QR/search), schedule change log | 3 (in progress, `modules/tes.md`) |
 | DaftarUlang | Re-registration processing | 4 |
 | Seragam | Uniform status (stock/packages later) | 4 |
 | Laporan | Dashboard stats, filters, XLSX/CSV/PDF export, XLSX import | 4 |
@@ -191,6 +191,8 @@ Source: Dapodik public recap data at <https://dapo.kemendikdasmen.go.id/>
 with <https://sekolah.data.kemendikdasmen.go.id/> (school reference data by NPSN)
 as the alternative/secondary source — to verify in phase 2 whether it also lists MI. If not, MI
 (Kemenag/EMIS) are loaded through an XLSX import.
+**Default since D-058**: the national SD/MI list (177,422 schools) ships in the Referensi module and is loaded by
+`spmb:install` and on deploy; the Dapodik route below stays optional.
 A `spark referensi:import` command fetches and upserts into `ref_sekolah`
 (NPSN, name, type, status, district, sub-district); applicants pick from an
 autocomplete; unknown schools are stored as free text and mapped by admins.

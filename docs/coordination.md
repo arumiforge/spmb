@@ -1,7 +1,7 @@
 # Coordination of parallel sessions
 
 How several Claude sessions build one phase at the same time without stepping on
-each other. First used for phase 2 (registration); reuse it for later phases.
+each other. First used for phase 2 (registration), again for phase 3 (placement test); reuse it for later phases.
 The repository is the only shared memory (see `.claude/skills/spmb-session`).
 
 ## Roles
@@ -9,7 +9,7 @@ The repository is the only shared memory (see `.claude/skills/spmb-session`).
 | Role | Who | May touch |
 | --- | --- | --- |
 | Coordinator | One session (`spmb:coordinator`) | The integration branch, shared files, shared docs, merges into the integration branch |
-| Worker | One session per work package (`spmb:worker`) | Only the files its package owns (listed in the phase plan, e.g. `docs/phase-2-plan.md`) |
+| Worker | One session per work package (`spmb:worker`) | Only the files its package owns (listed in the phase plan, e.g. `docs/phase-3-plan.md`) |
 | User (Arumi Studios) | Human | Merges the integration branch into `main`; answers open questions |
 
 ## Protocol

@@ -197,4 +197,14 @@ class ModuleRegistry
 
         return $this->isEnabled($module) && is_file($file) ? $file : null;
     }
+
+    /**
+     * Absolute path of a folder inside an enabled module, or null.
+     */
+    public function directory(string $module, string $relative): ?string
+    {
+        $dir = rtrim($this->path, '/') . '/' . $module . '/' . trim($relative, '/');
+
+        return $this->isEnabled($module) && is_dir($dir) ? $dir : null;
+    }
 }

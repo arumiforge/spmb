@@ -2,7 +2,7 @@
 /**
  * Public card check page opened by the QR code (/kartu/<token>). Minimal data only.
  *
- * @var array{state: string, number?: string|null, name?: string|null, wave?: string|null, staffLink?: string|null} $check
+ * @var array{state: string, number?: string|null, name?: string|null, wave?: string|null, staffLink?: string|null, applicantId?: int|null} $check
  *      state: valid | cancelled | invalid | throttled
  */
 $styles = [
@@ -45,6 +45,10 @@ $facts = array_filter([
             <a href="<?= esc($check['staffLink'], 'attr') ?>" class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary-600 px-5 py-3 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 sm:w-auto dark:focus:ring-primary-800">
                 <?= icon('user', 'h-5 w-5') ?><?= lang('Kartu.openApplicant') ?>
             </a>
+        <?php endif ?>
+
+        <?php if (! empty($check['applicantId'])) : ?>
+            <?= module_panels('card_check', ['applicantId' => $check['applicantId'], 'cardState' => $check['state']]) ?>
         <?php endif ?>
     </div>
     <p class="mt-4 flex items-start justify-center gap-2 text-center text-xs text-gray-500 dark:text-gray-400">
