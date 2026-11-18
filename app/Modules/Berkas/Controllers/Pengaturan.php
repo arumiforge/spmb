@@ -187,7 +187,7 @@ class Pengaturan extends BaseController
             'title'       => $title,
             'breadcrumbs' => [['label' => 'Dasbor', 'url' => 'admin'], ['label' => 'Pengaturan'], ['label' => 'Berkas Wajib', 'url' => 'admin/pengaturan/berkas'], ['label' => $type === null ? 'Tambah' : 'Ubah']],
             'type'        => $type ?? [
-                'code' => '', 'name' => '', 'description' => '', 'is_required' => 1, 'may_follow' => 0,
+                'code'        => '', 'name' => '', 'description' => '', 'is_required' => 1, 'may_follow' => 0,
                 'max_size_kb' => 2048, 'extensions' => 'jpg,jpeg,png,pdf', 'is_active' => 1,
             ],
             'isNew' => $type === null,

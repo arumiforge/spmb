@@ -55,7 +55,7 @@ final class UploadInput
                 continue;
             }
 
-            $number = (int) $value;
+            $number   = (int) $value;
             $limits[] = match (strtolower(substr($value, -1))) {
                 'g'     => $number * 1024 * 1024,
                 'm'     => $number * 1024,

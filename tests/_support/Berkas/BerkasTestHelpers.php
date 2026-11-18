@@ -46,15 +46,29 @@ trait BerkasTestHelpers
      */
     protected function fakeUpload(string $fixture, ?string $clientName = null, int $error = UPLOAD_ERR_OK): void
     {
-        $tmp           = $this->tmpCopy($fixture);
-        $_FILES        = [];
-        $_FILES['berkas'] = [
+        $tmp    = $this->tmpCopy($fixture);
+        $_FILES = ['berkas' => [
             'name'     => $clientName ?? $fixture,
             'type'     => 'application/octet-stream',
             'tmp_name' => $tmp,
             'error'    => $error,
             'size'     => filesize($tmp),
-        ];
+        ]];
+        service('superglobals')->setFilesArray($_FILES);
+    }
+
+    protected function clearUpload(): void
+    {
+        $_FILES = [];
+        service('superglobals')->setFilesArray([]);
+    }
+
+    /**
+     * Loads the route table, for rendering views outside a request.
+     */
+    protected function loadRoutes(): void
+    {
+        service('routes')->loadRoutes();
     }
 
     protected function seedTypes(): void
@@ -138,6 +152,6 @@ trait BerkasTestHelpers
             @unlink(WRITEPATH . 'uploads/berkas/' . $row['file_path']);
         }
 
-        $_FILES = [];
+        $this->clearUpload();
     }
 }

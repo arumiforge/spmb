@@ -6,8 +6,8 @@ namespace Modules\Berkas\Services;
 
 use finfo;
 use GdImage;
-use RuntimeException;
 use Modules\Berkas\Models\DocumentTypeModel;
+use RuntimeException;
 use Throwable;
 
 /**

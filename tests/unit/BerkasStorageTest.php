@@ -81,7 +81,7 @@ final class BerkasStorageTest extends CIUnitTestCase
     {
         setting('Berkas.imageMaxEdge', 1000);
 
-        $stored = $this->storage->store($this->tmpCopy('camera-rotated.jpg'), 'foto.jpg', $this->type);
+        $stored           = $this->storage->store($this->tmpCopy('camera-rotated.jpg'), 'foto.jpg', $this->type);
         [$width, $height] = getimagesize((string) $this->storage->path($stored['file_path']));
 
         $this->assertSame([500, 1000], [$width, $height]);

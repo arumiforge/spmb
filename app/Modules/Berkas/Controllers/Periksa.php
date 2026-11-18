@@ -105,11 +105,11 @@ class Periksa extends BaseController
             'title'       => lang('Berkas.reviewTitle'),
             'breadcrumbs' => [['label' => 'Dasbor', 'url' => 'admin'], ['label' => 'Periksa Berkas', 'url' => 'admin/berkas'], ['label' => $type['name']]],
             'review'      => [
-                'document'  => $document,
-                'applicant' => $applicant,
-                'type'      => $type,
-                'others'    => $others,
-                'verifier'  => PanelData::staffNames([$document['verified_by']])[(int) $document['verified_by']] ?? null,
+                'document'         => $document,
+                'applicant'        => $applicant,
+                'type'             => $type,
+                'others'           => $others,
+                'verifier'         => PanelData::staffNames([$document['verified_by']])[(int) $document['verified_by']] ?? null,
                 'canViewApplicant' => auth()->user()->can('pendaftar.view'),
             ],
         ]);
@@ -131,8 +131,8 @@ class Periksa extends BaseController
     public function verify(int $docId): RedirectResponse
     {
         [$document, $applicant, $type] = $this->load($docId);
-        $status = (string) $this->request->getPost('status');
-        $back   = $this->request->getPost('kembali') === 'antrean' ? 'antrean' : 'pendaftar';
+        $status                        = (string) $this->request->getPost('status');
+        $back                          = $this->request->getPost('kembali') === 'antrean' ? 'antrean' : 'pendaftar';
 
         try {
             (new DocumentService())->verify($document, $status, (string) $this->request->getPost('note'), (int) auth()->id());
