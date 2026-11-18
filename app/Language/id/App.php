@@ -37,6 +37,7 @@ return [
     'footerRights'   => 'Hak cipta dilindungi.',
     'publicNavLabel' => 'Navigasi situs',
     'staffLogin'     => 'Masuk Petugas',
+    'partnerLabel'   => 'Di bawah naungan',
 
     'notFoundTitle'    => 'Halaman tidak ditemukan',
     'notFoundText'     => 'Alamat yang Anda buka mungkin salah ketik, sudah dipindahkan, atau tidak tersedia lagi. Periksa kembali alamatnya, atau kembali ke halaman utama.',

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use Modules\Pendaftaran\Services\ApplicantStats;
 
 class Dashboard extends BaseController
 {
@@ -22,6 +23,9 @@ class Dashboard extends BaseController
                 $user->getGroups(),
             ),
             'twoFactorOn' => service('twoFactor')->isEnabled((int) $user->id),
+            // Registration counts while the Pendaftaran module is on (null otherwise).
+            'stats'       => service('modules')->isEnabled('Pendaftaran') ? (new ApplicantStats())->summary() : null,
+            'canViewList' => $user->can('pendaftar.view'),
         ]);
     }
 

@@ -204,7 +204,7 @@ final class RiwayatTest extends CIUnitTestCase
         $this->assertSame('Data baru berisi Email', $presenter->summary(['event' => 'created', 'new_values' => json_encode(['email' => 'a@b.c'])]));
         $this->assertSame('Admin Sekolah', $presenter->format('roles', ['admin']));
         $this->assertSame('{"a":1}', $presenter->format('extra', ['a' => 1]));
-        $this->assertSame('Mengubah Nama sekolah, Email, Website dan 1 lainnya', $presenter->summary([
+        $this->assertSame('Mengubah Nama, Email, Website dan 1 lainnya', $presenter->summary([
             'event'      => 'updated',
             'new_values' => json_encode(['name' => 'x', 'email' => 'y', 'website' => 'z', 'phone' => 'w']),
         ]));

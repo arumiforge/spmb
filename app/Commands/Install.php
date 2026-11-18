@@ -47,8 +47,14 @@ class Install extends BaseCommand
             return EXIT_ERROR;
         }
 
-        if (CLI::getOption('demo') !== null && ! $this->createDemoUsers()) {
-            return EXIT_ERROR;
+        $this->runModuleSeeders('InstallSeeder');
+
+        if (CLI::getOption('demo') !== null) {
+            if (! $this->createDemoUsers()) {
+                return EXIT_ERROR;
+            }
+
+            $this->runModuleSeeders('DemoSeeder');
         }
 
         CLI::newLine();
@@ -154,6 +160,55 @@ class Install extends BaseCommand
         CLI::table(array_map(static fn (array $row): array => array_values($row), $created), ['Username', 'Email', 'Role']);
 
         return true;
+    }
+
+    /**
+     * Runs Modules\<Name>\Database\Seeds\<seeder> of every enabled module that has
+     * one, in module order. InstallSeeder adds defaults (e.g. document types),
+     * DemoSeeder adds demo data (development only). Both must be idempotent.
+     */
+    private function runModuleSeeders(string $seeder): void
+    {
+        foreach ($this->modulesInDependencyOrder() as $module) {
+            $class = 'Modules\\' . $module . '\\Database\\Seeds\\' . $seeder;
+
+            if (! class_exists($class)) {
+                continue;
+            }
+
+            CLI::write("Seeding {$module} ({$seeder})...");
+            (new $class(config('Database')))->run();
+        }
+    }
+
+    /**
+     * Enabled modules, each after the modules it requires (Config/Module.php
+     * 'requires'), so e.g. Berkas demo data finds Pendaftaran's applicants.
+     *
+     * @return list<string>
+     */
+    private function modulesInDependencyOrder(): array
+    {
+        $registry = service('modules');
+        $enabled  = $registry->enabled();
+        $ordered  = [];
+        $visit    = static function (string $module, array $path) use (&$visit, &$ordered, $registry, $enabled): void {
+            if (in_array($module, $ordered, true) || in_array($module, $path, true) || ! in_array($module, $enabled, true)) {
+                return;
+            }
+
+            foreach ($registry->requires($module) as $required) {
+                $visit($required, [...$path, $module]);
+            }
+
+            $ordered[] = $module;
+        };
+
+        foreach ($enabled as $module) {
+            $visit($module, []);
+        }
+
+        return $ordered;
     }
 
     private function option(string $name, string $label, string $rules): string

@@ -66,6 +66,35 @@ final class AuthGroupsTest extends CIUnitTestCase
         }
     }
 
+    /**
+     * Phase 2 (registration) permissions: who may do what (docs/phase-2-plan.md).
+     */
+    public function testRegistrationPermissions(): void
+    {
+        $holders = function (string $permission): array {
+            $scope = explode('.', $permission)[0] . '.*';
+
+            return array_keys(array_filter(
+                $this->config->matrix,
+                static fn (array $list): bool => in_array($permission, $list, true) || in_array($scope, $list, true),
+            ));
+        };
+
+        $this->assertSame(['superadmin', 'admin'], $holders('referensi.kelola'));
+        $this->assertSame(['superadmin', 'admin'], $holders('pengaturan.pendaftaran'));
+        $this->assertSame(['superadmin', 'admin', 'panitia'], $holders('pendaftar.create'));
+        $this->assertSame(['superadmin', 'admin', 'panitia'], $holders('pendaftar.verifikasi'));
+        $this->assertSame(['superadmin', 'admin', 'panitia', 'petugas-tes'], $holders('kartu.cetak'));
+        $this->assertSame(['superadmin', 'admin'], $holders('pendaftar.delete'));
+
+        // D-051: Panitia also records test attendance, re-registration and uniform pickup; settings stay with Admin Sekolah.
+        $this->assertSame(['superadmin', 'admin', 'panitia', 'petugas-tes'], $holders('tes.kehadiran'));
+        $this->assertSame(['superadmin', 'admin', 'panitia', 'petugas-daftar-ulang'], $holders('daftar-ulang.proses'));
+        $this->assertSame(['superadmin', 'admin', 'panitia', 'petugas-seragam'], $holders('seragam.proses'));
+        $this->assertNotContains('tes.atur', $this->config->matrix['panitia']);
+        $this->assertNotContains('pengaturan.pendaftaran', $this->config->matrix['panitia']);
+    }
+
     public function testDefaultGroupExists(): void
     {
         $this->assertArrayHasKey($this->config->defaultGroup, $this->config->groups);

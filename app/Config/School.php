@@ -33,6 +33,38 @@ class School extends BaseConfig
     public string $faviconPath = '';
 
     /**
+     * Landscape logo for light backgrounds, and its version for dark mode
+     * (shown in the website and sign-in headers instead of logo + name).
+     */
+    public string $logoWidePath = '';
+
+    public string $logoWideDarkPath = '';
+
+    /**
+     * App icon (square PNG, 512 px): home-screen icon and fallback link preview image.
+     */
+    public string $iconPath = '';
+
+    /**
+     * Image shown when a link to the website is shared (1200 × 630).
+     */
+    public string $shareImagePath = '';
+
+    /**
+     * Parent organisation shown in the website footer, e.g. the foundation or
+     * association the school belongs to ('' = none).
+     */
+    public string $partnerName = '';
+
+    public string $partnerLogoPath = '';
+
+    /**
+     * Accent set of the painted illustrations: '' = default (blue accent) or
+     * 'hijau' (green accent, ai/prompts/013). Missing variants fall back to the default.
+     */
+    public string $illustrationAccent = '';
+
+    /**
      * Brand colour (hex). The layout derives the primary colour scale from it.
      */
     public string $primaryColor = '#2563EB';

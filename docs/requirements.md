@@ -10,13 +10,13 @@ IDs are stable; reference them in commits, PRs and tests (`FR-REG-03`).
 | Role | Who | Main capabilities | Language level |
 | --- | --- | --- | --- |
 | Super Admin | Arumi Studios | Everything: modules on/off, white-label, system settings, backups, logs, users of all roles | Technical allowed |
-| Admin Sekolah | School IT/operator | School identity, waves, test schedule, documents list, users (except super admin), all data and reports | Non-technical |
-| Kepala Sekolah **[proposed]** | Principal | Read-only dashboard and reports | Non-technical |
-| Panitia Pendaftaran | Registration committee | Add offline applicants, edit data, verify documents, print cards | Non-technical |
-| Petugas Tes | Test officers | Scan card / search, record attendance, reschedule | Non-technical |
-| Petugas Daftar Ulang | Re-registration officers | Process re-registration | Non-technical |
-| Petugas Seragam **[proposed]** | Uniform officers | Update uniform status | Non-technical |
-| Calon Murid / Orang Tua | Public | Register online, check status, correct data, download card | Non-technical |
+| Admin Sekolah | School IT/operator | Everything for the school: identity, waves, test schedule, documents list, uniform settings, users (except super admin), all data and reports **[confirmed, D-051]** | Non-technical |
+| Kepala Sekolah **[optional, unused by default]** | Principal | Read-only dashboard and reports | Non-technical |
+| Panitia Pendaftaran | Registration committee | Registration work only: offline applicants, data edits, document checks, cards, test attendance, re-registration, uniform pickup; no settings **[confirmed, D-051]** | Non-technical |
+| Petugas Tes **[optional]** | Test officers | Scan card / search, record attendance, reschedule | Non-technical |
+| Petugas Daftar Ulang **[optional]** | Re-registration officers | Process re-registration | Non-technical |
+| Petugas Seragam **[optional]** | Uniform officers | Update uniform status | Non-technical |
+| Calon Murid / Orang Tua ("akun siswa") | Public, used by parents | Register online, check status, correct data, download card, send messages/criticism/suggestions — no password: registration number + birth date or private link **[confirmed, D-008, D-052]** | Non-technical |
 
 Access is permission-based (`Config\AuthGroups`, D-014). Admin Sekolah assigns roles and
 extra per-user permissions; changing a role's permission set is a configuration change
@@ -25,25 +25,25 @@ extra per-user permissions; changing a role's permission set is a configuration 
 ## 2. Functional requirements
 
 ### Registration (REG)
-- FR-REG-01 Online registration form: identity, parents/guardian, previous school, contacts, documents. [confirmed]
-- FR-REG-02 Offline registration by an officer using the same form; method recorded automatically. [confirmed]
-- FR-REG-03 One shared sequence and number format (default `PMB-{YEAR}-{0000}`, configurable); unique, immutable, never reused. [confirmed]
-- FR-REG-04 Wave assigned from the registration date; waves and dates configurable. [confirmed]
-- FR-REG-05 Duplicate warning on NIK/NISN (and similar name + birth date). [confirmed]
-- FR-REG-06 Previous school chosen from a normalised list (public SD/MI data, Central Java first) with a fallback "other school" entry that admins can map later. [confirmed]
-- FR-REG-07 Public status check and data correction **[proposed: number + date of birth, no account]**.
+- FR-REG-01 Online registration form: identity, parents/guardian, previous school, contacts, documents. [confirmed] **[built in phase 2]**
+- FR-REG-02 Offline registration by an officer using the same form; method recorded automatically. [confirmed] **[built in phase 2]**
+- FR-REG-03 One shared sequence and number format (default `PMB-{YEAR}-{0000}`, configurable); unique, immutable, never reused. [confirmed] **[built in phase 2]**
+- FR-REG-04 Wave assigned from the registration date; waves and dates configurable. [confirmed] **[built in phase 2]**
+- FR-REG-05 Duplicate warning on NIK/NISN (and similar name + birth date). [confirmed] **[built in phase 2]**
+- FR-REG-06 Previous school chosen from a normalised list (public SD/MI data, Central Java first) with a fallback "other school" entry that admins can map later. [confirmed] **[built in phase 2; live Dapodik import pending D-040, CSV/XLSX import works]**
+- FR-REG-07 Public status check and data correction **[proposed: number + date of birth, no account]**. **[built in phase 2: D-008, D-034]**
 
 ### Documents (DOC)
-- FR-DOC-01 Required documents list configurable (type, required/optional, max size, formats).
-- FR-DOC-02 Images resized/compressed on upload; PDFs size-limited.
-- FR-DOC-03 Files stored outside the public web root, served only to authorised users.
-- FR-DOC-04 Verification status per document and per applicant (complete / incomplete / to follow).
+- FR-DOC-01 Required documents list configurable (type, required/optional, max size, formats). **[built in phase 2]**
+- FR-DOC-02 Images resized/compressed on upload; PDFs size-limited. **[built in phase 2]**
+- FR-DOC-03 Files stored outside the public web root, served only to authorised users. **[built in phase 2]**
+- FR-DOC-04 Verification status per document and per applicant (complete / incomplete / to follow). **[built in phase 2]**
 
 ### Card (CARD)
-- FR-CARD-01 PDF card: number, name, wave, previous school, method, test status/schedule, QR.
-- FR-CARD-02 QR holds a random token (never NIK/NISN) resolving to a verification page/officer lookup.
-- FR-CARD-03 Reprint any time; always shows current schedule; never creates new data.
-- FR-CARD-04 Availability rule configurable: immediately or after initial verification (committee decision pending).
+- FR-CARD-01 PDF card: number, name, wave, previous school, method, test status/schedule, QR. **[built in phase 2]**
+- FR-CARD-02 QR holds a random token (never NIK/NISN) resolving to a verification page/officer lookup. **[built in phase 2]**
+- FR-CARD-03 Reprint any time; always shows current schedule; never creates new data. **[built in phase 2]**
+- FR-CARD-04 Availability rule configurable: immediately or after initial verification (committee decision pending). **[built in phase 2]**
 
 ### Placement test (TEST)
 - FR-TEST-01 Calendar of test days (holidays excluded), sessions, rooms, quotas.
@@ -63,7 +63,7 @@ extra per-user permissions; changing a role's permission set is a configuration 
 - FR-RPT-04 XLSX import (e.g. bulk offline data, reference schools) with row-level validation report.
 
 ### Public website (WEB)
-- FR-WEB-01 Pages: Beranda, Profil, Persyaratan, Jadwal Gelombang, Pengumuman, Kontak/Bantuan — content editable by Admin Sekolah.
+- FR-WEB-01 Pages: Beranda, Profil, Persyaratan, Jadwal Gelombang, Pengumuman, Kontak/Bantuan — content editable by Admin Sekolah. **[phase 2: Beranda actions, Persyaratan, Jadwal Gelombang; the rest and editing in phase 5]**
 - FR-WEB-02 Indonesian, friendly, readable URLs (`/daftar`, `/cek-status`, `/persyaratan`).
 
 ### Platform (PLT)
@@ -73,8 +73,8 @@ extra per-user permissions; changing a role's permission set is a configuration 
 - FR-PLT-04 Audit log of data changes and logins.
 - FR-PLT-05 Breadcrumbs on every page except home; friendly labels.
 - FR-PLT-06 Guide pages per role at `/panduan/<role>` in plain Indonesian.
-- FR-PLT-07 Visitor analytics, light: page views, unique visitors/day, top pages, referrers, device type. [proposed: built-in, no third-party script]
-- FR-PLT-08 Modern interactive chat. [scope pending — interview round 1]
+- FR-PLT-07 Visitor analytics, compact: page views, unique visitors/day, top pages (referrers and device type only as simple totals). [confirmed: built-in, no third-party script, not detailed — D-053]
+- FR-PLT-08 Messages, not live chat: applicants (through their status page) send messages, criticism and suggestions; the committee reads and replies in an inbox; replies appear on the applicant's page. [confirmed, D-052]
 - FR-PLT-09 Notifications via WhatsApp. [later]
 - FR-PLT-10 Digital payment. [later]
 

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Libraries\BrandingAssets;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Serves the school logo and favicon uploaded in settings.
+ * Serves the school's brand images uploaded in settings (logos, icons, link preview image).
  *
  * Files live in writable/uploads/branding/ (outside public/). They are public
  * by nature (shown on the sign-in page), so no permission is needed; only
@@ -16,22 +17,29 @@ use CodeIgniter\HTTP\ResponseInterface;
  */
 class Branding extends BaseController
 {
-    public const DIR = WRITEPATH . 'uploads/branding/';
+    /**
+     * Same folder as BrandingAssets::DIR (kept for existing callers).
+     */
+    public const DIR = BrandingAssets::DIR;
 
     public function logo(): ResponseInterface
     {
-        return $this->serve((string) setting('School.logoPath'));
+        return $this->show('logo');
     }
 
     public function favicon(): ResponseInterface
     {
-        return $this->serve((string) setting('School.faviconPath'));
+        return $this->show('favicon');
     }
 
-    private function serve(string $name): ResponseInterface
+    /**
+     * Any brand image by its public slug (see BrandingAssets::ASSETS).
+     */
+    public function show(string $slug): ResponseInterface
     {
-        $name = basename($name);
-        $file = self::DIR . $name;
+        $key  = BrandingAssets::keyForSlug($slug);
+        $name = $key === null ? '' : BrandingAssets::file($key);
+        $file = BrandingAssets::DIR . $name;
 
         if ($name === '' || ! is_file($file)) {
             throw PageNotFoundException::forPageNotFound();
@@ -39,7 +47,7 @@ class Branding extends BaseController
 
         $mime = mime_content_type($file) ?: 'application/octet-stream';
 
-        if (! in_array($mime, ['image/png', 'image/jpeg', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon'], true)) {
+        if (! in_array($mime, BrandingAssets::MIMES, true)) {
             throw PageNotFoundException::forPageNotFound();
         }
 

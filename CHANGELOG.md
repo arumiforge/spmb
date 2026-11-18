@@ -5,6 +5,37 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Phase 2 foundation: modules Referensi, Pendaftaran, Berkas, Kartu and Situs (registry entries, menus, public
+  navigation, audit labels); migrations for `ref_sekolah`, `waves`, `registration_counters`, `applicants`,
+  `document_types`, `applicant_documents`, `card_tokens` with audited models; settings defaults
+  `Pendaftaran`, `Berkas`, `Kartu`, `Referensi`; permission `referensi.kelola`; applicant session grant
+  (`service('applicantAccess')`); module `requires`, panels (`module_panels()`), `Config/PublicMenu.php`,
+  `Config/Audit.php` and installer seeders (D-033); `docs/coordination.md` and `docs/phase-2-plan.md`.
+- Dependencies `setasign/fpdf` and `phpoffice/phpspreadsheet` (MIT, D-030).
+- Referensi: previous-school list for admins (search, filters, add, edit, deactivate), CSV/XLSX import with a row report,
+  mapping of schools typed by applicants, public school search `/sekolah-asal/cari` and the school picker,
+  `php spark referensi:import` (Dapodik/file), demo schools (FR-REG-06).
+- Berkas: required documents settings (`/admin/pengaturan/berkas`), document upload by applicants and staff, document check
+  queue and review screen (`/admin/berkas`), photo resizing with EXIF removal, applicant document status (FR-DOC-01…04).
+- Kartu: registration card PDF with random QR token, card check page `/kartu/<token>`, applicant card download, staff card
+  lookup and card settings (FR-CARD-01…04).
+- Pendaftaran: registration waves and settings (academic year, number format, required/hidden fields); online form `/daftar`
+  with success page, private link and duplicate flagging; public status check `/cek-status`, applicant page, contact/address
+  correction and private link `/tautan/<token>`; staff applicant list, offline registration, detail, edit, status change,
+  duplicate review, new private link and delete (FR-REG-01…07).
+- School answers: quota behaviour per wave (information only / close online / separate online limit), optional random
+  code at the end of registration numbers (`{ACAK:n}`, max 5), KK number and parent/guardian occupation and income
+  dropdowns (editable lists), field mode "Hanya diisi petugas" (D-047…D-049).
+- Brand images: landscape logo (light/dark), app icon, link-preview image, parent organisation name and logo in the
+  footer, Open Graph tags; `php spark spmb:branding` loads a school's branding pack; branding pack for SMP NU Al Ma'ruf
+  Kudus (green `#005c2f`, LP Ma'arif NU); optional green illustration accent; `deploy/provision.sh` and a go-live
+  checklist (D-054…D-056).
+- Previous schools: `php spark referensi:import --file` reads the national SD/MI JSON list (array, NDJSON or .gz),
+  matches Indonesian/English keys and takes the level from the school name when missing (D-057).
+- Dark mode: lighter accent text tints so dark brand colours stay readable.
+- Panitia Pendaftaran may also record test attendance, re-registration and uniform pickup (D-051).
+- Dashboard shows real registration counts (total, today, per wave against quota, online/offline, documents complete).
+- Situs: public pages `/persyaratan` and `/jadwal`; home page shows "Daftar Sekarang" while registration is open (FR-WEB-01, FR-WEB-02).
 - Phase 0 foundation: project rules (`CLAUDE.md`), repo agent skills (`.claude/skills/`),
   staged documentation (`docs/`), interview round 1, AI image prompt workflow (`ai/`).
 - `docs/progress.md` and the `spmb-session` skill for handoff between sessions and Claude accounts.

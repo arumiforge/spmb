@@ -6,10 +6,15 @@ exports, and which role guides cover it.
 
 | Module | Doc |
 | --- | --- |
+| Berkas | [berkas.md](berkas.md) |
+| Kartu | [kartu.md](kartu.md) |
 | Panduan | [panduan.md](panduan.md) |
+| Pendaftaran | [pendaftaran.md](pendaftaran.md) |
 | Pengaturan | [pengaturan.md](pengaturan.md) |
 | Pengguna | [pengguna.md](pengguna.md) |
 | Profil | [profil.md](profil.md) |
+| Referensi | [referensi.md](referensi.md) |
+| Situs | [situs.md](situs.md) |
 
 Core pieces outside modules (layouts, sign-in, dashboard, filters) are described in
 [`../architecture.md`](../architecture.md).

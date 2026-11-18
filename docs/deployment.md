@@ -23,7 +23,7 @@ No inbound ports open on the server firewall (`ufw default deny incoming`).
 5. MySQL: database `spmb`, user with privileges on that database only, `utf8mb4_unicode_ci`.
    After the first release is uploaded, run `php spark spmb:install` once in `current/`
    to create the first Super Admin (later deploys only run migrations).
-6. Nginx server block: `root /var/www/spmb/current/public;` `try_files $uri $uri/ /index.php?$query_string;`, PHP via FPM socket, deny dotfiles, `client_max_body_size` matching the upload limit, `real_ip_header CF-Connecting-IP` with Cloudflare ranges.
+6. Nginx server block: `root /var/www/spmb/current/public;` `try_files $uri $uri/ /index.php?$query_string;`, PHP via FPM socket, deny dotfiles, `client_max_body_size 12m;` matching the upload limit (php-fpm: `upload_max_filesize = 10M`, `post_max_size = 12M`, in line with `Berkas.imageUploadLimitKb` — phone photos are 3–8 MB), `real_ip_header CF-Connecting-IP` with Cloudflare ranges.
 7. Cloudflare Tunnel: ingress `https://<domain>` → `http://localhost:80` and `ssh://<ssh-host>` → `ssh://localhost:22`; protect the SSH hostname with a Cloudflare Access application allowing a **service token** (for CI) and the admins' emails.
 
 ## GitHub configuration
@@ -56,3 +56,35 @@ Rollback: `ln -sfn /var/www/spmb/releases/<previous> /var/www/spmb/current && su
 
 Daily `mysqldump --single-transaction` + `writable/uploads` archive, kept 14 days
 on the server and copied off-site; monthly restore drill on staging.
+
+## First client: SMP NU Al Ma'ruf Kudus
+
+| Item | Value |
+| --- | --- |
+| Domain | `spmbsmpnualmarufkudusweb.id` (`app.baseURL = 'https://spmbsmpnualmarufkudusweb.id/'`) |
+| School name (Pengaturan → Identitas Sekolah) | SMP NU Al Ma'ruf Kudus |
+| Installation | One installation and database for this school (D-050) |
+| Cloudflare | Arumi Studios' account (developer); the domain's nameservers point there |
+| Branding pack | `clients/smp-nu-al-maruf-kudus/branding` (logos, favicon, app icon, share image, green `#005c2f`, LP Ma'arif NU footer logo) |
+
+## Go-live for the school's review (first client)
+
+The school checks the site on its own domain before registration opens; it enters its waves itself
+(no wave = the online form shows "pendaftaran belum dibuka").
+
+| # | Step | Who |
+| --- | --- | --- |
+| 1 | Merge the phase 2 PR (`phase-2` → `main`) | Arumi Studios |
+| 2 | A VPS with Ubuntu Server 24.04 (2 vCPU, 2–4 GB RAM, 40 GB disk is enough for the first year) | Arumi Studios |
+| 3 | Add `spmbsmpnualmarufkudusweb.id` to the developer's Cloudflare account and set the registrar's nameservers to Cloudflare's | Arumi Studios |
+| 4 | On the server: `sudo DOMAIN=spmbsmpnualmarufkudusweb.id bash deploy/provision.sh` (copy the script from the repo) | Arumi Studios / Claude with SSH access |
+| 5 | Cloudflare Zero Trust → Tunnels: create a tunnel, install it on the server, public hostnames `spmbsmpnualmarufkudusweb.id` → `http://localhost:80` and `ssh.spmbsmpnualmarufkudusweb.id` → `ssh://localhost:22`; Access application with a service token on the SSH hostname; SSL/TLS "Full", "Always Use HTTPS" on | Arumi Studios |
+| 6 | GitHub → Environments → `production`: variables and secrets from the table above | Arumi Studios |
+| 7 | Actions → Deploy → Run workflow on `main` | Arumi Studios |
+| 8 | On the server in `/var/www/spmb/current`: `php spark spmb:install` (Super Admin), then `php spark spmb:branding clients/smp-nu-al-maruf-kudus/branding` | Arumi Studios |
+| 9 | Create the Admin Sekolah account (Pengguna → Tambah), hand over the temporary password in person; the school fills in address/contact, waves, documents and card settings | School |
+
+While the school reviews, no wave is open, so nobody can register by accident. Do not use `--demo` on
+the server. Later schools get their own `clients/<school>/` folder; when there are several, deploy only
+the school's own folder with its installation.
+

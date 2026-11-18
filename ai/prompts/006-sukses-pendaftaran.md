@@ -7,7 +7,7 @@ shape: square
 size: 1024x1024
 background: transparent
 variants: light
-status: generated
+status: done
 ---
 
 # 006 — sukses-pendaftaran

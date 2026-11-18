@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use App\Libraries\BrandingAssets;
 
 /** View helpers shared by all layouts and modules. */
 if (! function_exists('asset_url')) {
@@ -47,15 +48,22 @@ if (! function_exists('illustration')) {
                 . ($lazy ? ' loading="lazy"' : '') . ' decoding="async" class="' . esc(trim($class . ' ' . $extra)) . '">';
         };
 
-        $light = $tag($path, '');
+        // Optional accent set per school (setting School.illustrationAccent, e.g. "hijau" → <name>-hijau.webp);
+        // falls back to the default painting when the variant does not exist.
+        $accent = (string) setting('School.illustrationAccent');
+        $accent = preg_match('/\A[a-z]+\z/', $accent) === 1 ? $accent : '';
+        $pick   = static fn (string $name): string => $accent !== '' && is_file(FCPATH . 'assets/img/' . $name . '-' . $accent . '.webp') ? $name . '-' . $accent : $name;
+
+        $lightName = $pick($path);
+        $light     = $tag($lightName, '');
 
         if ($light === '') {
             return '';
         }
 
-        $dark = $tag($path . '-dark', 'hidden dark:block');
+        $dark = $tag($pick($path . '-dark'), 'hidden dark:block');
 
-        return $dark === '' ? $light : $tag($path, 'dark:hidden') . $dark;
+        return $dark === '' ? $light : $tag($lightName, 'dark:hidden') . $dark;
     }
 }
 
@@ -95,18 +103,14 @@ if (! function_exists('school_logo_url')) {
      */
     function school_logo_url(): ?string
     {
-        $path = (string) setting('School.logoPath');
-
-        return $path === '' ? null : url_to('aset.logo') . '?v=' . substr(md5($path), 0, 8);
+        return BrandingAssets::url('logo');
     }
 }
 
 if (! function_exists('school_favicon_url')) {
     function school_favicon_url(): string
     {
-        $path = (string) setting('School.faviconPath');
-
-        return $path === '' ? base_url('favicon.ico') : url_to('aset.favicon') . '?v=' . substr(md5($path), 0, 8);
+        return BrandingAssets::url('favicon') ?? base_url('favicon.ico');
     }
 }
 
@@ -194,5 +198,64 @@ if (! function_exists('icon')) {
         $body = $paths[$name] ?? $paths['info'];
 
         return '<svg class="' . esc($class, 'attr') . '" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">' . $body . '</svg>';
+    }
+}
+
+if (! function_exists('module_panels')) {
+    /**
+     * Renders the panel <name> of every enabled module that provides
+     * Views/panels/<name>.php, in module order. Each panel receives $data
+     * (e.g. ['applicant' => [...], 'context' => 'admin']) and must render
+     * nothing when it has nothing to show. See docs/phase-2-plan.md, "Panels".
+     *
+     * @param array<string, mixed> $data
+     */
+    function module_panels(string $name, array $data = []): string
+    {
+        $html = '';
+
+        foreach (service('modules')->panels($name) as $view) {
+            $html .= view($view, $data, ['saveData' => false]);
+        }
+
+        return $html;
+    }
+}
+
+if (! function_exists('status_badge_for')) {
+    /**
+     * Badge data for a shared status code, for partials/status_badge:
+     * view('partials/status_badge', ['badge' => status_badge_for('documents', 'complete')]).
+     *
+     * @param string $type applicant | documents | document | method
+     *
+     * @return array{label: string, color: string}
+     */
+    function status_badge_for(string $type, string $code): array
+    {
+        $colors = [
+            'applicant' => ['registered' => 'blue', 'verified' => 'green', 'cancelled' => 'red'],
+            'documents' => ['incomplete' => 'red', 'pending' => 'yellow', 'to_follow' => 'yellow', 'complete' => 'green'],
+            'document'  => ['pending' => 'yellow', 'valid' => 'green', 'invalid' => 'red', 'to_follow' => 'gray'],
+            'method'    => ['online' => 'primary', 'offline' => 'gray'],
+        ];
+        $key   = 'Status.' . $type . '.' . $code;
+        $label = lang($key);
+
+        return [
+            'label' => $label === $key ? $code : $label,
+            'color' => $colors[$type][$code] ?? 'gray',
+        ];
+    }
+}
+
+if (! function_exists('brand_asset_url')) {
+    /**
+     * Public URL of a brand image (logoWide, logoWideDark, partnerLogo, icon,
+     * shareImage, ...; see App\Libraries\BrandingAssets), or null when not set.
+     */
+    function brand_asset_url(string $key): ?string
+    {
+        return BrandingAssets::url($key);
     }
 }

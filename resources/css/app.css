@@ -39,6 +39,17 @@
     --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
+/*
+ * Dark mode: accent text uses primary-300/400. With a dark brand colour (e.g. a
+ * deep green) those mixes stay dull on dark backgrounds, so they are lightened
+ * here to keep accent text readable (WCAG AA) for any brand.
+ */
+.dark {
+    --color-primary-300: color-mix(in oklab, var(--brand, #2563eb) 30%, white);
+    --color-primary-400: color-mix(in oklab, var(--brand, #2563eb) 45%, white);
+}
+
+
 @layer base {
     [x-cloak], [data-cloak] {
         display: none !important;

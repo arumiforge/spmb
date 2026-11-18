@@ -7,10 +7,13 @@
  * @var string|null                               $title
  * @var list<array{label: string, url?: string}>  $breadcrumbs
  */
+// Home and Panduan are fixed; enabled modules add links in Config/PublicMenu.php.
 $nav = [
-    ['label' => lang('App.home'), 'url' => '/'],
-    ['label' => lang('App.guide'), 'url' => 'panduan'],
+    ['label' => lang('App.home'), 'url' => '/', 'order' => 0],
+    ['label' => lang('App.guide'), 'url' => 'panduan', 'order' => 90],
+    ...service('modules')->collect('Config/PublicMenu.php'),
 ];
+usort($nav, static fn (array $a, array $b): int => ($a['order'] ?? 50) <=> ($b['order'] ?? 50));
 $current = trim(uri_string(), '/');
 $address = (string) setting('School.address');
 $phone   = (string) setting('School.phone');
@@ -26,7 +29,7 @@ $email   = (string) setting('School.email');
 
 <header class="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur dark:border-gray-700 dark:bg-gray-900/95">
     <nav class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between gap-2 px-4 py-3" aria-label="<?= lang('App.publicNavLabel') ?>">
-        <?= view('partials/school_brand', ['brand' => ['size' => 'h-9 w-9']]) ?>
+        <?= view('partials/school_brand', ['brand' => ['size' => 'h-9 w-9', 'wide' => true, 'wideSize' => 'h-10 sm:h-12']]) ?>
         <div class="flex items-center gap-1 md:order-2">
             <?= view('partials/theme_toggle') ?>
             <button data-collapse-toggle="public-menu" type="button" aria-controls="public-menu" aria-expanded="false"
@@ -62,8 +65,22 @@ $email   = (string) setting('School.email');
 <footer class="border-t border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
     <div class="mx-auto grid max-w-screen-xl gap-6 px-4 py-8 text-sm md:grid-cols-3">
         <div>
-            <p class="mb-2 font-semibold text-gray-900 dark:text-white"><?= esc(setting('School.name')) ?></p>
+            <div class="mb-2 flex items-center gap-3">
+                <?php if (($footerLogo = school_logo_url()) !== null) : ?>
+                    <img src="<?= esc($footerLogo, 'attr') ?>" alt="" class="h-12 w-12 shrink-0 object-contain">
+                <?php endif ?>
+                <p class="font-semibold text-gray-900 dark:text-white"><?= esc(setting('School.name')) ?></p>
+            </div>
             <?php if ($address !== '') : ?><p class="text-gray-600 dark:text-gray-400"><?= nl2br(esc($address)) ?></p><?php endif ?>
+            <?php $partnerName = (string) setting('School.partnerName'); $partnerLogo = brand_asset_url('partnerLogo'); ?>
+            <?php if ($partnerName !== '' || $partnerLogo !== null) : ?>
+                <div class="mt-4 flex items-center gap-3">
+                    <?php if ($partnerLogo !== null) : ?>
+                        <img src="<?= esc($partnerLogo, 'attr') ?>" alt="<?= esc('Logo ' . $partnerName, 'attr') ?>" class="h-12 w-auto max-w-[8rem] shrink-0 rounded object-contain">
+                    <?php endif ?>
+                    <p class="text-gray-600 dark:text-gray-400"><?= lang('App.partnerLabel') ?><?php if ($partnerName !== '') : ?><br><span class="font-medium text-gray-900 dark:text-white"><?= esc($partnerName) ?></span><?php endif ?></p>
+                </div>
+            <?php endif ?>
         </div>
         <div class="space-y-1 text-gray-600 dark:text-gray-400">
             <?php if ($phone !== '') : ?><p>Telepon: <a class="hover:underline" href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>"><?= esc($phone) ?></a></p><?php endif ?>
