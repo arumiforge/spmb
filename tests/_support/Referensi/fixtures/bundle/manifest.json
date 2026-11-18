@@ -1,0 +1,21 @@
+{
+  "version": "2099-01-01",
+  "description": "Test fixture",
+  "schools": 5,
+  "files": [
+    {
+      "file": "dki-jakarta.json.gz",
+      "province": "D.K.I. Jakarta",
+      "schools": 3,
+      "sd": 3,
+      "mi": 0
+    },
+    {
+      "file": "jawa-tengah.json.gz",
+      "province": "Jawa Tengah",
+      "schools": 2,
+      "sd": 1,
+      "mi": 1
+    }
+  ]
+}

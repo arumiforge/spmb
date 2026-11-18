@@ -378,7 +378,8 @@ class SchoolImporter
         }
 
         if ($row['npsn'] !== null) {
-            $row['npsn'] = preg_replace('/\D/', '', $row['npsn']);
+            // "NP718159" is a temporary number, not an NPSN: match by name instead.
+            $row['npsn'] = preg_match('/^NP\d+$/i', $row['npsn']) === 1 ? null : preg_replace('/\D/', '', $row['npsn']);
         }
 
         if ($row['level'] === null && $row['name'] !== null) {

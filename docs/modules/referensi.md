@@ -56,13 +56,41 @@ name + district + regency; a row with an NPSN also completes a school typed earl
 Empty cells never wipe data, `is_active` is never changed, nothing is deleted. Rows with
 problems are skipped and listed with the spreadsheet row number and a plain reason.
 
-## National JSON list (D-057, recommended)
+## Bundled national SD/MI list (D-058, default)
 
-Arumi Studios provides one JSON file with every SD/MI in Indonesia. Load it on the server with:
+SPMB ships the list of every SD and MI in Indonesia (177,422 schools, 38 provinces, version `2026-11-18`)
+in `app/Modules/Referensi/Database/Data/sekolah-sd-mi/`: one gzipped JSON file per province
+(`jawa-tengah.json.gz`, …, 2.7 MB in total) and `manifest.json` (version, file, province, counts).
+Public data only: NPSN, name, level (`SD`/`MI`), status (negeri/swasta), village, district, regency,
+province. No personal data, so it is kept in git.
+
+- `php spark spmb:install` loads it (Referensi `InstallSeeder`), about 50 s and < 1 GB memory.
+- Every deploy runs `php spark referensi:import --bawaan` (`deploy/activate.sh`); it does nothing when
+  the version in `manifest.json` equals the setting `Referensi.bundledVersion`, so an update that ships a
+  newer list loads it once.
+- Rows get `source = nasional` ("Daftar nasional"). The usual upsert rules apply (D-039): by NPSN, never
+  deleted, `is_active` never changed, so schools an admin hid stay hidden. A newer list does overwrite
+  name/address edits of the same NPSN.
+- Temporary numbers such as `NP718159` (3 schools in DKI Jakarta) are not NPSNs: these rows are matched by
+  name + district + regency. One NPSN appears twice in Papua (two spellings); the second wins.
 
 ```bash
-php spark referensi:import --file /path/sekolah-sd-mi.json            # or .json.gz, .ndjson
-php spark referensi:import --file /path/sekolah-sd-mi.json --dry-run  # count only
+php spark referensi:import --bawaan                                  # skipped when already loaded
+php spark referensi:import --bawaan --paksa                          # load again
+php spark referensi:import --bawaan --provinsi "Jawa Tengah" --dry-run   # one province, count only
+```
+
+**Updating the list**: replace the province files (same JSON shape: `npsn`, `nama`, `bentuk_pendidikan`,
+`status_sekolah`, `desa`, `kecamatan`, `kabupaten`, `provinsi`), gzip them with `gzip -9 -n`, update
+`manifest.json` (new `version`, counts) and keep `ReferensiBundledSchoolsTest` green.
+
+## Other JSON lists (`--file`, D-057)
+
+Any other JSON list loads with:
+
+```bash
+php spark referensi:import --file /path/sekolah.json            # or .json.gz, .ndjson
+php spark referensi:import --file /path/sekolah.json --dry-run  # count only
 ```
 
 Note the space after `--file` (CodeIgniter's CLI does not read `--file=…`).
@@ -72,7 +100,7 @@ unpacked. Keys are matched like spreadsheet headers (case, spaces, `_` and `.` i
 
 | Column | Accepted keys |
 | --- | --- |
-| npsn | `npsn` (8 digits; numbers are fine) |
+| npsn | `npsn` (8 digits; numbers are fine; `NP…` temporary numbers are ignored) |
 | name | `nama_sekolah`, `nama`, `sekolah`, `name` |
 | village | `desa`, `kelurahan`, `desa_kelurahan`, `kelurahan_desa`, `village` |
 | district | `kecamatan`, `kec`, `district` |
@@ -82,10 +110,8 @@ unpacked. Keys are matched like spreadsheet headers (case, spaces, `_` and `.` i
 | ownership (optional) | `status`, `status_sekolah` — negeri/swasta |
 
 Rows are upserted by NPSN (or name + district + regency), never deleted; running it again is quick and changes
-nothing. Rows without a name or a recognisable level are skipped and listed (first 1,000). Measured: 50,000 rows in
-about 15 s; the national list (~170,000 rows) takes about a minute and needs ~1–2 GB memory in the CLI (the command
-raises PHP's limit). The school search stays at ~50 ms with this volume. Keep the file out of git (tens of MB); copy
-it to the server and import there.
+nothing. Rows without a name or a recognisable level are skipped and listed (first 1,000). The school search stays at
+~50 ms with the national volume.
 
 ## Dapodik import: `php spark referensi:import`
 
@@ -131,3 +157,4 @@ in `tests/_support/Referensi/fixtures/` (shapes taken from the bundle's sample d
 | `dapodikToken` | empty | `.env` `referensi.dapodikToken`; never commit |
 | `importDelayMs` | 500 | Pause between Dapodik requests |
 | `searchPerMinute` | 30 | Public search limit per IP |
+| `bundledVersion` | empty | Version of the bundled list already loaded (written by the importer) |

@@ -279,3 +279,9 @@ Status: accepted (resolves D-040)
 Context: Arumi Studios prepares one JSON file with every SD and MI in Indonesia (NPSN, name, village, district, regency, province).
 Decision: `php spark referensi:import --file <list>.json` (also `.json.gz`, NDJSON) loads it with the same upsert rules as D-039; keys are matched by alias, and the level is taken from the school name when the file has none. This is the main source of previous schools; the Dapodik importer stays optional and no portal access key is used. The search still lists the configured provinces (`Referensi.provinces`, Jawa Tengah) first.
 Consequences: Schools from all provinces can be chosen, so fewer "sekolah lain" entries need mapping. The file is kept out of git and imported on the server.
+
+## D-058 — The national SD/MI list ships with SPMB (2026-11-18)
+Status: accepted (user's request; refines D-057)
+Context: Arumi Studios delivered the list as 38 JSON files, one per province (177,422 SD and MI: NPSN, name, level, status, village, district, regency, province). It is public data with no personal data, so it may live in the repository.
+Decision: The list is default data: gzipped per-province files plus a manifest in `app/Modules/Referensi/Database/Data/sekolah-sd-mi/` (2.7 MB). `spmb:install` loads it and every deploy runs `referensi:import --bawaan`, which is skipped while the manifest version equals `Referensi.bundledVersion`. Rows get source `nasional`; D-039 upsert rules apply. Temporary `NP…` numbers are not treated as NPSNs.
+Consequences: Every installation can find any SD/MI in Indonesia without a manual import; the Jawa Tengah-first ordering of the search stays. Updating the list = replace the files, bump the manifest version, deploy. Replaces "keep the file out of git" in D-057.

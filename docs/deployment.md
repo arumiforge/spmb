@@ -81,7 +81,7 @@ The school checks the site on its own domain before registration opens; it enter
 | 5 | Cloudflare Zero Trust → Tunnels: create a tunnel, install it on the server, public hostnames `spmbsmpnualmarufkudusweb.id` → `http://localhost:80` and `ssh.spmbsmpnualmarufkudusweb.id` → `ssh://localhost:22`; Access application with a service token on the SSH hostname; SSL/TLS "Full", "Always Use HTTPS" on | Arumi Studios |
 | 6 | GitHub → Environments → `production`: variables and secrets from the table above | Arumi Studios |
 | 7 | Actions → Deploy → Run workflow on `main` | Arumi Studios |
-| 8 | On the server in `/var/www/spmb/current`: `php spark spmb:install` (Super Admin), then `php spark spmb:branding clients/smp-nu-al-maruf-kudus/branding` | Arumi Studios |
+| 8 | On the server in `/var/www/spmb/current`: `php spark spmb:install` (Super Admin; also loads the national SD/MI list, ~1 min), then `php spark spmb:branding clients/smp-nu-al-maruf-kudus/branding` | Arumi Studios |
 | 9 | Create the Admin Sekolah account (Pengguna → Tambah), hand over the temporary password in person; the school fills in address/contact, waves, documents and card settings | School |
 
 While the school reviews, no wave is open, so nobody can register by accident. Do not use `--demo` on

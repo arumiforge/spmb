@@ -6,6 +6,7 @@ namespace Modules\Referensi\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use Modules\Referensi\Libraries\BundledSchools;
 use Modules\Referensi\Libraries\DapodikClient;
 use Modules\Referensi\Libraries\DapodikImport;
 use Modules\Referensi\Libraries\SchoolImporter;
@@ -14,15 +15,18 @@ use Throwable;
 
 /**
  * php spark referensi:import — fills the previous-school list (ref_sekolah)
- * from the public Dapodik portal or from a CSV/XLSX file. Safe to run again.
+ * from the bundled national SD/MI list (--bawaan), the public Dapodik portal
+ * or a CSV/XLSX/JSON file. Safe to run again.
  */
 class ImportSchools extends BaseCommand
 {
     protected $group       = 'SPMB';
     protected $name        = 'referensi:import';
-    protected $description = 'Imports previous schools (SD, ...) from Dapodik for the configured provinces, or from a CSV/XLSX file.';
+    protected $description = 'Imports previous schools: the bundled national SD/MI list (--bawaan), Dapodik for the configured provinces, or a CSV/XLSX/JSON file.';
     protected $usage       = 'referensi:import [options]';
     protected $options     = [
+        '--bawaan'    => 'Load the national SD/MI list that ships with SPMB (skipped when this version is already loaded)',
+        '--paksa'     => 'With --bawaan: load again even when this version is already loaded',
         '--provinsi'  => 'Province name(s), comma separated (default: setting Referensi.provinces)',
         '--kabupaten' => 'Only regencies whose name contains this text, e.g. "Kudus"',
         '--jenjang'   => 'Level(s), comma separated (default: setting Referensi.levels)',
@@ -38,7 +42,15 @@ class ImportSchools extends BaseCommand
         $file     = CLI::getOption('file');
 
         try {
-            if (is_string($file) && $file !== '') {
+            if (CLI::getOption('bawaan') !== null || array_key_exists('bawaan', $params)) {
+                $report = $this->fromBundle($importer, $dryRun);
+
+                if ($report === null) {
+                    return EXIT_SUCCESS;
+                }
+
+                $source = BundledSchools::SOURCE;
+            } elseif (is_string($file) && $file !== '') {
                 $report = $this->fromFile($importer, $file, $dryRun);
                 $source = 'import';
             } else {
@@ -75,6 +87,29 @@ class ImportSchools extends BaseCommand
         }
 
         return EXIT_SUCCESS;
+    }
+
+    /**
+     * @return array{created: int, updated: int, unchanged: int, failed: int, errors: list<array{row: int, name: string, message: string}>}|null null when already loaded
+     */
+    private function fromBundle(SchoolImporter $importer, bool $dryRun): ?array
+    {
+        $bundle    = new BundledSchools();
+        $force     = CLI::getOption('paksa') !== null;
+        $provinces = CLI::getOption('provinsi');
+        $provinces = is_string($provinces) && $provinces !== '' ? self::listOption('provinsi', []) : null;
+
+        if ($provinces === null && ! $force && ! $dryRun && $bundle->isImported()) {
+            CLI::write('Daftar SD/MI nasional versi ' . $bundle->version() . ' sudah dimuat. Pakai --paksa untuk memuat ulang.', 'green');
+
+            return null;
+        }
+
+        CLI::write(sprintf('Memuat daftar SD/MI nasional versi %s (%s sekolah) ...', $bundle->version(), number_format($bundle->manifest()['schools'], 0, ',', '.')));
+
+        return $bundle->import($provinces, $dryRun, static function (string $province, array $report): void {
+            CLI::write(sprintf('  %-28s %6d baru, %6d diperbarui, %6d tetap, %3d dilewati', $province, $report['created'], $report['updated'], $report['unchanged'], $report['failed']));
+        }, $importer);
     }
 
     /**

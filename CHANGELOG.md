@@ -5,6 +5,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Previous schools: the national SD/MI list (177,422 schools, 38 provinces) ships as default data and is loaded by
+  `spmb:install` and on deploy (`php spark referensi:import --bawaan`, skipped once loaded) (D-058).
 - Phase 2 foundation: modules Referensi, Pendaftaran, Berkas, Kartu and Situs (registry entries, menus, public
   navigation, audit labels); migrations for `ref_sekolah`, `waves`, `registration_counters`, `applicants`,
   `document_types`, `applicant_documents`, `card_tokens` with audited models; settings defaults
