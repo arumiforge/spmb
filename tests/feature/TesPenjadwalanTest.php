@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Libraries\ApplicantAccess;
-use App\Models\UserModel;
 use CodeIgniter\Shield\Entities\User;
 use CodeIgniter\Shield\Test\AuthenticationTesting;
 use CodeIgniter\Test\CIUnitTestCase;
@@ -14,6 +13,7 @@ use Modules\Tes\Models\TestAssignmentModel;
 use Modules\Tes\Services\Scheduler;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Support\Tes\TesFixtures;
+use Tests\Support\ViewerAccounts;
 
 /**
  * Package B pages: allocation, participants, giving/moving/removing a seat,
@@ -27,6 +27,7 @@ final class TesPenjadwalanTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
     use TesFixtures;
+    use ViewerAccounts;
 
     protected $namespace;
     protected $refresh = true;
@@ -50,18 +51,11 @@ final class TesPenjadwalanTest extends CIUnitTestCase
     }
 
     /**
-     * A staff member of $group, or a signed-in user without any group ('').
+     * A staff member of $group, or ('') a read-only viewer without tes.* permissions.
      */
     private function staffOrNobody(string $group): User
     {
-        if ($group !== '') {
-            return $this->makeStaff($group);
-        }
-
-        $users = model(UserModel::class, false);
-        $users->save(new User(['username' => 'tanpaperan', 'email' => 'tanpa-peran@example.test', 'password' => 'Rahasia-Kuat-2027']));
-
-        return $users->findById($users->getInsertID());
+        return $group === '' ? $this->viewer('pengamat') : $this->makeStaff($group);
     }
 
     private function panel(string $name, array $applicant): string
@@ -91,7 +85,7 @@ final class TesPenjadwalanTest extends CIUnitTestCase
      */
     public static function providePagePermissions(): iterable
     {
-        // route, allowed group, denied group ('' = signed in without a group)
+        // route, allowed group, denied group ('' = read-only viewer without tes.* permissions)
         yield 'allocation' => ['admin/tes/penjadwalan', 'admin', 'panitia'];
 
         yield 'participants' => ['admin/tes/peserta', 'panitia', ''];
@@ -311,6 +305,20 @@ final class TesPenjadwalanTest extends CIUnitTestCase
         $page->assertSee('Gedung B');
         $page->assertSee('Dijadwalkan petugas');
         $page->assertSee('Pendaftar offline');
+    }
+
+    public function testAdminPanelForAViewerWithoutTesKehadiran(): void
+    {
+        $a = $this->makeApplicant();
+        $this->makeAssignment((int) $a['id'], $this->makeSession(['room_id' => $this->makeRoom(['name' => 'Ruang Teratai'])]));
+        $this->actingAs($this->viewer('pengamat'));
+
+        $page = $this->get('admin/pendaftar/' . $a['id']);
+        $page->assertOK();
+        $page->assertSee('Jadwal Tes');
+        $page->assertSee('Ruang Teratai');
+        $page->assertDontSee('Pindah Jadwal');
+        $page->assertDontSee('Beri Jadwal');
     }
 
     public function testPublicPanel(): void
