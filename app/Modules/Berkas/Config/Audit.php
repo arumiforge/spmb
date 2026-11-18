@@ -5,11 +5,14 @@ return [
     'events' => [
         'document_uploaded' => 'Berkas diunggah',
         'document_verified' => 'Berkas diperiksa',
-        'document_replaced' => 'Berkas diganti',
+        'document_replaced'  => 'Berkas diganti',
+        'document_to_follow' => 'Berkas ditandai menyusul',
     ],
     'eventColors' => [
-        'document_uploaded' => 'blue',
-        'document_verified' => 'green',
+        'document_uploaded'  => 'blue',
+        'document_verified'  => 'green',
+        'document_replaced'  => 'yellow',
+        'document_to_follow' => 'gray',
     ],
     'subjects' => [
         'document_types'      => 'Jenis Berkas',
@@ -34,6 +37,8 @@ return [
         'verified_by'   => 'Diperiksa oleh',
         'verified_at'   => 'Waktu diperiksa',
         'uploaded_by'   => 'Diunggah oleh',
+        'document_type_id' => 'Jenis berkas',
+        'imageUploadLimitKb' => 'Batas unggah foto (KB)',
         'imageMaxEdge'  => 'Sisi gambar terpanjang (piksel)',
         'imageQuality'  => 'Kualitas gambar',
         'deadline'      => 'Batas akhir berkas menyusul',

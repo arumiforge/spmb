@@ -21,8 +21,18 @@ class Berkas extends BaseConfig
     public int $imageQuality = 80;
 
     /**
+     * Largest photo accepted before resizing, in KB. Phone cameras produce
+     * 3–8 MB JPEGs; after resizing they must fit the document type's own
+     * limit (document_types.max_size_kb). PDFs are not resized, so for them
+     * the type's limit applies to the uploaded file. The web server must allow
+     * uploads of this size (php.ini upload_max_filesize / post_max_size,
+     * nginx client_max_body_size).
+     */
+    public int $imageUploadLimitKb = 10240;
+
+    /**
      * Last day documents marked "menyusul" may be handed in ('' = no deadline).
-     * Pending the school's answer.
+     * Pending the school's answer. Format Y-m-d.
      */
     public string $deadline = '';
 }
