@@ -7,6 +7,7 @@ use CodeIgniter\Test\DatabaseTestTrait;
 use Modules\Tes\Libraries\SessionGenerator;
 use Modules\Tes\Models\TestHolidayModel;
 use Modules\Tes\Models\TestSessionModel;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Support\Tes\TesFixtures;
 use Tests\Support\Tes\TesJadwalHelpers;
 
@@ -97,31 +98,37 @@ final class TesJadwalGeneratorTest extends CIUnitTestCase
     }
 
     /**
-     * @return iterable<string, array{array<string, mixed>, string, string}>
-     */
-    public static function invalidInput(): iterable
-    {
-        yield 'to before from' => [['date_to' => '2027-06-01'], 'date_to', 'setelah tanggal awal'];
-        yield 'range too long' => [['date_to' => '2028-07-01'], 'date_to', '366 hari'];
-        yield 'no weekday' => [['weekdays' => []], 'weekdays', 'minimal satu hari'];
-        yield 'no slot' => [['slots' => [['start' => '', 'end' => '']]], 'slots', 'minimal satu jam'];
-        yield 'slot end before start' => [['slots' => [['start' => '10:00', 'end' => '09:00']]], 'slots', 'setelah jam mulainya'];
-        yield 'slots overlap' => [['slots' => [['start' => '07:30', 'end' => '09:30'], ['start' => '09:00', 'end' => '10:00']]], 'slots', 'bertabrakan'];
-        yield 'no room' => [['rooms' => []], 'rooms', 'minimal satu ruang'];
-        yield 'unknown wave' => [['wave_id' => 999], 'wave_id', 'Gelombang tidak ditemukan'];
-    }
-
-    /**
      * @param array<string, mixed> $override
-     *
-     * @dataProvider invalidInput
      */
+    #[DataProvider('provideInvalidInputIsRefused')]
     public function testInvalidInputIsRefused(array $override, string $field, string $message): void
     {
         $preview = (new SessionGenerator())->preview($this->input([$this->makeRoom()], $override));
 
         $this->assertStringContainsString($message, $preview['errors'][$field] ?? '');
         $this->assertSame(0, $preview['count']);
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>, string, string}>
+     */
+    public static function provideInvalidInputIsRefused(): iterable
+    {
+        yield 'to before from' => [['date_to' => '2027-06-01'], 'date_to', 'setelah tanggal awal'];
+
+        yield 'range too long' => [['date_to' => '2028-07-01'], 'date_to', '366 hari'];
+
+        yield 'no weekday' => [['weekdays' => []], 'weekdays', 'minimal satu hari'];
+
+        yield 'no slot' => [['slots' => [['start' => '', 'end' => '']]], 'slots', 'minimal satu jam'];
+
+        yield 'slot end before start' => [['slots' => [['start' => '10:00', 'end' => '09:00']]], 'slots', 'setelah jam mulainya'];
+
+        yield 'slots overlap' => [['slots' => [['start' => '07:30', 'end' => '09:30'], ['start' => '09:00', 'end' => '10:00']]], 'slots', 'bertabrakan'];
+
+        yield 'no room' => [['rooms' => []], 'rooms', 'minimal satu ruang'];
+
+        yield 'unknown wave' => [['wave_id' => 999], 'wave_id', 'Gelombang tidak ditemukan'];
     }
 
     public function testInactiveRoomIsRefused(): void

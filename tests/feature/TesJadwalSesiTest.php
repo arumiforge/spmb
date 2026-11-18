@@ -8,6 +8,7 @@ use CodeIgniter\Test\DatabaseTestTrait;
 use CodeIgniter\Test\FeatureTestTrait;
 use Modules\Tes\Models\TestHolidayModel;
 use Modules\Tes\Models\TestSessionModel;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Support\Tes\TesFixtures;
 use Tests\Support\Tes\TesJadwalHelpers;
 
@@ -106,23 +107,9 @@ final class TesJadwalSesiTest extends CIUnitTestCase
     }
 
     /**
-     * @return iterable<string, array{array<string, string>, string, string}>
-     */
-    public static function invalidSessions(): iterable
-    {
-        yield 'end before start' => [['starts_at' => '10:00', 'ends_at' => '09:00'], 'ends_at', 'setelah jam mulai'];
-        yield 'quota zero' => [['quota' => '0'], 'quota', '1 sampai 999'];
-        yield 'quota too big' => [['quota' => '1000'], 'quota', '1 sampai 999'];
-        yield 'bad date' => [['test_date' => '2027-02-30'], 'test_date', 'Tanggal'];
-        yield 'holiday' => [['test_date' => '2027-06-17'], 'test_date', 'hari libur'];
-        yield 'overlap' => [['starts_at' => '09:00', 'ends_at' => '11:00'], 'starts_at', 'bertabrakan'];
-    }
-
-    /**
      * @param array<string, string> $override
-     *
-     * @dataProvider invalidSessions
      */
+    #[DataProvider('provideInvalidSessionsAreRefused')]
     public function testInvalidSessionsAreRefused(array $override, string $field, string $message): void
     {
         $roomId = $this->makeRoom();
@@ -135,6 +122,24 @@ final class TesJadwalSesiTest extends CIUnitTestCase
 
         $this->assertStringContainsString($message, session('errors')[$field] ?? '');
         $this->assertSame(1, model(TestSessionModel::class)->countAllResults());
+    }
+
+    /**
+     * @return iterable<string, array{array<string, string>, string, string}>
+     */
+    public static function provideInvalidSessionsAreRefused(): iterable
+    {
+        yield 'end before start' => [['starts_at' => '10:00', 'ends_at' => '09:00'], 'ends_at', 'setelah jam mulai'];
+
+        yield 'quota zero' => [['quota' => '0'], 'quota', '1 sampai 999'];
+
+        yield 'quota too big' => [['quota' => '1000'], 'quota', '1 sampai 999'];
+
+        yield 'bad date' => [['test_date' => '2027-02-30'], 'test_date', 'Tanggal'];
+
+        yield 'holiday' => [['test_date' => '2027-06-17'], 'test_date', 'hari libur'];
+
+        yield 'overlap' => [['starts_at' => '09:00', 'ends_at' => '11:00'], 'starts_at', 'bertabrakan'];
     }
 
     public function testSameTimeInAnotherRoomAndBackToBackAreAllowed(): void

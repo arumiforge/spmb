@@ -76,7 +76,7 @@ class Sesi extends BaseController
 
         $rows     = $this->sessions->withStats($filters);
         $filtered = $date !== '' || isset($filters['wave_id']) || isset($filters['room_id']) || isset($filters['active']);
-        $all      = $filtered || $past ? null : $this->sessions->where('academic_year', $year)->countAllResults();
+        $all      = $filtered    || $past ? null : $this->sessions->where('academic_year', $year)->countAllResults();
 
         return view('Modules\Tes\Views\sesi\index', [
             'title'       => lang('TesJadwal.sessionsTitle'),

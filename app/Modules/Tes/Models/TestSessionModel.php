@@ -6,6 +6,7 @@ namespace Modules\Tes\Models;
 
 use App\Models\Concerns\Auditable;
 use CodeIgniter\Model;
+use DateTimeImmutable;
 use Modules\Pendaftaran\Models\WaveModel;
 
 /**
@@ -275,7 +276,7 @@ class TestSessionModel extends Model
 
     public static function isDate(string $value): bool
     {
-        $parsed = \DateTimeImmutable::createFromFormat('!Y-m-d', $value);
+        $parsed = DateTimeImmutable::createFromFormat('!Y-m-d', $value);
 
         return $parsed !== false && $parsed->format('Y-m-d') === $value;
     }
