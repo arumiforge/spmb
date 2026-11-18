@@ -41,4 +41,13 @@ Answers from Arumi Studios on behalf of the school (2026-11-18):
 - **Number**: restarts each academic year (D-031 confirmed); the format is set by the school and may end with a random code of up to 5 characters, or none (D-049).
 - **KK number, parent occupation and income**: approved by the ethics committee and the education office, with parents' consent; collected as optional fields (dropdowns for occupation and income) that may be left empty or filled by staff later (D-048).
 - **Quota**: chosen per wave — information only, close online at the quota, or a separate online limit (D-047).
-- Still open: Q1, Q2, Q4–Q6, Q8 for Arumi Studios; Dapodik access (D-040).
+
+Answers from Arumi Studios (2026-11-18):
+
+- **Q1 Tenancy**: one installation per school (D-050).
+- **Q3 Applicant access**: the "akun siswa" used by parents is the no-password access (number + birth date or private link) (D-052).
+- **Q4 Roles**: Admin Sekolah (everything, incl. uniform settings), Panitia (registration work, also test attendance, re-registration and uniform pickup), applicant/parent access; other roles kept but unused (D-051).
+- **Q5 Analytics**: compact, not detailed (D-053).
+- **Q6 Chat**: not live; parents send messages, criticism and suggestions from the applicant page; the committee replies (D-052).
+- **Q8 Branding and domain**: school name "SMP NU Al Ma'ruf Kudus", domain `spmbsmpnualmarufkudusweb.id` (D-050).
+- Still open: Q2 (go-live date / wave 1 opening), Q8 details (logo files, colours, who owns the Cloudflare account), Dapodik access (D-040).

@@ -50,7 +50,7 @@ class AuthGroups extends ShieldAuthGroups
         ],
         'panitia' => [
             'title'       => 'Panitia Pendaftaran',
-            'description' => 'Menambah pendaftar offline, memeriksa berkas, dan mencetak kartu.',
+            'description' => 'Mengurus pendaftaran: pendaftar offline, pemeriksaan berkas, kartu, kehadiran tes, daftar ulang, dan seragam.',
         ],
         'petugas-tes' => [
             'title'       => 'Petugas Tes',
@@ -142,6 +142,8 @@ class AuthGroups extends ShieldAuthGroups
         'panitia' => [
             'dasbor.view', 'pendaftar.view', 'pendaftar.create', 'pendaftar.edit',
             'pendaftar.verifikasi', 'kartu.cetak', 'chat.balas',
+            // D-051: the committee also runs test attendance, re-registration and uniform pickup.
+            'tes.kehadiran', 'daftar-ulang.proses', 'seragam.proses',
         ],
         'petugas-tes' => [
             'dasbor.view', 'pendaftar.view', 'kartu.cetak', 'tes.kehadiran',

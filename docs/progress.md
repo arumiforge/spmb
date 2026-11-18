@@ -54,11 +54,12 @@ create your own branch from `main` instead.
 
 - Dapodik API needs a bearer key (D-040): decide whether the importer may use the portal's published key; until then schools come from CSV/XLSX.
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
-- Interview round 1 answers (tenancy, timeline, applicant access, roles, chat, analytics, school data, branding). Defaults in use: D-004, D-008, D-009, D-014.
+- Interview round 1: only Q2 (go-live date / wave 1 opening) and Q8 details (logo files, colours, Cloudflare account owner) remain open.
 - School committee answers (waves, documents, card rule, number format, form fields): defaults in `docs/phase-2-plan.md` (D-031, D-035, D-036, D-037).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-18 · coordinator · `feat/p2-round1-answers` — interview round 1 answers: one installation per school, roles (Panitia also tests/re-registration/uniform), no-password student access + messages instead of live chat, compact analytics, domain and school name (D-050…D-053). Next: merge into `phase-2`; phase 3.
 - 2026-11-18 · coordinator · `feat/p2-school-answers` — school answers applied: quota per wave (D-047), KK/occupation/income dropdowns + staff-only field mode (D-048), random number suffix (D-049); 288 tests. Next: merge into `phase-2`, user merges #14.
 - 2026-11-18 · coordinator · `phase-2` — merged B (#10) after integration with A/C/D (282 tests); docs: requirements status, roadmap, architecture tables, D-044…D-046; opened PR `phase-2` → `main`; workers archived. Next: user merges, then phase 3.
 - 2026-11-18 · coordinator · `phase-2` — workers resumed after the usage limit; merged D (#11), A (#12), C (#13) after local tests on the combined branch (240 tests); decisions D-039…D-043; Dapodik key question open (D-040). Next: B (#10), then PR `phase-2` → `main`.

@@ -86,6 +86,13 @@ final class AuthGroupsTest extends CIUnitTestCase
         $this->assertSame(['superadmin', 'admin', 'panitia'], $holders('pendaftar.verifikasi'));
         $this->assertSame(['superadmin', 'admin', 'panitia', 'petugas-tes'], $holders('kartu.cetak'));
         $this->assertSame(['superadmin', 'admin'], $holders('pendaftar.delete'));
+
+        // D-051: Panitia also records test attendance, re-registration and uniform pickup; settings stay with Admin Sekolah.
+        $this->assertSame(['superadmin', 'admin', 'panitia', 'petugas-tes'], $holders('tes.kehadiran'));
+        $this->assertSame(['superadmin', 'admin', 'panitia', 'petugas-daftar-ulang'], $holders('daftar-ulang.proses'));
+        $this->assertSame(['superadmin', 'admin', 'panitia', 'petugas-seragam'], $holders('seragam.proses'));
+        $this->assertNotContains('tes.atur', $this->config->matrix['panitia']);
+        $this->assertNotContains('pengaturan.pendaftaran', $this->config->matrix['panitia']);
     }
 
     public function testDefaultGroupExists(): void
