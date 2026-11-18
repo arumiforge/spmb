@@ -37,4 +37,49 @@ class ApplicantModel extends Model
     {
         $this->registerAuditCallbacks();
     }
+
+    /**
+     * The applicant with this registration number and date of birth (public
+     * status check, D-008), or null. Case and spaces in the number are ignored.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function findByNumberAndBirthDate(string $number, string $date): ?array
+    {
+        $number = strtoupper(preg_replace('/\s+/', '', $number) ?? '');
+
+        if ($number === '' || preg_match('/\A\d{4}-\d{2}-\d{2}\z/', $date) !== 1) {
+            return null;
+        }
+
+        return $this->where('registration_number', $number)->where('birth_date', $date)->first();
+    }
+
+    /**
+     * The applicant whose private link carries $token (stored as SHA-256, D-034), or null.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function findByAccessToken(string $token): ?array
+    {
+        if (preg_match('/\A[A-Za-z0-9_-]{20,100}\z/', $token) !== 1) {
+            return null;
+        }
+
+        return $this->where('access_token_hash', hash('sha256', $token))->first();
+    }
+
+    /**
+     * NIK for lists: first 4 and last 4 digits only ("3319••••••••0001").
+     */
+    public static function maskNik(?string $nik): string
+    {
+        $nik = (string) $nik;
+
+        if ($nik === '') {
+            return '-';
+        }
+
+        return strlen($nik) <= 8 ? str_repeat('•', strlen($nik)) : substr($nik, 0, 4) . str_repeat('•', strlen($nik) - 8) . substr($nik, -4);
+    }
 }

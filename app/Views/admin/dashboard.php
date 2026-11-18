@@ -1,47 +1,87 @@
 <?php
 /**
- * Staff dashboard. Statistics are placeholders until the registration module (phase 2) exists.
+ * Staff dashboard: registration counts for the academic year (Pendaftaran
+ * module) and the signed-in account.
  *
  * @var CodeIgniter\Shield\Entities\User $user
  * @var list<string>                     $roles
  * @var bool                             $twoFactorOn
+ * @var array<string, mixed>|null        $stats       see Modules\Pendaftaran\Services\ApplicantStats::summary()
+ * @var bool                             $canViewList
  */
-$stats = [
-    ['label' => 'Total Pendaftar', 'icon' => 'users', 'note' => 'Semua gelombang'],
-    ['label' => 'Berkas Menunggu Diperiksa', 'icon' => 'clipboard', 'note' => 'Perlu verifikasi panitia'],
-    ['label' => 'Terjadwal Tes', 'icon' => 'calendar', 'note' => 'Tes pemetaan'],
-    ['label' => 'Sudah Daftar Ulang', 'icon' => 'check', 'note' => 'Calon murid diterima'],
+$num   = static fn (int $n): string => number_format($n, 0, ',', '.');
+$card  = 'rounded-lg border border-gray-200 bg-white p-5 shadow-xs dark:border-gray-700 dark:bg-gray-800';
+$tiles = $stats === null ? [] : [
+    ['label' => 'Total Pendaftar', 'value' => $stats['total'], 'icon' => 'users', 'note' => 'Tahun ajaran ' . $stats['year'], 'url' => 'admin/pendaftar'],
+    ['label' => 'Daftar Hari Ini', 'value' => $stats['today'], 'icon' => 'calendar', 'note' => tanggal_indo(date('Y-m-d')), 'url' => null],
+    ['label' => 'Berkas Lengkap', 'value' => $stats['complete'], 'icon' => 'clipboard', 'note' => $stats['total'] > 0 ? round($stats['complete'] / $stats['total'] * 100) . '% dari semua pendaftar' : 'Belum ada pendaftar', 'url' => 'admin/pendaftar?berkas=complete'],
+    ['label' => 'Mungkin Data Ganda', 'value' => $stats['duplicates'], 'icon' => 'warning', 'note' => 'Perlu diperiksa panitia', 'url' => 'admin/pendaftar?ganda=1'],
 ];
 ?>
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-    <?php foreach ($stats as $stat) : ?>
-        <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-xs dark:border-gray-700 dark:bg-gray-800">
-            <div class="flex items-start justify-between gap-3">
-                <div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400"><?= esc($stat['label']) ?></p>
-                    <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white" aria-label="Belum ada data">–</p>
+<?php if ($stats !== null) : ?>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <?php foreach ($tiles as $tile) : ?>
+            <?php $link = $tile['url'] !== null && $canViewList; ?>
+            <<?= $link ? 'a href="' . esc(site_url($tile['url']), 'attr') . '"' : 'div' ?> class="<?= $card ?> block<?= $link ? ' hover:border-primary-300 dark:hover:border-primary-700' : '' ?>">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400"><?= esc($tile['label']) ?></p>
+                        <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white"><?= $num($tile['value']) ?></p>
+                    </div>
+                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400"><?= icon($tile['icon'], 'h-6 w-6') ?></span>
                 </div>
-                <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400"><?= icon($stat['icon'], 'h-6 w-6') ?></span>
-            </div>
-            <p class="mt-3 text-xs text-gray-500 dark:text-gray-400"><?= esc($stat['note']) ?></p>
-        </div>
-    <?php endforeach ?>
-</div>
-
-<div class="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-3">
-    <div class="xl:col-span-2">
-        <?= view('partials/empty_state', ['empty' => [
-            'title' => 'Data pendaftaran belum tersedia',
-            'text'  => 'Ringkasan pendaftar, berkas, dan jadwal tes akan tampil di sini setelah fitur pendaftaran diaktifkan.',
-            'icon'  => 'chart',
-            'image' => 'state/kosong-data',
-            'imageAlt' => lang('App.altNoData'),
-        ]]) ?>
+                <p class="mt-3 text-xs text-gray-500 dark:text-gray-400"><?= esc($tile['note']) ?></p>
+            </<?= $link ? 'a' : 'div' ?>>
+        <?php endforeach ?>
     </div>
-    <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-xs dark:border-gray-700 dark:bg-gray-800">
+<?php endif ?>
+
+<div class="<?= $stats !== null ? 'mt-6 ' : '' ?>grid grid-cols-1 gap-4 xl:grid-cols-3">
+    <div class="space-y-4 xl:col-span-2">
+        <?php if ($stats === null || $stats['total'] === 0) : ?>
+            <?= view('partials/empty_state', ['empty' => [
+                'title'    => 'Belum ada pendaftar',
+                'text'     => $stats === null ? 'Ringkasan pendaftaran tampil di sini setelah fitur Pendaftaran diaktifkan.' : 'Ringkasan per gelombang akan tampil di sini setelah ada calon murid yang mendaftar.',
+                'icon'     => 'chart',
+                'image'    => 'state/kosong-data',
+                'imageAlt' => lang('App.altNoData'),
+            ]]) ?>
+        <?php else : ?>
+            <section class="<?= $card ?>">
+                <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Pendaftar per gelombang</h2>
+                <ul class="space-y-4">
+                    <?php foreach ($stats['waves'] as $wave) : ?>
+                        <?php $pct = $wave['quota'] ? min(100, (int) round($wave['count'] / $wave['quota'] * 100)) : null; ?>
+                        <li>
+                            <div class="flex flex-wrap items-baseline justify-between gap-x-3 text-sm">
+                                <span class="font-medium text-gray-900 dark:text-white"><?= esc($wave['name']) ?> <span class="font-normal text-gray-500 dark:text-gray-400">· <?= esc(tanggal_indo($wave['starts_on'])) ?> – <?= esc(tanggal_indo($wave['ends_on'])) ?></span></span>
+                                <span class="text-gray-700 dark:text-gray-300"><?= $num($wave['count']) ?><?= $wave['quota'] ? ' / ' . $num($wave['quota']) . ' kuota' : ' pendaftar' ?></span>
+                            </div>
+                            <?php if ($pct !== null) : ?>
+                                <div class="mt-2 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700" role="progressbar" aria-valuenow="<?= $pct ?>" aria-valuemin="0" aria-valuemax="100" aria-label="<?= esc($wave['name'], 'attr') ?>">
+                                    <div class="h-2.5 rounded-full bg-primary-600" style="width: <?= $pct ?>%"></div>
+                                </div>
+                            <?php endif ?>
+                        </li>
+                    <?php endforeach ?>
+                    <?php if ($stats['noWave'] > 0) : ?>
+                        <li class="flex justify-between text-sm"><span class="font-medium text-gray-900 dark:text-white">Tanpa gelombang</span><span class="text-gray-700 dark:text-gray-300"><?= $num($stats['noWave']) ?> pendaftar</span></li>
+                    <?php endif ?>
+                </ul>
+            </section>
+            <section class="<?= $card ?>">
+                <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Cara mendaftar</h2>
+                <dl class="grid grid-cols-2 gap-4">
+                    <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Online</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['online']) ?></dd></div>
+                    <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Di sekolah</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['offline']) ?></dd></div>
+                </dl>
+            </section>
+        <?php endif ?>
+    </div>
+    <div class="<?= $card ?> self-start">
         <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Akun Anda</h2>
         <dl class="space-y-3 text-sm">
             <div>
