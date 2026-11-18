@@ -27,7 +27,7 @@ class ImportSchools extends BaseCommand
         '--kabupaten' => 'Only regencies whose name contains this text, e.g. "Kudus"',
         '--jenjang'   => 'Level(s), comma separated (default: setting Referensi.levels)',
         '--delay'     => 'Pause between requests in milliseconds (default: Referensi.importDelayMs)',
-        '--file'      => 'Import this CSV/XLSX file instead of Dapodik (e.g. MI from EMIS)',
+        '--file'      => 'Import this CSV/XLSX/JSON file instead of Dapodik (JSON: national SD/MI list, .json.gz allowed)',
         '--dry-run'   => 'Count only; write nothing',
     ];
 
@@ -87,6 +87,13 @@ class ImportSchools extends BaseCommand
         }
 
         CLI::write('Membaca ' . $file . ' ...');
+
+        if (preg_match('/\.(json|ndjson|jsonl)(\.gz)?\z/i', $file) === 1) {
+            // A national list has ~170,000 schools; give the CLI room for it.
+            ini_set('memory_limit', '2048M');
+
+            return $importer->import($importer->readJson($file), 'import', $dryRun);
+        }
 
         return $importer->import($importer->readFile($file, pathinfo($file, PATHINFO_EXTENSION)), 'import', $dryRun);
     }

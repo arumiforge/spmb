@@ -1,8 +1,7 @@
 <?php
 /**
  * @var array<string, string> $values
- * @var string|null           $logoUrl
- * @var bool                  $hasFavicon
+ * @var array<string, string|null> $images Brand image URLs by key (App\Libraries\BrandingAssets)
  */
 $f = static fn (string $name, array $extra = []): string => view('partials/form_field', ['field' => $extra + [
     'name'  => $name,
@@ -44,21 +43,28 @@ $h2   = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
             <?= $f('primaryColor', ['type' => 'color', 'required' => true, 'help' => lang('Pengaturan.primaryColorHelp')]) ?>
             <?= $f('timezoneLabel', ['type' => 'select', 'required' => true, 'options' => ['WIB' => 'WIB (Waktu Indonesia Barat)', 'WITA' => 'WITA (Waktu Indonesia Tengah)', 'WIT' => 'WIT (Waktu Indonesia Timur)']]) ?>
             <div class="sm:col-span-2"><?= $f('footerText') ?></div>
-            <div>
-                <?= $f('logo', ['type' => 'file', 'help' => lang('Pengaturan.logoHelp'), 'attrs' => ['accept' => 'image/png,image/jpeg,image/webp']]) ?>
-                <?php if ($logoUrl !== null) : ?>
-                    <div class="mt-3 flex items-center gap-3">
-                        <img src="<?= esc($logoUrl, 'attr') ?>" alt="<?= lang('Pengaturan.currentLogo') ?>" class="h-14 w-14 rounded-lg border border-gray-200 bg-white object-contain p-1 dark:border-gray-600">
-                        <?= view('partials/form_field', ['field' => ['name' => 'remove_logo', 'type' => 'checkbox', 'label' => lang('Pengaturan.removeLogo'), 'value' => '0']]) ?>
-                    </div>
-                <?php endif ?>
-            </div>
-            <div>
-                <?= $f('favicon', ['type' => 'file', 'help' => lang('Pengaturan.faviconHelp'), 'attrs' => ['accept' => 'image/png,image/x-icon']]) ?>
-                <?php if ($hasFavicon) : ?>
-                    <div class="mt-3"><?= view('partials/form_field', ['field' => ['name' => 'remove_favicon', 'type' => 'checkbox', 'label' => lang('Pengaturan.removeFavicon'), 'value' => '0']]) ?></div>
-                <?php endif ?>
-            </div>
+            <?= $f('illustrationAccent', ['type' => 'select', 'options' => lang('Pengaturan.illustrationAccentOptions'), 'help' => lang('Pengaturan.illustrationAccentHelp')]) ?>
+        </div>
+    </section>
+
+    <section class="<?= $card ?>">
+        <h2 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Pengaturan.sectionImages') ?></h2>
+        <p class="mb-4 text-sm text-gray-500 dark:text-gray-400"><?= lang('Pengaturan.sectionImagesIntro') ?></p>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <?php foreach (App\Libraries\BrandingAssets::ASSETS as $key => $asset) : ?>
+                <?php $accept = implode(',', array_map(static fn (string $e): string => $e === 'ico' ? 'image/x-icon' : ($e === 'jpg' || $e === 'jpeg' ? 'image/jpeg' : 'image/' . $e), $asset['ext'])); ?>
+                <div class="<?= in_array($key, ['logoWide', 'logoWideDark', 'shareImage'], true) ? 'sm:col-span-2' : '' ?>">
+                    <?= $f($key, ['type' => 'file', 'help' => lang('Pengaturan.' . $key . 'Help'), 'attrs' => ['accept' => $accept]]) ?>
+                    <?php if (($images[$key] ?? null) !== null) : ?>
+                        <div class="mt-3 flex flex-wrap items-center gap-3">
+                            <img src="<?= esc($images[$key], 'attr') ?>" alt="<?= esc(lang('Pengaturan.currentImage', [lang('Pengaturan.' . $key)]), 'attr') ?>"
+                                 class="max-h-20 max-w-full rounded-lg border border-gray-200 object-contain p-1 <?= $key === 'logoWideDark' ? 'bg-gray-800' : 'bg-white' ?> dark:border-gray-600">
+                            <?= view('partials/form_field', ['field' => ['name' => 'remove_' . $key, 'type' => 'checkbox', 'label' => lang('Pengaturan.removeImage'), 'value' => '0']]) ?>
+                        </div>
+                    <?php endif ?>
+                </div>
+            <?php endforeach ?>
+            <div class="sm:col-span-2"><?= $f('partnerName', ['help' => lang('Pengaturan.partnerNameHelp')]) ?></div>
         </div>
     </section>
 

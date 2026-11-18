@@ -1,0 +1,8 @@
+[
+    {"npsn": "20319201", "nama_sekolah": "SD Negeri 1 Jati", "desa": "Jati Wetan", "kecamatan": "Jati", "kabupaten_kota": "Kab. Kudus", "provinsi": "Jawa Tengah"},
+    {"NPSN": 60713001, "Nama Sekolah": "MI NU Miftahul Ulum", "Desa/Kelurahan": "Getas Pejaten", "Kecamatan": "Jati", "Kabupaten/Kota": "Kab. Kudus", "Provinsi": "Jawa Tengah", "Status": "Swasta"},
+    {"npsn": "10101010", "nama_sekolah": "SDLB Negeri Contoh", "desa": "Contoh", "kecamatan": "Contoh", "kabupaten_kota": "Kota Contoh", "provinsi": "Aceh"},
+    {"npsn": "50101010", "nama_sekolah": "SD Negeri 2 Sleman", "jenjang": "Sekolah Dasar", "desa": "Caturtunggal", "kecamatan": "Depok", "kabupaten_kota": "Kab. Sleman", "provinsi": "DI Yogyakarta"},
+    {"npsn": "123", "nama_sekolah": "SD Rusak", "provinsi": "Jawa Tengah"},
+    {"npsn": "20319299", "nama_sekolah": "Sekolah Tanpa Jenjang", "provinsi": "Jawa Tengah"}
+]

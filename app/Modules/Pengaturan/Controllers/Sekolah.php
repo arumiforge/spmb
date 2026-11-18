@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Modules\Pengaturan\Controllers;
 
 use App\Controllers\BaseController;
-use App\Controllers\Branding;
-use CodeIgniter\HTTP\Files\UploadedFile;
+use App\Libraries\BrandingAssets;
 use CodeIgniter\HTTP\RedirectResponse;
-use Throwable;
 
 /**
  * School identity and branding (white label), stored with setting('School.*').
@@ -20,7 +18,7 @@ class Sekolah extends BaseController
      *
      * @var list<string>
      */
-    public const FIELDS = ['name', 'shortName', 'tagline', 'address', 'phone', 'whatsapp', 'email', 'website', 'primaryColor', 'timezoneLabel', 'footerText'];
+    public const FIELDS = ['name', 'shortName', 'tagline', 'address', 'phone', 'whatsapp', 'email', 'website', 'primaryColor', 'timezoneLabel', 'footerText', 'partnerName', 'illustrationAccent'];
 
     public function index(): string
     {
@@ -35,8 +33,7 @@ class Sekolah extends BaseController
             'subtitle'    => lang('Pengaturan.schoolIntro'),
             'breadcrumbs' => [['label' => 'Dasbor', 'url' => 'admin'], ['label' => 'Pengaturan'], ['label' => 'Identitas Sekolah']],
             'values'      => $values,
-            'logoUrl'     => school_logo_url(),
-            'hasFavicon'  => (string) setting('School.faviconPath') !== '',
+            'images'      => array_map(static fn (string $key): ?string => BrandingAssets::url($key), array_combine(array_keys(BrandingAssets::ASSETS), array_keys(BrandingAssets::ASSETS))),
         ]);
     }
 
@@ -56,16 +53,25 @@ class Sekolah extends BaseController
             'footerText'    => ['label' => lang('Pengaturan.footerText'), 'rules' => 'permit_empty|max_length[255]'],
         ];
 
-        $logo    = $this->request->getFile('logo');
-        $favicon = $this->request->getFile('favicon');
+        $uploads = [];
 
-        if ($logo !== null && $logo->getError() !== UPLOAD_ERR_NO_FILE) {
-            $rules['logo'] = ['label' => lang('Pengaturan.logo'), 'rules' => 'uploaded[logo]|is_image[logo]|mime_in[logo,image/png,image/jpeg,image/webp]|ext_in[logo,png,jpg,jpeg,webp]|max_size[logo,1024]'];
+        foreach (BrandingAssets::ASSETS as $key => $asset) {
+            $file = $this->request->getFile($key);
+
+            if ($file === null || $file->getError() === UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            $uploads[$key] = $file;
+            $mimes         = $key === 'favicon' ? 'image/png,image/x-icon,image/vnd.microsoft.icon' : implode(',', array_map(static fn (string $e): string => $e === 'jpg' || $e === 'jpeg' ? 'image/jpeg' : 'image/' . $e, $asset['ext']));
+            $rules[$key]   = [
+                'label' => lang('Pengaturan.' . $key),
+                'rules' => "uploaded[{$key}]|mime_in[{$key},{$mimes}]|ext_in[{$key}," . implode(',', $asset['ext']) . "]|max_size[{$key}," . ($key === 'favicon' ? 200 : 2048) . ']',
+            ];
         }
 
-        if ($favicon !== null && $favicon->getError() !== UPLOAD_ERR_NO_FILE) {
-            $rules['favicon'] = ['label' => lang('Pengaturan.favicon'), 'rules' => 'uploaded[favicon]|mime_in[favicon,image/png,image/x-icon,image/vnd.microsoft.icon]|ext_in[favicon,png,ico]|max_size[favicon,200]'];
-        }
+        $rules['partnerName']        = ['label' => lang('Pengaturan.partnerName'), 'rules' => 'permit_empty|max_length[150]'];
+        $rules['illustrationAccent'] = ['label' => lang('Pengaturan.illustrationAccent'), 'rules' => 'permit_empty|in_list[hijau]'];
 
         if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -90,23 +96,24 @@ class Sekolah extends BaseController
             }
         }
 
-        foreach (['logo' => 'logoPath', 'favicon' => 'faviconPath'] as $input => $setting) {
-            $file    = $input === 'logo' ? $logo : $favicon;
+        foreach (BrandingAssets::ASSETS as $key => $asset) {
+            $setting = $asset['setting'];
             $current = (string) setting('School.' . $setting);
+            $file    = $uploads[$key] ?? null;
 
             if ($file !== null && $file->isValid()) {
-                $stored = $this->store($file, $input);
+                $stored = BrandingAssets::storeUpload($file, $key);
 
                 if ($stored === null) {
                     return redirect()->back()->withInput()->with('error', lang('Pengaturan.uploadFailed'));
                 }
 
-                $this->removeFile($current);
+                BrandingAssets::remove($current);
                 setting('School.' . $setting, $stored);
                 $old[$setting] = $current;
                 $new[$setting] = $stored;
-            } elseif ($this->request->getPost('remove_' . $input) === '1' && $current !== '') {
-                $this->removeFile($current);
+            } elseif ($this->request->getPost('remove_' . $key) === '1' && $current !== '') {
+                BrandingAssets::remove($current);
                 setting('School.' . $setting, '');
                 $old[$setting] = $current;
                 $new[$setting] = '';
@@ -118,44 +125,5 @@ class Sekolah extends BaseController
         }
 
         return redirect()->route('pengaturan.sekolah')->with('message', lang('Pengaturan.saved'));
-    }
-
-    /**
-     * Saves an uploaded branding image under a random name; logos are scaled down to 512 px.
-     */
-    private function store(UploadedFile $file, string $prefix): ?string
-    {
-        if (! is_dir(Branding::DIR)) {
-            mkdir(Branding::DIR, 0775, true);
-        }
-
-        $name = $prefix . '-' . bin2hex(random_bytes(8)) . '.' . strtolower($file->guessExtension() ?: $file->getClientExtension());
-
-        try {
-            $file->move(Branding::DIR, $name);
-
-            if ($prefix === 'logo' && extension_loaded('gd')) {
-                [$width, $height] = getimagesize(Branding::DIR . $name) ?: [0, 0];
-
-                if ($width > 512 || $height > 512) {
-                    service('image')->withFile(Branding::DIR . $name)->resize(512, 512, true)->save();
-                }
-            }
-        } catch (Throwable $e) {
-            log_message('error', 'Branding upload failed: ' . $e->getMessage());
-
-            return null;
-        }
-
-        return $name;
-    }
-
-    private function removeFile(string $name): void
-    {
-        $name = basename($name);
-
-        if ($name !== '' && is_file(Branding::DIR . $name)) {
-            unlink(Branding::DIR . $name);
-        }
     }
 }

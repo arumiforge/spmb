@@ -1,0 +1,20 @@
+{
+    "settings": {
+        "name": "SMP NU Al Ma'ruf Kudus",
+        "shortName": "SMP NU Al Ma'ruf",
+        "tagline": "Penerimaan Murid Baru",
+        "website": "https://spmbsmpnualmarufkudusweb.id",
+        "primaryColor": "#005c2f",
+        "partnerName": "LP Ma'arif NU",
+        "illustrationAccent": "hijau"
+    },
+    "images": {
+        "logo": "logo.png",
+        "logoWide": "logo-wide.png",
+        "logoWideDark": "logo-wide-dark.png",
+        "partnerLogo": "logo-lp-maarif-nu.png",
+        "shareImage": "share.png",
+        "icon": "icon.png",
+        "favicon": "favicon.png"
+    }
+}

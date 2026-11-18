@@ -51,7 +51,25 @@ class SchoolImporter
         'kabupaten kota'    => 'regency',
         'alamat'            => 'address',
         'alamat jalan'      => 'address',
+        'kota'              => 'regency',
+        'kab'               => 'regency',
+        'kabupaten / kota'  => 'regency',
+        'kelurahan/desa'    => 'village',
+        'kelurahan desa'    => 'village',
+        'kec'               => 'district',
+        'prov'              => 'province',
+        'village'           => 'village',
+        'district'          => 'district',
+        'regency'           => 'regency',
+        'province'          => 'province',
+        'address'           => 'address',
+        'ownership'         => 'ownership',
     ];
+
+    /**
+     * Errors kept in a report (the count of failed rows is always complete).
+     */
+    public const MAX_ERRORS = 1000;
 
     /**
      * Columns compared and written.
@@ -120,6 +138,96 @@ class SchoolImporter
     }
 
     /**
+     * Reads a JSON school list for the command line (no row limit): an array of
+     * objects, {"data": [...]}, or one object per line (NDJSON); .gz files are
+     * unpacked. Keys use the same aliases as spreadsheet headers (npsn,
+     * nama_sekolah, desa, kecamatan, kabupaten_kota, provinsi, jenjang, status, ...).
+     * When no level is given it is taken from the name (SD…, MI…, D-057).
+     *
+     * @return iterable<int, array<string, string>> Row number (1-based) => columns
+     *
+     * @throws RuntimeException
+     */
+    public function readJson(string $path): iterable
+    {
+        $raw = (string) file_get_contents($path);
+
+        if (str_ends_with(strtolower($path), '.gz')) {
+            $raw = (string) gzdecode($raw);
+        }
+
+        $raw  = ltrim($raw, "\xEF\xBB\xBF \t\r\n");
+        $data = json_decode($raw, true);
+
+        if (is_array($data) && isset($data['data']) && is_array($data['data'])) {
+            $data = $data['data'];
+        }
+
+        if (! is_array($data) || ! array_is_list($data)) {
+            // One JSON object per line.
+            $data = [];
+
+            foreach (preg_split('/\R/', $raw) ?: [] as $line) {
+                $line = trim($line);
+
+                if ($line !== '') {
+                    $data[] = json_decode($line, true);
+                }
+            }
+        }
+
+        $raw = '';
+
+        if ($data === [] || ! is_array($data[0] ?? null)) {
+            throw new RuntimeException(lang('Referensi.importUnreadable'));
+        }
+
+        foreach ($data as $i => $object) {
+            if (! is_array($object)) {
+                continue;
+            }
+
+            $row = [];
+
+            foreach ($object as $key => $value) {
+                $column = self::HEADERS[self::headerKey((string) $key)] ?? null;
+
+                if ($column !== null && ! isset($row[$column]) && (is_scalar($value) || $value === null)) {
+                    $row[$column] = self::cell($value);
+                }
+            }
+
+            yield $i + 1 => $row;
+        }
+    }
+
+    /**
+     * "Nama_Sekolah" / "Kab. Kota" / "nama sekolah" → "nama sekolah".
+     */
+    private static function headerKey(string $title): string
+    {
+        $key = trim(preg_replace('/[\s_]+/u', ' ', mb_strtolower(str_replace('.', '', $title))) ?? '');
+
+        return preg_replace('/^\x{FEFF}/u', '', $key) ?? $key;
+    }
+
+    /**
+     * Level from the school name when the file has none: SD…, MI…, SDLB…, SLB….
+     */
+    public static function levelFromName(string $name): ?string
+    {
+        $name = strtoupper(trim($name));
+
+        return match (true) {
+            preg_match('/\A(SDLB|SD LB|SD-LB)\b/', $name) === 1                        => 'SDLB',
+            preg_match('/\A(SLB)\b/', $name) === 1                                     => 'SLB',
+            preg_match('/\A(SD|SDN|SDS|SDIT|SD IT|SDI|SEKOLAH DASAR)\b/', $name) === 1 => 'SD',
+            preg_match('/\A(MI|MIN|MIS|MIT|MI\.|MADRASAH IBTIDAIYAH)\b/', $name) === 1 => 'MI',
+            default                                                                    => null,
+        };
+    }
+
+    /**
      * @param list<list<mixed>> $data First row is the header
      *
      * @return array<int, array<string, string>>
@@ -130,8 +238,7 @@ class SchoolImporter
         $columns = [];
 
         foreach ($header as $index => $title) {
-            $key = trim(preg_replace('/[\s_]+/u', ' ', mb_strtolower(str_replace('.', '', (string) $title))) ?? '');
-            $key = preg_replace('/^\x{FEFF}/u', '', $key) ?? $key;
+            $key = self::headerKey((string) $title);
 
             if (isset(self::HEADERS[$key]) && ! in_array(self::HEADERS[$key], $columns, true)) {
                 $columns[$index] = self::HEADERS[$key];
@@ -190,7 +297,10 @@ class SchoolImporter
 
             if ($error !== null) {
                 $report['failed']++;
-                $report['errors'][] = ['row' => (int) $number, 'name' => (string) ($raw['name'] ?? ''), 'message' => $error];
+
+                if (count($report['errors']) < self::MAX_ERRORS) {
+                    $report['errors'][] = ['row' => (int) $number, 'name' => (string) ($raw['name'] ?? ''), 'message' => $error];
+                }
 
                 continue;
             }
@@ -271,9 +381,15 @@ class SchoolImporter
             $row['npsn'] = preg_replace('/\D/', '', $row['npsn']);
         }
 
+        if ($row['level'] === null && $row['name'] !== null) {
+            $row['level'] = self::levelFromName($row['name']);
+        }
+
         if ($row['level'] !== null) {
-            $level        = strtoupper(str_replace(['.', ' '], '', $row['level']));
-            $row['level'] = in_array($level, ['MIS', 'MIN'], true) ? 'MI' : $level;
+            $level = strtoupper(str_replace(['.', ' '], '', $row['level']));
+            $level = in_array($level, ['MIS', 'MIN'], true) ? 'MI' : $level;
+            // "Sekolah Dasar", "Madrasah Ibtidaiyah", ...
+            $row['level'] = in_array($level, SchoolModel::LEVELS, true) ? $level : (self::levelFromName($row['level']) ?? $level);
         }
 
         if ($row['ownership'] !== null) {

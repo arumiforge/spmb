@@ -52,13 +52,15 @@ create your own branch from `main` instead.
 
 ## Blockers / waiting on
 
-- Dapodik API needs a bearer key (D-040): decide whether the importer may use the portal's published key; until then schools come from CSV/XLSX.
+- National SD/MI JSON list (D-057): Arumi Studios prepares it; import on the server with `php spark referensi:import --file <file>`.
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
-- Interview round 1: only Q2 (go-live date / wave 1 opening) and Q8 details (logo files, colours, Cloudflare account owner) remain open.
+- Go-live (D-056): needs a VPS from Arumi Studios and the domain added to the developer's Cloudflare account; then `docs/deployment.md` → "Go-live" steps.
+- ChatGPT briefs 013 (green accent set) and 014 (dark versions) are queued in `ai/README.md`.
 - School committee answers (waves, documents, card rule, number format, form fields): defaults in `docs/phase-2-plan.md` (D-031, D-035, D-036, D-037).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-18 · coordinator · `feat/p2-branding` — JSON import for the national SD/MI list (D-057, resolves D-040); brand images + branding pack command, SMP NU Al Ma'ruf Kudus pack (logos, favicon, icon, share image, green), illustration accent setting, ChatGPT briefs 013/014, `deploy/provision.sh` + go-live checklist (D-054…D-056). Next: merge, user merges #14, go-live steps 1–9.
 - 2026-11-18 · coordinator · `feat/p2-round1-answers` — interview round 1 answers: one installation per school, roles (Panitia also tests/re-registration/uniform), no-password student access + messages instead of live chat, compact analytics, domain and school name (D-050…D-053). Next: merge into `phase-2`; phase 3.
 - 2026-11-18 · coordinator · `feat/p2-school-answers` — school answers applied: quota per wave (D-047), KK/occupation/income dropdowns + staff-only field mode (D-048), random number suffix (D-049); 288 tests. Next: merge into `phase-2`, user merges #14.
 - 2026-11-18 · coordinator · `phase-2` — merged B (#10) after integration with A/C/D (282 tests); docs: requirements status, roadmap, architecture tables, D-044…D-046; opened PR `phase-2` → `main`; workers archived. Next: user merges, then phase 3.

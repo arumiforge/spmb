@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use App\Libraries\BrandingAssets;
 
 /** View helpers shared by all layouts and modules. */
 if (! function_exists('asset_url')) {
@@ -47,15 +48,22 @@ if (! function_exists('illustration')) {
                 . ($lazy ? ' loading="lazy"' : '') . ' decoding="async" class="' . esc(trim($class . ' ' . $extra)) . '">';
         };
 
-        $light = $tag($path, '');
+        // Optional accent set per school (setting School.illustrationAccent, e.g. "hijau" → <name>-hijau.webp);
+        // falls back to the default painting when the variant does not exist.
+        $accent = (string) setting('School.illustrationAccent');
+        $accent = preg_match('/\A[a-z]+\z/', $accent) === 1 ? $accent : '';
+        $pick   = static fn (string $name): string => $accent !== '' && is_file(FCPATH . 'assets/img/' . $name . '-' . $accent . '.webp') ? $name . '-' . $accent : $name;
+
+        $lightName = $pick($path);
+        $light     = $tag($lightName, '');
 
         if ($light === '') {
             return '';
         }
 
-        $dark = $tag($path . '-dark', 'hidden dark:block');
+        $dark = $tag($pick($path . '-dark'), 'hidden dark:block');
 
-        return $dark === '' ? $light : $tag($path, 'dark:hidden') . $dark;
+        return $dark === '' ? $light : $tag($lightName, 'dark:hidden') . $dark;
     }
 }
 
@@ -95,18 +103,14 @@ if (! function_exists('school_logo_url')) {
      */
     function school_logo_url(): ?string
     {
-        $path = (string) setting('School.logoPath');
-
-        return $path === '' ? null : url_to('aset.logo') . '?v=' . substr(md5($path), 0, 8);
+        return BrandingAssets::url('logo');
     }
 }
 
 if (! function_exists('school_favicon_url')) {
     function school_favicon_url(): string
     {
-        $path = (string) setting('School.faviconPath');
-
-        return $path === '' ? base_url('favicon.ico') : url_to('aset.favicon') . '?v=' . substr(md5($path), 0, 8);
+        return BrandingAssets::url('favicon') ?? base_url('favicon.ico');
     }
 }
 
@@ -242,5 +246,16 @@ if (! function_exists('status_badge_for')) {
             'label' => $label === $key ? $code : $label,
             'color' => $colors[$type][$code] ?? 'gray',
         ];
+    }
+}
+
+if (! function_exists('brand_asset_url')) {
+    /**
+     * Public URL of a brand image (logoWide, logoWideDark, partnerLogo, icon,
+     * shareImage, ...; see App\Libraries\BrandingAssets), or null when not set.
+     */
+    function brand_asset_url(string $key): ?string
+    {
+        return BrandingAssets::url($key);
     }
 }
