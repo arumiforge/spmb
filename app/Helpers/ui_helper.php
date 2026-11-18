@@ -227,7 +227,7 @@ if (! function_exists('status_badge_for')) {
      * Badge data for a shared status code, for partials/status_badge:
      * view('partials/status_badge', ['badge' => status_badge_for('documents', 'complete')]).
      *
-     * @param string $type applicant | documents | document | method
+     * @param string $type applicant | documents | document | method | test
      *
      * @return array{label: string, color: string}
      */
@@ -238,6 +238,7 @@ if (! function_exists('status_badge_for')) {
             'documents' => ['incomplete' => 'red', 'pending' => 'yellow', 'to_follow' => 'yellow', 'complete' => 'green'],
             'document'  => ['pending' => 'yellow', 'valid' => 'green', 'invalid' => 'red', 'to_follow' => 'gray'],
             'method'    => ['online' => 'primary', 'offline' => 'gray'],
+            'test'      => ['unscheduled' => 'gray', 'pending' => 'blue', 'present' => 'green', 'absent' => 'red', 'rescheduled' => 'yellow'],
         ];
         $key   = 'Status.' . $type . '.' . $code;
         $label = lang($key);

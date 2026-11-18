@@ -27,6 +27,13 @@ return [
         'online'  => 'Online',
         'offline' => 'Di sekolah',
     ],
+    'test' => [
+        'unscheduled' => 'Belum dijadwalkan',
+        'pending'     => 'Belum tes',
+        'present'     => 'Hadir',
+        'absent'      => 'Tidak hadir',
+        'rescheduled' => 'Dijadwalkan ulang',
+    ],
     'gender' => [
         'L' => 'Laki-laki',
         'P' => 'Perempuan',
