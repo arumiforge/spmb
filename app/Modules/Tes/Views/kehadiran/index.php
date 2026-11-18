@@ -72,7 +72,7 @@ $chip    = 'inline-flex min-h-10 items-center gap-2 rounded-lg border px-3 py-2 
                         </div>
 
                         <div class="mt-5 flex flex-col gap-2 sm:flex-row">
-                            <a href="<?= site_url('admin/tes/kehadiran/sesi/' . (int) $session['id']) ?>" class="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-primary-600 px-5 py-3 text-base font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800">
+                            <a href="<?= site_url('admin/tes/kehadiran/sesi/' . (int) $session['id']) ?>" class="inline-flex min-h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-primary-600 px-4 py-3 text-sm font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800">
                                 <?= icon('check', 'h-5 w-5') ?><?= lang('TesKehadiran.openRoster') ?>
                             </a>
                             <a href="<?= site_url('admin/tes/sesi/' . (int) $session['id'] . '/daftar-hadir') ?>" target="_blank" rel="noopener" title="<?= esc(lang('TesKehadiran.printSheet'), 'attr') ?>" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">

@@ -16,7 +16,7 @@ $action    = site_url('admin/tes/kehadiran/catat');
 $back      = 'admin/tes/kehadiran/sesi/' . $sessionId;
 $gender    = lang('Status.gender.' . $row['gender']);
 $search    = mb_strtolower($row['registration_number'] . ' ' . $row['full_name']);
-$base      = 'inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-semibold focus:outline-none focus:ring-4';
+$base      = 'inline-flex min-h-12 w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-3 text-sm font-semibold sm:gap-2 sm:px-4 sm:text-base focus:outline-none focus:ring-4';
 $styles    = [
     'present' => [
         true  => 'bg-green-600 text-white ring-2 ring-green-600 ring-offset-2 hover:bg-green-700 focus:ring-green-300 dark:ring-offset-gray-800 dark:focus:ring-green-800',
@@ -41,7 +41,7 @@ $button = static function (string $value, string $label, string $icon) use ($act
         . '</button></form>';
 };
 ?>
-<li id="peserta-<?= (int) $row['applicant_id'] ?>" data-roster-row data-search="<?= esc($search, 'attr') ?>" class="flex flex-col gap-3 p-4 md:flex-row md:items-center md:gap-4">
+<li id="peserta-<?= (int) $row['applicant_id'] ?>" data-roster-row data-search="<?= esc($search, 'attr') ?>" class="flex flex-col gap-3 p-4 md:flex-row md:items-center md:gap-4 lg:flex-col lg:items-stretch 2xl:flex-row 2xl:items-center">
     <div class="flex min-w-0 flex-1 items-start gap-3">
         <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100 text-sm font-bold text-gray-700 dark:bg-gray-700 dark:text-gray-200" title="<?= esc(lang('Tes.seat'), 'attr') ?>">
             <?= $row['seat_number'] === null ? '–' : (int) $row['seat_number'] ?>
@@ -58,7 +58,7 @@ $button = static function (string $value, string $label, string $icon) use ($act
             </p>
         </div>
     </div>
-    <div class="flex flex-col gap-2 md:w-80 md:shrink-0">
+    <div class="flex flex-col gap-2 md:w-80 md:shrink-0 lg:w-full 2xl:w-80">
         <div class="grid grid-cols-2 gap-2">
             <?= $button('present', lang('TesKehadiran.present'), 'check') ?>
             <?= $button('absent', lang('TesKehadiran.absent'), 'x') ?>
