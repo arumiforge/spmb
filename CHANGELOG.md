@@ -95,3 +95,9 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `composer test` runs PHPUnit without coverage (same as CI).
 - Locale `id`, time zone `Asia/Jakarta`, Indonesian framework messages (`codeigniter4/translations`); URLs without `index.php`.
 - Switched from the CodeIgniter framework distribution to the appstarter layout; framework 4.7 installed via Composer.
+
+### Fixed
+- First client's domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image) (D-065).
+- `deploy/provision.sh` no longer locks the admin out: the SSH port (also a custom one) stays open until the tunnel
+  runs, and password login is switched off (via `sshd_config.d/00-spmb.conf`, which also works on cloud images) only
+  when an admin SSH key exists (D-065).

@@ -35,6 +35,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
+| `nty/exciting-mendel-ukwgth` | session go-live | Domain typo fix, `provision.sh` lock-out guards (D-065) | PR open |
 | `phase-3` | coordinator | Phase 3 integration branch | merged into `main` (PR #23) |
 | `nty/nifty-mendel-u2jf9s` | coordinator | SD/MI default data + foundation (#18), three roles (#19), phase 3 docs | merged into `phase-3` |
 | `feat/p3-jadwal`, `feat/p3-penjadwalan`, `feat/p3-kehadiran` | workers A, B, C | Phase 3 packages | merged into `phase-3` (#22, #20, #21) |
@@ -46,7 +47,10 @@ Start a new session from `origin/main` (`spmb-session`; `composer install`, `npm
 `php spark spmb:install --demo` for local work; in cloud containers run `service mysql start` first — MySQL stops
 when the container idles).
 
-1. **Go-live for the school's review (D-056)**: `docs/deployment.md` → "Go-live", steps 2–9. `spmb:install` also loads the
+1. **Go-live for the school's review (D-056, D-065)**: merge the PR of `nty/exciting-mendel-ukwgth` first. The VPS is
+   bought (custom SSH port, first login as root with a password via Bitvise); follow `docs/deployment.md` → "Go-live",
+   steps 2–9 on `spmbsmpnualmarufkudus.web.id`. Add an SSH key before `provision.sh` so it can switch password login
+   off; close the temporary SSH rule after the tunnel works. `spmb:install` also loads the
    national SD/MI list (~1 min); deploys run `referensi:import --bawaan` (no-op once loaded). Only two staff roles exist:
    create the school's Admin Sekolah, who adds Panitia accounts.
 2. **Phase 4 — Re-registration & reports** (FR-DU-01, FR-SRG-01, dashboard stats, filters, XLSX/CSV/PDF export, XLSX
@@ -61,11 +65,12 @@ when the container idles).
 
 - School still to confirm (phase 3 works with any answer): test days, sessions per day, rooms and capacity; tests per wave or after all waves.
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
-- Go-live (D-056): needs a VPS from Arumi Studios and the domain added to the developer's Cloudflare account; then `docs/deployment.md` → "Go-live" steps.
+- Go-live (D-056): VPS ready; `spmbsmpnualmarufkudus.web.id` still has to be added to the developer's Cloudflare account; then `docs/deployment.md` → "Go-live" steps.
 - ChatGPT briefs 013 (green accent set) and 014 (dark versions) are queued in `ai/README.md`.
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-19 · session go-live · `nty/exciting-mendel-ukwgth` — domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image re-rendered); `provision.sh` keeps the SSH port (custom too) open until the tunnel runs and turns password login off only when an admin key exists; deployment doc: 127.0.0.1 ingress, real SSH port, known_hosts from the server, Bitvise via `cloudflared access tcp` (D-065). Next: user merges, go-live.
 - 2026-11-18 · coordinator · `main` — PR #23 (phase 3) merged into `main` on the user's request; workers A–C done. Next: go-live, phase 4.
 - 2026-11-18 · coordinator · `phase-3` — merged B (#20), A (#22), C (#21) after combined local runs (424 tests, demo install seats all applicants, pages checked at 360 px); docs: D-064, requirements FR-TEST-01…04 built, changelog, roadmap; PR `phase-3` → `main` opened. Next: user merges, go-live, phase 4.
 - 2026-11-18 · coordinator · `nty/nifty-mendel-u2jf9s` → `phase-3` — only three roles (Admin Sekolah, Panitia, Siswa; D-063): removed Kepala Sekolah and Petugas roles, accounts migrated to Panitia, guide `/panduan/panitia`, tests use per-user permissions for read-only staff; workers told. Next: worker PRs.
@@ -75,4 +80,3 @@ when the container idles).
 - 2026-11-18 · coordinator · `feat/p2-round1-answers` — interview round 1 answers: one installation per school, roles (Panitia also tests/re-registration/uniform), no-password student access + messages instead of live chat, compact analytics, domain and school name (D-050…D-053). Next: merge into `phase-2`; phase 3.
 - 2026-11-18 · coordinator · `feat/p2-school-answers` — school answers applied: quota per wave (D-047), KK/occupation/income dropdowns + staff-only field mode (D-048), random number suffix (D-049); 288 tests. Next: merge into `phase-2`, user merges #14.
 - 2026-11-18 · coordinator · `phase-2` — merged B (#10) after integration with A/C/D (282 tests); docs: requirements status, roadmap, architecture tables, D-044…D-046; opened PR `phase-2` → `main`; workers archived. Next: user merges, then phase 3.
-- 2026-11-18 · coordinator · `phase-2` — workers resumed after the usage limit; merged D (#11), A (#12), C (#13) after local tests on the combined branch (240 tests); decisions D-039…D-043; Dapodik key question open (D-040). Next: B (#10), then PR `phase-2` → `main`.

@@ -3,12 +3,18 @@
 # Run as root on a fresh Ubuntu Server 24.04. Safe to run again (idempotent).
 #
 # Usage:
-#   sudo DOMAIN=spmbsmpnualmarufkudusweb.id bash provision.sh
+#   sudo DOMAIN=spmbsmpnualmarufkudus.web.id bash provision.sh
 #
-# Optional variables: DEPLOY_USER (deploy), DEPLOY_PATH (/var/www/spmb), DB_NAME (spmb), DB_USER (spmb).
+# Optional variables: DEPLOY_USER (deploy), DEPLOY_PATH (/var/www/spmb), DB_NAME (spmb), DB_USER (spmb),
+# KEEP_SSH_OPEN (auto; 0 = never add the temporary SSH rule described below).
 # It installs packages, creates the deploy user, folders, database, shared .env, Nginx site and
-# PHP limits. It does NOT open any inbound port: traffic arrives through Cloudflare Tunnel
-# (`cloudflared service install <token>`, token from the Cloudflare dashboard, step 7 in the docs).
+# PHP limits. Traffic arrives through Cloudflare Tunnel (`cloudflared service install <token>`,
+# token from the Cloudflare dashboard, step 7 in the docs), so the firewall denies all inbound ports.
+#
+# Lock-out guards (D-065):
+# - While the tunnel is not running yet, the port(s) sshd listens on (22 or a provider's custom port)
+#   stay open in the firewall; close them by hand once SSH through the tunnel works.
+# - Password login is switched off only when root or a sudo user already has an SSH key.
 set -euo pipefail
 
 DOMAIN="${DOMAIN:?Set DOMAIN, e.g. DOMAIN=example.sch.id}"
@@ -35,9 +41,29 @@ if ! command -v cloudflared >/dev/null; then
     apt-get update -q && apt-get install -y -q cloudflared
 fi
 
+# Port(s) sshd listens on: from ssh.socket (Ubuntu 24.04 socket activation) or from sshd's config.
+ssh_ports() {
+    if systemctl is-active --quiet ssh.socket 2>/dev/null; then
+        systemctl show -p Listen --value ssh.socket | grep -oE ':[0-9]+ ' | tr -d ': '
+    else
+        sshd -T 2>/dev/null | awk '$1 == "port" {print $2}'
+    fi | sort -un
+}
+SSH_PORTS="$(ssh_ports | tr '\n' ' ' || true)"
+SSH_PORTS="${SSH_PORTS% }"
+SSH_PORTS="${SSH_PORTS:-22}"
+
 echo "== Firewall: no inbound ports (Cloudflare Tunnel only)"
 ufw default deny incoming >/dev/null
 ufw default allow outgoing >/dev/null
+TEMP_SSH=0
+if [ "${KEEP_SSH_OPEN:-auto}" != "0" ] && ! systemctl is-active --quiet cloudflared 2>/dev/null; then
+    for port in $SSH_PORTS; do
+        ufw allow "$port/tcp" comment 'spmb: temporary SSH until the tunnel works' >/dev/null
+    done
+    TEMP_SSH=1
+    echo "   Tunnel not running yet: SSH port(s) $SSH_PORTS stay open for now."
+fi
 ufw --force enable >/dev/null
 
 echo "== Deploy user and folders"
@@ -48,8 +74,32 @@ chown -R "$DEPLOY_USER":www-data "$DEPLOY_PATH"
 chmod -R 2775 "$DEPLOY_PATH/shared/writable"
 echo "$DEPLOY_USER ALL=NOPASSWD: /usr/bin/systemctl reload php$PHP-fpm" > /etc/sudoers.d/spmb-deploy
 chmod 0440 /etc/sudoers.d/spmb-deploy
-sed -i 's/^#\?PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config
-systemctl reload ssh || true
+
+echo "== SSH: keys only"
+# A key line starts with its type; lines with options (e.g. a provider's command="..." stub) do not count.
+has_admin_key() {
+    local user home
+    for user in root $(getent group sudo | cut -d: -f4 | tr ',' ' '); do
+        home="$(getent passwd "$user" | cut -d: -f6)"
+        [ -n "$home" ] && grep -qsE '^(ssh-|ecdsa-|sk-)' "$home/.ssh/authorized_keys" && return 0
+    done
+    return 1
+}
+# Drop-in named 00-* so it wins over 50-cloud-init.conf (sshd keeps the first value it reads).
+SSHD_DROPIN=/etc/ssh/sshd_config.d/00-spmb.conf
+if has_admin_key; then
+    printf 'PasswordAuthentication no\nKbdInteractiveAuthentication no\n' > "$SSHD_DROPIN"
+    if sshd -t; then
+        systemctl reload ssh 2>/dev/null || true
+        echo "   Password login off ($SSHD_DROPIN)."
+    else
+        rm -f "$SSHD_DROPIN"
+        echo "   WARNING: sshd rejected $SSHD_DROPIN; removed it, SSH settings unchanged." >&2
+    fi
+else
+    echo "   WARNING: neither root nor a sudo user has an SSH key; password login left ON." >&2
+    echo "   Add your public key to ~/.ssh/authorized_keys, then run this script again." >&2
+fi
 
 echo "== Database"
 if [ ! -f "$DEPLOY_PATH/shared/.db-password" ]; then
@@ -128,7 +178,12 @@ nginx -t && systemctl reload nginx
 echo
 echo "Done. Next (docs/deployment.md, 'Go-live'):"
 echo " 1. Cloudflare Zero Trust → Tunnels: create a tunnel, run the shown 'cloudflared service install <token>'."
-echo "    Public hostnames: $DOMAIN → http://localhost:80, and an SSH hostname → ssh://localhost:22 (behind Access)."
+echo "    Public hostnames: $DOMAIN → http://127.0.0.1:80, and ssh.$DOMAIN → ssh://127.0.0.1:${SSH_PORTS%% *} (behind Access)."
+if [ "$TEMP_SSH" = 1 ]; then
+    echo "    When SSH through the tunnel works, close the temporary rule(s):"
+    for port in $SSH_PORTS; do echo "      ufw delete allow $port/tcp"; done
+fi
 echo " 2. Add the CI public key to /home/$DEPLOY_USER/.ssh/authorized_keys."
-echo " 3. Run the Deploy workflow on GitHub, then in $DEPLOY_PATH/current: php spark spmb:install"
-echo "    and php spark spmb:branding clients/<school>/branding"
+echo " 3. Run the Deploy workflow on GitHub, then in $DEPLOY_PATH/current:"
+echo "    sudo -u $DEPLOY_USER php spark spmb:install"
+echo "    sudo -u $DEPLOY_USER php spark spmb:branding clients/<school>/branding"
