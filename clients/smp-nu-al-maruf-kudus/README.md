@@ -5,7 +5,7 @@ installation**, not code: the application stays white label (D-050, D-054).
 
 | Item | Value |
 | --- | --- |
-| Domain | `spmbsmpnualmarufkudusweb.id` |
+| Domain | `spmbsmpnualmarufkudus.web.id` |
 | Parent organisation | LP Ma'arif NU (logo in the website footer) |
 | Brand colour | `#005c2f` (green of the school logo; NU green family), accent yellow `#f5c400` from the logo, used in the share image |
 | Cloudflare | Arumi Studios' account (developer) |
