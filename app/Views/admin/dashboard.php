@@ -76,7 +76,7 @@ $tiles = $stats === null ? [] : [
             </section>
             <section class="<?= $card ?> motion-rise" style="--rise-delay: 200ms">
                 <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Cara mendaftar</h2>
-                <div class="grid items-center gap-4 md:grid-cols-[minmax(0,1fr)_14rem]">
+                <div class="grid grid-cols-1 items-center gap-4 md:grid-cols-[minmax(0,1fr)_14rem]">
                     <?php
                     $methodChart = [
                         'chart'  => ['type' => 'donut', 'height' => 280],
@@ -85,7 +85,7 @@ $tiles = $stats === null ? [] : [
                         'plotOptions' => ['pie' => ['donut' => ['labels' => ['total' => ['label' => 'Semua']]]]],
                     ];
                     ?>
-                    <div class="min-h-[280px]" data-chart="<?= esc(json_encode($methodChart, JSON_THROW_ON_ERROR), 'attr') ?>" role="img" aria-label="<?= esc('Online ' . $num($stats['online']) . ', di sekolah ' . $num($stats['offline']), 'attr') ?>"></div>
+                    <div class="min-h-[280px] min-w-0" data-chart="<?= esc(json_encode($methodChart, JSON_THROW_ON_ERROR), 'attr') ?>" role="img" aria-label="<?= esc('Online ' . $num($stats['online']) . ', di sekolah ' . $num($stats['offline']), 'attr') ?>"></div>
                     <dl class="grid grid-cols-2 gap-4 md:grid-cols-1">
                         <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Online</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['online']) ?></dd></div>
                         <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Di sekolah</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['offline']) ?></dd></div>
