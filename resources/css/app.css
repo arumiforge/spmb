@@ -118,10 +118,53 @@
 
     /* "> **Tips:** ..." becomes a tip box */
     .guide blockquote {
-        @apply my-4 rounded-lg border-s-4 border-primary-500 bg-primary-50 px-4 py-1 dark:bg-gray-800;
+        @apply my-4 rounded-lg border border-primary-200 bg-primary-50 px-4 py-1 dark:border-gray-700 dark:bg-gray-800;
     }
 
     .guide blockquote p {
         @apply text-gray-800 dark:text-gray-200;
+    }
+}
+
+/*
+ * Motion (D-070): a soft entrance for page sections and tiles. Add `motion-rise` to an
+ * element; `style="--rise-delay: 80ms"` staggers a row. Nothing moves when the visitor
+ * asks for reduced motion, and the element is fully visible without the animation
+ * (no layout shift: only opacity and transform change).
+ */
+@media (prefers-reduced-motion: no-preference) {
+    .motion-rise {
+        animation: spmb-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: var(--rise-delay, 0ms);
+    }
+
+    .motion-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .motion-lift:hover,
+    .motion-lift:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -12px rgb(0 0 0 / 0.25);
+    }
+
+    .motion-lift:hover .motion-icon {
+        transform: scale(1.08);
+    }
+
+    .motion-icon {
+        transition: transform 0.2s ease;
+    }
+}
+
+@keyframes spmb-rise {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
     }
 }

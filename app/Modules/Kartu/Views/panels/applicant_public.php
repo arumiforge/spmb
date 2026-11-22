@@ -17,7 +17,7 @@ $cancelled = $applicant['status'] === 'cancelled';
 <section class="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800" aria-labelledby="panel-kartu-publik">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div class="flex items-start gap-3">
-            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-700 dark:bg-gray-700 dark:text-primary-400"><?= icon('key', 'h-5 w-5') ?></span>
+            <?= icon('key', 'h-6 w-6 shrink-0 text-primary-700 dark:text-primary-400') ?>
             <div>
                 <h2 id="panel-kartu-publik" class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Kartu.panelTitle') ?></h2>
                 <p class="text-sm text-gray-600 dark:text-gray-300">

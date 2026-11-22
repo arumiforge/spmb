@@ -36,14 +36,14 @@ $waveLabel  = $waveId === null ? lang('Tes.allWaves') : ($waves[$waveId] ?? lang
 
 <?= $this->section('content') ?>
 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-    <?php foreach ($tiles as $tile) : ?>
-        <div class="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800">
+    <?php foreach ($tiles as $i => $tile) : ?>
+        <div class="motion-rise rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800" style="--rise-delay: <?= $i * 60 ?>ms">
             <div class="flex items-start justify-between gap-3">
                 <div>
                     <p class="text-sm text-gray-500 dark:text-gray-400"><?= esc($tile['label']) ?></p>
                     <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white"><?= $num($tile['value']) ?></p>
                 </div>
-                <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400"><?= icon($tile['icon'], 'h-6 w-6') ?></span>
+                <?= icon($tile['icon'], 'h-7 w-7 shrink-0 text-primary-600 dark:text-primary-400') ?>
             </div>
             <p class="mt-3 text-xs text-gray-500 dark:text-gray-400"><?= esc($tile['note']) ?></p>
         </div>

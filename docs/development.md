@@ -2,7 +2,47 @@
 
 ## Dev install
 
-Requirements: PHP 8.3 (intl, mbstring, mysqli, gd, zip), Composer 2, MySQL 8.0, Node.js 22 + npm.
+Requirements (D-069): PHP 8.5.13+ (intl, mbstring, mysqli, gd, zip, exif), Composer 2, MySQL 8.4,
+Node.js 24 + npm. The usual setup is Windows + Laragon (below); production runs in Docker
+(`docs/deployment.md`).
+
+### Windows + Laragon
+
+1. Laragon (Full) with Nginx and MySQL. Add the runtimes Laragon does not ship yet:
+   - **PHP 8.5.13+**: download the *NTS x64* zip from windows.php.net, unzip into
+     `C:\laragon\bin\php\php-8.5.x-nts-Win32-vs17-x64\`, then Menu → PHP → Version → pick it. In that
+     folder copy `php.ini-development` to `php.ini` and enable `extension=intl`, `mbstring`, `mysqli`,
+     `gd`, `zip`, `exif`, `openssl`, `curl`, `fileinfo`; set `upload_max_filesize = 10M`,
+     `post_max_size = 12M`, `date.timezone = Asia/Jakarta`.
+   - **MySQL 8.4**: unzip the MySQL 8.4 *Windows ZIP* into `C:\laragon\bin\mysql\`, Menu → MySQL →
+     Version → pick it (Laragon initialises the data folder on first start).
+   - **Node.js 24**: unzip the Node 24 Windows zip into `C:\laragon\bin\nodejs\node-v24…\` (or install it
+     normally), Menu → Node.js → Version.
+   - Check in Laragon's terminal: `php -v` (8.5.13+), `mysql --version` (8.4), `node -v` (v24).
+2. Clone into `C:\laragon\www\spmb`. Laragon's auto virtual host serves `http://spmb.test`; make sure
+   the Nginx site's root is the `public/` folder (Menu → Nginx → sites-enabled → `auto.spmb.test.conf`,
+   `root "C:/laragon/www/spmb/public";`), or use `php spark serve` on `http://localhost:8080` instead.
+3. Continue with the steps below (databases, `.env`, `spmb:install --demo`, `npm ci && npm run build`).
+   Use `app.baseURL = 'http://spmb.test/'` when Nginx serves the site.
+4. Git: set `git config core.autocrlf input` so shell scripts keep LF line endings (the server scripts
+   in `deploy/server/` fail with CRLF).
+
+### Optional: the production images locally (Docker Desktop)
+
+To check the Docker build before a deploy, with Docker Desktop (WSL 2) or any Docker Engine:
+
+```bash
+docker build -f docker/Dockerfile --target app -t spmb-app:local .
+docker build -f docker/Dockerfile --target web -t spmb-web:local .
+```
+
+To run the stack, make a folder outside the repository with a `stack.env` (`SPMB_ENV=local`,
+`SPMB_PORT=8090`, `SPMB_TAG=local`, `SPMB_DB_PASSWORD=…`, `SPMB_DB_ROOT_PASSWORD=…`) and an `app.env`
+(as in `docs/deployment.md`, with `database.default.hostname = db`, `app.baseURL = 'http://127.0.0.1:8090/'`
+and an `encryption.key`), copy `deploy/compose.yaml` there and run
+`docker compose --env-file stack.env up -d`, then
+`docker compose --env-file stack.env exec app php spark migrate --all`.
+Day-to-day development stays on Laragon.
 
 ```bash
 git clone git@github.com:arumiforge/spmb.git && cd spmb

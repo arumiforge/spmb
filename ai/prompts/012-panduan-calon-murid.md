@@ -42,7 +42,7 @@ Sage sofa, cream walls, sand floor; blue only on the cushion or phone case.
 - A busy room
 - Everything listed under "Never" and "Rules for every image" in the style guide
 
-## Prompt (paste into ChatGPT)
+## Prompt
 
 ```
 Hand-painted storybook illustration in soft gouache and watercolour, visible gentle brush texture,

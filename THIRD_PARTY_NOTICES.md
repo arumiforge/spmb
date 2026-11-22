@@ -40,6 +40,7 @@ BSD-3-Clause and are not deployed (`composer install --no-dev`).
 | flowbite | MIT | Open-source components |
 | tailwindcss, @tailwindcss/cli | MIT | Build tool |
 | esbuild | MIT | Build tool |
+| lucide-static | ISC | Lucide icons; only the SVG paths of the icons we use are copied into `app/Helpers` at development time (D-070) |
 | apexcharts | ApexCharts licence (v4+) | **Verify** the current terms on apexcharts.com: v4 is free only below a revenue threshold for the licensee; buy a licence if Arumi Studios or a client exceeds it, or switch charts library |
 | qr-scanner (nimiq) | MIT | Camera QR scanning for test attendance (phase 3, `resources/js/scanner.js`) |
 

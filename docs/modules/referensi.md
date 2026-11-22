@@ -65,7 +65,7 @@ Public data only: NPSN, name, level (`SD`/`MI`), status (negeri/swasta), village
 province. No personal data, so it is kept in git.
 
 - `php spark spmb:install` loads it (Referensi `InstallSeeder`), about 50 s and < 1 GB memory.
-- Every deploy runs `php spark referensi:import --bawaan` (`deploy/activate.sh`); it does nothing when
+- Every deploy runs `php spark referensi:import --bawaan` (`spmb deploy`, D-068); it does nothing when
   the version in `manifest.json` equals the setting `Referensi.bundledVersion`, so an update that ships a
   newer list loads it once.
 - Rows get `source = nasional` ("Daftar nasional"). The usual upsert rules apply (D-039): by NPSN, never

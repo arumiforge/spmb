@@ -42,7 +42,7 @@ Navy cardigan and cream; blue only on the shield and one chart bar.
 - A computer room background
 - Everything listed under "Never" and "Rules for every image" in the style guide
 
-## Prompt (paste into ChatGPT)
+## Prompt
 
 ```
 Hand-painted storybook illustration in soft gouache and watercolour, visible gentle brush texture,

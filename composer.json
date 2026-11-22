@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.5.13",
         "ext-intl": "*",
         "ext-mbstring": "*",
         "chillerlan/php-qrcode": "^5.0",
@@ -48,11 +48,14 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "platform": {
-            "php": "8.3.0"
+            "php": "8.5.13"
         }
     },
     "scripts": {
-        "test": "phpunit --no-coverage",
+        "test": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --no-coverage"
+        ],
         "lint": "php-cs-fixer fix --dry-run --diff",
         "fix": "php-cs-fixer fix",
         "post-update-cmd": [

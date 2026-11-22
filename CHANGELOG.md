@@ -5,6 +5,21 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Platform round (D-066…D-075): writing standard skill `bahasa-indonesia-plain`; visual and chart rules in `spmb-ui`;
+  Claude cloud environment setup kept in the repository (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`);
+  `AGENTS.md` for Codex and other agents.
+- Dashboard chart of registration methods; charts keep their text readable on phones; gentle entrance and hover motion
+  that respects "reduce motion" (D-070).
+- Tanya Jawab (D-072): public page `/tanya-jawab` (topics, accordion, links to the real pages; shown in the menu only when
+  something is published), admin screen under Website (`situs.kelola`, audited), starter questions for SMP NU Al Ma'ruf
+  Kudus in the client pack loaded by `spmb:branding` (29 questions; 4 stay hidden until the school fills them in).
+- Docker images (PHP 8.5 FPM + Nginx), compose stack for staging and production on one server, one-time server setup
+  script (`deploy/server/setup.sh`: Docker, cloudflared, Cockpit, firewall with lock-out guards) and the `spmb` server
+  CLI (init, deploy, rollback, status, logs, backup, restore, spark) with daily backups and automatic rollback of a
+  failed deploy (D-066…D-068, D-076). Laragon setup for Windows in `docs/development.md`.
+- Visual asset pipeline moved to Codex: identity style guide (santri, Islamic, NU, Indonesian, Bhinneka), strict respect
+  rules for religious elements, 21 new briefs (patterns, dividers, special "Daftar sekarang" button, loader, page and
+  state paintings, default share image) and an asset checker (`ai/tools/check_assets.py`).
 - Tes, rooms and schedule: test rooms, test calendar with holidays, sessions (add, edit, deactivate, delete), creating many
   sessions at once with a preview, and Pengaturan → Tes (FR-TEST-01).
 - Tes, allocation: automatic test seating with preview (registration order, waves, holidays), participant list,
@@ -88,6 +103,12 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
+- The direct SSH port stays open with key-only login as the last way in, because the VPS has no provider console
+  (D-077); `setup.sh` keeps it open for good and no longer tells the admin to close it.
+- Minimum runtimes: PHP 8.5.13 (Composer platform too), Node.js 24, MySQL 8.4 in CI (D-069); 424 tests green on PHP 8.5.13.
+- Icons are Lucide line icons without coloured backgrounds; eyebrow labels and accent borders removed (D-070).
+  Icons are generated with `npm run icons` from `resources/icons.json` into `app/Helpers/lucide_icons.php`.
+- `composer test` no longer stops at Composer's 300-second limit (the suite takes about six minutes).
 - Only three roles: Admin Sekolah, Panitia (one committee role) and Siswa (applicant access); Kepala Sekolah, Petugas Tes,
   Petugas Daftar Ulang and Petugas Seragam removed and their accounts moved to Panitia; guide `/panduan/panitia` (D-063).
 - Project licence is now proprietary (© Arumi Studios), replacing the inherited CodeIgniter MIT notice (D-017).
@@ -95,3 +116,14 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `composer test` runs PHPUnit without coverage (same as CI).
 - Locale `id`, time zone `Asia/Jakarta`, Indonesian framework messages (`codeigniter4/translations`); URLs without `index.php`.
 - Switched from the CodeIgniter framework distribution to the appstarter layout; framework 4.7 installed via Composer.
+
+### Removed
+- GitHub Actions SSH deploy workflow, `deploy/provision.sh` and `deploy/activate.sh` (replaced by the server pulling and
+  building, D-068).
+
+### Fixed
+- Public menu links were duplicated because `Situs/Config/PublicMenu.php` overwrote the registry's items.
+- First client's domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image) (D-065).
+- `deploy/provision.sh` no longer locks the admin out: the SSH port (also a custom one) stays open until the tunnel
+  runs, and password login is switched off (via `sshd_config.d/00-spmb.conf`, which also works on cloud images) only
+  when an admin SSH key exists (D-065).

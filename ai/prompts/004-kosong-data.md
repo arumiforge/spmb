@@ -42,7 +42,7 @@ Sand, cream, sage; a small blue tab on the folder is the only accent.
 - Too many details (it is shown small)
 - Everything listed under "Never" and "Rules for every image" in the style guide
 
-## Prompt (paste into ChatGPT)
+## Prompt
 
 ```
 Hand-painted storybook illustration in soft gouache and watercolour, visible gentle brush texture,

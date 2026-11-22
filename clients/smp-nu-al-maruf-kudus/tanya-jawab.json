@@ -1,0 +1,154 @@
+{
+  "_note": "Starter questions for /tanya-jawab (D-072), loaded by spark spmb:branding when the installation has no questions yet. Answers in Markdown; links starting with / point into the site; {nama_sekolah} and {tahun_ajaran} are replaced. Text in [ISI SEKOLAH: ...] must be written by the school; those questions stay hidden until completed.",
+  "questions": [
+    {
+      "topic": "Cara mendaftar",
+      "question": "Bagaimana cara mendaftar?",
+      "answer": "Bapak/Ibu bisa mendaftar online atau langsung di sekolah.\n\n1. Baca [persyaratan pendaftaran](/persyaratan) dan siapkan berkasnya.\n2. Lihat [jadwal gelombang](/jadwal) untuk mengetahui gelombang yang sedang dibuka.\n3. Isi [formulir pendaftaran](/daftar) dari HP atau komputer.\n4. Simpan nomor pendaftaran dan tautan pribadi yang muncul setelah formulir terkirim.\n5. Unggah berkas dan pantau status di halaman [Cek Status](/cek-status)."
+    },
+    {
+      "topic": "Cara mendaftar",
+      "question": "Apakah saya perlu membuat akun?",
+      "answer": "Tidak perlu. Bapak/Ibu cukup mengisi formulir pendaftaran. Setelah terkirim, Bapak/Ibu mendapat nomor pendaftaran untuk membuka data pendaftaran di halaman [Cek Status](/cek-status)."
+    },
+    {
+      "topic": "Cara mendaftar",
+      "question": "Bisakah saya mendaftar lewat HP?",
+      "answer": "Bisa. Formulir pendaftaran, unggah berkas, dan kartu pendaftaran bisa dibuka dari HP. Pastikan koneksi internet lancar saat mengirim berkas."
+    },
+    {
+      "topic": "Cara mendaftar",
+      "question": "Saya kesulitan mendaftar online. Apa yang bisa saya lakukan?",
+      "answer": "Bapak/Ibu bisa datang langsung ke sekolah. Panitia akan membantu mengisi data pendaftaran. Bawa berkas yang tercantum di halaman [persyaratan](/persyaratan) dan lihat dulu [jadwal gelombang](/jadwal)."
+    },
+    {
+      "topic": "Cara mendaftar",
+      "question": "Mengapa formulir pendaftaran online tidak bisa dibuka?",
+      "answer": "Formulir online terbuka jika panitia membuka pendaftaran online, ada gelombang yang berjalan, dan kuotanya belum penuh. Lihat [jadwal gelombang](/jadwal) untuk tanggal pembukaan berikutnya, atau hubungi panitia."
+    },
+    {
+      "topic": "Berkas persyaratan",
+      "question": "Berkas apa saja yang perlu disiapkan?",
+      "answer": "Daftar berkas yang diminta ada di halaman [persyaratan](/persyaratan), lengkap dengan jenis file dan ukuran yang diterima."
+    },
+    {
+      "topic": "Berkas persyaratan",
+      "question": "Bagaimana cara mengirim berkas?",
+      "answer": "Berkas dikirim dari halaman [Cek Status](/cek-status).\n\n1. Masukkan nomor pendaftaran dan tanggal lahir calon murid, atau buka tautan pribadi dari pendaftaran.\n2. Di bagian berkas pendaftaran, pilih file untuk setiap berkas.\n3. Tekan Unggah dan tunggu sampai muncul pesan bahwa berkas sudah terkirim.\n\nFoto dari kamera HP bisa langsung diunggah. Ukurannya diperkecil otomatis."
+    },
+    {
+      "topic": "Berkas persyaratan",
+      "question": "Rapor atau surat keterangan lulus belum ada. Bagaimana?",
+      "answer": "Sebagian berkas boleh dikirim menyusul. Berkas itu bertanda \"Boleh menyusul\" di halaman [persyaratan](/persyaratan). Kirim berkasnya lewat [Cek Status](/cek-status) setelah berkas itu Bapak/Ibu terima."
+    },
+    {
+      "topic": "Berkas persyaratan",
+      "question": "Berkas saya berstatus \"Perlu diganti\". Apa artinya?",
+      "answer": "Panitia sudah memeriksa berkas itu dan meminta berkas yang lebih jelas atau yang benar. Baca catatan panitia di halaman [Cek Status](/cek-status), lalu unggah ulang berkasnya."
+    },
+    {
+      "topic": "Gelombang dan kuota",
+      "question": "Kapan pendaftaran dibuka?",
+      "answer": "Tanggal setiap gelombang ada di halaman [jadwal pendaftaran](/jadwal). Halaman itu juga menunjukkan gelombang yang sedang dibuka, akan dibuka, atau sudah ditutup."
+    },
+    {
+      "topic": "Gelombang dan kuota",
+      "question": "Apa itu gelombang pendaftaran?",
+      "answer": "Gelombang adalah masa pendaftaran dengan tanggal mulai dan tanggal selesai sendiri. Pendaftaran tahun ajaran {tahun_ajaran} bisa dibagi menjadi beberapa gelombang. Daftarlah di gelombang yang sedang dibuka."
+    },
+    {
+      "topic": "Gelombang dan kuota",
+      "question": "Berapa banyak murid yang diterima?",
+      "answer": "Jika panitia menetapkan kuota, jumlahnya tampil di setiap gelombang pada halaman [jadwal pendaftaran](/jadwal). Saat kuota gelombang sudah penuh, formulir online gelombang itu ditutup."
+    },
+    {
+      "topic": "Tes",
+      "question": "Kapan dan di mana tes dilaksanakan?",
+      "answer": "Jadwal tes tampil di halaman [Cek Status](/cek-status) setelah panitia membagikannya: hari, tanggal, jam, ruang, dan lokasi. Jadwal yang sama juga tercetak di kartu pendaftaran."
+    },
+    {
+      "topic": "Tes",
+      "question": "Apa yang perlu dibawa saat tes?",
+      "answer": "Bawa kartu pendaftaran, dicetak atau di HP. Baca juga pesan \"Yang perlu disiapkan\" di bawah jadwal tes pada halaman [Cek Status](/cek-status). Datanglah lebih awal."
+    },
+    {
+      "topic": "Tes",
+      "question": "Calon murid berhalangan pada jadwal tes. Bagaimana?",
+      "answer": "Hubungi panitia secepatnya. Panitia bisa memindahkan jadwal tes ke sesi lain."
+    },
+    {
+      "topic": "Tes",
+      "question": "Apa saja materi tes?",
+      "answer": "[ISI SEKOLAH: jelaskan materi tes, misalnya bagian yang diujikan, dan cara calon murid bersiap.]",
+      "published": false
+    },
+    {
+      "topic": "Kartu dan status",
+      "question": "Bagaimana cara mengecek status pendaftaran?",
+      "answer": "Buka halaman [Cek Status](/cek-status), lalu masukkan nomor pendaftaran dan tanggal lahir calon murid. Bapak/Ibu juga bisa membuka tautan pribadi yang disimpan setelah mendaftar. Setelah selesai, tekan Keluar, terutama jika memakai HP orang lain."
+    },
+    {
+      "topic": "Kartu dan status",
+      "question": "Bagaimana cara mendapatkan kartu pendaftaran?",
+      "answer": "Kartu diunduh dari halaman [Cek Status](/cek-status) di bagian kartu pendaftaran. Cetak di kertas A4, lalu tempel pas foto 3 x 4. Jika tertulis bahwa kartu bisa diunduh setelah berkas diperiksa, tunggu sampai panitia selesai memeriksa, lalu cek lagi."
+    },
+    {
+      "topic": "Kartu dan status",
+      "question": "Kartu pendaftaran hilang. Apa yang harus saya lakukan?",
+      "answer": "Unduh dan cetak lagi dari halaman [Cek Status](/cek-status). Kartu bisa diunduh kapan saja. Jika kartu dipakai orang lain, hubungi panitia untuk dibuatkan kartu baru."
+    },
+    {
+      "topic": "Kartu dan status",
+      "question": "Saya lupa nomor pendaftaran. Bagaimana?",
+      "answer": "Hubungi panitia dan sebutkan nama lengkap serta tanggal lahir calon murid. Panitia akan membantu mencarikan nomornya."
+    },
+    {
+      "topic": "Kartu dan status",
+      "question": "Ada data yang salah. Bisakah saya memperbaikinya?",
+      "answer": "Alamat, nomor HP, nomor WhatsApp, dan email bisa Bapak/Ibu perbaiki sendiri lewat halaman [Cek Status](/cek-status). Nama, tanggal lahir, NIK, NISN, dan data identitas lain hanya bisa diubah panitia. Hubungi panitia jika ada yang salah."
+    },
+    {
+      "topic": "Sekolah asal",
+      "question": "Sekolah asal tidak ada di daftar pilihan. Bagaimana?",
+      "answer": "Tulis nama lengkap sekolahnya, misalnya SD Negeri 1 Kudus, lalu pilih \"Sekolah saya tidak ada di daftar\". Panitia akan mencocokkan nama sekolah itu nanti."
+    },
+    {
+      "topic": "Sekolah asal",
+      "question": "Di mana saya bisa mengetahui NISN calon murid?",
+      "answer": "NISN terdiri dari 10 angka. Bapak/Ibu bisa menanyakannya ke sekolah asal calon murid."
+    },
+    {
+      "topic": "Sekolah asal",
+      "question": "Apakah lulusan tahun sebelumnya boleh mendaftar?",
+      "answer": "[ISI SEKOLAH: tulis apakah lulusan tahun sebelumnya boleh mendaftar dan syaratnya.]",
+      "published": false
+    },
+    {
+      "topic": "Biaya",
+      "question": "Berapa biaya pendaftaran?",
+      "answer": "Panitia menyampaikan rincian biaya pendaftaran secara langsung. Hubungi panitia lewat kontak di bagian bawah halaman ini."
+    },
+    {
+      "topic": "Biaya",
+      "question": "Berapa biaya setelah diterima, misalnya daftar ulang dan seragam?",
+      "answer": "Panitia menyampaikan rincian biaya ini secara langsung. Hubungi panitia lewat kontak di bagian bawah halaman ini."
+    },
+    {
+      "topic": "Biaya",
+      "question": "Apakah ada keringanan biaya atau beasiswa?",
+      "answer": "[ISI SEKOLAH: tulis jenis keringanan biaya atau beasiswa yang tersedia, syaratnya, dan cara mengajukannya.]",
+      "published": false
+    },
+    {
+      "topic": "Kontak panitia",
+      "question": "Bagaimana cara menghubungi panitia?",
+      "answer": "Kontak panitia ada di bagian bawah halaman ini. Bapak/Ibu juga bisa datang langsung ke {nama_sekolah}."
+    },
+    {
+      "topic": "Kontak panitia",
+      "question": "Kapan panitia bisa ditemui di sekolah?",
+      "answer": "[ISI SEKOLAH: tulis hari dan jam layanan panitia, misalnya Senin sampai Sabtu, 08.00–12.00 WIB.]",
+      "published": false
+    }
+  ]
+}

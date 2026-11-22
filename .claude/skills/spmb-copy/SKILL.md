@@ -5,6 +5,13 @@ description: Write friendly, non-technical Indonesian UI text, validation/error 
 
 # Indonesian copy for non-technical users
 
+**Writing standard: the `bahasa-indonesia-plain` skill** (plain language, EYD, inclusive and
+trauma-informed writing, numbers and dates, RASA check before you finish). Load it whenever
+you write or review Indonesian text. This skill adds SPMB's audience, form of address,
+glossary and guide structure. New and rewritten text uses sentence case for headings,
+buttons and labels (`Simpan data`, `Daftar sekarang`); existing Title Case labels are
+changed in one copy sweep later, not piecemeal (D-071).
+
 Audience: school committee staff, the principal, parents and students. Only the
 super admin may see technical language.
 
@@ -13,8 +20,8 @@ super admin may see technical language.
 - Polite, warm, short. Address the user as **Anda**; for students/parents
   public pages may use "Bapak/Ibu" in guidance text.
 - One idea per sentence. Lead with what the user should do.
-- Use active verbs on buttons: `Daftar Sekarang`, `Simpan Data`, `Unduh Kartu`,
-  `Cetak Ulang Kartu`, `Cari Pendaftar`.
+- Use active verbs on buttons: `Daftar sekarang`, `Simpan data`, `Unduh kartu`,
+  `Cetak ulang kartu`, `Cari pendaftar`.
 - Numbers and dates in Indonesian format: `17 November 2026`, `Rp150.000`, `08.00 WIB`.
 
 ## Avoid → use
