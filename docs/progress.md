@@ -35,7 +35,8 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `nty/exciting-mendel-ukwgth` | session go-live | Domain typo fix, `provision.sh` lock-out guards (D-065) | PR open |
+| `pw/zealous-albattani-2rz2z1` | session docker | Docker deployment (staging + production on one VPS), PHP 8.5 / Node 24, Lucide icons, design rules, Tanya Jawab page, Codex briefs; includes PR #25 | in progress |
+| `nty/exciting-mendel-ukwgth` | session go-live | Domain typo fix, `provision.sh` lock-out guards (D-065) | PR #25 open; merged into `pw/zealous-albattani-2rz2z1` |
 | `phase-3` | coordinator | Phase 3 integration branch | merged into `main` (PR #23) |
 | `nty/nifty-mendel-u2jf9s` | coordinator | SD/MI default data + foundation (#18), three roles (#19), phase 3 docs | merged into `phase-3` |
 | `feat/p3-jadwal`, `feat/p3-penjadwalan`, `feat/p3-kehadiran` | workers A, B, C | Phase 3 packages | merged into `phase-3` (#22, #20, #21) |
