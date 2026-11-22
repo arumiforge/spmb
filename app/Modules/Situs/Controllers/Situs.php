@@ -57,7 +57,7 @@ class Situs extends BaseController
         $used     = [];
 
         foreach (model(SiteQuestionModel::class)->publishedByTopic() as $group) {
-            $slug = self::slug($group['topic'], 'topik', $used);
+            $slug  = self::slug($group['topic'], 'topik', $used);
             $items = [];
 
             foreach ($group['items'] as $item) {

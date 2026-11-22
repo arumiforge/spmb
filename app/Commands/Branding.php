@@ -139,7 +139,8 @@ class Branding extends BaseCommand
 
         $model = model(SiteQuestionModel::class);
 
-        if ($model->countAllResults() > 0) {
+        // Deleted questions count too: a school that removed the starter set keeps it removed.
+        if ($model->withDeleted()->countAllResults() > 0) {
             CLI::write('Tanya jawab skipped: the installation already has questions.', 'yellow');
 
             return EXIT_SUCCESS;

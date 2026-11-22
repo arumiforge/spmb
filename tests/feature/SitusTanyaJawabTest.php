@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Commands\Branding;
 use App\Libraries\ModuleRegistry;
 use App\Models\UserModel;
+use CodeIgniter\CLI\Commands;
 use CodeIgniter\Shield\Entities\User;
 use CodeIgniter\Shield\Test\AuthenticationTesting;
 use CodeIgniter\Test\CIUnitTestCase;
@@ -226,8 +228,10 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
         $page->assertSee('Pertanyaan Anda belum terjawab?');
         $page->assertDontSee('Ada beasiswa?');
         $this->assertLessThan(strpos($page->getBody(), 'id="biaya"'), strpos($page->getBody(), 'id="pendaftaran"'));
-        // Public menu link while something is published.
+        // Public menu link while something is published, each link once.
         $page->assertSee('href="' . site_url('tanya-jawab') . '"', null, false);
+        // (once in the menu, once in the contact block)
+        $this->assertSame(2, substr_count($page->getBody(), 'href="' . site_url('persyaratan') . '"'));
     }
 
     public function testPublicPageWithoutQuestions(): void
@@ -265,6 +269,15 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
         $this->assertStringContainsString('href="' . esc(site_url('cek-status?a=1&b=2'), 'attr') . '"', $html);
     }
 
+    /**
+     * Runs spmb:branding directly: command() would re-discover every command
+     * class, which clashes with classes other tests in the suite already loaded.
+     */
+    private function runBranding(string $pack): void
+    {
+        (new Branding(service('logger'), $this->createMock(Commands::class)))->run([$pack]);
+    }
+
     private function makePack(string $json): string
     {
         $this->tmpDir = sys_get_temp_dir() . '/spmb-qa-' . bin2hex(random_bytes(4));
@@ -279,7 +292,7 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
     {
         $pack = $this->makePack((string) file_get_contents(self::CLIENT_FILE));
 
-        command('spmb:branding ' . $pack);
+        $this->runBranding($pack);
         $this->assertStringContainsString('Tanya jawab loaded', $this->getStreamFilterBuffer());
 
         $all    = $this->questions->ordered();
@@ -297,7 +310,7 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
         // Running again keeps the school's edits.
         $first = $all[0];
         $this->questions->update((int) $first['id'], ['answer' => 'Diubah sekolah.']);
-        command('spmb:branding ' . $pack);
+        $this->runBranding($pack);
         $this->assertStringContainsString('already has questions', $this->getStreamFilterBuffer());
         $this->assertCount(count($source), $this->questions->ordered());
         $this->seeInDatabase('site_questions', ['id' => $first['id'], 'answer' => 'Diubah sekolah.']);
@@ -313,7 +326,7 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
     {
         $pack = $this->makePack('{"questions": [{"topic": "Biaya", "question": "", "answer": "x"}]}');
 
-        command('spmb:branding ' . $pack);
+        $this->runBranding($pack);
         $this->assertStringContainsString('question 1 needs', $this->getStreamFilterBuffer());
         $this->assertSame(0, $this->questions->countAllResults());
     }
