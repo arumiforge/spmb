@@ -54,7 +54,12 @@ Do this before finishing, and also proactively when the conversation is long.
 
 ## Environment differences between accounts
 
-Per-account settings are not in the repo; mention them in *Blockers* when they block work:
+Each account sets up its cloud environment once from `docs/cloud-environment.md`: the setup
+script lives in the repository (`.claude/cloud/setup.sh`, PHP 8.5.13+, Node 24, MySQL, demo install)
+and the environment only runs it. If a session fails to start with "Setup script failed", or
+`php -v` is older than 8.5.13, the account still has an old inline script: follow that page.
+
+Other per-account settings are not in the repo; mention them in *Blockers* when they block work:
 - GitHub must be connected with access to `arumiforge/spmb`.
 - Network allowlist (e.g. `dapo.kemendikdasmen.go.id`, `sekolah.data.kemendikdasmen.go.id` for the school importer).
 - Setup script / installed tools.

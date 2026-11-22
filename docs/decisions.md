@@ -356,3 +356,9 @@ Decision: The public site gets `/tanya-jawab`: questions grouped by topic, edite
 ## D-073 — Codex makes the visual assets; identity is santri, Islamic, Nahdlatul Ulama, Indonesian and Bhinneka (2026-11-22)
 Status: accepted (user, 2026-11-22; replaces ChatGPT in D-027/D-028)
 Decision: Codex (with repository access) makes all illustrations, special buttons, art, patterns and other visuals from briefs Claude writes in `ai/`; Claude installs and wires them in. The visual identity for this product is santri, Islamic, Nahdlatul Ulama, Indonesian and Bhinneka Tunggal Ika: warm, respectful, inclusive of every region, without stereotypes. School-specific marks (logos, names) stay in settings and the client pack; generic assets must work for any school.
+
+## D-074 — Cloud environment setup lives in the repository (2026-11-22)
+Status: accepted (user, 2026-11-22)
+Context: Several Claude accounts work on SPMB and share nothing but the repository. The old inline setup script in one account's environment broke when PHP 8.5.13 became the minimum (D-069), and other accounts had no record of it.
+Decision: `.claude/cloud/setup.sh` is the single setup script for Claude Code cloud environments (PHP 8.5.13+ from the ondrej PPA, Node.js 24 from NodeSource, MySQL, dependencies, build, demo install). Each account's environment runs it through a one-line bootstrap; `docs/cloud-environment.md` lists the settings (name, repository, network, variables `COMPOSER_ALLOW_SUPERUSER=1` and `TZ=Asia/Jakarta`, no secrets).
+Consequences: Runtime changes are made once in the repository and reach every account at its next fresh session.

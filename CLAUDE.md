@@ -4,7 +4,8 @@ School admission system (Sistem Penerimaan Murid Baru) built by **Arumi Studios*
 First client: SMP NU Al Ma'ruf Kudus, academic year 2027/2028. The product is
 white-label: nothing school-specific is hard-coded.
 
-**Start every session with the `spmb-session` skill** and read `docs/progress.md`
+**Start every session with the `spmb-session` skill** (new Claude account: set up the cloud
+environment from `docs/cloud-environment.md` first) and read `docs/progress.md`
 (current state, claimed branches, next steps); update it before you finish. Work
 happens across several Claude accounts that share nothing but this repository.
 Docs index: `docs/README.md`. Decisions live in `docs/decisions.md`; open questions

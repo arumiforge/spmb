@@ -16,6 +16,7 @@ User-facing guides for each role are in Indonesian and live inside the app at `/
 | [roadmap.md](roadmap.md) | Delivery phases and status |
 | [deployment.md](deployment.md) | Ubuntu 24.04 server with Docker (staging + production), Cloudflare Tunnel, Cockpit, CI |
 | [development.md](development.md) | Local setup, conventions, git rules |
+| [cloud-environment.md](cloud-environment.md) | Claude Code cloud environment for any Claude account (setup script in `.claude/cloud/`) |
 | [coordination.md](coordination.md) | How parallel sessions work (coordinator, workers, integration branch) |
 | [platform-plan.md](platform-plan.md) | Platform round: Docker, PHP 8.5/Node 24, visual rules, Tanya Jawab, Codex briefs |
 | [interview/](interview/) | Staged requirements interview, one file per round |
