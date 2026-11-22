@@ -71,7 +71,7 @@ $subtitle ??= null;
         </div>
         <?php foreach ($menu as $group) : ?>
             <?php if ($group['label'] !== '') : ?>
-                <p class="mb-2 mt-5 px-2 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400" data-sidebar-label><?= esc($group['label']) ?></p>
+                <p class="mb-2 mt-5 px-2 text-sm font-medium text-gray-500 dark:text-gray-400" data-sidebar-label><?= esc($group['label']) ?></p>
             <?php endif ?>
             <ul class="space-y-1">
                 <?php foreach ($group['items'] as $item) : ?>

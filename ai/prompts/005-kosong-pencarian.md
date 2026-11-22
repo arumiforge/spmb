@@ -41,7 +41,7 @@ Cream paper, sand and slate; the magnifier rim is the blue accent.
 - Writing on the paper
 - Everything listed under "Never" and "Rules for every image" in the style guide
 
-## Prompt (paste into ChatGPT)
+## Prompt
 
 ```
 Hand-painted storybook illustration in soft gouache and watercolour, visible gentle brush texture,

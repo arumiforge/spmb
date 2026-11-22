@@ -22,7 +22,13 @@ description: Build views for SPMB with Tailwind v4 + Flowbite — full-width res
 - Illustrations: `illustration('state/kosong-data', lang('App.altNoData'), 'h-32 w-auto')` prints the painted
   WebP and its dark variant; empty states pass `'image' => 'state/...'` to `partials/empty_state`. New images
   are requested through `spmb-ai-image`.
-- Icons: `icon('users', 'h-5 w-5')` from `ui_helper` — Lucide icons (ISC, D-070). Dates: `tanggal_indo()`.
+- Icons: `icon('users', 'h-5 w-5')` from `ui_helper` — Lucide icons (ISC, D-070). Pass a Lucide name
+  (`circle-check`) or an alias (`check`). Only the icons listed in `resources/icons.json` exist: add the name
+  there, run `npm run icons` (writes `app/Helpers/lucide_icons.php`, never edit it by hand) and commit both.
+  `icon_exists()` tells whether a name is known. Dates: `tanggal_indo()`.
+- Motion: `motion-rise` (soft entrance; stagger with `style="--rise-delay: 80ms"`), `motion-lift` (hover lift on
+  cards and tiles), `motion-icon` (icon inside a `motion-lift`). All are off under `prefers-reduced-motion` and
+  change only opacity/transform, so nothing shifts.
 - After adding classes in views run `npm run build` (Tailwind scans `app/Views`, `app/Modules`).
 
 ## Visual rules (D-070, strict)
@@ -46,6 +52,7 @@ description: Build views for SPMB with Tailwind v4 + Flowbite — full-width res
 
 ## Charts (ApexCharts)
 
+`resources/js/charts.js` applies the shared responsive defaults; a chart passes only its own options.
 Text must never overlap, especially at 360 px:
 - use `responsive` breakpoints: under 640 px turn data labels off, put the legend at the
   bottom, shorten category labels (`formatter` with an ellipsis, full text in the tooltip),

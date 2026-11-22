@@ -9,6 +9,7 @@ installation**, not code: the application stays white label (D-050, D-054).
 | Parent organisation | LP Ma'arif NU (logo in the website footer) |
 | Brand colour | `#005c2f` (green of the school logo; NU green family), accent yellow `#f5c400` from the logo, used in the share image |
 | Cloudflare | Arumi Studios' account (developer) |
+| Hostnames | production `spmbsmpnualmarufkudus.web.id`, staging `staging.…`, console `konsol.…`, SSH `ssh.…` (tunnel, `docs/deployment.md`) |
 
 ## Files
 
@@ -22,10 +23,14 @@ installation**, not code: the application stays white label (D-050, D-054).
 
 ## Load into an installation
 
+On the server (`docs/deployment.md`; the pack is inside the image):
+
 ```bash
-php spark spmb:install                       # migrations, Super Admin
-php spark spmb:branding clients/smp-nu-al-maruf-kudus/branding
+spmb spark production spmb:install          # migrations, Super Admin (first time only)
+spmb spark production spmb:branding clients/smp-nu-al-maruf-kudus/branding
 ```
+
+Locally (Laragon): `php spark spmb:install` and `php spark spmb:branding clients/smp-nu-al-maruf-kudus/branding`.
 
 Then the school completes Pengaturan → Identitas Sekolah (address, phone, WhatsApp, email) and enters
 its own waves (Pengaturan → Gelombang). Everything stays editable in the admin.

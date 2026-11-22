@@ -7,10 +7,10 @@
  *      state: marked | already | elsewhere | unscheduled | cancelled | revoked | notFound | error
  */
 $styles = [
-    'marked'  => ['icon' => 'check', 'box' => 'border-green-300 bg-green-50 text-green-900 dark:border-green-800 dark:bg-gray-800 dark:text-green-300', 'dot' => 'bg-green-600 text-white'],
-    'already' => ['icon' => 'check', 'box' => 'border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-800 dark:bg-gray-800 dark:text-blue-300', 'dot' => 'bg-blue-600 text-white'],
-    'move'    => ['icon' => 'warning', 'box' => 'border-yellow-300 bg-yellow-50 text-yellow-900 dark:border-yellow-800 dark:bg-gray-800 dark:text-yellow-300', 'dot' => 'bg-yellow-400 text-yellow-900'],
-    'refused' => ['icon' => 'ban', 'box' => 'border-red-300 bg-red-50 text-red-900 dark:border-red-800 dark:bg-gray-800 dark:text-red-300', 'dot' => 'bg-red-600 text-white'],
+    'marked'  => ['icon' => 'check', 'box' => 'border-green-300 bg-green-50 text-green-900 dark:border-green-800 dark:bg-gray-800 dark:text-green-300', 'dot' => 'text-green-600 dark:text-green-400'],
+    'already' => ['icon' => 'check', 'box' => 'border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-800 dark:bg-gray-800 dark:text-blue-300', 'dot' => 'text-blue-600 dark:text-blue-400'],
+    'move'    => ['icon' => 'warning', 'box' => 'border-yellow-300 bg-yellow-50 text-yellow-900 dark:border-yellow-800 dark:bg-gray-800 dark:text-yellow-300', 'dot' => 'text-yellow-600 dark:text-yellow-400'],
+    'refused' => ['icon' => 'ban', 'box' => 'border-red-300 bg-red-50 text-red-900 dark:border-red-800 dark:bg-gray-800 dark:text-red-300', 'dot' => 'text-red-600 dark:text-red-400'],
 ];
 $state     = $scan['state'];
 $style     = $styles[$state] ?? (in_array($state, ['elsewhere', 'unscheduled'], true) ? $styles['move'] : $styles['refused']);
@@ -21,7 +21,7 @@ $button    = 'inline-flex min-h-12 w-full items-center justify-center gap-2 roun
 ?>
 <div class="rounded-lg border-2 p-4 <?= $style['box'] ?>" data-scan-state="<?= esc($state, 'attr') ?>">
     <div class="flex items-start gap-3">
-        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full <?= $style['dot'] ?>"><?= icon($style['icon'], 'h-6 w-6') ?></span>
+        <?= icon($style['icon'], 'h-8 w-8 shrink-0 ' . $style['dot']) ?>
         <div class="min-w-0 flex-1">
             <p class="text-lg font-bold break-words"><?= esc($scan['message']) ?></p>
             <?php if ($applicant !== null) : ?>

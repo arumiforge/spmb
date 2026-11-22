@@ -52,7 +52,10 @@
         }
     },
     "scripts": {
-        "test": "phpunit --no-coverage",
+        "test": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --no-coverage"
+        ],
         "lint": "php-cs-fixer fix --dry-run --diff",
         "fix": "php-cs-fixer fix",
         "post-update-cmd": [

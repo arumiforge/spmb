@@ -41,7 +41,7 @@ Sand path, sage bushes; blue only on the map dot.
 - A sad or worried face
 - Everything listed under "Never" and "Rules for every image" in the style guide
 
-## Prompt (paste into ChatGPT)
+## Prompt
 
 ```
 Hand-painted storybook illustration in soft gouache and watercolour, visible gentle brush texture,

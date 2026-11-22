@@ -6,10 +6,10 @@
  *      state: valid | cancelled | invalid | throttled
  */
 $styles = [
-    'valid'     => ['icon' => 'check', 'ring' => 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300', 'title' => lang('Kartu.validTitle'), 'text' => lang('Kartu.validText', [(string) setting('School.name')])],
-    'cancelled' => ['icon' => 'warning', 'ring' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300', 'title' => lang('Kartu.invalidTitle'), 'text' => lang('Kartu.cancelledText')],
-    'invalid'   => ['icon' => 'ban', 'ring' => 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300', 'title' => lang('Kartu.invalidTitle'), 'text' => lang('Kartu.invalidText')],
-    'throttled' => ['icon' => 'clock', 'ring' => 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300', 'title' => lang('Kartu.tooManyTitle'), 'text' => lang('Kartu.tooManyChecks')],
+    'valid'     => ['icon' => 'check', 'ring' => 'text-green-600 dark:text-green-400', 'title' => lang('Kartu.validTitle'), 'text' => lang('Kartu.validText', [(string) setting('School.name')])],
+    'cancelled' => ['icon' => 'warning', 'ring' => 'text-yellow-600 dark:text-yellow-400', 'title' => lang('Kartu.invalidTitle'), 'text' => lang('Kartu.cancelledText')],
+    'invalid'   => ['icon' => 'ban', 'ring' => 'text-red-600 dark:text-red-400', 'title' => lang('Kartu.invalidTitle'), 'text' => lang('Kartu.invalidText')],
+    'throttled' => ['icon' => 'clock', 'ring' => 'text-gray-600 dark:text-gray-400', 'title' => lang('Kartu.tooManyTitle'), 'text' => lang('Kartu.tooManyChecks')],
 ];
 $style = $styles[$check['state']] ?? $styles['invalid'];
 $facts = array_filter([
@@ -23,9 +23,7 @@ $facts = array_filter([
 <?= $this->section('content') ?>
 <section class="mx-auto max-w-lg px-4 py-8 sm:py-12">
     <div class="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm sm:p-8 dark:border-gray-700 dark:bg-gray-800">
-        <span class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full <?= $style['ring'] ?>">
-            <?= icon($style['icon'], 'h-9 w-9') ?>
-        </span>
+        <?= icon($style['icon'], 'mx-auto mb-4 h-14 w-14 ' . $style['ring']) ?>
         <p class="mb-1 text-sm font-medium text-gray-500 dark:text-gray-400"><?= lang('Kartu.checkTitle') ?></p>
         <h1 class="mb-3 text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white"><?= esc($style['title']) ?></h1>
         <p class="mb-6 text-gray-600 dark:text-gray-300"><?= esc($style['text']) ?></p>

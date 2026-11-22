@@ -20,7 +20,7 @@ $button    = 'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2
 ?>
 <section class="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800" aria-labelledby="panel-kartu">
     <div class="mb-4 flex items-center gap-3">
-        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-700 dark:bg-gray-700 dark:text-primary-400"><?= icon('key', 'h-5 w-5') ?></span>
+        <?= icon('key', 'h-6 w-6 shrink-0 text-primary-700 dark:text-primary-400') ?>
         <h2 id="panel-kartu" class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Kartu.panelTitle') ?></h2>
     </div>
 

@@ -26,7 +26,8 @@ php spark serve
 - [docs/](docs/README.md) — brief, requirements, architecture, decisions, roadmap, deployment
 - [docs/development.md](docs/development.md) — local setup, conventions, git rules
 - [CLAUDE.md](CLAUDE.md) — rules for AI coding agents working in this repo
-- [ai/](ai/README.md) — ChatGPT prompts for UI illustrations
+- [ai/](ai/README.md) — Codex briefs for visual assets (illustrations, patterns, special buttons, animation)
+- [AGENTS.md](AGENTS.md) — rules for Codex and other agents
 
 ## License
 

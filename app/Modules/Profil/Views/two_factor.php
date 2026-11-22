@@ -18,7 +18,7 @@ $btnDanger    = 'rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-whit
     <div class="grid max-w-5xl grid-cols-1 gap-4 lg:grid-cols-2">
         <section class="rounded-lg border border-gray-200 bg-white p-5 sm:p-6 lg:col-span-2 dark:border-gray-700 dark:bg-gray-800">
             <div class="flex items-start gap-4">
-                <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-700 dark:bg-gray-700 dark:text-green-400"><?= icon('shield', 'h-6 w-6') ?></span>
+                <?= icon('shield', 'h-7 w-7 shrink-0 text-green-700 dark:text-green-400') ?>
                 <div>
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Akun.tfStatusOn') ?></h2>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?= lang('Akun.tfStatusOnText') ?></p>

@@ -12,9 +12,7 @@ $picture = empty($empty['image']) ? '' : illustration($empty['image'], $empty['i
     <?php if ($picture !== '') : ?>
         <div class="mb-4"><?= $picture ?></div>
     <?php else : ?>
-        <span class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400">
-            <?= icon($empty['icon'] ?? 'inbox', 'h-7 w-7') ?>
-        </span>
+        <?= icon($empty['icon'] ?? 'inbox', 'mb-4 h-12 w-12 text-primary-600 dark:text-primary-400') ?>
     <?php endif ?>
     <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white"><?= esc($empty['title']) ?></h3>
     <?php if (! empty($empty['text'])) : ?>

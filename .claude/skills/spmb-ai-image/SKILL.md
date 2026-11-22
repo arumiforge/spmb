@@ -1,44 +1,68 @@
 ---
 name: spmb-ai-image
-description: Request UI/UX illustrations for SPMB by writing ChatGPT image-generation prompts into the ai/ folder, then process delivered images (resize, WebP) into public assets. Use whenever a page needs an illustration, hero, empty-state or guide image.
+description: Request visual assets for SPMB (paintings, heroes, empty/error states, SVG patterns, dividers, special buttons, loading animation) by writing Codex briefs in ai/, then review and install what Codex delivers (WebP/SVG/CSS into public/assets/img and resources/css). Use whenever a page needs an illustration, pattern, decorative visual, special button or animation.
 ---
 
-# AI image workflow
+# Visual asset workflow (Codex, D-073)
 
-Claude does not generate images. It writes prompts the user runs in ChatGPT,
-then integrates the results.
+Claude never draws assets itself. It writes briefs in `ai/prompts/`; **Codex** (with repository access)
+makes the assets and delivers them by pull request into `ai/generated/`; Claude reviews and installs
+them. Read `ai/style-guide.md` (identity, respect rules, palette, cast, sizes) and `ai/CODEX.md`
+(what Codex does) before writing a brief.
 
-## 1. Write the prompt
+## 1. Write the brief
 
-Create `ai/prompts/<NNN>-<slug>.md` (next free number) using `ai/prompts/_template.md`.
-Follow `ai/style-guide.md` (painted storybook style, D-027; muted palette, recurring cast, no text in image, no logos,
-diverse Indonesian students incl. hijab, white-label friendly). Fill in:
-target file name, usage (page + component), aspect ratio, pixel size, background
-(transparent or solid), light/dark variant needed.
+- Next free number: `ls ai/prompts`. File `ai/prompts/<NNN>-<name>.md`, name in Indonesian kebab-case.
+- Painting → copy `ai/prompts/_template.md`; SVG/CSS (pattern, divider, button, loader) →
+  `ai/prompts/_template-svg.md`. Keep the front matter keys exact: `ai/tools/check_assets.py` reads them
+  (`kind`, `area`, `background`, `variants`, `files`, `status`).
+- A brief must let Codex finish without asking: purpose, route and component where it is used, how big it
+  shows at 360 and 1280 px, composition with the empty area, cast members, props, where the single blue
+  accent goes, things to avoid, the full prompt (base style block from style guide §7, unchanged, plus one
+  self-contained paragraph), files table, Indonesian alt text, acceptance checks.
+- Identity (D-073): santri, Islamic, Nahdlatul Ulama, Indonesian, Bhinneka. Respect rules in style guide §2
+  are strict: no Arabic script or calligraphy, the mushaf never as decoration or near the floor, no figures
+  in prayer, no mosque silhouettes in patterns/dividers/printed things, no NU emblem or nine stars, no
+  regional-costume parade, modest clothing. School logos and names are never painted into generic art.
+- Visual rules (D-070) apply to assets and their CSS: no eyebrows, no short decorative lines, no
+  coloured top/side borders, no icon backgrounds, motion off under `prefers-reduced-motion`.
+- SVG never hard-codes the brand colour: patterns and dividers are `#000` masks painted with
+  `var(--color-primary-*)`; inline SVG uses `currentColor`; dark mode is the `.dark` class.
+- Paintings get variants `light, dark, hijau, dark-hijau` unless there is a reason not to.
+- Alt text: one short plain Indonesian sentence that says what the picture shows (`bahasa-indonesia-plain`);
+  no "Gambar …"/"Ilustrasi …"; decorative SVGs are `aria-hidden="true"` with no alt. Never put words into an
+  asset — every word is HTML.
+- Add a queue row in `ai/README.md` (ID, brief link, batch, kind, used on, `requested`). Group briefs into
+  batches that make sense as one pull request.
 
-Add a row to `ai/README.md` → "Queue" with status `requested`.
+## 2. Codex delivers
 
-## 2. ChatGPT generates and delivers (D-028)
+The user starts Codex with the starter prompt in `ai/README.md`. Codex works on `art/codex-<date>-<batch>`,
+adds files only under `ai/generated/` (masters, `install/`, `demo/`), sets the delivered statuses to
+`generated`, runs `python3 ai/tools/check_assets.py` and opens one pull request into `main` without
+merging. Its commits must be authored by Arumi Studios with no AI attribution (commit-policy CI).
 
-The user starts ChatGPT with the starter prompt in `ai/README.md`. ChatGPT follows `ai/CHATGPT.md`
-and opens one pull request from `art/illustrations-<date>` that adds the PNGs to `ai/generated/`
-(with `ai/generated/README.md`) and sets their status to `generated`. It never touches anything else and
-never merges. If ChatGPT cannot open a pull request, the user attaches the images in chat or uploads them
-to `ai/generated/` on a branch.
+## 3. Review (Claude)
 
-## 3. Review and install (Claude)
+- Find it: `git fetch origin` and look for `origin/art/codex-*`, or list open pull requests.
+- Run `python3 ai/tools/check_assets.py <IDs>` on the branch.
+- **Look at every file** (Read the WebP/PNG; open `ai/generated/demo/index.html` with Playwright at 360 and
+  1280 px, light/dark, blue/green, and with reduced motion). Check against the brief and style guide:
+  painted not 3D; no text or letter-like marks (zoom in); respect rules; empty areas empty; real alpha;
+  variants share one crop box; SVG tiles seamless; button contrast ≥ 4.5:1 and visible focus.
+- Ask for fixes as a pull request comment with one line per file (what is wrong, what to change). Do not
+  edit Codex's files yourself, except trivial SVG minification.
+- When approved, the user (or the coordinator) merges the Codex pull request.
 
-- Find it: `git fetch --all` and look for `origin/art/*`, or list open pull requests; originals already
-  merged are in `ai/generated/` with status `generated`. Work on a new branch from `main`. Commits made through GitHub by the `arumiforge` account pass the commit policy;
-  if the policy check fails, report the author/trailer it names to the user instead of rewriting history.
-- Review each file against the brief and `ai/style-guide.md` (look at every image): painted, not
-  realistic or 3D; no text; the empty area is empty; real transparency where required; right shape and
-  name. For a failing image, ask the user for a regeneration with a one-line correction to paste into
-  ChatGPT, and install only the approved ones.
-- Convert and resize into each brief's `target` under `public/assets/img/<area>/` (WebP, keeping
-  transparency): heroes max 1600 px wide, guide covers 1200 px, side illustrations 800 px, empty/
-  success/error states 480 px (see `ai/style-guide.md`). Use Python Pillow or the CI4 Image library.
-- Reference the image from the view with the brief's Indonesian `alt` text; dark variants via
-  `dark:hidden` / `hidden dark:block` pairs.
-- Set the status to `done` in the queue row of `ai/README.md` and in the brief. Keep the PNG originals
-  in `ai/generated/` as the source for later re-exports.
+## 4. Install (Claude, own branch and pull request)
+
+- Copy `ai/generated/install/img/<area>/*` → `public/assets/img/<area>/` and
+  `ai/generated/install/css/*.css` → `resources/css/visual/` (import them in `resources/css/app.css`),
+  then `npm run build`.
+- Paintings: `illustration('<area>/<name>', $alt, $classes)` in `app/Helpers/ui_helper.php` already picks
+  `-dark`, `-hijau` and `-dark-hijau` when the files exist. Put the alt text in the module's language file.
+- SVG/CSS: use the class names from the brief's CSS contract; decorative elements get `aria-hidden="true"`;
+  the loader is inlined in a partial with `role="status"` and HTML text.
+- Screenshots of every changed page at 360 and 1280 px, light and dark, before the pull request.
+- Set the status to `done` in the brief and in the queue. Keep masters and the old PNG originals in
+  `ai/generated/` as the source for re-exports.

@@ -5,8 +5,8 @@
  */
 $public = array_filter($roles, static fn (array $r): bool => $r['group'] === null);
 $staff  = array_filter($roles, static fn (array $r): bool => $r['group'] !== null);
-$card   = static fn (string $slug, array $role, bool $highlight): string => '<a href="' . esc(site_url('panduan/' . $slug), 'attr') . '" class="group flex h-full items-start gap-4 rounded-lg border p-5 hover:shadow-md ' . ($highlight ? 'border-primary-500 bg-primary-50 dark:bg-gray-800' : 'border-gray-200 bg-white hover:border-primary-300 dark:border-gray-700 dark:bg-gray-800') . '">'
-    . '<span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-primary-700 dark:bg-gray-700 dark:text-primary-300">' . icon($role['icon'], 'h-6 w-6') . '</span>'
+$card   = static fn (string $slug, array $role, bool $highlight): string => '<a href="' . esc(site_url('panduan/' . $slug), 'attr') . '" class="motion-lift group flex h-full items-start gap-4 rounded-lg border p-5 hover:shadow-md ' . ($highlight ? 'border-primary-500 bg-primary-50 dark:bg-gray-800' : 'border-gray-200 bg-white hover:border-primary-300 dark:border-gray-700 dark:bg-gray-800') . '">'
+    . icon($role['icon'], 'motion-icon h-7 w-7 shrink-0 text-primary-600 dark:text-primary-400')
     . '<span class="min-w-0"><span class="block font-semibold text-gray-900 group-hover:text-primary-700 dark:text-white">' . esc($role['title']) . '</span>'
     . '<span class="mt-1 block text-sm text-gray-500 dark:text-gray-400">' . esc($role['description']) . '</span>'
     . ($highlight ? '<span class="mt-2 inline-block rounded-md bg-primary-600 px-2 py-0.5 text-xs font-medium text-white">' . lang('Panduan.yourGuide') . '</span>' : '')

@@ -1,0 +1,34 @@
+{
+    "about": "Lucide icons copied into app/Helpers/lucide_icons.php by `node scripts/icons.mjs`. Add a Lucide name to icons, run the script and commit the PHP file. Aliases keep the older short names working.",
+    "icons": [
+        "arrow-left", "arrow-right", "ban", "bell", "book-open", "calendar", "calendar-days", "camera",
+        "chart-column", "chart-pie", "chevron-down", "chevron-left", "chevron-right", "circle-alert",
+        "circle-check", "circle-help", "circle-user", "circle-x", "clipboard-check", "clipboard-list", "clock", "compass",
+        "copy", "download", "external-link", "eye", "eye-off", "file-text", "graduation-cap", "house", "id-card",
+        "inbox", "info", "key-round", "layout-grid", "list-checks", "loader-circle", "lock", "log-in", "log-out",
+        "mail", "map-pin", "menu", "message-circle-question-mark", "moon", "pencil", "phone", "plus", "printer",
+        "qr-code", "refresh-cw", "school", "search", "settings", "shield-check", "sparkles", "sun", "trash-2",
+        "triangle-alert", "undo-2", "upload", "user", "users", "x"
+    ],
+    "aliases": {
+        "home": "house",
+        "chart": "chart-pie",
+        "cog": "settings",
+        "book": "book-open",
+        "shield": "shield-check",
+        "logout": "log-out",
+        "login": "log-in",
+        "chevron": "chevron-right",
+        "check": "circle-check",
+        "warning": "circle-alert",
+        "key": "key-round",
+        "grid": "layout-grid",
+        "clipboard": "clipboard-list",
+        "help": "circle-help",
+        "question": "message-circle-question-mark",
+        "message-circle-question": "message-circle-question-mark",
+        "trash": "trash-2",
+        "undo": "undo-2",
+        "spinner": "loader-circle"
+    }
+}

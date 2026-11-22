@@ -23,7 +23,7 @@ $name     = (string) setting('School.name');
         <?php if ($logo !== null) : ?>
             <img src="<?= esc($logo, 'attr') ?>" class="<?= esc($size, 'attr') ?> shrink-0 object-contain" alt="Logo <?= esc($name, 'attr') ?>">
         <?php else : ?>
-            <span class="<?= esc($size, 'attr') ?> flex shrink-0 items-center justify-center rounded-lg bg-primary-600 text-white"><?= icon('school', 'h-5 w-5') ?></span>
+            <?= icon('school', $size . ' shrink-0 text-primary-600 dark:text-primary-400') ?>
         <?php endif ?>
         <span class="truncate text-lg font-semibold text-gray-900 dark:text-white"><?= esc(setting('School.shortName') ?: $name) ?></span>
     <?php endif ?>

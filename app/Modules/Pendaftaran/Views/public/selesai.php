@@ -20,7 +20,7 @@ $waText = lang('Pendaftaran.doneWaText', [setting('School.name'), $done['name'],
 
     <div class="mt-8 space-y-5">
         <section class="rounded-xl border-2 border-primary-200 bg-primary-50 p-5 text-center sm:p-6 dark:border-primary-800 dark:bg-gray-800">
-            <h2 class="text-sm font-medium uppercase tracking-wide text-primary-800 dark:text-primary-300"><?= lang('Pendaftaran.doneNumber') ?></h2>
+            <h2 class="text-base font-semibold text-primary-800 dark:text-primary-300"><?= lang('Pendaftaran.doneNumber') ?></h2>
             <p class="mt-2 break-all font-mono text-3xl font-bold text-gray-900 sm:text-4xl dark:text-white"><?= esc($done['number']) ?></p>
             <button type="button" data-copy="<?= esc($done['number'], 'attr') ?>" class="<?= $button ?> mt-3 border border-gray-200 bg-white py-2 text-sm text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"><?= icon('copy', 'h-4 w-4') ?><?= lang('App.copy') ?></button>
             <p class="mt-3 text-sm text-gray-600 dark:text-gray-300"><?= lang('Pendaftaran.doneNumberNote') ?></p>
