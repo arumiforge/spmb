@@ -35,7 +35,8 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `pw/zealous-albattani-2rz2z1` | session docker | Docker deployment (staging + production on one VPS), PHP 8.5 / Node 24, Lucide icons, design rules, Tanya Jawab page, Codex briefs; includes PR #25 | in progress |
+| `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`): Docker, PHP 8.5/Node 24, design rules, Tanya Jawab, Codex; includes PR #25 | foundation done, workers running |
+| `feat/plat-docker`, `feat/plat-ui`, `feat/plat-tanya-jawab`, `feat/plat-codex` | workers A, B, C, D | Platform packages | in progress |
 | `nty/exciting-mendel-ukwgth` | session go-live | Domain typo fix, `provision.sh` lock-out guards (D-065) | PR #25 open; merged into `pw/zealous-albattani-2rz2z1` |
 | `phase-3` | coordinator | Phase 3 integration branch | merged into `main` (PR #23) |
 | `nty/nifty-mendel-u2jf9s` | coordinator | SD/MI default data + foundation (#18), three roles (#19), phase 3 docs | merged into `phase-3` |

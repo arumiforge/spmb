@@ -320,3 +320,39 @@ Status: accepted (user's answer while preparing the first VPS; corrects the doma
 Context: The first client's domain is `spmbsmpnualmarufkudus.web.id`; the repository had `spmbsmpnualmarufkudusweb.id` (typo). The VPS bought for it runs sshd on a provider-set custom port and is reached as root with a password from Bitvise on Windows. `provision.sh` enabled a deny-all firewall before the tunnel existed (new SSH logins blocked) and turned password login off in the main `sshd_config` (no effect on cloud images, a lock-out on servers without a key).
 Decision: The domain is `spmbsmpnualmarufkudus.web.id` everywhere (docs, client README, `branding.json`, share image). `provision.sh` keeps the port(s) sshd listens on open in ufw while `cloudflared` is not running (removed by hand after SSH through the tunnel works; `KEEP_SSH_OPEN=0` skips it) and switches password login off through `/etc/ssh/sshd_config.d/00-spmb.conf` only when root or a sudo user has an SSH key. Tunnel ingress uses `127.0.0.1` and the real SSH port; `SSH_KNOWN_HOSTS` is built from the server's host key, not `ssh-keyscan`; `spark` runs as `deploy`. Server IPs and ports stay out of the repository.
 Consequences: Running the script over a password-only root session no longer locks the admin out; password login stays on (with a warning) until a key is added and the script runs again. Clients without a proxy command reach SSH with `cloudflared access tcp` (docs/deployment.md).
+
+## D-066 — Docker on the VPS, admin access that does not depend on SSH or Docker (2026-11-22)
+Status: accepted (user, 2026-11-22; replaces the bare-metal server layout of D-011/D-056 and `deploy/provision.sh`)
+Context: The production VPS (`spmb-prod`, Ubuntu 24.04.5) is a NAT VPS: private address, sshd on a provider-set port, root with a password from Bitvise, and no provider console. More apps will share the server later, and moving to another server must be easy. The user asked about Proxmox; Proxmox replaces the OS and network and needs nested virtualisation, so installing it here without a console risks a permanent lock-out.
+Decision: No Proxmox. Every app runs as its own Docker Compose stack (own network, database and volumes) that publishes one port on `127.0.0.1` only, taken from a port list on the server; nothing listens publicly. `cloudflared` (tunnel) and Cockpit (browser console: terminal, services, logs, reboot) run on the host, not in Docker, so admin access survives a broken Docker or a broken sshd. Cockpit and SSH are reachable only through Cloudflare Tunnel behind Cloudflare Access. A one-time `setup.sh` prepares a fresh Ubuntu 24.04 server (Docker, cloudflared, Cockpit, firewall with the D-065 lock-out guards, swap, security updates, log limits, `live-restore`); it is idempotent and never turns off the access the admin is using.
+Consequences: A new or replacement server needs only `setup.sh`, the git checkout and a restore of each stack's backup. Docker publishes no public ports, so ufw and Docker do not fight.
+
+## D-067 — Staging and production as two stacks on one VPS, from the one `main` branch (2026-11-22)
+Status: accepted (user, 2026-11-22)
+Decision: The same VPS runs `spmb-staging` (`staging.<domain>`, own database and files) and `spmb-production`. There is one long-lived branch, `main`. Staging is deployed from `origin/main` (or a given commit); production is promoted to the exact image that is running on staging (or a given commit/tag), so production never runs an untested build. Development stays on Windows with Laragon (Nginx, MySQL) from the same repository.
+Consequences: Staging data is test data only; never copy production personal data to staging (UU PDP).
+
+## D-068 — The server pulls and builds; no deploy key in the repository or in GitHub (2026-11-22)
+Status: accepted (user, 2026-11-22; replaces the GitHub Actions SSH deploy of D-011)
+Decision: The developer gives the server read access to the repository themselves (their own key or token, kept on the server, never in the repository or in GitHub secrets). A server command (`spmb deploy staging|production [ref]`) fetches, builds the image from the exact commit (multi-stage: Node 24 for assets, PHP 8.5 FPM, Nginx), backs up the database, starts the new containers, runs migrations and the bundled data import, and can roll back to the previous image. The `Deploy` workflow in GitHub Actions is retired; CI keeps linting and testing.
+
+## D-069 — Minimum runtime versions: PHP 8.5.13, Node.js 24, MySQL 8.4 (2026-11-22)
+Status: accepted (user, 2026-11-22; updates D-001)
+Decision: `composer.json` requires `php ^8.5.13`; `package.json` requires Node `>=24`; CI runs PHP 8.5 with MySQL 8.4 and Node 24; the Docker image uses `php:8.5-fpm` and `node:24`. The full suite (424 tests) passed on PHP 8.5.13 with MySQL 8.4 before the switch. Laragon on Windows needs PHP 8.5.13+ and Node 24 added.
+
+## D-070 — Visual rules: Lucide icons without backgrounds, no eyebrows, no accent bars or accent borders (2026-11-22)
+Status: accepted (user, 2026-11-22; updates D-010)
+Decision: Icons come from Lucide (`lucide-static`, ISC) through the `icon()` helper; only the paths of the icons in use are copied into the helper, so production needs no Node. Icons sit directly next to text in `currentColor`, with no tinted square or circle behind them. No eyebrow labels (small uppercase or tracked text above a heading), no short decorative lines under or above headings, no cards with a coloured top or side border. Heavier pages are accepted: illustrations, animation and rich visuals are welcome as long as every feature works on mobile and desktop and `prefers-reduced-motion` is respected. Charts must never overlap text at 360 px (labels shortened or rotated, data labels off on small screens, legend below). Rules live in `spmb-ui`.
+
+## D-071 — Writing standard: `bahasa-indonesia-plain` (2026-11-22)
+Status: accepted (user, 2026-11-22; extends `spmb-copy`)
+Decision: The user's `bahasa-indonesia-plain` skill (plain language, EYD, inclusive and trauma-informed writing, number literacy, RASA check) is the writing standard for all Indonesian text. `spmb-copy` keeps SPMB's glossary, the "Anda" form of address and guide structure. New and rewritten text uses sentence case for headings, buttons and labels; existing Title Case labels are changed in a later copy sweep, not piecemeal.
+
+## D-072 — Public Tanya Jawab page (2026-11-22)
+Status: accepted (user, 2026-11-22)
+Context: The writing skill says "Jangan gunakan FAQ"; the user explicitly asked for a Q&A page for parents.
+Decision: The public site gets `/tanya-jawab`: questions grouped by topic, edited by Admin Sekolah in the dashboard (white label, nothing school-specific in code). Starter questions for SMP NU Al Ma'ruf Kudus ship in the client pack (`clients/smp-nu-al-maruf-kudus/`) and are loaded with the branding pack. Answers point to the real pages (jadwal, persyaratan, cek status) instead of repeating them, so the page does not replace clear content elsewhere.
+
+## D-073 — Codex makes the visual assets; identity is santri, Islamic, Nahdlatul Ulama, Indonesian and Bhinneka (2026-11-22)
+Status: accepted (user, 2026-11-22; replaces ChatGPT in D-027/D-028)
+Decision: Codex (with repository access) makes all illustrations, special buttons, art, patterns and other visuals from briefs Claude writes in `ai/`; Claude installs and wires them in. The visual identity for this product is santri, Islamic, Nahdlatul Ulama, Indonesian and Bhinneka Tunggal Ika: warm, respectful, inclusive of every region, without stereotypes. School-specific marks (logos, names) stay in settings and the client pack; generic assets must work for any school.

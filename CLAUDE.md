@@ -36,8 +36,10 @@ the super admin area — see the `spmb-copy` skill for the glossary.
 
 ## Stack
 
-CodeIgniter 4.7 (PHP 8.3) · MySQL 8 · Nginx + PHP-FPM · Ubuntu Server 24.04 ·
-Cloudflare Tunnel (no open inbound ports) · SSH deploy · Tailwind CSS v4 + Flowbite.
+CodeIgniter 4.7 (PHP 8.5.13+) · MySQL 8.4 · Nginx + PHP-FPM · Node.js 24 (asset build) ·
+Docker Compose on Ubuntu Server 24.04 (staging + production stacks, server pulls and builds) ·
+Cloudflare Tunnel + Cockpit on the host (no open inbound ports) · Tailwind CSS v4 + Flowbite ·
+Lucide icons. Local development: Windows + Laragon (Nginx, MySQL).
 The framework is a Composer dependency (`vendor/codeigniter4/framework`); never edit `vendor/`.
 
 ## Architecture (summary — full version in `docs/architecture.md`)
@@ -71,10 +73,12 @@ composer lint                   # php-cs-fixer dry run
 | --- | --- |
 | `spmb-session` | Start and end of every session (sync, identity, progress handoff) |
 | `spmb-module` | Creating or changing a feature module |
-| `spmb-ui` | Building any page/view (Flowbite, layout, breadcrumbs, responsive) |
-| `spmb-copy` | Writing UI text, guide pages, error messages in Indonesian |
+| `spmb-ui` | Building any page/view (Flowbite, layout, breadcrumbs, responsive, visual rules, charts) |
+| `spmb-copy` | Writing UI text, guide pages, error messages in Indonesian (with `bahasa-indonesia-plain`) |
+| `bahasa-indonesia-plain` | Writing standard for all Indonesian text: plain language, EYD, inclusive, RASA check |
 | `spmb-docs` | Updating documentation after a change (staged docs) |
-| `spmb-ai-image` | An illustration/image is needed → write a ChatGPT prompt in `ai/` |
+| `spmb-ai-image` | An illustration, special button, pattern or other visual is needed → write a Codex brief in `ai/` |
+| `spmb-deploy` | Docker image, server setup, staging/production deploys, backups, server moves |
 | `spmb-interview` | Continuing the requirements interview with the user |
 | `spmb-commit` | Committing, pushing, opening PRs |
 
