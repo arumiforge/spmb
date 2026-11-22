@@ -63,7 +63,7 @@ when the container idles).
 3. **Visual assets (Codex, D-073/D-075)**: the user runs the Codex starter prompt in `ai/README.md`, batch `svg-kit` first (015–018), then `paintings-pages`, `paintings-states`, `variants-001-012` (013/014). Review each Codex PR with `python3 ai/tools/check_assets.py` and install per `spmb-ai-image` (needs `resources/css/visual/`, a loader partial, `.tombol-daftar` on the main CTA, fallback share image).
 4. **Copy sweep (D-071)**: sentence case for existing headings, buttons and labels in all `Language/id` files (for example `Situs.academicYear` "Tahun Ajaran {0}", "Daftar Sekarang", "Cek Status"), in one pass.
 5. **Small follow-ups**: Indonesian "Pilih berkas" button instead of the browser's "Choose File" on the applicant page;
-   optional icons `camera`, `printer`, `undo` in `ui_helper` (attendance page uses `eye`/`clipboard`/`x` for now); update the
+   use the Lucide icons `camera`, `printer`, `undo-2` (now available) on the attendance page instead of `eye`/`clipboard`/`x`; update the
    share image year each academic year.
 
 ## Blockers / waiting on
