@@ -8,6 +8,7 @@ use App\Libraries\BrandingAssets;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use Config\School;
+use Modules\Situs\Models\SiteQuestionModel;
 use Throwable;
 
 /**
@@ -18,6 +19,11 @@ use Throwable;
  * branding.json:
  *   {"settings": {"name": "...", "shortName": "...", "primaryColor": "#005c2f", ...},
  *    "images": {"logo": "logo.png", "logoWide": "...", "favicon": "favicon.png", ...}}
+ *
+ * Starter questions for /tanya-jawab (D-072) come from tanya-jawab.json next to
+ * branding.json or in its parent folder (the client folder). They are loaded only
+ * while the installation has no questions, so the school's own edits are kept:
+ *   {"questions": [{"topic": "...", "question": "...", "answer": "Markdown", "published": true}, ...]}
  */
 class Branding extends BaseCommand
 {
@@ -108,6 +114,70 @@ class Branding extends BaseCommand
         }
 
         CLI::write('Branding loaded: ' . count($new) . ' setting(s) changed.', 'green');
+
+        return $this->loadQuestions($dir);
+    }
+
+    /**
+     * Loads tanya-jawab.json from the pack folder or its parent, if present.
+     */
+    private function loadQuestions(string $dir): int
+    {
+        $file = null;
+
+        foreach ([$dir, dirname($dir)] as $folder) {
+            if (is_file($folder . '/tanya-jawab.json')) {
+                $file = $folder . '/tanya-jawab.json';
+
+                break;
+            }
+        }
+
+        if ($file === null) {
+            return EXIT_SUCCESS;
+        }
+
+        $model = model(SiteQuestionModel::class);
+
+        if ($model->countAllResults() > 0) {
+            CLI::write('Tanya jawab skipped: the installation already has questions.', 'yellow');
+
+            return EXIT_SUCCESS;
+        }
+
+        $data = json_decode((string) file_get_contents($file), true);
+        $rows = [];
+
+        foreach (is_array($data) ? (array) ($data['questions'] ?? []) : [] as $i => $item) {
+            $topic    = is_array($item) ? trim((string) ($item['topic'] ?? '')) : '';
+            $question = is_array($item) ? trim((string) ($item['question'] ?? '')) : '';
+            $answer   = is_array($item) ? trim((string) ($item['answer'] ?? '')) : '';
+
+            if ($topic === '' || $question === '' || $answer === '' || mb_strlen($topic) > 80 || mb_strlen($question) > 200 || mb_strlen($answer) > 5000) {
+                CLI::error('tanya-jawab.json: question ' . ($i + 1) . ' needs a topic (max 80), question (max 200) and answer (max 5000).');
+
+                return EXIT_ERROR;
+            }
+
+            $row = ['topic' => $topic, 'question' => $question, 'answer' => $answer];
+            // Answers that still need the school's input stay hidden until completed.
+            $row['is_published'] = (int) ((bool) ($item['published'] ?? true) && ! SiteQuestionModel::needsSchoolInput($row));
+            $rows[]              = $row;
+        }
+
+        if ($rows === []) {
+            CLI::error('tanya-jawab.json has no questions.');
+
+            return EXIT_ERROR;
+        }
+
+        foreach ($rows as $position => $row) {
+            $model->insert($row + ['sort_order' => ($position + 1) * 10]);
+        }
+
+        $model->normalise();
+        $hidden = count(array_filter($rows, static fn (array $r): bool => $r['is_published'] === 0));
+        CLI::write('Tanya jawab loaded: ' . count($rows) . ' question(s), ' . $hidden . ' hidden until the school completes them.', 'green');
 
         return EXIT_SUCCESS;
     }
