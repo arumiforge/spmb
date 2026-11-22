@@ -1,10 +1,26 @@
-# Delivered illustration originals
+# Delivered assets
+
+Codex delivers here (see [`../CODEX.md`](../CODEX.md) → "Where files go"):
+
+- `<name>[-variant].webp` — painting masters at native size (new work, from 015 on);
+- `install/img/<area>/…` and `install/css/…` — files ready to install, already trimmed and sized;
+- `demo/index.html` — preview of the SVG/CSS assets (brand blue/green, light/dark);
+- this README — one delivery table per pull request, newest first.
+
+Claude installs from `install/` into `public/assets/img/` and `resources/css/visual/`, and sets the brief
+status to `done`. Nothing here is served by the app directly.
+
+## Codex deliveries
+
+_None yet. Add a section per pull request: batch, date, table (ID, file, px, KB, background, review notes)._
+
+## 001–012 (ChatGPT, before D-073)
 
 This folder contains the 12 illustration originals and seven dark variants from queue IDs
 001–012. All 19 files retain their original PNG bytes. Application integration is intentionally
 pending for the next agent; this delivery only changes files under `ai/`.
 
-## Handoff
+### Handoff
 
 1. Follow the [style guide](../style-guide.md) and
    [image workflow](../../.claude/skills/spmb-ai-image/SKILL.md).
@@ -21,7 +37,7 @@ The square originals are 1254×1254; the style guide permits resizing from the g
 output size. Landscape and portrait originals match the requested dimensions. The three landscape
 images have white backgrounds; all other originals have verified alpha transparency.
 
-## Files and targets
+### Files and targets
 
 | ID | Original files | Original size | Target | Background | Indonesian alt text |
 | --- | --- | --- | --- | --- | --- |
@@ -38,7 +54,7 @@ images have white backgrounds; all other originals have verified alpha transpare
 | 011 | [panduan-petugas.png](panduan-petugas.png) | 1536×1024 | `guide/panduan-petugas.webp` | white | Dua petugas sekolah membaca panduan bersama. |
 | 012 | [panduan-calon-murid.png](panduan-calon-murid.png) | 1536×1024 | `guide/panduan-calon-murid.webp` | white | Orang tua dan calon murid membaca panduan pendaftaran di ponsel. |
 
-## Review notes
+### Review notes
 
 - 001 and 011: corrected once to keep the title area empty.
 - 003: corrected once to place the character in the lower two thirds.

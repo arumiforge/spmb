@@ -42,7 +42,7 @@ Cream, sand, sage; blue only on the booklet cover and a small laptop detail.
 - An office with many people
 - Everything listed under "Never" and "Rules for every image" in the style guide
 
-## Prompt (paste into ChatGPT)
+## Prompt
 
 ```
 Hand-painted storybook illustration in soft gouache and watercolour, visible gentle brush texture,
