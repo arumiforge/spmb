@@ -40,7 +40,7 @@ Slate and sand; the fourth block is the blue accent.
 - Toy brand look (no studs like LEGO)
 - Everything listed under "Never" and "Rules for every image" in the style guide
 
-## Prompt (paste into ChatGPT)
+## Prompt
 
 ```
 Hand-painted storybook illustration in soft gouache and watercolour, visible gentle brush texture,

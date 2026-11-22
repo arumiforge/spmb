@@ -46,7 +46,7 @@ Mostly cream, sand and sage; the only blue accent is the phone screen.
 - Realistic faces
 - Everything listed under "Never" and "Rules for every image" in the style guide
 
-## Prompt (paste into ChatGPT)
+## Prompt
 
 ```
 Hand-painted storybook illustration in soft gouache and watercolour, visible gentle brush texture,
