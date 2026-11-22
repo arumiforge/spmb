@@ -10,7 +10,7 @@
 #   ADMIN_USER           sudo account to create for Cockpit (Cockpit refuses root); asks for
 #                        its password when run in a terminal
 #   SWAP_SIZE            swap file size when the server has no swap (default 2G; 0 = none)
-#   KEEP_SSH_OPEN        auto (default) | 0 — see "Lock-out guards"
+#   KEEP_SSH_OPEN        auto (default) | 0 — see "Lock-out guards" (0 = do not add the SSH rule)
 #   SSH_PASSWORD_LOGIN   auto (default) | keep — "keep" never touches sshd's password setting
 #
 # What it does: base packages, unattended security updates (no automatic reboot), swap,
@@ -20,10 +20,9 @@
 #
 # Lock-out guards (D-065, D-066) — the server has no provider console, so losing SSH means
 # losing the server:
-# - The port of the SSH session running this script is always kept open in the firewall when
-#   that session does not come through the tunnel (never closes the session in use).
-# - While cloudflared is not running, every port sshd listens on stays open too (22 or the
-#   provider's custom port). Remove the rule by hand once SSH through the tunnel works.
+# - Every port sshd listens on (22 or the provider's custom port) stays open in the firewall for
+#   good (D-077): with no provider console, direct SSH with a key is the last way in when the
+#   tunnel is down. The port of the SSH session running this script is always kept open too.
 # - Password login is switched off only when root or a sudo user has an SSH key and the SSH
 #   session running this script signed in with a key (checked in sshd's log), and only through
 #   a drop-in that sshd validates first (`sshd -t`); otherwise it is left on.
@@ -223,9 +222,7 @@ if [ -n "${SSH_CONNECTION:-}" ]; then
 fi
 
 OPEN_PORTS=""
-TUNNEL_UP=0
-systemctl is-active --quiet cloudflared 2>/dev/null && TUNNEL_UP=1
-if [ "$KEEP_SSH_OPEN" != 0 ] && [ "$TUNNEL_UP" = 0 ]; then
+if [ "$KEEP_SSH_OPEN" != 0 ]; then
     OPEN_PORTS="$SSH_PORTS"
 fi
 if [ -n "$CURRENT_PORT" ] && [[ " $OPEN_PORTS " != *" $CURRENT_PORT "* ]]; then
@@ -235,7 +232,7 @@ fi
 ufw default deny incoming >/dev/null
 ufw default allow outgoing >/dev/null
 for port in $OPEN_PORTS; do
-    ufw allow "$port/tcp" comment 'SSH, temporary until SSH through the tunnel works' >/dev/null
+    ufw allow "$port/tcp" comment 'SSH (key-only), last way in when the tunnel is down' >/dev/null
 done
 if ufw --force enable >/dev/null; then
     if [ -n "$OPEN_PORTS" ]; then
@@ -316,8 +313,9 @@ Done. Next steps (docs/deployment.md, "First server"):
     --url 127.0.0.1:2222, then connect Bitvise to 127.0.0.1:2222) and Cockpit at https://${CONSOLE_HOST:-konsol.$D}.
 NEXT
 if [ -n "$OPEN_PORTS" ]; then
-    echo "    Only when both work, close the direct SSH port(s):"
-    for port in $OPEN_PORTS; do echo "      ufw delete allow $port/tcp"; done
+    echo "    The direct SSH port(s) $OPEN_PORTS stay open on purpose (D-077): the last way in if the tunnel is down."
+    echo "    Make them key-only: add your public key to ~/.ssh/authorized_keys (root and ${ADMIN_USER:-your sudo user}), sign in"
+    echo "    once with the key, then run this script again from that session to switch password login off."
 fi
 cat <<NEXT
  4. Give this server read access to the repository (your own deploy key or token; never commit

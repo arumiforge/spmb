@@ -53,7 +53,7 @@ create your own branch from `main` instead.
 
 ## Next steps
 
-0. **User merges PR #26**, then decides the direct SSH port question (Blockers), then go-live (step 1).
+0. **User merges PR #26**, then go-live (step 1).
    The school fills in the 4 hidden Tanya Jawab answers (`[ISI SEKOLAH: …]`: costs, contacts) in Website → Tanya jawab.
 
 Start a new session from `origin/main` (`spmb-session`; `composer install`, `npm ci && npm run build`,
@@ -67,8 +67,8 @@ when the container idles).
    clone to `/opt/apps/spmb/src`, `spmb init staging staging.<domain>`, `spmb deploy staging` (first real clean image
    build), `spmb spark staging spmb:install`, then `spmb init production <domain>`, `spmb deploy production`,
    `spmb spark production spmb:install` and `spmb spark production spmb:branding clients/smp-nu-al-maruf-kudus/branding`.
-   Only two staff roles exist: create the school's Admin Sekolah, who adds Panitia accounts. Keep the direct SSH port
-   open until the user decides (see Blockers).
+   Only two staff roles exist: create the school's Admin Sekolah, who adds Panitia accounts. The direct SSH port stays open,
+   key-only (D-077): add the key, sign in with it, run `setup.sh` again to switch password login off.
 2. **Phase 4 — Re-registration & reports** (FR-DU-01, FR-SRG-01, dashboard stats, filters, XLSX/CSV/PDF export, XLSX
    import): same protocol (`docs/coordination.md`, integration branch `phase-4`, foundation first, workers). Panitia does
    re-registration and uniform pickup (D-051, D-063); reports are for Admin Sekolah.
@@ -83,13 +83,12 @@ when the container idles).
 - School still to confirm (phase 3 works with any answer): test days, sessions per day, rooms and capacity; tests per wave or after all waves.
 - Each Claude account needs its cloud environment set up once from `docs/cloud-environment.md` (old inline scripts fail on PHP 8.5.13).
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
-- **Decision for the user**: keep the direct SSH port open with key-only login as the last way in (the VPS has no
-  provider console), or close it once the tunnel works (nothing public, but a tunnel outage locks everyone out).
 - Go-live (D-056): VPS ready; `spmbsmpnualmarufkudus.web.id` still has to be added to the developer's Cloudflare account; then `docs/deployment.md` → "First server".
 - Codex batches (briefs 013–035) are queued in `ai/README.md`; waiting for the user to start Codex.
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user decided: direct SSH port stays open, key-only (D-077); `setup.sh`, deployment guide (Bitvise key steps, no fail2ban on the NAT VPS), deploy skill and CLAUDE.md updated. Next: user merges #26, go-live.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — merged D (#27 Codex briefs, AGENTS.md, D-075), B (#28 Lucide, visual rules, motion, charts), A (#29 Docker, setup.sh, `spmb` CLI, D-076), C (#30 Tanya Jawab, menu fix); combined run 442 tests green, lint clean, build OK, pages checked at 360/1280 px; Docker web image and PHP base build here (Composer download blocked only by this container's proxy). Next: user merges #26, SSH port decision, go-live.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — first workers failed at environment setup (old inline script on PHP 8.3); cloud setup moved into the repo (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`, D-074), the SPMB environment now runs it, Composer platform set to 8.5.13 (CI green); workers A–D restarted. Next: review worker PRs.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user's answers: Docker on the VPS with Cockpit + host cloudflared (no Proxmox), staging + production stacks on one VPS from `main`, server pulls and builds (no deploy key), public Tanya Jawab page; foundation landed (PHP ^8.5.13 / Node 24 / MySQL 8.4 in CI, 424 tests green on 8.5.13, lucide-static, `bahasa-indonesia-plain` skill, visual and chart rules, D-066…D-073, `docs/platform-plan.md`); PR #25 merged in; workers A–D started. Next: review worker PRs, integrate, PR to `main`.
@@ -99,4 +98,3 @@ when the container idles).
 - 2026-11-18 · coordinator · `nty/nifty-mendel-u2jf9s` → `phase-3` — only three roles (Admin Sekolah, Panitia, Siswa; D-063): removed Kepala Sekolah and Petugas roles, accounts migrated to Panitia, guide `/panduan/panitia`, tests use per-user permissions for read-only staff; workers told. Next: worker PRs.
 - 2026-11-18 · coordinator · `nty/nifty-mendel-u2jf9s` → `phase-3` — national SD/MI list shipped as default data (D-058, 177,422 schools, loaded by `spmb:install` and deploys); phase 3 foundation (module Tes, D-059…D-062, `phase-3-plan.md`); workers A–C started. Next: review worker PRs.
 - 2026-11-18 · coordinator · `phase-2` → `main` — merged #17 into `phase-2` and PR #14 into `main` (user's request); handoff: JSON import, go-live, illustrations, phase 3. Coordinator session ended.
-- 2026-11-18 · coordinator · `feat/p2-branding` — JSON import for the national SD/MI list (D-057, resolves D-040); brand images + branding pack command, SMP NU Al Ma'ruf Kudus pack (logos, favicon, icon, share image, green), illustration accent setting, ChatGPT briefs 013/014, `deploy/provision.sh` + go-live checklist (D-054…D-056). Next: merge, user merges #14, go-live steps 1–9.

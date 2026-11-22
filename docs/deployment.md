@@ -25,8 +25,8 @@ Browser ──HTTPS──▶ Cloudflare (DNS, TLS, WAF, Access)
 ```
 
 - Every app stack has its own network, database and volumes, and publishes **one** port on
-  `127.0.0.1` from the port list `/opt/apps/PORTS` (8100–8199). Nothing listens publicly, so more
-  apps can share the server and Docker's iptables rules never open a public port.
+  `127.0.0.1` from the port list `/opt/apps/PORTS` (8100–8199). Only sshd listens publicly, with key-only
+  login (D-077); more apps can share the server and Docker's iptables rules never open a public port.
 - `cloudflared` and Cockpit run on the host, not in Docker: admin access survives a broken Docker or
   a broken sshd (Cockpit has a terminal, services, logs and reboot).
 - The VPS is a NAT VPS without a provider console. **Losing SSH and Cockpit means losing the server.**
@@ -83,10 +83,9 @@ Server IPs, ports and passwords stay out of the repository.
    prints the next steps. Run it again any time; it changes only what differs.
 
    Lock-out guards (D-065, D-066):
-   - The port of the SSH session running the script stays open in ufw when that session does not come
-     through the tunnel. While `cloudflared` is not running, every port sshd listens on stays open too
-     (22, or the provider's custom port, read from `ssh.socket` or `sshd -T`). `KEEP_SSH_OPEN=0` skips the
-     second rule only.
+   - Every port sshd listens on (22, or the provider's custom port, read from `ssh.socket` or `sshd -T`)
+     stays open in ufw for good (D-077), and so does the port of the SSH session running the script.
+     `KEEP_SSH_OPEN=0` skips the first rule only.
    - Password login is switched off only when root or a sudo user has an SSH key **and** the session
      running the script signed in with a key (found in sshd's log); it goes into
      `/etc/ssh/sshd_config.d/00-spmb.conf` (wins over `50-cloud-init.conf`) after `sshd -t` accepts it.
@@ -109,19 +108,24 @@ Server IPs, ports and passwords stay out of the repository.
    `ssh.<domain>`, `konsol.<domain>` and `staging.<domain>`, policy *Allow* for the developers' emails
    (one-time PIN or Google). The production domain stays public. SSL/TLS mode "Full", "Always Use HTTPS" on.
 
-4. **Test the new ways in before closing the old one.** From the Windows PC:
+4. **Test the tunnel, then make SSH key-only (D-077).** The direct SSH port stays open on purpose: the
+   VPS has no provider console, so direct SSH with a key is the last way in when the tunnel is down.
    - Cockpit: open `https://konsol.<domain>`, sign in as the admin user.
-   - SSH: install `cloudflared` on Windows, run
+   - SSH through the tunnel: install `cloudflared` on Windows, run
      `cloudflared access tcp --hostname ssh.<domain> --url 127.0.0.1:2222`, then connect Bitvise to
-     `127.0.0.1` port `2222` (same user and password/key). OpenSSH clients can use
-     `ProxyCommand cloudflared access ssh --hostname %h` in `~/.ssh/config` instead.
-   - Only when **both** work: `sudo ufw delete allow <ssh port>/tcp`. From then on nothing listens publicly.
-     **Decision pending (user):** this VPS has no provider console. With the direct port closed, Cockpit and SSH
-     both depend on the tunnel; if the tunnel is down (Cloudflare outage, token revoked, cloudflared broken by an
-     update) there is no way in until it recovers. The alternative is to keep the direct SSH port open with key-only
-     login (password login off) as the last way in. Until the user decides, keep the direct port open.
-   - Optional, after a key works through the tunnel: run `setup.sh` again from a key-based session to turn
-     password login off.
+     `127.0.0.1` port `2222`. OpenSSH clients can use `ProxyCommand cloudflared access ssh --hostname %h`
+     in `~/.ssh/config` instead.
+   - Make a key in Bitvise: *Client key manager* → *Generate New* (ed25519, with a passphrase) → *Export*
+     the public key in OpenSSH format. Keep a copy of the private key in the password manager: without it
+     and without passwords there is no way in.
+   - Add the public key on the server for root and the admin user
+     (`~/.ssh/authorized_keys`, mode 600, folder 700). In Bitvise set *Initial method* to *publickey*,
+     choose the key and sign in with it **while the password session stays open**.
+   - From the key session run `sudo bash setup.sh` again (same variables): it sees the key login and
+     switches password login off (`/etc/ssh/sshd_config.d/00-spmb.conf`). Open one more key session to
+     check before you close the old ones.
+   - Do not install fail2ban or similar: on a NAT VPS every SSH client appears to come from the provider's
+     gateway address, so a ban would lock everyone out. Key-only login already defeats password guessing.
 
 5. **Repository access (developer).** Give the server read access yourself — a read-only deploy key
    created on the server (`ssh-keygen -t ed25519`, public key added to the repository's *Deploy keys*) or a
@@ -227,7 +231,7 @@ The stack must be running (deploy first on a new server).
 | 502 from the site | `spmb status`; `spmb logs <env> app` |
 | Site down, SSH down | Cockpit at `https://konsol.<domain>` → Terminal |
 | Cockpit down, SSH works | `systemctl status cockpit.socket` |
-| Both down | Tunnel: Cloudflare dashboard → Tunnels shows the connector status; until the direct SSH rule is removed, the provider's SSH port still works |
+| Both down | Direct SSH with your key on the provider's SSH port (Bitvise) still works (D-077); then check `systemctl status cloudflared` and the Cloudflare dashboard → Tunnels |
 | Disk full | `docker system df`; `docker image prune`; old backups in `/opt/apps/spmb/<env>/backups/` |
 | Reboot needed (`/var/run/reboot-required`) | Reboot in a quiet hour; containers come back (`restart: unless-stopped`) |
 
@@ -252,7 +256,7 @@ The school checks the site on its own domain before registration opens; it enter
 | 1 | Domain on Cloudflare (registrar nameservers → Cloudflare) | Arumi Studios |
 | 2 | `setup.sh` on `spmb-prod` with `DOMAIN=spmbsmpnualmarufkudus.web.id` and an admin user (First server, step 1) | Arumi Studios |
 | 3 | Tunnel + public hostnames + Access (steps 2–3) | Arumi Studios |
-| 4 | Cockpit and SSH through the tunnel work from the Windows PC; then close the direct SSH port (step 4) | Arumi Studios |
+| 4 | Cockpit and SSH through the tunnel work from the Windows PC; SSH key added and password login off; the direct SSH port stays open, key-only (step 4) | Arumi Studios |
 | 5 | Repository read access on the server and the clone (step 5) | Arumi Studios |
 | 6 | `spmb init staging staging.spmbsmpnualmarufkudus.web.id`, `spmb deploy staging`, `spmb spark staging spmb:install`, branding pack; test on staging | Arumi Studios |
 | 7 | `spmb init production spmbsmpnualmarufkudus.web.id`, `spmb deploy production`, `spmb spark production spmb:install`, `spmb spark production spmb:branding clients/smp-nu-al-maruf-kudus/branding` | Arumi Studios |

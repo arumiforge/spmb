@@ -24,10 +24,10 @@ pulls and builds, no deploy key in the repo/GitHub), D-069 (PHP 8.5.13, Node 24,
 ## Rules
 
 - **Never lock the admin out.** The VPS has no provider console. Any change to `setup.sh` must keep:
-  the SSH port(s) open while `cloudflared` is not running; the port of the session in use open when it is
-  not a tunnel session; password login off only with a proven key (`sshd -t` first, drop-in `00-spmb.conf`);
+  the SSH port(s) always open (key-only, D-077); the port of the session in use open; password login off only with a proven key (`sshd -t` first, drop-in `00-spmb.conf`);
   sshd reloaded, never restarted; no network configuration changes (no NetworkManager, no netplan edits).
-- Nothing listens publicly: stacks publish on `127.0.0.1` only, with a port from `/opt/apps/PORTS`.
+- Only sshd listens publicly (key-only, D-077); stacks publish on `127.0.0.1` only, with a port from
+  `/opt/apps/PORTS`. Never add fail2ban: on the NAT VPS every client comes from the gateway address.
 - No secrets, IPs, ports, emails or tokens in the repository. The server's git access is the developer's
   own business; scripts never create or read keys.
 - The committed Dockerfile must build on a normal server: no proxy settings, no CA bundles.

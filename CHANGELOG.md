@@ -103,6 +103,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
+- The direct SSH port stays open with key-only login as the last way in, because the VPS has no provider console
+  (D-077); `setup.sh` keeps it open for good and no longer tells the admin to close it.
 - Minimum runtimes: PHP 8.5.13 (Composer platform too), Node.js 24, MySQL 8.4 in CI (D-069); 424 tests green on PHP 8.5.13.
 - Icons are Lucide line icons without coloured backgrounds; eyebrow labels and accent borders removed (D-070).
   Icons are generated with `npm run icons` from `resources/icons.json` into `app/Helpers/lucide_icons.php`.

@@ -372,3 +372,9 @@ Consequences: Installing needs a `resources/css/visual/` folder imported from `a
 Status: accepted (coordinator, platform package A)
 Decision: The staging stack runs with `CI_ENVIRONMENT = production`, so it behaves exactly like production (errors, caching, security headers). As a result `spmb:install --demo` is refused on staging; test accounts are created in the admin screens. Staging holds test data only, never a copy of production personal data (D-067).
 Consequences: If demo accounts are wanted on staging later, `spmb:install` needs an explicit opt-in (for example `--demo --allow-staging`).
+
+## D-077 — Direct SSH stays open, key-only (2026-11-23)
+Status: accepted (user, 2026-11-23; amends D-066 "nothing listens publicly")
+Context: The VPS has no provider console. If the direct SSH port were closed, Cockpit and SSH would both depend on the Cloudflare tunnel, and a tunnel outage (Cloudflare problem, revoked token, broken cloudflared update) would lock everyone out.
+Decision: The port(s) sshd listens on stay open in the firewall for good, with password login off once a key login is proven (`setup.sh` switches it off through `/etc/ssh/sshd_config.d/00-spmb.conf`). Day-to-day access still goes through the tunnel (SSH behind Cloudflare Access, Cockpit); direct SSH with a key is the last way in. No fail2ban: on the NAT VPS every client appears to come from the provider's gateway address, so a ban would lock everyone out; key-only login already defeats password guessing.
+Consequences: The private key (with a passphrase) must be kept safe in the password manager. Everything else still listens on `127.0.0.1` only.

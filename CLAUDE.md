@@ -39,7 +39,7 @@ the super admin area — see the `spmb-copy` skill for the glossary.
 
 CodeIgniter 4.7 (PHP 8.5.13+) · MySQL 8.4 · Nginx + PHP-FPM · Node.js 24 (asset build) ·
 Docker Compose on Ubuntu Server 24.04 (staging + production stacks, server pulls and builds) ·
-Cloudflare Tunnel + Cockpit on the host (no open inbound ports) · Tailwind CSS v4 + Flowbite ·
+Cloudflare Tunnel + Cockpit on the host (only SSH open, key-only) · Tailwind CSS v4 + Flowbite ·
 Lucide icons. Local development: Windows + Laragon (Nginx, MySQL).
 The framework is a Composer dependency (`vendor/codeigniter4/framework`); never edit `vendor/`.
 
