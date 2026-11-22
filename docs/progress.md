@@ -36,7 +36,8 @@ create your own branch from `main` instead.
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
 | `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`): Docker, PHP 8.5/Node 24, design rules, Tanya Jawab, Codex; includes PR #25 | foundation done, workers running |
-| `feat/plat-docker`, `feat/plat-ui`, `feat/plat-tanya-jawab`, `feat/plat-codex` | workers A, B, C, D | Platform packages | in progress |
+| `feat/plat-docker`, `feat/plat-ui`, `feat/plat-tanya-jawab` | workers A, B, C | Platform packages | in progress |
+| `feat/plat-codex` | worker D | Codex briefs and identity | merged into the integration branch (#27) |
 | `nty/exciting-mendel-ukwgth` | session go-live | Domain typo fix, `provision.sh` lock-out guards (D-065) | PR #25 open; merged into `pw/zealous-albattani-2rz2z1` |
 | `phase-3` | coordinator | Phase 3 integration branch | merged into `main` (PR #23) |
 | `nty/nifty-mendel-u2jf9s` | coordinator | SD/MI default data + foundation (#18), three roles (#19), phase 3 docs | merged into `phase-3` |
@@ -58,7 +59,7 @@ when the container idles).
 2. **Phase 4 — Re-registration & reports** (FR-DU-01, FR-SRG-01, dashboard stats, filters, XLSX/CSV/PDF export, XLSX
    import): same protocol (`docs/coordination.md`, integration branch `phase-4`, foundation first, workers). Panitia does
    re-registration and uniform pickup (D-051, D-063); reports are for Admin Sekolah.
-3. **Illustrations**: when ChatGPT delivers briefs 013 (green accent) and 014 (dark versions), install them per `spmb-ai-image`.
+3. **Visual assets (Codex, D-073/D-075)**: the user runs the Codex starter prompt in `ai/README.md`, batch `svg-kit` first (015–018), then `paintings-pages`, `paintings-states`, `variants-001-012` (013/014). Review each Codex PR with `python3 ai/tools/check_assets.py` and install per `spmb-ai-image` (needs `resources/css/visual/`, a loader partial, `.tombol-daftar` on the main CTA, fallback share image).
 4. **Small follow-ups**: Indonesian "Pilih berkas" button instead of the browser's "Choose File" on the applicant page;
    optional icons `camera`, `printer`, `undo` in `ui_helper` (attendance page uses `eye`/`clipboard`/`x` for now); update the
    share image year each academic year.
@@ -69,7 +70,7 @@ when the container idles).
 - Each Claude account needs its cloud environment set up once from `docs/cloud-environment.md` (old inline scripts fail on PHP 8.5.13).
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
 - Go-live (D-056): VPS ready; `spmbsmpnualmarufkudus.web.id` still has to be added to the developer's Cloudflare account; then `docs/deployment.md` → "Go-live" steps.
-- ChatGPT briefs 013 (green accent set) and 014 (dark versions) are queued in `ai/README.md`.
+- Codex batches (briefs 013–035) are queued in `ai/README.md`; waiting for the user to start Codex.
 
 ## Session log (newest first, keep the last 10)
 

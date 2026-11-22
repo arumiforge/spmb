@@ -5,6 +5,12 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Platform round (D-066…D-075): writing standard skill `bahasa-indonesia-plain`; visual and chart rules in `spmb-ui`;
+  Claude cloud environment setup kept in the repository (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`);
+  `AGENTS.md` for Codex and other agents.
+- Visual asset pipeline moved to Codex: identity style guide (santri, Islamic, NU, Indonesian, Bhinneka), strict respect
+  rules for religious elements, 21 new briefs (patterns, dividers, special "Daftar sekarang" button, loader, page and
+  state paintings, default share image) and an asset checker (`ai/tools/check_assets.py`).
 - Tes, rooms and schedule: test rooms, test calendar with holidays, sessions (add, edit, deactivate, delete), creating many
   sessions at once with a preview, and Pengaturan → Tes (FR-TEST-01).
 - Tes, allocation: automatic test seating with preview (registration order, waves, holidays), participant list,
@@ -88,6 +94,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
+- Minimum runtimes: PHP 8.5.13 (Composer platform too), Node.js 24, MySQL 8.4 in CI (D-069); 424 tests green on PHP 8.5.13.
+- `lucide-static` (ISC) added for the Lucide icon set (D-070).
 - Only three roles: Admin Sekolah, Panitia (one committee role) and Siswa (applicant access); Kepala Sekolah, Petugas Tes,
   Petugas Daftar Ulang and Petugas Seragam removed and their accounts moved to Panitia; guide `/panduan/panitia` (D-063).
 - Project licence is now proprietary (© Arumi Studios), replacing the inherited CodeIgniter MIT notice (D-017).

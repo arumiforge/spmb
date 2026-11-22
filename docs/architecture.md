@@ -41,7 +41,7 @@ resources/             frontend sources (Tailwind CSS, JS)
 public/                web root (index.php, build/ = compiled assets)
 writable/              logs, cache, sessions, uploads (private)
 deploy/activate.sh     server-side release activation
-ai/                    ChatGPT image prompts and raw outputs
+ai/                    Codex briefs, delivered assets and the asset checker
 flowbite/              Flowbite Pro templates — markup reference only (private repo)
 ```
 
