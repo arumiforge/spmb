@@ -66,12 +66,14 @@ when the container idles).
 ## Blockers / waiting on
 
 - School still to confirm (phase 3 works with any answer): test days, sessions per day, rooms and capacity; tests per wave or after all waves.
+- Each Claude account needs its cloud environment set up once from `docs/cloud-environment.md` (old inline scripts fail on PHP 8.5.13).
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
 - Go-live (D-056): VPS ready; `spmbsmpnualmarufkudus.web.id` still has to be added to the developer's Cloudflare account; then `docs/deployment.md` → "Go-live" steps.
 - ChatGPT briefs 013 (green accent set) and 014 (dark versions) are queued in `ai/README.md`.
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — first workers failed at environment setup (old inline script on PHP 8.3); cloud setup moved into the repo (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`, D-074), the SPMB environment now runs it, Composer platform set to 8.5.13 (CI green); workers A–D restarted. Next: review worker PRs.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user's answers: Docker on the VPS with Cockpit + host cloudflared (no Proxmox), staging + production stacks on one VPS from `main`, server pulls and builds (no deploy key), public Tanya Jawab page; foundation landed (PHP ^8.5.13 / Node 24 / MySQL 8.4 in CI, 424 tests green on 8.5.13, lucide-static, `bahasa-indonesia-plain` skill, visual and chart rules, D-066…D-073, `docs/platform-plan.md`); PR #25 merged in; workers A–D started. Next: review worker PRs, integrate, PR to `main`.
 - 2026-11-19 · session go-live · `nty/exciting-mendel-ukwgth` — domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image re-rendered); `provision.sh` keeps the SSH port (custom too) open until the tunnel runs and turns password login off only when an admin key exists; deployment doc: 127.0.0.1 ingress, real SSH port, known_hosts from the server, Bitvise via `cloudflared access tcp` (D-065). Next: user merges, go-live.
 - 2026-11-18 · coordinator · `main` — PR #23 (phase 3) merged into `main` on the user's request; workers A–C done. Next: go-live, phase 4.
