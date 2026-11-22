@@ -23,15 +23,15 @@ $tiles = $stats === null ? [] : [
 <?= $this->section('content') ?>
 <?php if ($stats !== null) : ?>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <?php foreach ($tiles as $tile) : ?>
+        <?php foreach ($tiles as $i => $tile) : ?>
             <?php $link = $tile['url'] !== null && $canViewList; ?>
-            <<?= $link ? 'a href="' . esc(site_url($tile['url']), 'attr') . '"' : 'div' ?> class="<?= $card ?> block<?= $link ? ' hover:border-primary-300 dark:hover:border-primary-700' : '' ?>">
+            <<?= $link ? 'a href="' . esc(site_url($tile['url']), 'attr') . '"' : 'div' ?> class="<?= $card ?> motion-rise block<?= $link ? ' motion-lift hover:border-primary-300 dark:hover:border-primary-700' : '' ?>" style="--rise-delay: <?= $i * 60 ?>ms">
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <p class="text-sm text-gray-500 dark:text-gray-400"><?= esc($tile['label']) ?></p>
                         <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white"><?= $num($tile['value']) ?></p>
                     </div>
-                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400"><?= icon($tile['icon'], 'h-6 w-6') ?></span>
+                    <?= icon($tile['icon'], 'motion-icon h-7 w-7 shrink-0 text-primary-600 dark:text-primary-400') ?>
                 </div>
                 <p class="mt-3 text-xs text-gray-500 dark:text-gray-400"><?= esc($tile['note']) ?></p>
             </<?= $link ? 'a' : 'div' ?>>
@@ -52,7 +52,7 @@ $tiles = $stats === null ? [] : [
                 'imageAlt' => lang('App.altNoData'),
             ]]) ?>
         <?php else : ?>
-            <section class="<?= $card ?>">
+            <section class="<?= $card ?> motion-rise" style="--rise-delay: 200ms">
                 <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Pendaftar per gelombang</h2>
                 <ul class="space-y-4">
                     <?php foreach ($stats['waves'] as $wave) : ?>
@@ -74,12 +74,23 @@ $tiles = $stats === null ? [] : [
                     <?php endif ?>
                 </ul>
             </section>
-            <section class="<?= $card ?>">
+            <section class="<?= $card ?> motion-rise" style="--rise-delay: 200ms">
                 <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Cara mendaftar</h2>
-                <dl class="grid grid-cols-2 gap-4">
-                    <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Online</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['online']) ?></dd></div>
-                    <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Di sekolah</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['offline']) ?></dd></div>
-                </dl>
+                <div class="grid grid-cols-1 items-center gap-4 md:grid-cols-[minmax(0,1fr)_14rem]">
+                    <?php
+                    $methodChart = [
+                        'chart'  => ['type' => 'donut', 'height' => 280],
+                        'series' => [(int) $stats['online'], (int) $stats['offline']],
+                        'labels' => ['Online', 'Di sekolah'],
+                        'plotOptions' => ['pie' => ['donut' => ['labels' => ['total' => ['label' => 'Semua']]]]],
+                    ];
+                    ?>
+                    <div class="min-h-[280px] min-w-0" data-chart="<?= esc(json_encode($methodChart, JSON_THROW_ON_ERROR), 'attr') ?>" role="img" aria-label="<?= esc('Online ' . $num($stats['online']) . ', di sekolah ' . $num($stats['offline']), 'attr') ?>"></div>
+                    <dl class="grid grid-cols-2 gap-4 md:grid-cols-1">
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Online</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['online']) ?></dd></div>
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Di sekolah</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['offline']) ?></dd></div>
+                    </dl>
+                </div>
             </section>
         <?php endif ?>
     </div>
@@ -106,3 +117,9 @@ $tiles = $stats === null ? [] : [
     </div>
 </div>
 <?= $this->endSection() ?>
+
+<?php if ($stats !== null && $stats['total'] > 0) : ?>
+    <?= $this->section('scripts') ?>
+    <script src="<?= asset_url('charts.js') ?>" defer></script>
+    <?= $this->endSection() ?>
+<?php endif ?>

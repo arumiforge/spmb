@@ -18,9 +18,9 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
         <?php if ($picture !== '') : ?>
             <div class="mb-4"><?= $picture ?></div>
         <?php else : ?>
-            <span class="mb-4 flex h-16 w-16 items-center justify-center rounded-full <?= $error['code'] === 404 ? 'bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400' : 'bg-yellow-100 text-yellow-700 dark:bg-gray-700 dark:text-yellow-300' ?>"><?= icon($error['icon'], 'h-8 w-8') ?></span>
+            <?= icon($error['icon'], 'mb-4 h-14 w-14 ' . ($error['code'] === 404 ? 'text-primary-600 dark:text-primary-400' : 'text-yellow-600 dark:text-yellow-400')) ?>
         <?php endif ?>
-        <p class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400"><?= lang('App.errorCode', [$error['code']]) ?></p>
+        <p class="text-sm text-gray-500 dark:text-gray-400"><?= lang('App.errorCode', [$error['code']]) ?></p>
         <?php if (! $staff) : ?>
             <h1 class="mt-1 text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white"><?= esc($error['title']) ?></h1>
         <?php endif ?>

@@ -9,9 +9,7 @@
 <?= $this->extend(config('Auth')->views['layout']) ?>
 
 <?= $this->section('main') ?>
-<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400">
-    <?= icon('shield', 'h-6 w-6') ?>
-</div>
+<?= icon('shield', 'mb-4 h-10 w-10 text-primary-600 dark:text-primary-400') ?>
 <h1 class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"><?= lang('Akun.verifyTitle') ?></h1>
 
 <?php if ($expired) : ?>

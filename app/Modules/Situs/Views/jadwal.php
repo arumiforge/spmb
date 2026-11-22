@@ -22,8 +22,8 @@ $banner = $page['banner'];
 <?= $this->section('content') ?>
 <div class="mx-auto max-w-screen-lg px-4 py-6 sm:py-10">
     <header class="mb-6">
-        <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-primary-700 dark:text-primary-400"><?= lang('Situs.academicYear', [$page['academicYear']]) ?></p>
-        <h1 class="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.scheduleTitle') ?></h1>
+        <h1 class="mb-1 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.scheduleTitle') ?></h1>
+        <p class="mb-3 text-lg font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.academicYear', [$page['academicYear']]) ?></p>
         <p class="max-w-2xl text-lg text-gray-600 dark:text-gray-300"><?= lang('Situs.scheduleIntro') ?></p>
     </header>
 
@@ -40,7 +40,7 @@ $banner = $page['banner'];
         <ol class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <?php foreach ($page['waves'] as $wave) : ?>
                 <?php $open = $wave['state'] === 'open'; ?>
-                <li class="flex flex-col rounded-lg border bg-white p-5 dark:bg-gray-800 <?= $open ? 'border-primary-500 ring-1 ring-primary-500' : 'border-gray-200 dark:border-gray-700' ?>">
+                <li class="motion-rise flex flex-col rounded-lg border bg-white p-5 dark:bg-gray-800 <?= $open ? 'border-primary-500 ring-1 ring-primary-500' : 'border-gray-200 dark:border-gray-700' ?>">
                     <div class="mb-3 flex items-start justify-between gap-3">
                         <h2 class="text-lg font-bold text-gray-900 dark:text-white"><?= esc($wave['name']) ?></h2>
                         <?= view('partials/status_badge', ['badge' => $states[$wave['state']]]) ?>
