@@ -8,7 +8,7 @@ $card     = static function (array $m): string {
     $id = 'fitur-' . strtolower($m['name']);
     ob_start(); ?>
     <li class="flex items-start gap-4 p-4">
-        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg <?= $m['enabled'] ? 'bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400' : 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-500' ?>"><?= icon($m['icon'], 'h-5 w-5') ?></span>
+        <?= icon($m['icon'], 'mt-0.5 h-6 w-6 shrink-0 ' . ($m['enabled'] ? 'text-primary-600 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500')) ?>
         <div class="min-w-0 flex-1">
             <p class="font-medium text-gray-900 dark:text-white" id="<?= $id ?>-label"><?= esc($m['label']) ?></p>
             <?php if ($m['description'] !== '') : ?>

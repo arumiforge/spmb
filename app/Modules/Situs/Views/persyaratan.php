@@ -31,8 +31,8 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
 <?= $this->section('content') ?>
 <div class="mx-auto max-w-screen-lg px-4 py-6 sm:py-10">
     <header class="mb-8">
-        <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-primary-700 dark:text-primary-400"><?= lang('Situs.academicYear', [$page['academicYear']]) ?></p>
-        <h1 class="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.requirementsTitle') ?></h1>
+        <h1 class="mb-1 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.requirementsTitle') ?></h1>
+        <p class="mb-3 text-lg font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.academicYear', [$page['academicYear']]) ?></p>
         <p class="max-w-2xl text-lg text-gray-600 dark:text-gray-300"><?= lang('Situs.requirementsIntro') ?></p>
     </header>
 
@@ -48,8 +48,8 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
                     $extensions = array_filter(array_map('trim', explode(',', strtoupper((string) $doc['extensions']))));
                     $extensions = array_values(array_unique(array_map(static fn (string $e): string => $e === 'JPEG' ? 'JPG' : $e, $extensions)));
                     ?>
-                    <li class="flex gap-4 rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800">
-                        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-700 dark:bg-gray-700 dark:text-primary-400"><?= icon('clipboard', 'h-6 w-6') ?></span>
+                    <li class="motion-rise flex gap-4 rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800">
+                        <?= icon('clipboard', 'h-7 w-7 shrink-0 text-primary-700 dark:text-primary-400') ?>
                         <div class="min-w-0 flex-1">
                             <div class="mb-1 flex flex-wrap items-center gap-2">
                                 <h3 class="text-base font-semibold text-gray-900 dark:text-white"><?= esc($doc['name']) ?></h3>

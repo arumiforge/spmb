@@ -20,9 +20,11 @@ $intro     = match (true) {
 <?= $this->section('content') ?>
 <section class="bg-white dark:bg-gray-900">
     <div class="mx-auto grid max-w-screen-xl items-center gap-8 px-4 py-10 sm:py-16 md:grid-cols-[1fr_minmax(0,24rem)] lg:grid-cols-[1fr_minmax(0,28rem)]">
-        <div class="text-center md:text-start">
-            <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-primary-700 dark:text-primary-400"><?= esc(setting('School.tagline')) ?></p>
-            <h1 class="mb-4 text-3xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl dark:text-white"><?= esc(setting('School.name')) ?></h1>
+        <div class="motion-rise text-center md:text-start">
+            <h1 class="mb-2 text-3xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl dark:text-white"><?= esc(setting('School.name')) ?></h1>
+            <?php if ((string) setting('School.tagline') !== '') : ?>
+                <p class="mb-4 text-lg font-semibold text-primary-700 sm:text-xl dark:text-primary-400"><?= esc(setting('School.tagline')) ?></p>
+            <?php endif ?>
             <p class="mx-auto mb-6 max-w-2xl text-lg text-gray-500 md:mx-0 dark:text-gray-400"><?= esc($intro) ?></p>
 
             <?php if ($banner !== null && $banner['wave'] !== null) : ?>
@@ -45,7 +47,7 @@ $intro     = match (true) {
                 <?php endif ?>
             </div>
         </div>
-        <div class="mx-auto w-full max-w-xs overflow-hidden rounded-2xl bg-white md:max-w-none">
+        <div class="motion-rise mx-auto w-full max-w-xs overflow-hidden rounded-2xl bg-white md:max-w-none" style="--rise-delay: 120ms">
             <?= illustration('hero/hero-beranda', lang('App.altHero'), 'h-auto w-full', false) ?>
         </div>
     </div>
@@ -57,7 +59,7 @@ $intro     = match (true) {
             <h2 id="cara-daftar" class="mb-6 text-center text-2xl font-bold text-gray-900 md:text-start dark:text-white"><?= lang('Situs.homeStepsTitle') ?></h2>
             <ol class="grid gap-4 md:grid-cols-3">
                 <?php foreach (['homeStep1', 'homeStep2', 'homeStep3'] as $i => $key) : ?>
-                    <li class="flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800">
+                    <li class="motion-rise motion-lift flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800" style="--rise-delay: <?= $i * 80 ?>ms">
                         <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-600 font-bold text-white"><?= $i + 1 ?></span>
                         <p class="pt-2 text-gray-800 dark:text-gray-200"><?= lang('Situs.' . $key) ?></p>
                     </li>
