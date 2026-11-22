@@ -73,10 +73,13 @@ ai/generated/
 3. Make the variants by **editing the accepted light image**, not by generating a new scene: dark
    (style guide §8), green accent (§9), and dark green accent (apply §9 to the dark image).
 4. Export:
-   - master: `ai/generated/<name>[-variant].webp`, native size, quality 92, alpha kept;
-   - installed file: `ai/generated/install/img/<area>/<name>[-variant].webp`, resized to the width in the
-     style guide's size table (Lanczos), quality 80–85, within the budget, alpha kept.
-   Pillow example: `img.resize((w, round(img.height * w / img.width)), Image.LANCZOS).save(path, 'WEBP', quality=82, method=6)`.
+   - master: `ai/generated/<name>[-variant].webp`, native size, untrimmed, quality 92, alpha kept;
+   - installed file: `ai/generated/install/img/<area>/<name>[-variant].webp`, trimmed to the subject with
+     **one crop box shared by all variants**, scaled to the longest side in the style guide's size table,
+     quality 80–85, within the budget, alpha kept (style guide → Sizes and budgets).
+   Pillow sketch: `box = union(img.getchannel('A').point(lambda a: 255 if a > 8 else 0).getbbox() for each variant)`,
+   grow it by 2 %, `crop(box)`, then `thumbnail((limit, limit), Image.LANCZOS)` and
+   `save(path, 'WEBP', quality=82, method=6)`.
 5. If you cannot generate images in your environment, deliver the SVG/CSS batch only and say in the
    pull request which painting briefs are blocked and why. Never substitute stock photos, clip-art or
    another style.

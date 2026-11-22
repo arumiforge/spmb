@@ -22,11 +22,11 @@ AI = ROOT / "ai"
 GEN = AI / "generated"
 INSTALL = GEN / "install"
 
-# Installed width (px) and budget (KB) per painting area; see ai/style-guide.md → Sizes and budgets.
+# Longest side (px) and budget (KB) of installed paintings; see ai/style-guide.md → Sizes and budgets.
 AREAS = {
-    "hero": (1536, 260),
+    "hero": (1100, 220),
     "section": (800, 140),
-    "guide": (1200, 200),
+    "guide": (1000, 180),
     "state": (480, 70),
     "share": (1200, 180),
 }
@@ -62,21 +62,24 @@ def front_matter(path: Path) -> dict[str, str]:
     return data
 
 
-def check_raster(brief: str, path: Path, width: int | None, budget_kb: int, alpha: bool, height: int | None = None) -> None:
+def check_raster(brief: str, path: Path, width: int | None, budget_kb: int, alpha: bool, height: int | None = None, longest: int | None = None) -> tuple[int, int] | None:
     if not path.is_file():
         fail(brief, f"missing {path.relative_to(ROOT)}")
-        return
+        return None
     try:
         from PIL import Image
     except ImportError:
         fail(brief, "Pillow is not installed (pip install pillow)")
-        return
+        return None
     with Image.open(path) as img:
         rel = path.relative_to(ROOT)
         if width and img.width != width:
             fail(brief, f"{rel} is {img.width} px wide, expected {width}")
         if height and img.height != height:
             fail(brief, f"{rel} is {img.height} px high, expected {height}")
+        if longest and max(img.size) > longest:
+            fail(brief, f"{rel} is {img.width}×{img.height}, longest side must be ≤ {longest}")
+        size = img.size
         if alpha:
             if "A" not in img.getbands():
                 fail(brief, f"{rel} has no alpha channel (transparent background expected)")
@@ -89,6 +92,7 @@ def check_raster(brief: str, path: Path, width: int | None, budget_kb: int, alph
     if kb > budget_kb:
         fail(brief, f"{path.relative_to(ROOT)} is {kb:.0f} KB, budget {budget_kb} KB")
     ok()
+    return size
 
 
 def check_painting(brief: str, fm: dict[str, str]) -> None:
@@ -96,7 +100,8 @@ def check_painting(brief: str, fm: dict[str, str]) -> None:
     if area not in AREAS:
         fail(brief, f"unknown area '{area}'")
         return
-    width, budget = AREAS[area]
+    limit, budget = AREAS[area]
+    sizes: dict[str, tuple[int, int]] = {}
     transparent = fm.get("background", "transparent") == "transparent"
     variants = [v.strip() for v in fm.get("variants", "light").split(",") if v.strip()]
     for v in variants:
@@ -112,7 +117,11 @@ def check_painting(brief: str, fm: dict[str, str]) -> None:
             check_raster(brief, INSTALL / "img" / area / f"{file}.webp", 1200, budget, False, 630)
             check_raster(brief, INSTALL / "img" / area / f"{file}.jpg", 1200, budget, False, 630)
         else:
-            check_raster(brief, INSTALL / "img" / area / f"{file}.webp", width, budget, need_alpha)
+            size = check_raster(brief, INSTALL / "img" / area / f"{file}.webp", None, budget, need_alpha, longest=limit)
+            if size:
+                sizes[v] = size
+    if len(set(sizes.values())) > 1:
+        fail(brief, f"variants differ in size {sizes}; use one crop box for all variants")
 
 
 def check_svg(brief: str, path: Path) -> None:

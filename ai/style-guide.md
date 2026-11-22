@@ -144,16 +144,23 @@ The app picks the variant itself (`illustration()` in `app/Helpers/ui_helper.php
 
 ### Sizes and budgets
 
-Generate at the generator's native shape, then export. Exports are WebP, quality 80–85 for the installed
-file, alpha kept when transparent.
+Generate at the generator's native shape. The **installed** file is trimmed and scaled:
 
-| Usage | Generate | Installed file (`public/assets/img/…`) | Budget per file |
-| --- | --- | --- | --- |
-| Public hero | landscape 1536×1024 | `hero/<name>.webp`, 1536 px wide | ≤ 260 KB |
-| Section illustration (beside a page heading) | square 1024×1024 | `section/<name>.webp`, 800 px | ≤ 140 KB |
-| Guide cover | landscape 1536×1024 | `guide/<name>.webp`, 1200 px wide | ≤ 200 KB |
-| Empty / success / error state | square 1024×1024 | `state/<name>.webp`, 480 px | ≤ 70 KB |
-| Share image (link previews) | landscape 1536×1024, cropped | `share/<name>.webp` and `.jpg`, 1200×630 | ≤ 180 KB |
+1. **Trim** to the painted subject: the bounding box of pixels with alpha > 8 (transparent images) or that
+   are not near-white (white images), plus a 2 % margin. The empty area of a hero is removed here — the page
+   layout already places the text beside the picture.
+2. **Use one crop box for all variants** of a painting (light, dark, hijau, dark-hijau), taken as the union
+   of their boxes, so the variants swap without a jump.
+3. **Scale down** so the longest side fits the limit below (Lanczos); never scale up.
+4. Save as WebP, quality 80–85, alpha kept.
+
+| Usage | Generate | Installed file (`public/assets/img/…`) | Longest side | Budget per file |
+| --- | --- | --- | --- | --- |
+| Public hero | landscape 1536×1024 | `hero/<name>.webp` | ≤ 1100 px | ≤ 220 KB |
+| Section illustration (beside a page heading) | square 1024×1024 | `section/<name>.webp` | ≤ 800 px | ≤ 140 KB |
+| Guide cover | landscape 1536×1024 | `guide/<name>.webp` | ≤ 1000 px | ≤ 180 KB |
+| Empty / success / error state | square 1024×1024 | `state/<name>.webp` | ≤ 480 px | ≤ 70 KB |
+| Share image (link previews) | landscape 1536×1024 | `share/<name>.webp` and `.jpg` | exactly 1200×630, centre crop, no trim | ≤ 180 KB |
 
 ## 5. Vector assets (SVG)
 
