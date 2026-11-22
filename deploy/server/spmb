@@ -32,6 +32,7 @@ PORT_MAX=8199
 KEEP_IMAGES=5
 KEEP_BACKUP_DAYS=14
 ASSUME_YES=0
+ROLLBACK_PREVIOUS=""
 
 say()  { printf '%s\n' "$*"; }
 step() { printf '\n== %s\n' "$*"; }
@@ -340,6 +341,7 @@ activate() {
     sha="$(image_commit "$tag")"
     [ -n "$sha" ] || die "Image spmb-app:$tag has no commit label."
     current="$(get_var "$dir/stack.env" SPMB_TAG)"
+    ROLLBACK_PREVIOUS="$(get_var "$dir/stack.env" SPMB_PREVIOUS_TAG)"
 
     git -C "$SRC" show "$sha:deploy/compose.yaml" > "$dir/compose.yaml.new" \
         || die "deploy/compose.yaml not found in $sha."
@@ -387,7 +389,7 @@ fail_and_roll_back() {
     if [ -n "$previous" ] && [ "$previous" != "$(get_var "$dir/stack.env" SPMB_TAG)" ]; then
         warn "Switching back to the previous image $previous."
         set_var "$dir/stack.env" SPMB_TAG "$previous"
-        set_var "$dir/stack.env" SPMB_PREVIOUS_TAG ""
+        set_var "$dir/stack.env" SPMB_PREVIOUS_TAG "${ROLLBACK_PREVIOUS:-}"
         local sha; sha="$(image_commit "$previous")"
         [ -z "$sha" ] || git -C "$SRC" show "$sha:deploy/compose.yaml" > "$dir/compose.yaml" || true
         dc "$env" up -d --remove-orphans --wait --wait-timeout 300 || true
@@ -410,13 +412,15 @@ cmd_deploy() {
     if [ "$env" = staging ]; then
         sha="$(resolve_commit "${ref:-origin/main}")"
         build_images "$sha"
+        tag="${sha:0:12}"
+        activate staging "$tag"
         # The checkout follows staging, so this CLI matches what was just deployed.
         if [ -z "$(git -C "$SRC" status --porcelain --untracked-files=no)" ]; then
             git -C "$SRC" checkout -q --detach "$sha"
         else
             warn "$SRC has local changes; checkout left as it is."
         fi
-        tag="${sha:0:12}"
+        return 0
     else
         if [ -z "$ref" ]; then
             tag="$(get_var "$(env_dir staging)/stack.env" SPMB_TAG)"
