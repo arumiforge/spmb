@@ -36,7 +36,7 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends \
         libicu-dev libzip-dev libpng-dev libjpeg62-turbo-dev libwebp-dev libfreetype-dev; \
     docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype; \
-    docker-php-ext-install -j"$(nproc)" intl mysqli gd zip exif; \
+    docker-php-ext-install -j"$(nproc)" intl mysqli gd zip exif pcntl; \
     apt-mark auto '.*' > /dev/null; \
     [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; \
     find /usr/local -type f -executable -exec ldd '{}' ';' 2>/dev/null \
@@ -45,7 +45,7 @@ RUN set -eux; \
         | awk 'sub(":$", "", $1) { print $1 }' | sort -u | xargs -r apt-mark manual; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
     rm -rf /var/lib/apt/lists/*; \
-    for ext in intl mysqli gd zip exif; do php -m | grep -qix "$ext"; done; \
+    for ext in intl mysqli gd zip exif pcntl; do php -m | grep -qix "$ext"; done; \
     php -r 'exit(function_exists("imagewebp") && function_exists("imagejpeg") && function_exists("imagettftext") ? 0 : 1);'
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY docker/php/spmb.ini "$PHP_INI_DIR/conf.d/90-spmb.ini"
