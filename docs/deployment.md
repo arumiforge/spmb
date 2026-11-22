@@ -116,6 +116,10 @@ Server IPs, ports and passwords stay out of the repository.
      `127.0.0.1` port `2222` (same user and password/key). OpenSSH clients can use
      `ProxyCommand cloudflared access ssh --hostname %h` in `~/.ssh/config` instead.
    - Only when **both** work: `sudo ufw delete allow <ssh port>/tcp`. From then on nothing listens publicly.
+     **Decision pending (user):** this VPS has no provider console. With the direct port closed, Cockpit and SSH
+     both depend on the tunnel; if the tunnel is down (Cloudflare outage, token revoked, cloudflared broken by an
+     update) there is no way in until it recovers. The alternative is to keep the direct SSH port open with key-only
+     login (password login off) as the last way in. Until the user decides, keep the direct port open.
    - Optional, after a key works through the tunnel: run `setup.sh` again from a key-based session to turn
      password login off.
 

@@ -10,6 +10,10 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   `AGENTS.md` for Codex and other agents.
 - Dashboard chart of registration methods; charts keep their text readable on phones; gentle entrance and hover motion
   that respects "reduce motion" (D-070).
+- Docker images (PHP 8.5 FPM + Nginx), compose stack for staging and production on one server, one-time server setup
+  script (`deploy/server/setup.sh`: Docker, cloudflared, Cockpit, firewall with lock-out guards) and the `spmb` server
+  CLI (init, deploy, rollback, status, logs, backup, restore, spark) with daily backups and automatic rollback of a
+  failed deploy (D-066…D-068, D-076). Laragon setup for Windows in `docs/development.md`.
 - Visual asset pipeline moved to Codex: identity style guide (santri, Islamic, NU, Indonesian, Bhinneka), strict respect
   rules for religious elements, 21 new briefs (patterns, dividers, special "Daftar sekarang" button, loader, page and
   state paintings, default share image) and an asset checker (`ai/tools/check_assets.py`).
@@ -107,6 +111,10 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `composer test` runs PHPUnit without coverage (same as CI).
 - Locale `id`, time zone `Asia/Jakarta`, Indonesian framework messages (`codeigniter4/translations`); URLs without `index.php`.
 - Switched from the CodeIgniter framework distribution to the appstarter layout; framework 4.7 installed via Composer.
+
+### Removed
+- GitHub Actions SSH deploy workflow, `deploy/provision.sh` and `deploy/activate.sh` (replaced by the server pulling and
+  building, D-068).
 
 ### Fixed
 - First client's domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image) (D-065).

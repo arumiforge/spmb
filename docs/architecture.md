@@ -40,7 +40,9 @@ app/
 resources/             frontend sources (Tailwind CSS, JS)
 public/                web root (index.php, build/ = compiled assets)
 writable/              logs, cache, sessions, uploads (private)
-deploy/activate.sh     server-side release activation
+deploy/server/         setup.sh (one-time server setup) and spmb (server CLI: deploy, rollback, backup)
+deploy/compose.yaml    Docker Compose stack per environment (staging, production)
+docker/                Dockerfile (app: PHP-FPM 8.5, web: Nginx), Nginx and PHP config
 ai/                    Codex briefs, delivered assets and the asset checker
 flowbite/              Flowbite Pro templates — markup reference only (private repo)
 ```

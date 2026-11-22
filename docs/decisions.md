@@ -367,3 +367,8 @@ Consequences: Runtime changes are made once in the repository and reach every ac
 Status: accepted (coordinator, platform package D; details of D-073)
 Decision: Codex delivers ready-to-install files under `ai/generated/install/` (mirroring `public/assets/img/` and `resources/css/visual/`) plus untrimmed WebP masters in `ai/generated/`, one pull request per batch into `main`, never merged by Codex. Patterns and dividers are `#000` SVG masks painted with `var(--color-primary-*)`, so the brand colour stays in settings; buttons and loaders use `currentColor` and custom properties. Paintings keep the swappable blue accent (D-027) and every new one also gets `-dark`, `-hijau` and `-dark-hijau` variants. `ai/tools/check_assets.py` checks names, sizes, budgets, alpha and SVG/CSS safety before Claude installs. A root `AGENTS.md` points Codex to `ai/CODEX.md`.
 Consequences: Installing needs a `resources/css/visual/` folder imported from `app.css`, a loader partial, `.tombol-daftar` on the main call to action, a fallback share image, and (later) `--tombol-teks` from the brand colour's luminance for schools with a light brand colour.
+
+## D-076 — Staging runs as production (2026-11-22)
+Status: accepted (coordinator, platform package A)
+Decision: The staging stack runs with `CI_ENVIRONMENT = production`, so it behaves exactly like production (errors, caching, security headers). As a result `spmb:install --demo` is refused on staging; test accounts are created in the admin screens. Staging holds test data only, never a copy of production personal data (D-067).
+Consequences: If demo accounts are wanted on staging later, `spmb:install` needs an explicit opt-in (for example `--demo --allow-staging`).
