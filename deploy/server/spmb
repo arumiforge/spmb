@@ -1,0 +1,609 @@
+#!/usr/bin/env bash
+# spmb — server CLI for the SPMB Docker stacks (docs/deployment.md, D-066…D-068).
+#
+# Installed by `spmb init` as a symlink: /usr/local/bin/spmb -> <checkout>/deploy/server/spmb.
+# Runs as root on the server. The checkout (/opt/apps/spmb/src) is a plain git clone whose
+# read access the developer sets up; this script never handles keys or tokens.
+#
+# Layout:
+#   /opt/apps/PORTS                     ports taken on this server, one "<port> <name>" per line
+#   /opt/apps/spmb/src/                 git checkout (follows the commit running on staging)
+#   /opt/apps/spmb/<env>/stack.env      port, image tag, database passwords (made by `init`)
+#   /opt/apps/spmb/<env>/app.env        CodeIgniter .env, mounted read-only into the app container
+#   /opt/apps/spmb/<env>/compose.yaml   copied from deploy/compose.yaml of the deployed commit
+#   /opt/apps/spmb/<env>/backups/       spmb-<env>-<time>.tar, kept 14 days
+#
+# Overrides for testing: SPMB_ROOT (default /opt/apps), SPMB_SRC (default $SPMB_ROOT/spmb/src).
+#
+# The whole script is one function called on the last line, so a `git checkout` that changes
+# this file while it runs cannot change what bash executes.
+
+# Shell snippets in single quotes run inside the containers, where $MYSQL_* are set.
+# shellcheck disable=SC2016
+main() {
+set -Eeuo pipefail
+
+SPMB_ROOT="${SPMB_ROOT:-/opt/apps}"
+APP_DIR="$SPMB_ROOT/spmb"
+SRC="${SPMB_SRC:-$APP_DIR/src}"
+PORTS_FILE="$SPMB_ROOT/PORTS"
+PORT_MIN=8100
+PORT_MAX=8199
+KEEP_IMAGES=5
+KEEP_BACKUP_DAYS=14
+ASSUME_YES=0
+
+say()  { printf '%s\n' "$*"; }
+step() { printf '\n== %s\n' "$*"; }
+warn() { printf 'WARNING: %s\n' "$*" >&2; }
+die()  { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
+
+usage() {
+    cat <<'USAGE'
+Usage: spmb <command> [arguments]
+
+  init <env> <domain>         Prepare an environment (staging | production): folder, passwords,
+                              encryption key, a free local port, daily backup timer.
+  deploy staging [ref]        Fetch, build the images of <ref> (default origin/main), back up,
+                              start, migrate, import bundled data, health check.
+  deploy production [ref]     Promote the image running on staging (default), or build <ref>.
+  rollback <env>              Switch back to the previous image (the database is not rolled back).
+  status                      Environments, ports, images, containers.
+  logs <env> [service]        Follow the logs (services: web, app, db).
+  backup <env>                Database dump + uploaded files into <env>/backups/ (kept 14 days).
+  restore <env> <file>        Restore a backup made by `spmb backup` (asks first).
+  spark <env> <args...>       Run `php spark <args...>` in the app container.
+
+Options: -y / --yes answers "yes" to confirmations (production deploy, restore).
+USAGE
+}
+
+need_root() { [ "$(id -u)" -eq 0 ] || die "Run as root (sudo spmb ...)."; }
+
+check_env() {
+    case "${1:-}" in
+        staging|production) ;;
+        *) die "Environment must be 'staging' or 'production' (got '${1:-}')." ;;
+    esac
+}
+
+env_dir() { printf '%s/%s' "$APP_DIR" "$1"; }
+
+require_init() {
+    [ -f "$(env_dir "$1")/stack.env" ] || die "'$1' is not initialised. Run: spmb init $1 <domain>"
+}
+
+# Read / write KEY=value lines in stack.env (values are simple words, written by this script).
+get_var() {
+    local file="$1" key="$2"
+    [ -f "$file" ] || return 0
+    sed -n "s/^${key}=//p" "$file" | tail -n 1
+}
+set_var() {
+    local file="$1" key="$2" value="$3"
+    if grep -q "^${key}=" "$file"; then
+        sed -i "s|^${key}=.*|${key}=${value}|" "$file"
+    else
+        printf '%s=%s\n' "$key" "$value" >> "$file"
+    fi
+}
+
+confirm() {
+    local question="$1" answer
+    [ "$ASSUME_YES" = 1 ] && return 0
+    [ -t 0 ] || die "$question — not confirmed (no terminal). Add --yes to confirm."
+    read -r -p "$question [y/N] " answer
+    case "$answer" in y|Y|yes|ya|Ya) return 0 ;; *) die "Cancelled." ;; esac
+}
+
+dc() {
+    local env="$1"; shift
+    local dir; dir="$(env_dir "$env")"
+    docker compose --project-directory "$dir" -p "spmb-$env" \
+        --env-file "$dir/stack.env" -f "$dir/compose.yaml" "$@"
+}
+
+tty_flag() { if [ -t 0 ] && [ -t 1 ]; then printf ''; else printf -- '-T'; fi; }
+
+lock() {
+    mkdir -p "$APP_DIR"
+    exec 9> "$APP_DIR/.lock"
+    flock -n 9 || die "Another spmb command is running (lock $APP_DIR/.lock)."
+}
+
+# --- host integration: CLI link and backup timer ------------------------------------------
+install_host_bits() {
+    local self
+    self="$(readlink -f "${BASH_SOURCE[0]}")"
+    if [ "$self" != "$(readlink -f /usr/local/bin/spmb 2>/dev/null || true)" ]; then
+        ln -sfn "$self" /usr/local/bin/spmb
+        say "   /usr/local/bin/spmb -> $self"
+    fi
+    [ -d /run/systemd/system ] || { warn "systemd is not running here; backup timer not installed."; return 0; }
+    cat > /etc/systemd/system/spmb-backup@.service <<'UNIT'
+[Unit]
+Description=SPMB daily backup (%i)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/spmb backup %i
+Nice=10
+IOSchedulingClass=idle
+UNIT
+    cat > /etc/systemd/system/spmb-backup@.timer <<'UNIT'
+[Unit]
+Description=SPMB daily backup (%i)
+
+[Timer]
+OnCalendar=*-*-* 01:30:00 Asia/Jakarta
+RandomizedDelaySec=20m
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+UNIT
+    systemctl daemon-reload
+}
+
+enable_backup_timer() {
+    [ -d /run/systemd/system ] || return 0
+    if systemctl enable --now "spmb-backup@$1.timer" >/dev/null 2>&1; then
+        say "   Daily backup timer: spmb-backup@$1.timer"
+    else
+        warn "Could not enable spmb-backup@$1.timer."
+    fi
+}
+
+# --- ports ---------------------------------------------------------------------------------
+port_in_use() {
+    local port="$1"
+    grep -qE "^${port}[[:space:]]" "$PORTS_FILE" 2>/dev/null && return 0
+    if command -v ss >/dev/null; then
+        [ -n "$(ss -ltnH "sport = :$port" 2>/dev/null)" ] && return 0
+    fi
+    return 1
+}
+
+take_port() {
+    local name="$1" port
+    mkdir -p "$SPMB_ROOT"
+    [ -f "$PORTS_FILE" ] || printf '# Local ports taken by app stacks on this server: <port> <name>\n' > "$PORTS_FILE"
+    port="$(awk -v n="$name" '$2 == n {print $1; exit}' "$PORTS_FILE")"
+    if [ -n "$port" ]; then printf '%s' "$port"; return 0; fi
+    for ((port = PORT_MIN; port <= PORT_MAX; port++)); do
+        if ! port_in_use "$port"; then
+            printf '%s %s\n' "$port" "$name" >> "$PORTS_FILE"
+            printf '%s' "$port"
+            return 0
+        fi
+    done
+    die "No free port between $PORT_MIN and $PORT_MAX (see $PORTS_FILE)."
+}
+
+# --- init ----------------------------------------------------------------------------------
+cmd_init() {
+    local env="${1:-}" domain="${2:-}"
+    check_env "$env"
+    [[ "$domain" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$ ]] \
+        || die "Give the domain of this environment, e.g. spmb init $env staging.example.sch.id"
+    need_root
+    command -v docker >/dev/null || die "Docker is not installed (run deploy/server/setup.sh first)."
+    command -v openssl >/dev/null || die "openssl is missing."
+    lock
+    local dir; dir="$(env_dir "$env")"
+
+    step "Environment $env ($domain)"
+    install -d -m 0700 "$dir" "$dir/backups"
+
+    if [ -f "$dir/stack.env" ]; then
+        say "   $dir/stack.env exists; passwords, key and port are kept."
+        local old; old="$(get_var "$dir/stack.env" SPMB_DOMAIN)"
+        [ "$old" = "$domain" ] || warn "Domain stays '$old' (edit $dir/stack.env and app.env to change it)."
+    else
+        local port db_pass root_pass
+        port="$(take_port "spmb-$env")"
+        db_pass="$(openssl rand -hex 24)"
+        root_pass="$(openssl rand -hex 24)"
+        umask 077
+        cat > "$dir/stack.env" <<STACK
+# SPMB $env stack (made by spmb init). Keep it on the server; never commit it.
+SPMB_ENV=$env
+SPMB_DOMAIN=$domain
+SPMB_PORT=$port
+SPMB_TAG=
+SPMB_PREVIOUS_TAG=
+SPMB_DB_PASSWORD=$db_pass
+SPMB_DB_ROOT_PASSWORD=$root_pass
+STACK
+        cat > "$dir/app.env" <<APPENV
+# CodeIgniter settings of the SPMB $env stack (made by spmb init).
+# encryption.key protects 2FA secrets and other encrypted data: keep a copy off the server.
+CI_ENVIRONMENT = production
+app.baseURL = 'https://$domain/'
+
+database.default.hostname = db
+database.default.database = spmb
+database.default.username = spmb
+database.default.password = $db_pass
+database.default.DBDriver = MySQLi
+database.default.charset = utf8mb4
+database.default.DBCollat = utf8mb4_unicode_ci
+database.default.port = 3306
+
+encryption.key = hex2bin:$(openssl rand -hex 32)
+APPENV
+        umask 022
+        say "   Port 127.0.0.1:$port, database passwords and encryption.key created in $dir."
+    fi
+    # The app container (www-data, uid/gid 33) reads app.env through a read-only bind mount.
+    chown root:33 "$dir/app.env"
+    chmod 0640 "$dir/app.env"
+    chmod 0600 "$dir/stack.env"
+
+    install_host_bits
+    enable_backup_timer "$env"
+
+    local port; port="$(get_var "$dir/stack.env" SPMB_PORT)"
+    say
+    say "Next:"
+    say " - Cloudflare Tunnel public hostname: $domain -> http://127.0.0.1:$port"
+    if [ "$env" = staging ]; then
+        say " - spmb deploy staging"
+    else
+        say " - spmb deploy production   (promotes the image running on staging)"
+    fi
+    say " - First time only: spmb spark $env spmb:install"
+}
+
+# --- images --------------------------------------------------------------------------------
+resolve_commit() {
+    local ref="$1"
+    git -C "$SRC" rev-parse --verify --quiet "${ref}^{commit}" \
+        || die "Unknown commit, branch or tag '$ref' in $SRC."
+}
+
+fetch_src() {
+    [ -d "$SRC/.git" ] || [ -f "$SRC/.git" ] \
+        || die "No git checkout in $SRC. Clone the repository there first (docs/deployment.md)."
+    step "Fetching $SRC"
+    git -C "$SRC" fetch --prune --tags origin
+}
+
+image_exists() { docker image inspect "$1" >/dev/null 2>&1; }
+
+image_commit() {
+    docker image inspect -f '{{ index .Config.Labels "org.opencontainers.image.revision" }}' "spmb-app:$1" 2>/dev/null || true
+}
+
+build_images() {
+    local sha="$1" tag="${1:0:12}" target
+    if image_exists "spmb-app:$tag" && image_exists "spmb-web:$tag"; then
+        say "   Images spmb-app:$tag and spmb-web:$tag exist; not rebuilt."
+        return 0
+    fi
+    step "Building $tag ($(git -C "$SRC" log -1 --format='%cs %s' "$sha"))"
+    for target in app web; do
+        git -C "$SRC" archive --format=tar "$sha" \
+            | DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile --target "$target" \
+                --label "org.opencontainers.image.revision=$sha" \
+                --label "org.opencontainers.image.title=spmb-$target" \
+                -t "spmb-$target:$tag" -
+    done
+}
+
+prune_images() {
+    local keep tag
+    keep=" $(for e in staging production; do
+        get_var "$(env_dir "$e")/stack.env" SPMB_TAG
+        get_var "$(env_dir "$e")/stack.env" SPMB_PREVIOUS_TAG
+    done | tr '\n' ' ') "
+    # Newest first; the newest $KEEP_IMAGES tags are kept as well as every tag in use.
+    docker image ls spmb-app --format '{{.Tag}}' | awk -v n="$KEEP_IMAGES" 'NR > n' | while read -r tag; do
+        [ -n "$tag" ] || continue
+        case "$keep" in *" $tag "*) continue ;; esac
+        docker image rm "spmb-app:$tag" "spmb-web:$tag" >/dev/null 2>&1 || true
+        say "   Removed old image $tag"
+    done
+    docker image prune -f >/dev/null 2>&1 || true
+}
+
+# --- health --------------------------------------------------------------------------------
+health_check() {
+    local env="$1" dir port domain code
+    dir="$(env_dir "$env")"
+    port="$(get_var "$dir/stack.env" SPMB_PORT)"
+    domain="$(get_var "$dir/stack.env" SPMB_DOMAIN)"
+    for _ in $(seq 1 20); do
+        code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 \
+            -H "Host: $domain" -H 'X-Forwarded-Proto: https' "http://127.0.0.1:$port/" || true)"
+        if [ "$code" = 200 ]; then
+            say "   Health check: HTTP 200 on / ($env, port $port)."
+            return 0
+        fi
+        sleep 3
+    done
+    warn "Health check failed: HTTP ${code:-none} on http://127.0.0.1:$port/ ($env)."
+    return 1
+}
+
+stack_running() { [ -f "$(env_dir "$1")/compose.yaml" ] && [ -n "$(dc "$1" ps -q db 2>/dev/null)" ]; }
+
+# Start <env> on image <tag>: copy compose.yaml of that commit, back up, up, migrate, import, check.
+activate() {
+    local env="$1" tag="$2" dir sha current
+    dir="$(env_dir "$env")"
+    sha="$(image_commit "$tag")"
+    [ -n "$sha" ] || die "Image spmb-app:$tag has no commit label."
+    current="$(get_var "$dir/stack.env" SPMB_TAG)"
+
+    git -C "$SRC" show "$sha:deploy/compose.yaml" > "$dir/compose.yaml.new" \
+        || die "deploy/compose.yaml not found in $sha."
+
+    if [ -n "$current" ] && stack_running "$env"; then
+        step "Backup before the update"
+        cmd_backup_unlocked "$env"
+    fi
+
+    mv -f "$dir/compose.yaml.new" "$dir/compose.yaml"
+    if [ "$current" != "$tag" ]; then
+        set_var "$dir/stack.env" SPMB_PREVIOUS_TAG "$current"
+        set_var "$dir/stack.env" SPMB_TAG "$tag"
+    fi
+
+    step "Starting spmb-$env on $tag"
+    if ! dc "$env" up -d --remove-orphans --wait --wait-timeout 300; then
+        dc "$env" ps || true
+        dc "$env" logs --tail 50 || true
+        fail_and_roll_back "$env" "$current" "containers did not become healthy"
+    fi
+
+    step "Migrations and bundled data"
+    if ! dc "$env" exec -T app php spark migrate --all \
+        || ! dc "$env" exec -T app php spark referensi:import --bawaan; then
+        fail_and_roll_back "$env" "$current" "migration or data import failed"
+    fi
+
+    if ! health_check "$env"; then
+        dc "$env" logs --tail 50 app web || true
+        fail_and_roll_back "$env" "$current" "health check failed"
+    fi
+
+    printf '%s %s %s %s\n' "$(date -Iseconds)" "$env" "$tag" "$sha" >> "$dir/deploys.log"
+    step "Cleaning old images"
+    prune_images
+    say
+    say "spmb-$env runs $tag ($sha)."
+}
+
+fail_and_roll_back() {
+    local env="$1" previous="$2" reason="$3" dir
+    dir="$(env_dir "$env")"
+    warn "Deploy of $env stopped: $reason."
+    if [ -n "$previous" ] && [ "$previous" != "$(get_var "$dir/stack.env" SPMB_TAG)" ]; then
+        warn "Switching back to the previous image $previous."
+        set_var "$dir/stack.env" SPMB_TAG "$previous"
+        set_var "$dir/stack.env" SPMB_PREVIOUS_TAG ""
+        local sha; sha="$(image_commit "$previous")"
+        [ -z "$sha" ] || git -C "$SRC" show "$sha:deploy/compose.yaml" > "$dir/compose.yaml" || true
+        dc "$env" up -d --remove-orphans --wait --wait-timeout 300 || true
+        health_check "$env" || true
+        warn "Migrations that already ran are not undone. If the old version misbehaves,"
+        warn "restore the backup made before the deploy: ls $dir/backups/; spmb restore $env <file>"
+    fi
+    exit 1
+}
+
+cmd_deploy() {
+    local env="${1:-}" ref="${2:-}" sha tag
+    check_env "$env"
+    need_root
+    require_init "$env"
+    lock
+    install_host_bits
+    fetch_src
+
+    if [ "$env" = staging ]; then
+        sha="$(resolve_commit "${ref:-origin/main}")"
+        build_images "$sha"
+        # The checkout follows staging, so this CLI matches what was just deployed.
+        if [ -z "$(git -C "$SRC" status --porcelain --untracked-files=no)" ]; then
+            git -C "$SRC" checkout -q --detach "$sha"
+        else
+            warn "$SRC has local changes; checkout left as it is."
+        fi
+        tag="${sha:0:12}"
+    else
+        if [ -z "$ref" ]; then
+            tag="$(get_var "$(env_dir staging)/stack.env" SPMB_TAG)"
+            [ -n "$tag" ] || die "Staging runs no image yet. Deploy staging first, or give a ref: spmb deploy production <ref>"
+            if ! image_exists "spmb-app:$tag" || ! image_exists "spmb-web:$tag"; then
+                die "Images for $tag are missing."
+            fi
+            sha="$(image_commit "$tag")"
+            say "   Promoting the image running on staging: $tag"
+        else
+            sha="$(resolve_commit "$ref")"
+            tag="${sha:0:12}"
+            [ "$tag" = "$(get_var "$(env_dir staging)/stack.env" SPMB_TAG)" ] \
+                || warn "$tag is not what runs on staging: production gets a build that staging has not tested."
+            build_images "$sha"
+        fi
+        say "   $(git -C "$SRC" log -1 --format='%h %cs %s' "$sha" 2>/dev/null || echo "$sha")"
+        confirm "Deploy $tag to PRODUCTION ($(get_var "$(env_dir production)/stack.env" SPMB_DOMAIN))?"
+    fi
+    activate "$env" "$tag"
+}
+
+cmd_rollback() {
+    local env="${1:-}" dir current previous
+    check_env "$env"
+    need_root
+    require_init "$env"
+    lock
+    dir="$(env_dir "$env")"
+    current="$(get_var "$dir/stack.env" SPMB_TAG)"
+    previous="$(get_var "$dir/stack.env" SPMB_PREVIOUS_TAG)"
+    [ -n "$previous" ] || die "No previous image recorded for $env."
+    image_exists "spmb-app:$previous" || die "Image spmb-app:$previous no longer exists."
+    confirm "Roll $env back from $current to $previous? (the database is not rolled back)"
+    local sha; sha="$(image_commit "$previous")"
+    git -C "$SRC" show "$sha:deploy/compose.yaml" > "$dir/compose.yaml"
+    set_var "$dir/stack.env" SPMB_TAG "$previous"
+    set_var "$dir/stack.env" SPMB_PREVIOUS_TAG "$current"
+    dc "$env" up -d --remove-orphans --wait --wait-timeout 300
+    health_check "$env"
+    printf '%s %s %s %s rollback\n' "$(date -Iseconds)" "$env" "$previous" "$sha" >> "$dir/deploys.log"
+    say "spmb-$env runs $previous again. Migrations are not undone; restore a backup if needed."
+}
+
+cmd_status() {
+    local env dir
+    for env in staging production; do
+        dir="$(env_dir "$env")"
+        printf '\n== %s\n' "$env"
+        if [ ! -f "$dir/stack.env" ]; then say "   not initialised"; continue; fi
+        local tag; tag="$(get_var "$dir/stack.env" SPMB_TAG)"
+        say "   domain   $(get_var "$dir/stack.env" SPMB_DOMAIN)"
+        say "   port     127.0.0.1:$(get_var "$dir/stack.env" SPMB_PORT)"
+        say "   image    ${tag:-none} $( [ -z "$tag" ] || git -C "$SRC" log -1 --format='(%cs %s)' "$(image_commit "$tag")" 2>/dev/null || true)"
+        say "   previous $(get_var "$dir/stack.env" SPMB_PREVIOUS_TAG)"
+        say "   backups  $(find "$dir/backups" -name "spmb-$env-*.tar" 2>/dev/null | wc -l) (latest: $(find "$dir/backups" -name "spmb-$env-*.tar" -printf '%f\n' 2>/dev/null | sort | tail -n 1))"
+        [ -f "$dir/compose.yaml" ] && dc "$env" ps --format 'table {{.Service}}\t{{.Status}}' 2>/dev/null | sed 's/^/   /'
+    done
+    printf '\n== host\n'
+    say "   cloudflared $(systemctl is-active cloudflared 2>/dev/null || echo unknown), cockpit $(systemctl is-active cockpit.socket 2>/dev/null || echo unknown)"
+    say "   disk $(df -h "$SPMB_ROOT" | awk 'NR == 2 {print $4 " free of " $2}')"
+}
+
+cmd_logs() {
+    local env="${1:-}"; shift || true
+    check_env "$env"
+    require_init "$env"
+    dc "$env" logs --tail 200 -f "$@"
+}
+
+cmd_spark() {
+    local env="${1:-}"; shift || true
+    check_env "$env"
+    require_init "$env"
+    [ "$#" -gt 0 ] || die "Usage: spmb spark <env> <command> [args...]"
+    local t; t="$(tty_flag)"
+    # shellcheck disable=SC2086 # $t is empty or -T
+    dc "$env" exec $t app php spark "$@"
+}
+
+# --- backup / restore ----------------------------------------------------------------------
+cmd_backup() {
+    local env="${1:-}"
+    check_env "$env"
+    need_root
+    require_init "$env"
+    lock
+    cmd_backup_unlocked "$env"
+}
+
+cmd_backup_unlocked() {
+    local env="$1" dir stamp work archive
+    dir="$(env_dir "$env")"
+    stack_running "$env" || die "spmb-$env is not running; nothing to back up."
+    stamp="$(date +%Y%m%d-%H%M%S)"
+    work="$(mktemp -d)"
+    archive="$dir/backups/spmb-$env-$stamp.tar"
+    install -d -m 0700 "$dir/backups"
+
+    dc "$env" exec -T db sh -c 'exec mysqldump --single-transaction --quick --routines --triggers \
+        --no-tablespaces --default-character-set=utf8mb4 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' \
+        2> >(grep -v 'Using a password' >&2) | gzip -6 > "$work/db.sql.gz"
+    dc "$env" exec -T app tar -C /var/www/html/writable -czf - uploads > "$work/uploads.tar.gz"
+    cp "$dir/app.env" "$work/app.env"
+    {
+        printf 'env=%s\n' "$env"
+        printf 'created=%s\n' "$(date -Iseconds)"
+        printf 'tag=%s\n' "$(get_var "$dir/stack.env" SPMB_TAG)"
+        printf 'commit=%s\n' "$(image_commit "$(get_var "$dir/stack.env" SPMB_TAG)")"
+    } > "$work/backup.info"
+    (umask 077 && tar -C "$work" -cf "$archive" backup.info db.sql.gz uploads.tar.gz app.env)
+    rm -rf "$work"
+    find "$dir/backups" -name "spmb-$env-*.tar" -mtime +$((KEEP_BACKUP_DAYS - 1)) -delete
+    say "   Backup: $archive ($(du -h "$archive" | cut -f1))"
+}
+
+cmd_restore() {
+    local env="${1:-}" file="${2:-}" dir work from key
+    check_env "$env"
+    need_root
+    require_init "$env"
+    [ -f "$file" ] || die "Usage: spmb restore <env> <backup.tar>"
+    lock
+    dir="$(env_dir "$env")"
+    work="$(mktemp -d)"
+    tar -C "$work" -xf "$file" backup.info db.sql.gz uploads.tar.gz app.env \
+        || die "$file is not an spmb backup."
+    from="$(sed -n 's/^env=//p' "$work/backup.info")"
+    # UU PDP (D-067): production holds real personal data; it never goes to staging.
+    if [ "$from" = production ] && [ "$env" = staging ]; then
+        rm -rf "$work"
+        die "A production backup cannot be restored on staging (personal data stays in production)."
+    fi
+    stack_running "$env" || die "spmb-$env is not running. Deploy it first (spmb deploy $env), then restore."
+    say "Backup of '$from' from $(sed -n 's/^created=//p' "$work/backup.info") (image $(sed -n 's/^tag=//p' "$work/backup.info"))."
+    confirm "Replace ALL data of $env (database and uploaded files) with this backup?"
+
+    step "Safety backup of the current data"
+    cmd_backup_unlocked "$env"
+
+    step "Database"
+    dc "$env" exec -T db sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS \`$MYSQL_DATABASE\`; CREATE DATABASE \`$MYSQL_DATABASE\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"' \
+        2> >(grep -v 'Using a password' >&2)
+    gunzip -c "$work/db.sql.gz" | dc "$env" exec -T db sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' \
+        2> >(grep -v 'Using a password' >&2)
+
+    step "Uploaded files"
+    dc "$env" exec -T app sh -c 'rm -rf /var/www/html/writable/uploads && tar -C /var/www/html/writable -xzf -' \
+        < "$work/uploads.tar.gz"
+
+    # Encrypted data (2FA secrets) only opens with the key it was made with.
+    key="$(sed -n 's/^encryption\.key = //p' "$work/app.env" | tail -n 1)"
+    if [ -n "$key" ] && [ "$key" != "$(sed -n 's/^encryption\.key = //p' "$dir/app.env" | tail -n 1)" ]; then
+        cp "$dir/app.env" "$dir/app.env.before-restore"
+        sed -i "s|^encryption\.key = .*|encryption.key = $key|" "$dir/app.env"
+        say "   encryption.key taken from the backup (old file: app.env.before-restore)."
+    fi
+    rm -rf "$work"
+
+    dc "$env" restart app >/dev/null
+    dc "$env" exec -T app php spark migrate --all
+    dc "$env" exec -T app php spark cache:clear >/dev/null 2>&1 || true
+    health_check "$env"
+    say "Restore of $env finished."
+}
+
+# --- dispatch ------------------------------------------------------------------------------
+local args=()
+for a in "$@"; do
+    case "$a" in
+        -y|--yes) ASSUME_YES=1 ;;
+        -h|--help) usage; return 0 ;;
+        *) args+=("$a") ;;
+    esac
+done
+set -- "${args[@]+"${args[@]}"}"
+
+local cmd="${1:-}"; shift || true
+case "$cmd" in
+    init)     cmd_init "$@" ;;
+    deploy)   cmd_deploy "$@" ;;
+    rollback) cmd_rollback "$@" ;;
+    status)   cmd_status ;;
+    logs)     cmd_logs "$@" ;;
+    backup)   cmd_backup "$@" ;;
+    restore)  cmd_restore "$@" ;;
+    spark)    cmd_spark "$@" ;;
+    ''|help)  usage ;;
+    *)        usage >&2; die "Unknown command '$cmd'." ;;
+esac
+}
+
+main "$@"; exit $?
