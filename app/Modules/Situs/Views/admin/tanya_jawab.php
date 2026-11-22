@@ -42,7 +42,7 @@ $move = static function (string $action, array $hidden, string $direction, bool 
 
 <?= $this->section('content') ?>
 <?php if ($groups === []) : ?>
-    <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.qaAdminEmptyTitle'), 'text' => lang('Situs.qaAdminEmptyText'), 'icon' => 'info', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => ['label' => lang('Situs.qaAdd'), 'url' => 'admin/tanya-jawab/tambah']]]) ?>
+    <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.qaAdminEmptyTitle'), 'text' => lang('Situs.qaAdminEmptyText'), 'icon' => 'message-circle-question-mark', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => ['label' => lang('Situs.qaAdd'), 'url' => 'admin/tanya-jawab/tambah']]]) ?>
 <?php else : ?>
     <div class="space-y-6">
         <?php if ($incomplete > 0) : ?>
@@ -91,7 +91,7 @@ $move = static function (string $action, array $hidden, string $direction, bool 
                                 <?php if ($shown || ! $todo) : ?>
                                     <form method="post" action="<?= url_to('situs.tanya-jawab.tampilkan', $item['id']) ?>">
                                         <?= csrf_field() ?><input type="hidden" name="tampil" value="<?= $shown ? '0' : '1' ?>">
-                                        <button type="submit" class="<?= $btn ?>"><?= icon($shown ? 'ban' : 'eye', 'h-4 w-4') ?><?= lang($shown ? 'Situs.qaHide' : 'Situs.qaShow') ?></button>
+                                        <button type="submit" class="<?= $btn ?>"><?= icon($shown ? 'eye-off' : 'eye', 'h-4 w-4') ?><?= lang($shown ? 'Situs.qaHide' : 'Situs.qaShow') ?></button>
                                     </form>
                                 <?php endif ?>
                                 <form method="post" action="<?= url_to('situs.tanya-jawab.hapus', $item['id']) ?>" data-confirm="<?= esc(lang('Situs.qaDeleteConfirm', [$item['question']]), 'attr') ?>">
