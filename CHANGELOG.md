@@ -8,6 +8,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - Platform round (D-066…D-075): writing standard skill `bahasa-indonesia-plain`; visual and chart rules in `spmb-ui`;
   Claude cloud environment setup kept in the repository (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`);
   `AGENTS.md` for Codex and other agents.
+- Dashboard chart of registration methods; charts keep their text readable on phones; gentle entrance and hover motion
+  that respects "reduce motion" (D-070).
 - Visual asset pipeline moved to Codex: identity style guide (santri, Islamic, NU, Indonesian, Bhinneka), strict respect
   rules for religious elements, 21 new briefs (patterns, dividers, special "Daftar sekarang" button, loader, page and
   state paintings, default share image) and an asset checker (`ai/tools/check_assets.py`).
@@ -95,7 +97,9 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 
 ### Changed
 - Minimum runtimes: PHP 8.5.13 (Composer platform too), Node.js 24, MySQL 8.4 in CI (D-069); 424 tests green on PHP 8.5.13.
-- `lucide-static` (ISC) added for the Lucide icon set (D-070).
+- Icons are Lucide line icons without coloured backgrounds; eyebrow labels and accent borders removed (D-070).
+  Icons are generated with `npm run icons` from `resources/icons.json` into `app/Helpers/lucide_icons.php`.
+- `composer test` no longer stops at Composer's 300-second limit (the suite takes about six minutes).
 - Only three roles: Admin Sekolah, Panitia (one committee role) and Siswa (applicant access); Kepala Sekolah, Petugas Tes,
   Petugas Daftar Ulang and Petugas Seragam removed and their accounts moved to Panitia; guide `/panduan/panitia` (D-063).
 - Project licence is now proprietary (© Arumi Studios), replacing the inherited CodeIgniter MIT notice (D-017).

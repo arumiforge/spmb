@@ -36,7 +36,8 @@ create your own branch from `main` instead.
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
 | `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`): Docker, PHP 8.5/Node 24, design rules, Tanya Jawab, Codex; includes PR #25 | foundation done, workers running |
-| `feat/plat-docker`, `feat/plat-ui`, `feat/plat-tanya-jawab` | workers A, B, C | Platform packages | in progress |
+| `feat/plat-docker`, `feat/plat-tanya-jawab` | workers A, C | Platform packages | in progress |
+| `feat/plat-ui` | worker B | Lucide icons and visual rules | merged into the integration branch (#28) |
 | `feat/plat-codex` | worker D | Codex briefs and identity | merged into the integration branch (#27) |
 | `nty/exciting-mendel-ukwgth` | session go-live | Domain typo fix, `provision.sh` lock-out guards (D-065) | PR #25 open; merged into `pw/zealous-albattani-2rz2z1` |
 | `phase-3` | coordinator | Phase 3 integration branch | merged into `main` (PR #23) |
@@ -60,7 +61,8 @@ when the container idles).
    import): same protocol (`docs/coordination.md`, integration branch `phase-4`, foundation first, workers). Panitia does
    re-registration and uniform pickup (D-051, D-063); reports are for Admin Sekolah.
 3. **Visual assets (Codex, D-073/D-075)**: the user runs the Codex starter prompt in `ai/README.md`, batch `svg-kit` first (015–018), then `paintings-pages`, `paintings-states`, `variants-001-012` (013/014). Review each Codex PR with `python3 ai/tools/check_assets.py` and install per `spmb-ai-image` (needs `resources/css/visual/`, a loader partial, `.tombol-daftar` on the main CTA, fallback share image).
-4. **Small follow-ups**: Indonesian "Pilih berkas" button instead of the browser's "Choose File" on the applicant page;
+4. **Copy sweep (D-071)**: sentence case for existing headings, buttons and labels in all `Language/id` files (for example `Situs.academicYear` "Tahun Ajaran {0}", "Daftar Sekarang", "Cek Status"), in one pass.
+5. **Small follow-ups**: Indonesian "Pilih berkas" button instead of the browser's "Choose File" on the applicant page;
    optional icons `camera`, `printer`, `undo` in `ui_helper` (attendance page uses `eye`/`clipboard`/`x` for now); update the
    share image year each academic year.
 
