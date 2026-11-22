@@ -15,10 +15,10 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
 $wa        = preg_replace('/\D/', '', $page['whatsapp']);
 $wa        = str_starts_with((string) $wa, '0') ? '62' . substr((string) $wa, 1) : $wa;
 $contacts  = array_filter([
-    $page['whatsapp'] !== '' ? ['label' => lang('Situs.qaWhatsapp'), 'text' => $page['whatsapp'], 'href' => 'https://wa.me/' . $wa] : null,
-    $page['phone'] !== '' ? ['label' => lang('Situs.qaPhone'), 'text' => $page['phone'], 'href' => 'tel:' . preg_replace('/[^0-9+]/', '', $page['phone'])] : null,
-    $page['email'] !== '' ? ['label' => lang('Situs.qaEmail'), 'text' => $page['email'], 'href' => 'mailto:' . $page['email']] : null,
-    $page['address'] !== '' ? ['label' => lang('Situs.qaAddress'), 'text' => $page['address'], 'href' => null] : null,
+    $page['whatsapp'] !== '' ? ['icon' => 'phone', 'label' => lang('Situs.qaWhatsapp'), 'text' => $page['whatsapp'], 'href' => 'https://wa.me/' . $wa] : null,
+    $page['phone'] !== '' ? ['icon' => 'phone', 'label' => lang('Situs.qaPhone'), 'text' => $page['phone'], 'href' => 'tel:' . preg_replace('/[^0-9+]/', '', $page['phone'])] : null,
+    $page['email'] !== '' ? ['icon' => 'mail', 'label' => lang('Situs.qaEmail'), 'text' => $page['email'], 'href' => 'mailto:' . $page['email']] : null,
+    $page['address'] !== '' ? ['icon' => 'map-pin', 'label' => lang('Situs.qaAddress'), 'text' => $page['address'], 'href' => null] : null,
 ]);
 ?>
 <?= $this->extend('layouts/public') ?>
@@ -69,7 +69,9 @@ $contacts  = array_filter([
         <?php if ($contacts !== []) : ?>
             <dl class="mb-6 grid gap-4 sm:grid-cols-2">
                 <?php foreach ($contacts as $contact) : ?>
-                    <div class="min-w-0">
+                    <div class="flex min-w-0 items-start gap-3">
+                        <?= icon($contact['icon'], 'mt-0.5 h-5 w-5 shrink-0 text-primary-700 dark:text-primary-400') ?>
+                        <div class="min-w-0">
                         <dt class="text-sm text-gray-500 dark:text-gray-400"><?= esc($contact['label']) ?></dt>
                         <dd class="break-words font-medium text-gray-900 dark:text-white">
                                 <?php if ($contact['href'] !== null) : ?>
@@ -78,6 +80,7 @@ $contacts  = array_filter([
                                     <?= nl2br(esc($contact['text'])) ?>
                                 <?php endif ?>
                         </dd>
+                        </div>
                     </div>
                 <?php endforeach ?>
             </dl>
