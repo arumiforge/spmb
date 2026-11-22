@@ -77,7 +77,7 @@ when the container idles).
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
 - **Decision for the user**: keep the direct SSH port open with key-only login as the last way in (the VPS has no
   provider console), or close it once the tunnel works (nothing public, but a tunnel outage locks everyone out).
-- Go-live (D-056): VPS ready; `spmbsmpnualmarufkudus.web.id` still has to be added to the developer's Cloudflare account; then `docs/deployment.md` → "Go-live" steps.
+- Go-live (D-056): VPS ready; `spmbsmpnualmarufkudus.web.id` still has to be added to the developer's Cloudflare account; then `docs/deployment.md` → "First server".
 - Codex batches (briefs 013–035) are queued in `ai/README.md`; waiting for the user to start Codex.
 
 ## Session log (newest first, keep the last 10)
