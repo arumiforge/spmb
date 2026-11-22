@@ -79,4 +79,7 @@ spmb status; spmb logs staging app
 4. `spmb spark staging spmb:install …`, load `/`, `/masuk`, `/admin` through the port, screenshots at
    360 and 1280 px; `spmb backup`, `spmb restore`, `spmb deploy production`, `spmb rollback`.
 5. `setup.sh`: run it in a privileged systemd `ubuntu:24.04` container (own network namespace, never with
-   `--network host`), with `SSH_CONNECTION` set to simulate a session; run it twice.
+   `--network host`), with `SSH_CONNECTION` set to simulate a session; run it twice. A privileged
+   systemd container shares the kernel clock and can shift it by the time-zone offset (systemd's RTC
+   "warp"), which breaks TLS ("certificate is not yet valid"): remove the container afterwards and reset
+   the clock from an HTTP `Date` header (`date -s "<Date>"`).
