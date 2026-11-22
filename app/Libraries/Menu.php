@@ -20,7 +20,7 @@ class Menu
     /**
      * Groups in display order; entries without a group go first.
      */
-    private const GROUP_ORDER = ['', 'Pendaftaran', 'Tes', 'Laporan', 'Situs', 'Pengaturan'];
+    private const GROUP_ORDER = ['', 'Pendaftaran', 'Tes', 'Laporan', 'Website', 'Pengaturan'];
 
     /**
      * @param list<array<string, mixed>> $coreItems Entries that do not belong to a module

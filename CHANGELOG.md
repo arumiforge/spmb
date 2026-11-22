@@ -10,6 +10,9 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   `AGENTS.md` for Codex and other agents.
 - Dashboard chart of registration methods; charts keep their text readable on phones; gentle entrance and hover motion
   that respects "reduce motion" (D-070).
+- Tanya Jawab (D-072): public page `/tanya-jawab` (topics, accordion, links to the real pages; shown in the menu only when
+  something is published), admin screen under Website (`situs.kelola`, audited), starter questions for SMP NU Al Ma'ruf
+  Kudus in the client pack loaded by `spmb:branding` (29 questions; 4 stay hidden until the school fills them in).
 - Docker images (PHP 8.5 FPM + Nginx), compose stack for staging and production on one server, one-time server setup
   script (`deploy/server/setup.sh`: Docker, cloudflared, Cockpit, firewall with lock-out guards) and the `spmb` server
   CLI (init, deploy, rollback, status, logs, backup, restore, spark) with daily backups and automatic rollback of a
@@ -117,6 +120,7 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   building, D-068).
 
 ### Fixed
+- Public menu links were duplicated because `Situs/Config/PublicMenu.php` overwrote the registry's items.
 - First client's domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image) (D-065).
 - `deploy/provision.sh` no longer locks the admin out: the SSH port (also a custom one) stays open until the tunnel
   runs, and password login is switched off (via `sshd_config.d/00-spmb.conf`, which also works on cloud images) only

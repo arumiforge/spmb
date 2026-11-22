@@ -7,6 +7,11 @@ personal data.
 
 ## Current phase
 
+**Platform round**: done on `pw/zealous-albattani-2rz2z1`, PR #26 → `main` waits for the user (supersedes #25). Docker
+on the VPS (staging + production, server pulls and builds, Cockpit + cloudflared on the host), PHP 8.5.13 / Node 24 /
+MySQL 8.4, Lucide icons and visual rules, public Tanya Jawab page, Codex briefs, cloud environment setup in the repo
+(D-066…D-076, `docs/platform-plan.md`). 442 tests green on PHP 8.5.13.
+
 **Phase 3 — Placement test**: done and merged into `main` (PR #23; foundation #18, three roles #19, packages
 B #20, A #22, C #21; 424 tests green). Module Tes: rooms, calendar with
 holidays, sessions + generator, automatic allocation, seat moves with a change log, attendance by QR/search with an
@@ -35,8 +40,8 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`): Docker, PHP 8.5/Node 24, design rules, Tanya Jawab, Codex; includes PR #25 | foundation done, workers running |
-| `feat/plat-tanya-jawab` | worker C | Tanya Jawab page | in progress |
+| `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`): Docker, PHP 8.5/Node 24, design rules, Tanya Jawab, Codex; includes PR #25 | all packages merged; PR #26 → `main` ready for the user |
+| `feat/plat-tanya-jawab` | worker C | Tanya Jawab page | merged into the integration branch (#30) |
 | `feat/plat-docker` | worker A | Docker and server | merged into the integration branch (#29) |
 | `feat/plat-ui` | worker B | Lucide icons and visual rules | merged into the integration branch (#28) |
 | `feat/plat-codex` | worker D | Codex briefs and identity | merged into the integration branch (#27) |
@@ -47,6 +52,9 @@ create your own branch from `main` instead.
 | `phase-2` and `feat/p2-*` | coordinator, workers A–D | Phase 2 | merged into `main` (PR #14) |
 
 ## Next steps
+
+0. **User merges PR #26**, then decides the direct SSH port question (Blockers), then go-live (step 1).
+   The school fills in the 4 hidden Tanya Jawab answers (`[ISI SEKOLAH: …]`: costs, contacts) in Website → Tanya jawab.
 
 Start a new session from `origin/main` (`spmb-session`; `composer install`, `npm ci && npm run build`,
 `php spark spmb:install --demo` for local work; in cloud containers run `service mysql start` first — MySQL stops
@@ -82,6 +90,7 @@ when the container idles).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — merged D (#27 Codex briefs, AGENTS.md, D-075), B (#28 Lucide, visual rules, motion, charts), A (#29 Docker, setup.sh, `spmb` CLI, D-076), C (#30 Tanya Jawab, menu fix); combined run 442 tests green, lint clean, build OK, pages checked at 360/1280 px; Docker web image and PHP base build here (Composer download blocked only by this container's proxy). Next: user merges #26, SSH port decision, go-live.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — first workers failed at environment setup (old inline script on PHP 8.3); cloud setup moved into the repo (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`, D-074), the SPMB environment now runs it, Composer platform set to 8.5.13 (CI green); workers A–D restarted. Next: review worker PRs.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user's answers: Docker on the VPS with Cockpit + host cloudflared (no Proxmox), staging + production stacks on one VPS from `main`, server pulls and builds (no deploy key), public Tanya Jawab page; foundation landed (PHP ^8.5.13 / Node 24 / MySQL 8.4 in CI, 424 tests green on 8.5.13, lucide-static, `bahasa-indonesia-plain` skill, visual and chart rules, D-066…D-073, `docs/platform-plan.md`); PR #25 merged in; workers A–D started. Next: review worker PRs, integrate, PR to `main`.
 - 2026-11-19 · session go-live · `nty/exciting-mendel-ukwgth` — domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image re-rendered); `provision.sh` keeps the SSH port (custom too) open until the tunnel runs and turns password login off only when an admin key exists; deployment doc: 127.0.0.1 ingress, real SSH port, known_hosts from the server, Bitvise via `cloudflared access tcp` (D-065). Next: user merges, go-live.
