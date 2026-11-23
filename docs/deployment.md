@@ -131,14 +131,27 @@ Server IPs, ports and passwords stay out of the repository.
    - Do not install fail2ban or similar: on a NAT VPS every SSH client appears to come from the provider's
      gateway address, so a ban would lock everyone out. Key-only login already defeats password guessing.
 
-5. **Repository access (developer).** Give the server read access yourself — a read-only deploy key
-   created on the server (`ssh-keygen -t ed25519`, public key added to the repository's *Deploy keys*) or a
-   fine-grained read-only token in the clone URL's credential helper. Never put the key or token in the
-   repository, in GitHub secrets or in these docs. Then:
+5. **Repository access (developer).** Give the server read access yourself with a read-only deploy key
+   made on the server. GitHub accepts a deploy key for one repository only, so each repository gets its own
+   key and an SSH host alias (`github-<app>`); other apps on the same server then add their own pair
+   without touching this one. Never put the key in the repository, in GitHub secrets or in these docs.
 
    ```bash
-   git clone <repository URL> /opt/apps/spmb/src
+   ssh-keygen -t ed25519 -f /root/.ssh/spmb_deploy -N "" -C "spmb-prod deploy (read-only)"
+   printf 'Host github-spmb\n  HostName github.com\n  User git\n  IdentityFile /root/.ssh/spmb_deploy\n  IdentitiesOnly yes\n' >> /root/.ssh/config
+   chmod 600 /root/.ssh/config
+   cat /root/.ssh/spmb_deploy.pub   # GitHub → repository → Settings → Deploy keys → Add (no write access)
+   mkdir -p /opt/apps/spmb && git clone git@github-spmb:arumiforge/spmb.git /opt/apps/spmb/src
    ```
+
+   The key has no passphrase because `spmb deploy` fetches unattended; it can only read this repository.
+
+   **Other apps on the same server** live in `/opt/apps/<app>/` with their own deploy key and alias, their
+   own Docker stack published on a free `127.0.0.1` port that they record in `/opt/apps/PORTS`
+   (`<port> <name>`), and their own public hostname on the same tunnel (any domain on the same Cloudflare
+   account). Watch memory: each SPMB environment runs its own MySQL. A second SPMB school on the same
+   server is not supported by the `spmb` command yet (it always uses `/opt/apps/spmb` and the `spmb-<env>`
+   stack names).
 
 6. **Staging.**
 
