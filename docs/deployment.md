@@ -50,7 +50,8 @@ without it.
 `spmb deploy` builds from `git archive <commit>`, so an image is always one exact commit (label
 `org.opencontainers.image.revision`). Tag = the first 12 characters of the commit.
 
-- `assets` stage: `node:24` runs `npm ci && npm run build` (Tailwind scans `app/`).
+- `assets` stage: `node:24` runs `npm ci && npm run build` (Tailwind scans `app/`). Both `app` and `web`
+  copy its `public/build/` and `public/assets/img/` (minified SVGs) — see *Build notes* below.
 - `app`: `php:8.5-fpm` + intl, mysqli, gd (jpeg, webp, freetype), zip, exif, pcntl; `php.ini-production`
   with `docker/php/spmb.ini` (upload 10M, post 12M, memory 256M, `expose_php Off`, Asia/Jakarta, OPcache
   without timestamp checks); Composer `--no-dev --optimize`. Code is owned by root and read-only;
@@ -63,6 +64,31 @@ without it.
 - Not in the image (`.dockerignore`): `flowbite/` (licensed Pro source, D-018), `node_modules`, `vendor`
   (rebuilt), `.git`, `tests`, `docs`, `ai`, `deploy`, client `originals/` and `source/`, `writable/*` content,
   `.env`.
+
+#### Build notes: minified assets (D-086)
+
+Everything the public downloads is minified; the readable originals stay in the repository.
+
+| Asset | Original (edit this) | Served file | Made by |
+| --- | --- | --- | --- |
+| CSS | `resources/css/` | `public/build/app.css` | `npm run build:css` (Tailwind `--minify`) |
+| JavaScript | `resources/js/` | `public/build/*.js` | `npm run build:js` (esbuild `--minify`) |
+| SVG (patterns, dividers, loaders, button ornament) | `resources/img/<area>/*.svg`, unminified, as Codex delivered them | `public/assets/img/<area>/*.svg` | `npm run build:img` (`scripts/minify-assets.mjs`, svgo) |
+| WebP illustrations | masters in `ai/generated/` | `public/assets/img/<area>/*.webp` (committed) | already compressed by Codex; copied as is |
+
+- `npm run build` runs `build:img`, `build:css` and `build:js`, locally (Laragon), in CI and in the Docker
+  `assets` stage. `public/build/` and `public/assets/img/**/*.svg` are build output and ignored by git, so a
+  fresh checkout shows no patterns or loaders until `npm run build` has run.
+- svgo settings: `multipass`, `preset-default` with `cleanupIds`, `inlineStyles`, `minifyStyles`,
+  `mergePaths` and `convertShapeToPath` off. The `viewBox` is kept (svgo 4 no longer removes it by default),
+  so are ids (`memuat-kecil.svg#diam` is a `<view>` target, patterns use `<use href="#…">`), classes and
+  `style="--urutan:…"`. svgo 4 cannot parse `@keyframes` selectors, so the script hides each `<style>` body
+  while svgo runs and puts it back with only its whitespace collapsed (it fails the build if a block is lost).
+- To add or replace an SVG: put the original in `resources/img/<area>/`, run `npm run build:img`
+  (`node scripts/minify-assets.mjs --verbose` lists each file's size), reference it as
+  `/assets/img/<area>/<name>.svg`. Never edit the files under `public/assets/img/` by hand.
+- First run (11 SVGs): 6,698 → 6,137 bytes (−8.4 %). The delivered SVGs were already hand-compact; the gain is
+  mostly shorter path data and removed line breaks.
 
 Examples of both settings files, with every key explained and no real values, are in
 `deploy/env/production/` and `deploy/env/staging/` (`stack.env.example`, `app.env.example`). `spmb init` writes

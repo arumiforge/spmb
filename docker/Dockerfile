@@ -17,10 +17,12 @@ ARG NGINX_IMAGE=nginx:1.28-alpine
 ARG COMPOSER_IMAGE=composer:2
 
 # --- Frontend assets (Tailwind scans the PHP views, so they are copied in) -----------------
+# Builds public/build/ (CSS, JS) and public/assets/img/**/*.svg (svgo copies of resources/img/, D-086).
 FROM ${NODE_IMAGE} AS assets
 WORKDIR /src
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
+COPY scripts/ scripts/
 COPY resources/ resources/
 COPY app/ app/
 RUN npm run build
@@ -71,6 +73,7 @@ COPY spark ./
 COPY clients/ clients/
 COPY --from=vendor /var/www/html/vendor/ vendor/
 COPY --from=assets /src/public/build/ public/build/
+COPY --from=assets /src/public/assets/img/ public/assets/img/
 # writable/ holds only the index.html guards (.dockerignore); the named volume mounted here keeps
 # logs, cache, sessions and uploads. Docker copies this skeleton into a new, empty volume.
 COPY --chown=www-data:www-data writable/ writable/
@@ -88,6 +91,7 @@ COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY docker/nginx/spmb.conf /etc/nginx/conf.d/spmb.conf
 COPY public/ /var/www/html/public/
 COPY --from=assets /src/public/build/ /var/www/html/public/build/
+COPY --from=assets /src/public/assets/img/ /var/www/html/public/assets/img/
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD wget -q -O /dev/null http://127.0.0.1/healthz || exit 1

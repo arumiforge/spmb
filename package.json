@@ -4,7 +4,8 @@
   "description": "SPMB frontend assets (Tailwind CSS v4 + Flowbite). Built into public/build/.",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "npm run build:css && npm run build:js",
+    "build": "npm run build:img && npm run build:css && npm run build:js",
+    "build:img": "node scripts/minify-assets.mjs",
     "build:css": "tailwindcss -i resources/css/app.css -o public/build/app.css --minify",
     "build:js": "esbuild resources/js/app.js resources/js/charts.js resources/js/scanner.js resources/js/ikon3d.js --bundle --minify --format=iife --target=es2020 --outdir=public/build",
     "icons": "node scripts/icons.mjs",
