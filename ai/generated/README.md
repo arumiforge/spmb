@@ -52,6 +52,11 @@ status to `done`. Nothing here is served by the app directly.
 | 048 | `install/img/langkah/langkah-3.webp` | 640×480 | 64.77 | Transparent | Shared crop, aisyah shows her registration card at the school gate |
 | 048 | `langkah-3-hijau.webp` | 1448×1086 | 249.13 | Transparent | Registration card header band in leaf green |
 | 048 | `install/img/langkah/langkah-3-hijau.webp` | 640×480 | 64.54 | Transparent | Shared crop, registration card header band in leaf green |
+| 072 | `install/img/langkah/latar-langkah-1.svg` | 400×480 | 0.95 | Transparent mask | Frangipani flowers and two leaves |
+| 072 | `install/img/langkah/latar-langkah-2.svg` | 400×480 | 0.75 | Transparent mask | Mango branch with leaves and one fruit |
+| 072 | `install/img/langkah/latar-langkah-3.svg` | 400×480 | 1.04 | Transparent mask | Jasmine sprig with flowers and a bud |
+| 072 | `install/css/latar-langkah.css` | 420 px minimum card height | 1.30 | School colour through masks | School colour, theme, top-aligned mask and print rules |
+| 072 | `demo/index.html` | 360×800 and 1280×800 | 20.24 | White or gray-900 | Three step cards checked in both themes and school colours |
 
 ### paintings-pages (2026-11-24)
 
