@@ -236,7 +236,7 @@ The stack must be running (deploy first on a new server).
 | Site down, SSH down | Cockpit at `https://konsol.<domain>` → Terminal |
 | Cockpit down, SSH works | `systemctl status cockpit.socket` |
 | Both down | Direct SSH with your key on the provider's SSH port (Bitvise) still works (D-077); then check `systemctl status cloudflared` and the Cloudflare dashboard → Tunnels |
-| `setup.sh` says "Could not get lock /var/lib/dpkg/lock-frontend … (unattended-upgr)" | A fresh server runs its automatic security updates first. Do not kill them; wait until `pgrep -x unattended-upgr` prints nothing, then run `setup.sh` again. The current `setup.sh` waits by itself |
+| `setup.sh` says "Could not get lock /var/lib/dpkg/lock-frontend … (unattended-upgr)" | A fresh server runs its automatic security updates first. Do not kill them; wait until `pgrep -af 'unattended-upgrade( |$)|apt-get|dpkg'` prints nothing (not `pgrep -x unattended-upgr`: that also matches the always-running `unattended-upgrade-shutdown` service), then run `setup.sh` again. The current `setup.sh` waits by itself |
 | Disk full | `docker system df`; `docker image prune`; old backups in `/opt/apps/spmb/<env>/backups/` |
 | Reboot needed (`/var/run/reboot-required`) | Reboot in a quiet hour; containers come back (`restart: unless-stopped`) |
 

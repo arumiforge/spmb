@@ -63,7 +63,9 @@ esac
 # instead of failing (never kill it: an interrupted dpkg leaves packages half-installed).
 wait_for_apt() {
     local waited=0
-    while pgrep -x unattended-upgr >/dev/null || pgrep -x apt-get >/dev/null \
+    # Match the worker (/usr/bin/unattended-upgrade), not the always-running
+    # unattended-upgrade-shutdown service, whose process name is also "unattended-upgr".
+    while pgrep -f 'bin/unattended-upgrade( |$)' >/dev/null || pgrep -x apt-get >/dev/null \
         || pgrep -x apt >/dev/null || pgrep -x dpkg >/dev/null; do
         [ "$waited" -eq 0 ] && say "Another package job is running (automatic updates?); waiting for it to finish..."
         waited=$((waited + 10))
