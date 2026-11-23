@@ -48,6 +48,14 @@ status to `done`. Nothing here is served by the app directly.
 | 022 | `install/img/section/persyaratan-hijau.webp` | 690×663 | 138.63 | Transparent | Shared crop, folder and phone case in leaf green |
 | 022 | `persyaratan-dark-hijau.webp` | 1254×1254 | 451.10 | Transparent | Gentle tonal lift and a faint rim; folder and phone case in leaf green |
 | 022 | `install/img/section/persyaratan-dark-hijau.webp` | 690×663 | 135.97 | Transparent | Shared crop, gentle tonal lift and a faint rim; folder and phone case in leaf green |
+| 023 | `jadwal.webp` | 1254×1254 | 424.01 | Transparent | Blank calendar blocks, with one highlighted cell and two sage dots |
+| 023 | `install/img/section/jadwal.webp` | 710×689 | 129.83 | Transparent | Shared crop, blank calendar blocks, with one highlighted cell and two sage dots |
+| 023 | `jadwal-dark.webp` | 1254×1254 | 397.89 | Transparent | Gentle tonal lift and a faint rim |
+| 023 | `install/img/section/jadwal-dark.webp` | 710×689 | 127.12 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 023 | `jadwal-hijau.webp` | 1254×1254 | 423.92 | Transparent | Calendar cell in leaf green |
+| 023 | `install/img/section/jadwal-hijau.webp` | 710×689 | 129.83 | Transparent | Shared crop, calendar cell in leaf green |
+| 023 | `jadwal-dark-hijau.webp` | 1254×1254 | 397.82 | Transparent | Gentle tonal lift and a faint rim; calendar cell in leaf green |
+| 023 | `install/img/section/jadwal-dark-hijau.webp` | 710×689 | 127.13 | Transparent | Shared crop, gentle tonal lift and a faint rim; calendar cell in leaf green |
 
 ### svg-kit (2026-11-23)
 

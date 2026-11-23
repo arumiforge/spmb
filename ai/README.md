@@ -59,7 +59,7 @@ Batches are delivered in this order: `svg-kit` (no image generator needed) → `
 | 020 | [beranda-kebersamaan](prompts/020-beranda-kebersamaan.md) | paintings-pages | painting | Home: learning together (Bhinneka) | generated |
 | 021 | [beranda-langkah](prompts/021-beranda-langkah.md) | paintings-pages | painting | Home: three steps to register | generated |
 | 022 | [persyaratan](prompts/022-persyaratan.md) | paintings-pages | painting | `/persyaratan` | generated |
-| 023 | [jadwal](prompts/023-jadwal.md) | paintings-pages | painting | `/jadwal` | requested |
+| 023 | [jadwal](prompts/023-jadwal.md) | paintings-pages | painting | `/jadwal` | generated |
 | 024 | [tanya-jawab](prompts/024-tanya-jawab.md) | paintings-pages | painting | `/tanya-jawab` | requested |
 | 025 | [cek-status](prompts/025-cek-status.md) | paintings-pages | painting | `/cek-status` | requested |
 | 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | requested |
