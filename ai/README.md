@@ -52,7 +52,7 @@ Batches are delivered in this order: `svg-kit` (no image generator needed) → `
 | 011 | [panduan-petugas](prompts/011-panduan-petugas.md) | — | painting | Staff guide cover | done |
 | 012 | [panduan-calon-murid](prompts/012-panduan-calon-murid.md) | — | painting | Applicant guide cover | done |
 | 015 | [pola](prompts/015-pola.md) | svg-kit | SVG + CSS | Tileable patterns: kawung, khatam, anyaman, ceplok daun | generated |
-| 016 | [pemisah](prompts/016-pemisah.md) | svg-kit | SVG + CSS | Full-width section dividers: lengkung, tumpal, mega, bukit | requested |
+| 016 | [pemisah](prompts/016-pemisah.md) | svg-kit | SVG + CSS | Full-width section dividers: lengkung, tumpal, mega, bukit | generated |
 | 017 | [tombol-daftar](prompts/017-tombol-daftar.md) | svg-kit | SVG + CSS | Special "Daftar sekarang" button, all states | requested |
 | 018 | [memuat](prompts/018-memuat.md) | svg-kit | SVG + CSS | Loading animation, large and in-button | requested |
 | 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | requested |

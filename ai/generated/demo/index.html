@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pratinjau aset SPMB</title>
     <link rel="stylesheet" href="../install/css/pola.css">
+    <link rel="stylesheet" href="../install/css/pemisah.css">
     <style>
         :root {
             color-scheme: light;
@@ -98,6 +99,10 @@
         .pola-khatam { --pola-gambar: url("../img/pola/pola-khatam.svg"); }
         .pola-anyaman { --pola-gambar: url("../img/pola/pola-anyaman.svg"); }
         .pola-ceplok-daun { --pola-gambar: url("../img/pola/pola-ceplok-daun.svg"); }
+        .pemisah-lengkung { --pemisah-gambar: url("../img/pemisah/pemisah-lengkung.svg"); }
+        .pemisah-tumpal { --pemisah-gambar: url("../img/pemisah/pemisah-tumpal.svg"); }
+        .pemisah-mega { --pemisah-gambar: url("../img/pemisah/pemisah-mega.svg"); }
+        .pemisah-bukit { --pemisah-gambar: url("../img/pemisah/pemisah-bukit.svg"); }
 
         .contoh-pudar, .bidang-pola {
             position: relative;
@@ -132,6 +137,20 @@
         .bidang-pola .pola { --pola-ukuran: 25%; }
 
         figcaption { margin-top: .5rem; }
+
+        #judul-pemisah { margin-bottom: 1rem; }
+
+        .contoh-pemisah {
+            margin-top: 1rem;
+            padding-bottom: .75rem;
+        }
+
+        .bidang-warna {
+            position: relative;
+            background: var(--color-primary-600);
+        }
+
+        .ruang-warna { min-height: 4rem; }
     </style>
 </head>
 <body>
@@ -185,6 +204,46 @@
                     <figcaption>Ceplok daun</figcaption>
                 </figure>
             </div>
+        </section>
+        <section aria-labelledby="judul-pemisah">
+            <h2 class="isi" id="judul-pemisah">Pemisah bagian</h2>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="ruang-warna">
+                        <div class="pola pola-kawung pola-terang" aria-hidden="true"></div>
+                    </div>
+                    <div class="pemisah pemisah-lengkung" aria-hidden="true"></div>
+                </div>
+                <figcaption class="isi">Lengkung</figcaption>
+            </figure>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="ruang-warna"></div>
+                    <div class="pemisah pemisah-tumpal" aria-hidden="true"></div>
+                </div>
+                <figcaption class="isi">Tumpal</figcaption>
+            </figure>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="ruang-warna"></div>
+                    <div class="pemisah pemisah-mega" aria-hidden="true"></div>
+                </div>
+                <figcaption class="isi">Mega</figcaption>
+            </figure>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="ruang-warna"></div>
+                    <div class="pemisah pemisah-bukit pemisah-cermin" aria-hidden="true"></div>
+                </div>
+                <figcaption class="isi">Bukit bercermin</figcaption>
+            </figure>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="pemisah pemisah-lengkung pemisah-balik" aria-hidden="true"></div>
+                    <div class="ruang-warna"></div>
+                </div>
+                <figcaption class="isi">Lengkung terbalik</figcaption>
+            </figure>
         </section>
     </main>
     <script>

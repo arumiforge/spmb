@@ -1,0 +1,76 @@
+@layer components {
+    .pemisah {
+        display: block;
+        width: 100%;
+        height: var(--pemisah-tinggi, clamp(24px, 5vw, 64px));
+        margin-top: -1px;
+        background-color: var(--pemisah-warna, var(--pemisah-warna-baku, #fff));
+        -webkit-mask: var(--pemisah-gambar) bottom / 100% 100% no-repeat;
+        mask: var(--pemisah-gambar) bottom / 100% 100% no-repeat;
+        transform: scale(var(--pemisah-arah-x, 1), var(--pemisah-arah-y, 1));
+    }
+
+    .dark .pemisah {
+        --pemisah-warna-baku: #111827;
+    }
+
+    .pemisah-lengkung {
+        --pemisah-gambar: url("/assets/img/pemisah/pemisah-lengkung.svg");
+    }
+
+    .pemisah-tumpal {
+        --pemisah-tinggi: clamp(20px, 3vw, 40px);
+        --tumpal-lebar-ubin: calc(var(--pemisah-tinggi) * 96 / 40);
+        --pemisah-gambar: url("/assets/img/pemisah/pemisah-tumpal.svg");
+        -webkit-mask-repeat: repeat-x;
+        mask-repeat: repeat-x;
+        -webkit-mask-size: auto 100%;
+        mask-size: auto 100%;
+    }
+
+    @supports (width: round(down, 100%, 1px)) {
+        .pemisah-tumpal {
+            position: relative;
+            background: linear-gradient(to bottom, transparent 80%, var(--pemisah-warna, var(--pemisah-warna-baku, #fff)) 80%);
+            -webkit-mask: none;
+            mask: none;
+        }
+
+        .pemisah-tumpal::before {
+            /* Leave room for a whole number of tiles over a full-width base. */
+            position: absolute;
+            inset-block: 0;
+            inset-inline-start: 50%;
+            width: round(down, 100%, var(--tumpal-lebar-ubin));
+            transform: translateX(-50%);
+            background-color: var(--pemisah-warna, var(--pemisah-warna-baku, #fff));
+            -webkit-mask: var(--pemisah-gambar) left bottom / auto 100% repeat-x;
+            mask: var(--pemisah-gambar) left bottom / auto 100% repeat-x;
+            content: "";
+        }
+    }
+
+    .pemisah-mega {
+        --pemisah-gambar: url("/assets/img/pemisah/pemisah-mega.svg");
+        --pemisah-tinggi: clamp(28px, 5vw, 72px);
+    }
+
+    .pemisah-bukit {
+        --pemisah-gambar: url("/assets/img/pemisah/pemisah-bukit.svg");
+        --pemisah-tinggi: clamp(32px, 6vw, 80px);
+    }
+
+    .pemisah-balik {
+        --pemisah-arah-y: -1;
+    }
+
+    .pemisah-cermin {
+        --pemisah-arah-x: -1;
+    }
+
+    @media (forced-colors: active) {
+        .pemisah {
+            display: none;
+        }
+    }
+}
