@@ -12,6 +12,19 @@ status to `done`. Nothing here is served by the app directly.
 
 ## Codex deliveries
 
+### langkah and D-089 revisions (2026-11-24)
+
+| ID | File | Size (px) | KB | Background | Review notes |
+| --- | --- | --- | --- | --- | --- |
+| 019 | `hero-beranda-santri.webp` | 1536×1024 | 250.44 | Transparent | Pak Rahmat and Nurul walk together, with a salim greeting at the gate |
+| 019 | `install/img/hero/hero-beranda-santri.webp` | 898×916 | 170.37 | Transparent | Shared crop, pak Rahmat and Nurul walk together, with a salim greeting at the gate |
+| 019 | `hero-beranda-santri-dark.webp` | 1536×1024 | 258.65 | Transparent | Gentle tonal lift and a faint rim |
+| 019 | `install/img/hero/hero-beranda-santri-dark.webp` | 898×916 | 175.10 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 019 | `hero-beranda-santri-hijau.webp` | 1536×1024 | 250.35 | Transparent | Phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-hijau.webp` | 898×916 | 170.41 | Transparent | Shared crop, phone display in leaf green |
+| 019 | `hero-beranda-santri-dark-hijau.webp` | 1536×1024 | 258.57 | Transparent | Gentle tonal lift and a faint rim, phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-dark-hijau.webp` | 898×916 | 175.04 | Transparent | Shared crop, gentle tonal lift and a faint rim, phone display in leaf green |
+
 ### paintings-pages (2026-11-24)
 
 | ID | File | Size (px) | KB | Background | Review notes |
