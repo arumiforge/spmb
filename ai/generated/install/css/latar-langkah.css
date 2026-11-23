@@ -1,0 +1,47 @@
+@layer components {
+    .kartu-langkah {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        min-height: 26.25rem;
+        --kartu-langkah-warna: var(--color-primary-100);
+    }
+
+    .kartu-langkah::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background-color: var(--kartu-langkah-warna);
+        -webkit-mask-image: var(--kartu-langkah-gambar);
+        mask-image: var(--kartu-langkah-gambar);
+        -webkit-mask-size: cover;
+        mask-size: cover;
+        -webkit-mask-position: top center;
+        mask-position: top center;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+    }
+
+    .kartu-langkah-1 {
+        --kartu-langkah-gambar: url("/assets/img/langkah/latar-langkah-1.svg");
+    }
+
+    .kartu-langkah-2 {
+        --kartu-langkah-gambar: url("/assets/img/langkah/latar-langkah-2.svg");
+        --kartu-langkah-warna: var(--color-primary-50);
+    }
+
+    .kartu-langkah-3 {
+        --kartu-langkah-gambar: url("/assets/img/langkah/latar-langkah-3.svg");
+    }
+
+    .dark .kartu-langkah {
+        --kartu-langkah-warna: color-mix(in oklab, var(--color-primary-700) 35%, transparent);
+    }
+
+    @media print {
+        .kartu-langkah::before { display: none; }
+    }
+}
