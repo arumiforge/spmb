@@ -49,6 +49,11 @@ class BrandingAssets
     public const HERO_SLIDES = ['heroSlide1', 'heroSlide2', 'heroSlide3', 'heroSlide4', 'heroSlide5', 'heroSlide6'];
 
     /**
+     * MIME types ever served from the branding folder.
+     */
+    public const MIMES = ['image/png', 'image/jpeg', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon'];
+
+    /**
      * URLs of the slides the school uploaded, in order (empty slots skipped).
      *
      * @return list<string>
@@ -57,11 +62,6 @@ class BrandingAssets
     {
         return array_values(array_filter(array_map(self::url(...), self::HERO_SLIDES)));
     }
-
-    /**
-     * MIME types ever served from the branding folder.
-     */
-    public const MIMES = ['image/png', 'image/jpeg', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon'];
 
     public static function keyForSlug(string $slug): ?string
     {

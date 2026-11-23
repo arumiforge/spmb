@@ -350,7 +350,7 @@ if (! function_exists('public_nav')) {
         ];
         usort($nav, static fn (array $a, array $b): int => ($a['order'] ?? 50) <=> ($b['order'] ?? 50));
 
-        $icons = ['/' => 'house', 'persyaratan' => 'clipboard-list', 'daftar' => 'user-round-plus', 'jadwal' => 'calendar-days',
+        $icons = ['/'    => 'house', 'persyaratan' => 'clipboard-list', 'daftar' => 'user-round-plus', 'jadwal' => 'calendar-days',
             'cek-status' => 'search', 'panduan' => 'book-open', 'tanya-jawab' => 'message-circle-question-mark'];
         $current = trim(uri_string(), '/');
 
@@ -411,7 +411,7 @@ if (! function_exists('art_icon')) {
         $picture = illustration($path, $alt, 'h-full w-full object-contain');
 
         if ($picture === '') {
-            return '<span class="inline-flex ' . esc($class) . ' items-center justify-center text-primary-600 dark:text-primary-400" aria-hidden="true">'
+            return '<span class="ikon-cadangan inline-flex ' . esc($class) . ' items-center justify-center text-primary-600 dark:text-primary-400" aria-hidden="true">'
                 . icon($fallback, 'h-3/5 w-3/5') . '</span>';
         }
 

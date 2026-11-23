@@ -24,11 +24,12 @@ class School extends BaseConfig
      * School slogan (motto), shown under the school name on the home page and in the footer (D-087).
      */
     public string $motto = '';
-    public string $address   = '';
-    public string $phone     = '';
-    public string $whatsapp  = '';
-    public string $email     = '';
-    public string $website   = '';
+
+    public string $address  = '';
+    public string $phone    = '';
+    public string $whatsapp = '';
+    public string $email    = '';
+    public string $website  = '';
 
     /**
      * Google Maps embed URL (https://www.google.com/maps/embed?...), '' = no map (D-085).

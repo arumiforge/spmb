@@ -5,6 +5,14 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- UI round (D-080…D-088, `docs/ui-round-plan.md`): staff sign in with email **or username**; mobile bottom bar
+  with five items on every page (public: Daftar raised in the middle; dashboard: raised "Cari pendaftar" quick
+  search); menu drawer from the right; small top bar with the school's social media and the staff sign-in link;
+  school slogan, Google Maps embed and social links in Identitas Sekolah; home page with an automatic hero
+  slideshow (default Codex paintings, replaceable by up to 6 own pictures, soft edges), art buttons, "Cara
+  mendaftar" and information cards with painted icons in 3D (three.js), and a location/contact section with the
+  map; Indonesian date picker for every date field; "Lihat selengkapnya" folds and a contents list that
+  highlights the section being read; "Developed by : Mr. F" in the footers; one painting slot per empty condition.
 - Off-site backups (D-079): `spmb offsite setup|status|get`; daily and manual backups also upload an encrypted copy
   (restic) to a private Cloudflare R2 bucket; `setup.sh` installs restic; `spmb status` shows the last upload.
 - `spmb domain <env> <domain>` changes an environment's domain on the server (stack.env, `app.baseURL`), restarts the
@@ -112,6 +120,10 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
+- Dashboard pages use the full width (forms in two card columns from `xl`); breadcrumbs without the home icon;
+  no white plate behind pictures in dark mode (D-083); brand images are cached for a year with an ETag, so the
+  logo no longer blinks on reload; the cloud setup script installs PHP from packages.sury.org (the ondrej PPA
+  is frozen and failed with 503).
 - Pages start in the light theme whatever the device theme; dark mode only after the theme toggle (D-078).
 - README, roadmap, architecture, requirements, module index, third-party notices and agent guide updated to the
   current state (Docker deployment, PHP 8.5 / MySQL 8.4, Lucide icons, Tanya Jawab, Codex, D-066…D-077).

@@ -278,6 +278,10 @@
         --tombol-seni-garis: var(--color-primary-800);
     }
 
+    .dark .tombol-seni {
+        background: var(--tombol-seni-latar);
+    }
+
     .dark .tombol-seni-lembut {
         --tombol-seni-latar: var(--color-gray-800);
         --tombol-seni-garis: var(--color-gray-600);
@@ -291,6 +295,17 @@
         width: 4.25rem;
         height: 4.25rem;
         pointer-events: none;
+    }
+
+    /* Until the painted icon arrives, the Lucide fallback sits inside the button. */
+    .tombol-seni:has(.ikon-cadangan) {
+        padding-inline-start: 1.25rem;
+    }
+
+    .tombol-seni-gambar:has(.ikon-cadangan) {
+        position: static;
+        width: 1.5rem;
+        height: 1.5rem;
     }
 
     .tombol-seni:focus-visible {

@@ -137,6 +137,7 @@ $social   = school_social_links();
                 </div>
             <?php endif ?>
         </div>
+        <?php if ($address !== '' || $phone !== '' || $whatsapp !== '' || $email !== '') : ?>
         <div>
             <h2 class="mb-3 font-semibold text-gray-900 dark:text-white"><?= lang('App.contactTitle') ?></h2>
             <ul class="space-y-2 text-gray-600 dark:text-gray-400">
@@ -146,6 +147,7 @@ $social   = school_social_links();
                 <?php if ($email !== '') : ?><li><a class="flex items-center gap-2 break-all hover:underline" href="mailto:<?= esc($email, 'attr') ?>"><?= icon('mail', 'h-4 w-4 shrink-0') ?><?= esc($email) ?></a></li><?php endif ?>
             </ul>
         </div>
+        <?php endif ?>
         <div>
             <h2 class="mb-3 font-semibold text-gray-900 dark:text-white"><?= lang('App.footerLinks') ?></h2>
             <ul class="grid grid-cols-2 gap-2 text-gray-600 md:grid-cols-1 dark:text-gray-400">

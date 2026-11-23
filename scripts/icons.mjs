@@ -59,6 +59,7 @@ for (const name of [...new Set(manifest.brands ?? [])].sort()) {
 const pad = (keys) => Math.max(...keys.map((k) => php(k).length));
 const iconPad = pad(Object.keys(icons));
 const aliasPad = pad(Object.keys(aliases));
+const brandPad = pad(Object.keys(brands));
 
 const out = `<?php
 
@@ -80,7 +81,7 @@ ${Object.entries(icons).map(([k, v]) => `        ${php(k).padEnd(iconPad)} => ${
 ${Object.entries(aliases).map(([k, v]) => `        ${php(k).padEnd(aliasPad)} => ${php(v)},`).join('\n')}
     ],
     'brands' => [
-${Object.entries(brands).map(([k, v]) => `        ${php(k)} => ${php(v)},`).join('\n')}
+${Object.entries(brands).map(([k, v]) => `        ${php(k).padEnd(brandPad)} => ${php(v)},`).join('\n')}
     ],
 ];
 `;
