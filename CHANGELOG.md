@@ -13,6 +13,11 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   mendaftar" and information cards with painted icons in 3D (three.js), and a location/contact section with the
   map; Indonesian date picker for every date field; "Lihat selengkapnya" folds and a contents list that
   highlights the section being read; "Developed by : Mr. F" in the footers; one painting slot per empty condition.
+  Topic contents on Tanya Jawab stick under the header and highlight the topic in view. Codex briefs 036–071
+  (painted home icons, step pictures, art-button kit, two hero slides, one painting per empty state; new art reads
+  on light and dark pages without `-dark` copies). SVG originals live in `resources/img/`; `npm run build` writes
+  minified copies to `public/assets/img/` (D-086). Dashboard: tiles 2×2 on phones, cards in 2–3 columns on wide
+  screens, filters fold behind "Saring" on phones.
 - Off-site backups (D-079): `spmb offsite setup|status|get`; daily and manual backups also upload an encrypted copy
   (restic) to a private Cloudflare R2 bucket; `setup.sh` installs restic; `spmb status` shows the last upload.
 - `spmb domain <env> <domain>` changes an environment's domain on the server (stack.env, `app.baseURL`), restarts the
