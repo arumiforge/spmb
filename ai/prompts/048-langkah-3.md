@@ -7,7 +7,7 @@ generate: landscape 1536x1152
 background: transparent
 variants: light, hijau
 batch: langkah
-status: generated
+status: done
 ---
 
 # 048 — langkah-3

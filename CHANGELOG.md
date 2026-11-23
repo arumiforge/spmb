@@ -137,6 +137,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   phones (its links are in the drawer). Phones show the hero picture before the title. Public empty states show an
   icon that fits the page instead of the same painting. Side-by-side form fields line up when a label wraps.
 - Codex paintings 019, 020 and 027 repainted for D-089 (#49) and installed; 019 is now the first home hero slide.
+- Codex batch `langkah` installed: the three "Cara mendaftar" cards show painted scenes (046–048) on botanical
+  art backgrounds (072, `resources/css/visual/latar-langkah.css`); the interim pattern background is gone.
 - Dashboard pages use the full width (forms in two card columns from `xl`); breadcrumbs without the home icon;
   no white plate behind pictures in dark mode (D-083); brand images are cached for a year with an ETag, so the
   logo no longer blinks on reload; the cloud setup script installs PHP from packages.sury.org (the ondrej PPA

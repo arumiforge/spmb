@@ -4,7 +4,7 @@ name: latar-langkah
 kind: svg
 batch: langkah
 files: img/langkah/latar-langkah-1.svg, img/langkah/latar-langkah-2.svg, img/langkah/latar-langkah-3.svg, css/latar-langkah.css
-status: generated
+status: done
 ---
 
 # 072 — latar-langkah (art backgrounds of the "Cara mendaftar" cards)
