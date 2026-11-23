@@ -28,6 +28,8 @@ pulls and builds, no deploy key in the repo/GitHub), D-069 (PHP 8.5.13, Node 24,
   sshd reloaded, never restarted; no network configuration changes (no NetworkManager, no netplan edits).
 - Only sshd listens publicly (key-only, D-077); stacks publish on `127.0.0.1` only, with a port from
   `/opt/apps/PORTS`. Never add fail2ban: on the NAT VPS every client comes from the gateway address.
+- `deploy/env/{production,staging}/*.env.example` mirror what `spmb init` writes: when `cmd_init` gains or
+  loses a key, update both examples in the same commit.
 - No secrets, IPs, ports, emails or tokens in the repository. The server's git access is the developer's
   own business; scripts never create or read keys.
 - The committed Dockerfile must build on a normal server: no proxy settings, no CA bundles.
