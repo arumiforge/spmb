@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#000">
+<defs>
+<path id="petal" fill-rule="evenodd" d="M0-4C-8-6-8-22 0-24C8-22 8-6 0-4ZM0-6.6C4.8-8.6 4.8-19.4 0-21.4C-4.8-19.4-4.8-8.6 0-6.6Z"/>
+<g id="kawung"><use href="#petal"/><use href="#petal" transform="rotate(90)"/><use href="#petal" transform="rotate(180)"/><use href="#petal" transform="rotate(270)"/><circle r="1.8"/></g>
+</defs>
+<use href="#kawung" x="32" y="32"/><use href="#kawung"/><use href="#kawung" x="64"/><use href="#kawung" y="64"/><use href="#kawung" x="64" y="64"/>
+</svg>

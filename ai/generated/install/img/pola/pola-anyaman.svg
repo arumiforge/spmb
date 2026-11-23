@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="#000">
+<defs><rect id="strip" x="-18.5" y="-1.8" width="37" height="3.6" rx="1.8"/></defs>
+<use href="#strip"/><use href="#strip" x="48"/><use href="#strip" y="48"/><use href="#strip" x="48" y="48"/><use href="#strip" x="24" y="24"/>
+<use href="#strip" transform="translate(0 24) rotate(90)"/><use href="#strip" transform="translate(48 24) rotate(90)"/><use href="#strip" transform="translate(24) rotate(90)"/><use href="#strip" transform="translate(24 48) rotate(90)"/>
+</svg>

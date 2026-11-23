@@ -51,7 +51,7 @@ Batches are delivered in this order: `svg-kit` (no image generator needed) → `
 | 010 | [fitur-tambahan](prompts/010-fitur-tambahan.md) | — | painting | Fitur page empty state | done |
 | 011 | [panduan-petugas](prompts/011-panduan-petugas.md) | — | painting | Staff guide cover | done |
 | 012 | [panduan-calon-murid](prompts/012-panduan-calon-murid.md) | — | painting | Applicant guide cover | done |
-| 015 | [pola](prompts/015-pola.md) | svg-kit | SVG + CSS | Tileable patterns: kawung, khatam, anyaman, ceplok daun | requested |
+| 015 | [pola](prompts/015-pola.md) | svg-kit | SVG + CSS | Tileable patterns: kawung, khatam, anyaman, ceplok daun | generated |
 | 016 | [pemisah](prompts/016-pemisah.md) | svg-kit | SVG + CSS | Full-width section dividers: lengkung, tumpal, mega, bukit | requested |
 | 017 | [tombol-daftar](prompts/017-tombol-daftar.md) | svg-kit | SVG + CSS | Special "Daftar sekarang" button, all states | requested |
 | 018 | [memuat](prompts/018-memuat.md) | svg-kit | SVG + CSS | Loading animation, large and in-button | requested |

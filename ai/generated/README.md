@@ -12,7 +12,15 @@ status to `done`. Nothing here is served by the app directly.
 
 ## Codex deliveries
 
-_None yet. Add a section per pull request: batch, date, table (ID, file, px, KB, background, review notes)._
+### svg-kit (2026-11-23)
+
+| ID | File | Size (px) | KB | Background | Review notes |
+| --- | --- | --- | --- | --- | --- |
+| 015 | `install/img/pola/pola-kawung.svg` | 64×64 | 0.55 | Transparent | Outlined oval petals on a diagonal grid |
+| 015 | `install/img/pola/pola-khatam.svg` | 72×72 | 0.87 | Transparent | Linked eight-point outlines |
+| 015 | `install/img/pola/pola-anyaman.svg` | 48×48 | 0.53 | Transparent | Rounded strips with alternating crossings |
+| 015 | `install/img/pola/pola-ceplok-daun.svg` | 64×64 | 0.55 | Transparent | Four leaves around a point |
+| 015 | `install/css/pola.css` | 48, 64 or 72 px tiles | 1.55 | Masked brand colour or white | 7% opacity in light mode, 9% in dark mode, optional fade to the left |
 
 ## 001–012 (ChatGPT, before D-073)
 
