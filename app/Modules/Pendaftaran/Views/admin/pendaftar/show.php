@@ -107,7 +107,7 @@ $button  = 'inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5
         <?php foreach ($rows as $section => $fields) : ?>
             <section class="<?= $card ?>">
                 <h2 class="<?= $h2 ?>"><?= lang('Pendaftaran.' . $section) ?></h2>
-                <dl class="grid grid-cols-1 gap-x-6 gap-y-4 text-sm sm:grid-cols-2">
+                <dl class="grid grid-cols-2 gap-x-4 gap-y-4 text-sm sm:gap-x-6 2xl:grid-cols-3">
                     <?php foreach ($fields as $field => $v) : ?>
                         <div class="min-w-0">
                             <dt class="text-gray-500 dark:text-gray-400"><?= $label($field) ?></dt>

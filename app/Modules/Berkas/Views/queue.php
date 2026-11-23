@@ -9,6 +9,8 @@
  * @var bool                         $filtered
  */
 $input = 'block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400';
+// The lists stay folded on phones while they show the default queue.
+$folded = $filters['jenis'] === 0 && $filters['gelombang'] === 0 && $filters['status'] === 'menunggu';
 $check = 'inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary-600 px-3 py-2 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800';
 ?>
 <?= $this->extend('layouts/admin') ?>
@@ -21,35 +23,44 @@ $check = 'inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary-
             <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-gray-500 dark:text-gray-400"><?= icon('search', 'h-4 w-4') ?></span>
             <input type="search" id="q" name="q" value="<?= esc($filters['q'], 'attr') ?>" placeholder="<?= lang('Berkas.searchLabel') ?>" class="<?= $input ?> ps-9">
         </div>
-        <div>
-            <label for="status" class="sr-only"><?= lang('Berkas.statusFilter') ?></label>
-            <select id="status" name="status" class="<?= $input ?>">
-                <?php foreach ($statusFilters as $slug => $code) : ?>
-                    <option value="<?= $slug ?>" <?= $filters['status'] === $slug ? 'selected' : '' ?>><?= lang('Status.document.' . $code) ?></option>
-                <?php endforeach ?>
-                <option value="semua" <?= $filters['status'] === 'semua' ? 'selected' : '' ?>><?= lang('Berkas.allStatuses') ?></option>
-            </select>
-        </div>
-        <div>
-            <label for="jenis" class="sr-only"><?= lang('Berkas.typeFilter') ?></label>
-            <select id="jenis" name="jenis" class="<?= $input ?>">
-                <option value=""><?= lang('Berkas.allTypes') ?></option>
-                <?php foreach ($types as $type) : ?>
-                    <option value="<?= (int) $type['id'] ?>" <?= $filters['jenis'] === (int) $type['id'] ? 'selected' : '' ?>><?= esc($type['name']) ?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
-        <?php if ($waves !== []) : ?>
-            <div>
-                <label for="gelombang" class="sr-only"><?= lang('Berkas.waveFilter') ?></label>
-                <select id="gelombang" name="gelombang" class="<?= $input ?>">
-                    <option value=""><?= lang('Berkas.allWaves') ?></option>
-                    <?php foreach ($waves as $wave) : ?>
-                        <option value="<?= (int) $wave['id'] ?>" <?= $filters['gelombang'] === (int) $wave['id'] ? 'selected' : '' ?>><?= esc($wave['name'] . ' ' . $wave['academic_year']) ?></option>
-                    <?php endforeach ?>
-                </select>
+        <?php // Phones: the lists fold behind one button so the queue starts higher up the screen. ?>
+        <button type="button" data-collapse-toggle="berkas-saring" aria-controls="berkas-saring" aria-expanded="<?= $folded ? 'false' : 'true' ?>"
+                class="flex w-full items-center justify-between rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 sm:col-span-2 md:hidden dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+            <span><?= lang('Berkas.filterToggle') ?></span><?= icon('chevron-down', 'h-4 w-4') ?>
+        </button>
+        <div id="berkas-saring" class="<?= $folded ? 'hidden ' : '' ?>sm:col-span-2 md:contents">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:contents">
+                <div>
+                    <label for="status" class="sr-only"><?= lang('Berkas.statusFilter') ?></label>
+                    <select id="status" name="status" class="<?= $input ?>">
+                        <?php foreach ($statusFilters as $slug => $code) : ?>
+                            <option value="<?= $slug ?>" <?= $filters['status'] === $slug ? 'selected' : '' ?>><?= lang('Status.document.' . $code) ?></option>
+                        <?php endforeach ?>
+                        <option value="semua" <?= $filters['status'] === 'semua' ? 'selected' : '' ?>><?= lang('Berkas.allStatuses') ?></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="jenis" class="sr-only"><?= lang('Berkas.typeFilter') ?></label>
+                    <select id="jenis" name="jenis" class="<?= $input ?>">
+                        <option value=""><?= lang('Berkas.allTypes') ?></option>
+                        <?php foreach ($types as $type) : ?>
+                            <option value="<?= (int) $type['id'] ?>" <?= $filters['jenis'] === (int) $type['id'] ? 'selected' : '' ?>><?= esc($type['name']) ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <?php if ($waves !== []) : ?>
+                    <div>
+                        <label for="gelombang" class="sr-only"><?= lang('Berkas.waveFilter') ?></label>
+                        <select id="gelombang" name="gelombang" class="<?= $input ?>">
+                            <option value=""><?= lang('Berkas.allWaves') ?></option>
+                            <?php foreach ($waves as $wave) : ?>
+                                <option value="<?= (int) $wave['id'] ?>" <?= $filters['gelombang'] === (int) $wave['id'] ? 'selected' : '' ?>><?= esc($wave['name'] . ' ' . $wave['academic_year']) ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                <?php endif ?>
             </div>
-        <?php endif ?>
+        </div>
         <div class="flex gap-2 sm:col-span-2 xl:col-span-1">
             <button type="submit" class="flex-1 rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-700 xl:flex-none"><?= lang('Berkas.filter') ?></button>
             <?php if ($filtered) : ?>
@@ -65,7 +76,7 @@ $check = 'inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary-
                 : ['title' => lang('Berkas.queueEmptyTitle'), 'text' => lang('Berkas.queueEmptyText'), 'icon' => 'inbox', 'image' => 'state/kosong-antrean-berkas', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
         </div>
     <?php else : ?>
-        <div class="hidden overflow-x-auto md:block">
+        <div class="relative hidden overflow-x-auto md:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>

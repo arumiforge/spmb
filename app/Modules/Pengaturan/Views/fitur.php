@@ -32,7 +32,8 @@ $card     = static function (array $m): string {
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<div class="form-lebar">
+<?php // Two cards side by side from xl (.form-lebar would stretch the last of only two cards across both columns). ?>
+<div class="grid grid-cols-1 items-start gap-6 xl:grid-cols-2">
     <form method="post" action="<?= url_to('pengaturan.fitur') ?>" data-confirm="<?= esc(lang('Pengaturan.featuresConfirm'), 'attr') ?>" class="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
         <?= csrf_field() ?>
         <h2 class="border-b border-gray-200 px-4 py-3 text-base font-semibold text-gray-900 dark:border-gray-700 dark:text-white"><?= lang('Pengaturan.featuresOptional') ?></h2>

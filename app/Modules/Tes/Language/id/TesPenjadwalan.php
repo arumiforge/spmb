@@ -82,6 +82,7 @@ return [
     'filterStatus'      => 'Semua status tes',
     'filterWave'        => 'Semua gelombang',
     'filter'            => 'Tampilkan',
+    'filterToggle'      => 'Saring peserta',
     'colNumber'         => 'No. Pendaftaran',
     'colName'           => 'Nama',
     'colWave'           => 'Gelombang',

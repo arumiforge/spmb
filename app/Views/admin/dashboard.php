@@ -11,6 +11,7 @@
  */
 $num   = static fn (int $n): string => number_format($n, 0, ',', '.');
 $card  = 'rounded-lg border border-gray-200 bg-white p-5 shadow-xs dark:border-gray-700 dark:bg-gray-800';
+$tileBox = 'rounded-lg border border-gray-200 bg-white p-4 shadow-xs sm:p-5 dark:border-gray-700 dark:bg-gray-800';
 $tiles = $stats === null ? [] : [
     ['label' => 'Total Pendaftar', 'value' => $stats['total'], 'icon' => 'users', 'note' => 'Tahun ajaran ' . $stats['year'], 'url' => 'admin/pendaftar'],
     ['label' => 'Daftar Hari Ini', 'value' => $stats['today'], 'icon' => 'calendar', 'note' => tanggal_indo(date('Y-m-d')), 'url' => null],
@@ -22,16 +23,16 @@ $tiles = $stats === null ? [] : [
 
 <?= $this->section('content') ?>
 <?php if ($stats !== null) : ?>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div class="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <?php foreach ($tiles as $i => $tile) : ?>
             <?php $link = $tile['url'] !== null && $canViewList; ?>
-            <<?= $link ? 'a href="' . esc(site_url($tile['url']), 'attr') . '"' : 'div' ?> class="<?= $card ?> motion-rise block<?= $link ? ' motion-lift hover:border-primary-300 dark:hover:border-primary-700' : '' ?>" style="--rise-delay: <?= $i * 60 ?>ms">
+            <<?= $link ? 'a href="' . esc(site_url($tile['url']), 'attr') . '"' : 'div' ?> class="<?= $tileBox ?> motion-rise block min-w-0<?= $link ? ' motion-lift hover:border-primary-300 dark:hover:border-primary-700' : '' ?>" style="--rise-delay: <?= $i * 60 ?>ms">
                 <div class="flex items-start justify-between gap-3">
-                    <div>
+                    <div class="min-w-0">
                         <p class="text-sm text-gray-500 dark:text-gray-400"><?= esc($tile['label']) ?></p>
-                        <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white"><?= $num($tile['value']) ?></p>
+                        <p class="mt-2 text-2xl font-bold sm:text-3xl text-gray-900 dark:text-white"><?= $num($tile['value']) ?></p>
                     </div>
-                    <?= icon($tile['icon'], 'motion-icon h-7 w-7 shrink-0 text-primary-600 dark:text-primary-400') ?>
+                    <?= icon($tile['icon'], 'motion-icon h-6 w-6 shrink-0 sm:h-7 sm:w-7 text-primary-600 dark:text-primary-400') ?>
                 </div>
                 <p class="mt-3 text-xs text-gray-500 dark:text-gray-400"><?= esc($tile['note']) ?></p>
             </<?= $link ? 'a' : 'div' ?>>
@@ -39,18 +40,18 @@ $tiles = $stats === null ? [] : [
     </div>
 <?php endif ?>
 
-<div class="<?= $stats !== null ? 'mt-6 ' : '' ?>grid grid-cols-1 gap-4 xl:grid-cols-3">
-    <div class="space-y-4 xl:col-span-2">
-        <?php // Modules add their own summary here (panel slot "dashboard"); each panel checks its permission. ?>
-        <?= module_panels('dashboard', ['user' => $user]) ?>
-        <?php if ($stats === null || $stats['total'] === 0) : ?>
-            <?= view('partials/empty_state', ['empty' => [
+<?php // Cards flow in columns (two from xl, three from 2xl) so wide screens have no empty side column. ?>
+<div class="<?= $stats !== null ? 'mt-6 ' : '' ?>grid grid-cols-1 items-start gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+    <?php // Modules add their own summary here (panel slot "dashboard"); each panel checks its permission and is one grid item. ?>
+    <div class="contents"><?= module_panels('dashboard', ['user' => $user]) ?></div>
+    <?php if ($stats === null || $stats['total'] === 0) : ?>
+            <div class="xl:col-span-2 2xl:col-span-2"><?= view('partials/empty_state', ['empty' => [
                 'title'    => 'Belum ada pendaftar',
                 'text'     => $stats === null ? 'Ringkasan pendaftaran tampil di sini setelah fitur Pendaftaran diaktifkan.' : 'Ringkasan per gelombang akan tampil di sini setelah ada calon murid yang mendaftar.',
                 'icon'     => 'chart',
                 'image'    => 'state/kosong-dasbor', 'fallback' => 'state/kosong-data',
                 'imageAlt' => lang('App.altNoData'),
-            ]]) ?>
+            ]]) ?></div>
         <?php else : ?>
             <section class="<?= $card ?> motion-rise" style="--rise-delay: 200ms">
                 <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Pendaftar per gelombang</h2>
@@ -76,7 +77,7 @@ $tiles = $stats === null ? [] : [
             </section>
             <section class="<?= $card ?> motion-rise" style="--rise-delay: 200ms">
                 <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Cara mendaftar</h2>
-                <div class="grid grid-cols-1 items-center gap-4 md:grid-cols-[minmax(0,1fr)_14rem]">
+                <div class="@container"><div class="grid grid-cols-1 items-center gap-4 @lg:grid-cols-[minmax(0,1fr)_12rem]">
                     <?php
                     $methodChart = [
                         'chart'  => ['type' => 'donut', 'height' => 280],
@@ -86,15 +87,14 @@ $tiles = $stats === null ? [] : [
                     ];
                     ?>
                     <div class="min-h-[280px] min-w-0" data-chart="<?= esc(json_encode($methodChart, JSON_THROW_ON_ERROR), 'attr') ?>" role="img" aria-label="<?= esc('Online ' . $num($stats['online']) . ', di sekolah ' . $num($stats['offline']), 'attr') ?>"></div>
-                    <dl class="grid grid-cols-2 gap-4 md:grid-cols-1">
+                    <dl class="grid grid-cols-2 gap-4 @lg:grid-cols-1">
                         <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Online</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['online']) ?></dd></div>
                         <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Di sekolah</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['offline']) ?></dd></div>
                     </dl>
-                </div>
+                </div></div>
             </section>
         <?php endif ?>
-    </div>
-    <div class="<?= $card ?> self-start">
+    <div class="<?= $card ?>">
         <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Akun Anda</h2>
         <dl class="space-y-3 text-sm">
             <div>
