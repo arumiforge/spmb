@@ -29,14 +29,14 @@ Statuses: `requested` → `generated` (delivered by Codex) → `done` (installed
 ## Codex starter prompt
 
 ```
-Work in the GitHub repository arumiforge/spmb, starting from the latest main. Read ai/CODEX.md and follow it exactly; it points you to ai/style-guide.md and the briefs in ai/prompts/. Your only job is to make the visual assets of ONE batch from the queue in ai/README.md (rows with status "requested"; take the first batch in the table that is not done yet), check them with python3 ai/tools/check_assets.py, and deliver them only in ai/generated/ (plus the status lines) on a new branch art/codex-<YYYYMMDD>-<batch>, with one pull request into main. Commit as Arumi Studios <arumiforge@gmail.com>. Do not change anything else, do not merge, and add no AI attribution anywhere. Respect the rules for religious elements in section 2 of the style guide above everything else.
+Work in the GitHub repository arumiforge/spmb, starting from the latest main. Read ai/CODEX.md and follow it exactly; it points you to ai/style-guide.md and the briefs in ai/prompts/. Your only job is to make the visual assets of ONE batch from the queue in ai/README.md (rows with status "requested"; take the first batch, in the delivery order written under "Queue", that is not done yet), check them with python3 ai/tools/check_assets.py, and deliver them only in ai/generated/ (plus the status lines) on a new branch art/codex-<YYYYMMDD>-<batch>, with one pull request into main. Commit as Arumi Studios <arumiforge@gmail.com>. Do not change anything else, do not merge, and add no AI attribution anywhere. Respect the rules for religious elements in section 2 of the style guide above everything else.
 ```
 
 ## Queue
 
-Batches are delivered in this order: `svg-kit` (no image generator needed) → `paintings-pages` →
-`paintings-states` → `ikon-beranda` → `langkah` → `tombol-seni` (no image generator needed) → `slide-beranda` →
-`kosong-states` → `variants-001-012`.
+Batches are delivered in this order (home page first, user's request of 2026-11-23): `svg-kit` (no image
+generator needed) → `tombol-seni` (no image generator needed) → `ikon-beranda` → `langkah` → `slide-beranda` →
+`paintings-pages` → `kosong-states` → `paintings-states` → `variants-001-012`.
 
 | ID | Brief | Batch | Kind | Used on | Status |
 | --- | --- | --- | --- | --- | --- |
