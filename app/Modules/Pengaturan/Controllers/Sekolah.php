@@ -113,7 +113,8 @@ class Sekolah extends BaseController
             $current = (string) setting('School.' . $setting);
             $file    = $uploads[$key] ?? null;
 
-            if ($file !== null && $file->isValid()) {
+            // Same guard as Berkas UploadInput: the test suite's fake uploads are not is_uploaded_file().
+            if ($file !== null && $file->getError() === UPLOAD_ERR_OK && (ENVIRONMENT === 'testing' || $file->isValid())) {
                 $stored = BrandingAssets::storeUpload($file, $key);
 
                 if ($stored === null) {
