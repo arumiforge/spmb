@@ -56,6 +56,14 @@ status to `done`. Nothing here is served by the app directly.
 | 023 | `install/img/section/jadwal-hijau.webp` | 710×689 | 129.83 | Transparent | Shared crop, calendar cell in leaf green |
 | 023 | `jadwal-dark-hijau.webp` | 1254×1254 | 397.82 | Transparent | Gentle tonal lift and a faint rim; calendar cell in leaf green |
 | 023 | `install/img/section/jadwal-dark-hijau.webp` | 710×689 | 127.13 | Transparent | Shared crop, gentle tonal lift and a faint rim; calendar cell in leaf green |
+| 024 | `tanya-jawab.webp` | 1254×1254 | 459.38 | Transparent | Three empty speech bubbles above the help desk |
+| 024 | `install/img/section/tanya-jawab.webp` | 700×676 | 132.11 | Transparent | Shared crop, three empty speech bubbles above the help desk |
+| 024 | `tanya-jawab-dark.webp` | 1254×1254 | 439.19 | Transparent | Gentle tonal lift and a faint rim |
+| 024 | `install/img/section/tanya-jawab-dark.webp` | 700×676 | 128.92 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 024 | `tanya-jawab-hijau.webp` | 1254×1254 | 457.96 | Transparent | One speech bubble in leaf green |
+| 024 | `install/img/section/tanya-jawab-hijau.webp` | 700×676 | 131.89 | Transparent | Shared crop, one speech bubble in leaf green |
+| 024 | `tanya-jawab-dark-hijau.webp` | 1254×1254 | 438.54 | Transparent | Gentle tonal lift and a faint rim; one speech bubble in leaf green |
+| 024 | `install/img/section/tanya-jawab-dark-hijau.webp` | 700×676 | 130.14 | Transparent | Shared crop, gentle tonal lift and a faint rim; one speech bubble in leaf green |
 
 ### svg-kit (2026-11-23)
 
