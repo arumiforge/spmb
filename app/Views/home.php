@@ -18,8 +18,9 @@ $intro     = match (true) {
 <?= $this->extend('layouts/public') ?>
 
 <?= $this->section('content') ?>
-<section class="bg-white dark:bg-gray-900">
-    <div class="mx-auto grid max-w-screen-xl items-center gap-8 px-4 py-10 sm:py-16 md:grid-cols-[1fr_minmax(0,24rem)] lg:grid-cols-[1fr_minmax(0,28rem)]">
+<section class="relative overflow-hidden bg-white dark:bg-gray-900">
+    <div class="pola pola-kawung pola-pudar" aria-hidden="true"></div>
+    <div class="relative mx-auto grid max-w-screen-xl items-center gap-8 px-4 py-10 sm:py-16 md:grid-cols-[1fr_minmax(0,24rem)] lg:grid-cols-[1fr_minmax(0,28rem)]">
         <div class="motion-rise text-center md:text-start">
             <h1 class="mb-2 text-3xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl dark:text-white"><?= esc(setting('School.name')) ?></h1>
             <?php if ((string) setting('School.tagline') !== '') : ?>
@@ -35,7 +36,7 @@ $intro     = match (true) {
 
             <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap md:justify-start sm:justify-center">
                 <?php if ($home['onlineOpen']) : ?>
-                    <a href="<?= site_url('daftar') ?>" class="<?= $primary ?>"><?= lang('Situs.register') ?><?= icon('arrow-right', 'h-5 w-5') ?></a>
+                    <a href="<?= site_url('daftar') ?>" class="tombol-daftar tombol-daftar-besar tombol-daftar-penuh"><span class="tombol-daftar-isi"><?= lang('Situs.register') ?><?= icon('arrow-right', 'h-5 w-5') ?></span></a>
                 <?php endif ?>
                 <?php if ($home['registration']) : ?>
                     <a href="<?= site_url('cek-status') ?>" class="<?= $home['onlineOpen'] ? $secondary : $primary ?>"><?= icon('search', 'h-5 w-5') ?><?= lang('Situs.checkStatus') ?></a>
@@ -51,10 +52,13 @@ $intro     = match (true) {
             <?= illustration('hero/hero-beranda', lang('App.altHero'), 'h-auto w-full', false) ?>
         </div>
     </div>
+    <?php if ($home['registration']) : ?>
+        <div class="pemisah pemisah-lengkung relative [--pemisah-warna:var(--color-gray-50)] dark:[--pemisah-warna:var(--color-gray-800)]" aria-hidden="true"></div>
+    <?php endif ?>
 </section>
 
 <?php if ($home['registration']) : ?>
-    <section class="border-t border-gray-100 bg-gray-50 dark:border-gray-800 dark:bg-gray-800/50" aria-labelledby="cara-daftar">
+    <section class="bg-gray-50 dark:bg-gray-800" aria-labelledby="cara-daftar">
         <div class="mx-auto max-w-screen-xl px-4 py-10">
             <h2 id="cara-daftar" class="mb-6 text-center text-2xl font-bold text-gray-900 md:text-start dark:text-white"><?= lang('Situs.homeStepsTitle') ?></h2>
             <ol class="grid gap-4 md:grid-cols-3">

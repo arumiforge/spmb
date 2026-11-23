@@ -86,7 +86,7 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
 
     <div class="flex flex-col gap-3 sm:flex-row">
         <?php if ($page['onlineOpen']) : ?>
-            <a href="<?= site_url('daftar') ?>" class="<?= $primary ?>"><?= lang('Situs.register') ?><?= icon('arrow-right', 'h-5 w-5') ?></a>
+            <a href="<?= site_url('daftar') ?>" class="tombol-daftar tombol-daftar-penuh"><span class="tombol-daftar-isi"><?= lang('Situs.register') ?><?= icon('arrow-right', 'h-5 w-5') ?></span></a>
         <?php endif ?>
         <a href="<?= url_to('situs.jadwal') ?>" class="<?= $page['onlineOpen'] ? $secondary : $primary ?>"><?= icon('calendar', 'h-5 w-5') ?><?= lang('Situs.seeSchedule') ?></a>
         <a href="<?= site_url('cek-status') ?>" class="<?= $secondary ?>"><?= icon('search', 'h-5 w-5') ?><?= lang('Situs.checkStatus') ?></a>

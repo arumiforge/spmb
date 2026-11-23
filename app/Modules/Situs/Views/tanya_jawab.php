@@ -87,7 +87,7 @@ $contacts  = array_filter([
         <?php endif ?>
         <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <?php if ($page['onlineOpen']) : ?>
-                <a href="<?= site_url('daftar') ?>" class="<?= $primary ?>"><?= lang('Situs.register') ?><?= icon('arrow-right', 'h-5 w-5') ?></a>
+                <a href="<?= site_url('daftar') ?>" class="tombol-daftar tombol-daftar-penuh"><span class="tombol-daftar-isi"><?= lang('Situs.register') ?><?= icon('arrow-right', 'h-5 w-5') ?></span></a>
             <?php endif ?>
             <a href="<?= url_to('situs.persyaratan') ?>" class="<?= $page['onlineOpen'] ? $secondary : $primary ?>"><?= icon('clipboard', 'h-5 w-5') ?><?= lang('Situs.seeRequirements') ?></a>
             <a href="<?= url_to('situs.jadwal') ?>" class="<?= $secondary ?>"><?= icon('calendar', 'h-5 w-5') ?><?= lang('Situs.seeSchedule') ?></a>

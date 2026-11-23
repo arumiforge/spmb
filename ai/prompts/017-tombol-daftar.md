@@ -4,7 +4,7 @@ name: tombol-daftar
 kind: svg
 batch: svg-kit
 files: img/tombol/tombol-ornamen.svg, css/tombol-daftar.css
-status: generated
+status: done
 ---
 
 # 017 — tombol-daftar (special "Daftar sekarang" button)

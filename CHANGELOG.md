@@ -5,6 +5,9 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Codex visual kit installed (briefs 015–018): tileable patterns, section dividers, the special "Daftar Sekarang"
+  button and loaders (`resources/css/visual/`, `public/assets/img/{pola,pemisah,tombol,memuat}/`). Used on the home
+  hero (pattern, curved divider, large button) and the registration buttons on Persyaratan, Jadwal and Tanya Jawab.
 - Example settings files for the server stacks: `deploy/env/production/` and `deploy/env/staging/`
   (`stack.env.example`, `app.env.example`), matching what `spmb init` writes, with placeholders only.
 - Platform round (D-066…D-075): writing standard skill `bahasa-indonesia-plain`; visual and chart rules in `spmb-ui`;

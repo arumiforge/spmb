@@ -1,0 +1,217 @@
+@layer components {
+    @property --tombol-gradien-awal {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #000;
+    }
+
+    @property --tombol-gradien-akhir {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #000;
+    }
+
+    .tombol-daftar {
+        --tombol-gradien-awal: var(--tombol-dari, var(--color-primary-600));
+        --tombol-gradien-akhir: var(--tombol-ke, var(--color-primary-700));
+        --tombol-bayangan: 0 6px 16px -6px color-mix(in srgb, var(--color-primary-700) 45%, transparent);
+        --tombol-cincin: inset 0 0 0 0 transparent;
+        --tombol-pola: url("/assets/img/pola/pola-kawung.svg");
+        --tombol-ornamen: url("/assets/img/tombol/tombol-ornamen.svg");
+        position: relative;
+        isolation: isolate;
+        display: inline-flex;
+        box-sizing: border-box;
+        align-items: center;
+        justify-content: center;
+        /* Reserve space for the registration label while the saving message is shown. */
+        min-inline-size: min(100%, var(--tombol-lebar-min, var(--tombol-lebar-baku, 16rem)));
+        min-height: 48px;
+        padding: .5rem 1.25rem;
+        overflow: hidden;
+        border: 0;
+        border-radius: .75rem;
+        background: linear-gradient(135deg, var(--tombol-gradien-awal), var(--tombol-gradien-akhir));
+        box-shadow: var(--tombol-cincin), var(--tombol-bayangan);
+        color: var(--tombol-teks, #fff);
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.25;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .tombol-daftar-besar {
+        --tombol-lebar-baku: 18.5rem;
+        min-height: 56px;
+        padding-inline: 1.75rem;
+        font-size: 1.125rem;
+    }
+
+    @media (width < 640px) {
+        .tombol-daftar-penuh {
+            width: 100%;
+        }
+    }
+
+    .tombol-daftar::before,
+    .tombol-daftar::after {
+        position: absolute;
+        background-color: #fff;
+        pointer-events: none;
+        content: "";
+    }
+
+    .tombol-daftar::before {
+        --tombol-pola-pudar: linear-gradient(to left, #000, transparent 52%);
+        inset: 0;
+        opacity: .12;
+        -webkit-mask: var(--tombol-pola) 0 0 / 40px repeat, var(--tombol-pola-pudar) center / 100% 100% no-repeat;
+        mask: var(--tombol-pola) 0 0 / 40px repeat, var(--tombol-pola-pudar) center / 100% 100% no-repeat;
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
+    }
+
+    .tombol-daftar::after {
+        inset-block-start: calc(50% - 28px);
+        inset-inline-end: -12px;
+        width: 56px;
+        height: 56px;
+        opacity: .18;
+        -webkit-mask: var(--tombol-ornamen) center / contain no-repeat;
+        mask: var(--tombol-ornamen) center / contain no-repeat;
+    }
+
+    .tombol-daftar-isi {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5em;
+    }
+
+    .tombol-daftar-isi .lucide {
+        flex: none;
+        width: 1.1em;
+        height: 1.1em;
+    }
+
+    .dark .tombol-daftar {
+        --tombol-cincin: inset 0 0 0 1px color-mix(in srgb, var(--color-primary-400) 60%, transparent);
+        --tombol-batas-fokus: transparent;
+    }
+
+    .tombol-daftar:focus-visible {
+        outline: 3px solid var(--color-primary-300);
+        outline-offset: 3px;
+        box-shadow: var(--tombol-cincin), 0 0 0 7px var(--tombol-batas-fokus, var(--color-primary-800)), var(--tombol-bayangan);
+    }
+
+    .tombol-daftar:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):hover {
+        --tombol-gradien-awal: var(--tombol-dari, var(--color-primary-700));
+        --tombol-gradien-akhir: var(--tombol-ke, var(--color-primary-800));
+    }
+
+    .tombol-daftar:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):active {
+        --tombol-bayangan: 0 3px 8px -4px color-mix(in srgb, var(--color-primary-700) 45%, transparent);
+    }
+
+    .tombol-daftar:is(:disabled, [aria-disabled="true"]) {
+        --tombol-cincin: inset 0 0 0 0 transparent;
+        --tombol-bayangan: 0 0 0 0 transparent;
+        background: #e5e7eb;
+        color: #6b7280;
+        cursor: not-allowed;
+    }
+
+    .tombol-daftar:is(:disabled, [aria-disabled="true"])::before,
+    .tombol-daftar:is(:disabled, [aria-disabled="true"])::after {
+        display: none;
+    }
+
+    .tombol-daftar[aria-busy="true"] {
+        pointer-events: none;
+    }
+
+    .tombol-daftar[aria-busy="true"] .lucide {
+        display: none;
+    }
+
+    .tombol-daftar[aria-busy="true"] .tombol-daftar-isi::before {
+        flex: none;
+        width: 1.1em;
+        height: 1.1em;
+        background-color: currentColor;
+        -webkit-mask: var(--memuat-topeng, url("/assets/img/memuat/memuat-kecil.svg")) center / contain no-repeat;
+        mask: var(--memuat-topeng, url("/assets/img/memuat/memuat-kecil.svg")) center / contain no-repeat;
+        content: "";
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .tombol-daftar {
+            transition: --tombol-gradien-awal 200ms ease-out, --tombol-gradien-akhir 200ms ease-out,
+                box-shadow 200ms ease-out, transform 200ms ease-out;
+        }
+
+        .tombol-daftar::before {
+            transition: mask-position 200ms ease-out;
+        }
+
+        .tombol-daftar::after,
+        .tombol-daftar .lucide {
+            transition: transform 200ms ease-out;
+        }
+
+        .tombol-daftar:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):hover::before {
+            -webkit-mask-position: 8px 0, center;
+            mask-position: 8px 0, center;
+        }
+
+        .tombol-daftar:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):hover::after {
+            transform: rotate(20deg);
+        }
+
+        .tombol-daftar:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):hover .lucide {
+            transform: translateX(3px);
+        }
+
+        .tombol-daftar:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):active {
+            transform: translateY(1px);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .tombol-daftar[aria-busy="true"] .tombol-daftar-isi::before {
+            -webkit-mask-image: var(--memuat-topeng-diam, url("/assets/img/memuat/memuat-kecil.svg#diam"));
+            mask-image: var(--memuat-topeng-diam, url("/assets/img/memuat/memuat-kecil.svg#diam"));
+        }
+    }
+
+    @media (forced-colors: active) {
+        .tombol-daftar,
+        .tombol-daftar:is(:disabled, [aria-disabled="true"]) {
+            forced-color-adjust: none;
+            border: 1px solid ButtonText;
+            background: ButtonFace;
+            box-shadow: none;
+            color: ButtonText;
+        }
+
+        .tombol-daftar:is(:disabled, [aria-disabled="true"]) {
+            border-color: GrayText;
+            color: GrayText;
+        }
+
+        .tombol-daftar:focus-visible {
+            outline-color: Highlight;
+        }
+
+        .tombol-daftar::before,
+        .tombol-daftar::after {
+            display: none;
+        }
+    }
+}
