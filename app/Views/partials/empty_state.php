@@ -9,8 +9,9 @@
  * @var array{title: string, text?: string, icon?: string, image?: string, fallback?: string, imageAlt?: string, action?: array{label: string, url: string}} $empty
  */
 $picture = '';
+$alts    = lang('App.altStates');
 foreach (array_filter([$empty['image'] ?? null, $empty['fallback'] ?? 'state/kosong-data']) as $candidate) {
-    $picture = illustration($candidate, $empty['imageAlt'] ?? '', 'mx-auto h-32 w-auto sm:h-40');
+    $picture = illustration($candidate, $alts[$candidate] ?? $empty['imageAlt'] ?? '', 'mx-auto h-32 w-auto sm:h-40');
     if ($picture !== '') {
         break;
     }

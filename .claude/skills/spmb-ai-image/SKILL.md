@@ -28,7 +28,8 @@ them. Read `ai/style-guide.md` (identity, respect rules, palette, cast, sizes) a
   coloured top/side borders, no icon backgrounds, motion off under `prefers-reduced-motion`.
 - SVG never hard-codes the brand colour: patterns and dividers are `#000` masks painted with
   `var(--color-primary-*)`; inline SVG uses `currentColor`; dark mode is the `.dark` class.
-- Paintings get variants `light, dark, hijau, dark-hijau` unless there is a reason not to.
+- Paintings get variants `light, hijau` (D-083: on real transparency that reads on light and dark pages, no
+  `-dark` copy, no plate behind images); older paintings keep their `-dark` files.
 - Alt text: one short plain Indonesian sentence that says what the picture shows (`bahasa-indonesia-plain`);
   no "Gambar …"/"Ilustrasi …"; decorative SVGs are `aria-hidden="true"` with no alt. Never put words into an
   asset — every word is HTML.
@@ -60,7 +61,8 @@ merging. Its commits must be authored by Arumi Studios with no AI attribution (c
   `ai/generated/install/css/*.css` → `resources/css/visual/` (import them in `resources/css/app.css`),
   then `npm run build`.
 - Paintings: `illustration('<area>/<name>', $alt, $classes)` in `app/Helpers/ui_helper.php` already picks
-  `-dark`, `-hijau` and `-dark-hijau` when the files exist. Put the alt text in the module's language file.
+  `-hijau` (and older `-dark`/`-dark-hijau`) when the files exist. Painted icons: `art_icon()`; empty states:
+  the unique `'image'` with `'fallback'`, alt text in `App.altStates`. Put the alt text in the module's language file.
 - SVG/CSS: use the class names from the brief's CSS contract; decorative elements get `aria-hidden="true"`;
   the loader is inlined in a partial with `role="status"` and HTML text.
 - Screenshots of every changed page at 360 and 1280 px, light and dark, before the pull request.

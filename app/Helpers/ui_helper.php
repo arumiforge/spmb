@@ -386,7 +386,7 @@ if (! function_exists('public_bottom_nav')) {
             foreach ($wanted as $url) {
                 if (isset($byUrl[$url]) && ! in_array($url, $used, true)) {
                     $used[]   = $url;
-                    $bottom[] = $byUrl[$url] + ['center' => $url === 'daftar'];
+                    $bottom[] = $byUrl[$url] + ['center' => $url === 'daftar', 'art' => $url === 'daftar' ? 'ikon/ikon-daftar' : null];
                     if ($url === 'daftar') {
                         $bottom[array_key_last($bottom)]['label'] = lang('App.navRegister');
                     }

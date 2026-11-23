@@ -40,7 +40,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `feat/ui-codex` | worker A (ui-round) | Codex briefs 036+ (`docs/ui-round-plan.md` A) | in progress |
+| `feat/ui-codex` | worker A (ui-round) | Codex briefs 036–071 (`docs/ui-round-plan.md` A) | merged into the integration branch (#42) |
 | `feat/ui-minify` | worker B (ui-round) | Minified assets, SVG originals in `resources/img/` (B) | in progress |
 | `feat/ui-admin` | worker C (ui-round) | Dashboard full-width pass, AdminLayoutTest (C) | in progress |
 | `feat/ui-publik` | worker D (ui-round) | Public pages pass, home/settings tests (D) | in progress |

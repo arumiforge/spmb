@@ -157,7 +157,11 @@
             0 10px 22px -8px color-mix(in srgb, var(--color-primary-700) 70%, transparent);
     }
 
-    /* Codex art for the middle button (brief 044), when installed. */
+    /* Codex art for the middle button (brief 041 ikon-daftar inside the 049 badge), when installed. */
+    .nav-bawah-tengah-bulat.ada-seni {
+        padding: 0.45rem;
+    }
+
     .nav-bawah-tengah-bulat img {
         width: 100%;
         height: 100%;
@@ -351,7 +355,7 @@
 
     @media (width >= 48rem) {
         .slide-hero {
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 5 / 4; /* close to the 3:2 landscape slides (briefs 050, 051) */
             -webkit-mask-image:
                 linear-gradient(to right, transparent 0, #000 30%, #000 88%, transparent 100%),
                 linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
