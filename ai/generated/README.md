@@ -48,6 +48,10 @@ status to `done`. Nothing here is served by the app directly.
 | 047 | `install/img/langkah/langkah-2.webp` | 640×470 | 73.32 | Transparent | Shared crop, mak Ijah watches Daeng Arif fill in the form on his phone |
 | 047 | `langkah-2-hijau.webp` | 1448×1086 | 351.55 | Transparent | Round button on the phone display in leaf green |
 | 047 | `install/img/langkah/langkah-2-hijau.webp` | 640×470 | 73.28 | Transparent | Shared crop, round button on the phone display in leaf green |
+| 048 | `langkah-3.webp` | 1448×1086 | 249.53 | Transparent | Aisyah shows her registration card at the school gate |
+| 048 | `install/img/langkah/langkah-3.webp` | 640×480 | 64.77 | Transparent | Shared crop, aisyah shows her registration card at the school gate |
+| 048 | `langkah-3-hijau.webp` | 1448×1086 | 249.13 | Transparent | Registration card header band in leaf green |
+| 048 | `install/img/langkah/langkah-3-hijau.webp` | 640×480 | 64.54 | Transparent | Shared crop, registration card header band in leaf green |
 
 ### paintings-pages (2026-11-24)
 

@@ -86,7 +86,7 @@ generator needed) → `tombol-seni` (no image generator needed) → `ikon-berand
 | 045 | [ikon-email](prompts/045-ikon-email.md) | ikon-beranda | painting | Home contact card "Email" | requested |
 | 046 | [langkah-1](prompts/046-langkah-1.md) | langkah | painting | Home "Cara mendaftar" step 1 (scene, D-090) | generated |
 | 047 | [langkah-2](prompts/047-langkah-2.md) | langkah | painting | Home "Cara mendaftar" step 2 (scene, D-090) | generated |
-| 048 | [langkah-3](prompts/048-langkah-3.md) | langkah | painting | Home "Cara mendaftar" step 3 (scene, D-090) | requested |
+| 048 | [langkah-3](prompts/048-langkah-3.md) | langkah | painting | Home "Cara mendaftar" step 3 (scene, D-090) | generated |
 | 072 | [latar-langkah](prompts/072-latar-langkah.md) | langkah | SVG + CSS | Art backgrounds of the three "Cara mendaftar" cards | requested |
 | 049 | [tombol-seni](prompts/049-tombol-seni.md) | tombol-seni | SVG + CSS | Art buttons `.tombol-seni` and the bottom-bar badge | requested |
 | 050 | [hero-slide-belajar](prompts/050-hero-slide-belajar.md) | slide-beranda | painting | Home hero slideshow (default slide) | requested |
