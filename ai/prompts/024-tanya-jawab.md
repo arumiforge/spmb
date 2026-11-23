@@ -7,7 +7,7 @@ generate: square 1024x1024
 background: transparent
 variants: light, dark, hijau, dark-hijau
 batch: paintings-pages
-status: generated
+status: done
 ---
 
 # 024 — tanya-jawab
