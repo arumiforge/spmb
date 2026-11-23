@@ -65,7 +65,7 @@ generator needed) → `tombol-seni` (no image generator needed) → `ikon-berand
 | 024 | [tanya-jawab](prompts/024-tanya-jawab.md) | paintings-pages | painting | `/tanya-jawab` | done |
 | 025 | [cek-status](prompts/025-cek-status.md) | paintings-pages | painting | `/cek-status` | done |
 | 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | done |
-| 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | requested (redo: D-089) |
+| 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | generated |
 | 035 | [bagikan-umum](prompts/035-bagikan-umum.md) | paintings-pages | painting | Default link-preview image | done |
 | 028 | [akses-ditolak](prompts/028-akses-ditolak.md) | paintings-states | painting | 403 / no permission | requested |
 | 029 | [sesi-berakhir](prompts/029-sesi-berakhir.md) | paintings-states | painting | Session expired | requested |

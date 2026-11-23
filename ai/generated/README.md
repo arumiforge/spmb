@@ -32,6 +32,14 @@ status to `done`. Nothing here is served by the app directly.
 | 020 | `install/img/section/beranda-kebersamaan-hijau.webp` | 750×645 | 99.25 | Transparent | Shared crop, tablet screen and book cover in leaf green |
 | 020 | `beranda-kebersamaan-dark-hijau.webp` | 1254×1254 | 226.25 | Transparent | Gentle tonal lift and a faint rim, tablet screen and book cover in leaf green |
 | 020 | `install/img/section/beranda-kebersamaan-dark-hijau.webp` | 750×645 | 96.57 | Transparent | Shared crop, gentle tonal lift and a faint rim, tablet screen and book cover in leaf green |
+| 027 | `tes.webp` | 1254×1254 | 280.13 | Transparent | Three relaxed pupils, abstract papers and a numeral-free clock |
+| 027 | `install/img/section/tes.webp` | 700×651 | 84.17 | Transparent | Shared crop, three relaxed pupils, abstract papers and a numeral-free clock |
+| 027 | `tes-dark.webp` | 1254×1254 | 282.17 | Transparent | Gentle tonal lift and a faint rim |
+| 027 | `install/img/section/tes-dark.webp` | 700×651 | 81.49 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 027 | `tes-hijau.webp` | 1254×1254 | 280.03 | Transparent | Pencil case in leaf green |
+| 027 | `install/img/section/tes-hijau.webp` | 700×651 | 84.17 | Transparent | Shared crop, pencil case in leaf green |
+| 027 | `tes-dark-hijau.webp` | 1254×1254 | 282.38 | Transparent | Gentle tonal lift and a faint rim, pencil case in leaf green |
+| 027 | `install/img/section/tes-dark-hijau.webp` | 700×651 | 81.49 | Transparent | Shared crop, gentle tonal lift and a faint rim, pencil case in leaf green |
 
 ### paintings-pages (2026-11-24)
 
