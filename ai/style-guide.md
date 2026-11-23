@@ -18,7 +18,7 @@ in the morning, where children from many backgrounds learn together.
 | Islamic | Modest clothing, gentle manners (salim to a teacher or parent, greeting with a smile), a small musholla or a simple dome far in the background of an outdoor scene, arches and geometric screens in architecture |
 | Nahdlatul Ulama | Green as the home colour of the art, batik and sarung in daily life, the tradition of learning with teachers (ustadz/ustadzah, kiai) — shown through people and places, **never** through the NU emblem |
 | Indonesian | Tropical light, tiled roofs, frangipani and mango trees, banana leaves, rattan and bamboo, kawung and other textile motifs, warung-style benches, rice fields or hills far away |
-| Bhinneka | Families and students from many regions and skin tones (see the cast); different kerudung styles; different batik and woven cloth patterns; a grandparent, a parent who uses a wheelchair, a child with glasses — all together, nobody singled out |
+| Bhinneka | Families and students from many regions and skin tones (see the cast); different kerudung styles; different batik and woven cloth patterns; a grandparent, parents and children of different ages and builds, a child with glasses — all together, nobody singled out |
 
 **White label.** Every asset must suit any school using SPMB. School logos, names, mottos and the LP
 Ma'arif NU logo are shown by the app from settings and the client pack (`clients/<school>/`); they are
@@ -50,6 +50,9 @@ Many families will see, print and save these images. Treat religious content wit
 - **Modesty**: girls and women in kerudung and loose clothing covering arms and legs; boys and men in
   shirts with sleeves and long trousers or sarung. No physical contact between unrelated adult men and
   women (a mother may hold her son's hand; a father his daughter's).
+- **No disability or assistive devices (D-089)**: no wheelchairs, hearing aids, walking canes, crutches,
+  white canes, prosthetics, sign-language poses or ramps shown as a subject. Diversity shows through regions,
+  skin tones, ages, builds, kerudung styles and everyday clothing (glasses are fine).
 - Tone: calm and welcoming. No stress, tears, punishment, exams pictured as scary, or anything broken.
 
 If a brief seems to need something on this list, choose the calmer option and mention it in the PR.
@@ -105,12 +108,12 @@ tones and differ from person to person.
 | Aisyah | applicant girl, 12, Javanese | white kerudung, white school shirt, navy skirt, small sage-green backpack |
 | Raka | applicant boy, 12, Sundanese | short black hair, black peci, white shirt, navy trousers |
 | Nurul | applicant girl, 12, from Papua (Fakfak), darker brown skin | cream kerudung over curly hair at the hairline, white shirt, navy skirt, round glasses |
-| Fajar | applicant boy, 12, Chinese-Indonesian Muslim family, lighter skin | straight black hair, black peci, white shirt, navy trousers, hearing aid on one ear (small, sage) |
+| Fajar | applicant boy, 12, Chinese-Indonesian Muslim family, lighter skin | straight black hair, black peci, white shirt, navy trousers |
 | Daeng Arif | applicant boy, 12, Bugis | wavy hair, black peci, sarung in deep green check on pesantren scenes, white baju koko |
 | Ibu Sari | mother | white kerudung, soft sand-coloured long tunic |
 | Pak Hadi | father | short hair, black peci, batik-like shirt with an abstract sage and sand pattern |
-| Mak Ijah | grandmother | dark green long kerudung, kain batik in brown and cream, walks with a small cane |
-| Pak Rahmat | father who uses a wheelchair | light grey peci, olive batik-like shirt, calm smile |
+| Mak Ijah | grandmother | dark green long kerudung, kain batik in brown and cream, walks upright with a gentle smile |
+| Pak Rahmat | father, Minang | light grey peci, olive batik-like shirt, calm smile |
 | Bu Nur | school staff (ustadzah) | white kerudung, navy cardigan over a cream blouse, lanyard with a blank card |
 | Pak Budi | school staff (ustadz) | black peci, light batik-like shirt with an abstract pattern, glasses |
 | Kiai Mansur | elder teacher | white peci, white baju koko, dark green sarung, short grey beard, kind face; shown with dignity, usually in the background |

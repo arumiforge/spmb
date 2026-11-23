@@ -29,7 +29,7 @@ Public home page (`/`), hero section. Headline, one sentence and the "Daftar sek
 ## Characters (cast in `ai/style-guide.md`)
 
 - Ibu Sari with Aisyah (holding a smartphone whose screen shows only abstract blocks), both smiling, walking towards the gate.
-- Pak Rahmat in his wheelchair with Nurul beside him, her hand resting on the wheelchair handle, chatting happily.
+- Pak Rahmat walking with Nurul beside him, chatting happily.
 - Further back, smaller: Raka and Daeng Arif greeting Pak Budi at the gate by bowing slightly and shaking hands (salim).
 
 ## Setting and props
@@ -37,7 +37,6 @@ Public home page (`/`), hero section. Headline, one sentence and the "Daftar sek
 - A single-storey Indonesian school with cream walls, muted terracotta roof tiles, a wide serambi (veranda) with simple arches and a geometric wooden screen; no sign, name or flag.
 - Far behind, small and soft, a simple musholla roof with a small dome among trees (optional; leave it out if it draws attention).
 - A frangipani tree with cream flowers, a mango tree, potted plants, a row of shoes neatly lined up at the veranda steps.
-- A low gentle ramp next to the steps (the wheelchair route), painted naturally.
 
 ## Colour and light
 
@@ -64,7 +63,7 @@ green, soft terracotta and a touch of soft gold, with ONE small accent in medium
 morning light. Modest Indonesian Muslim school life: girls in kerudung, boys in black peci. Absolutely no
 text, letters, numbers, Arabic script, calligraphy, logos, emblems, flags, signatures or watermarks anywhere.
 
-Landscape image. Transparent background (real alpha), the painting as an isolated vignette with soft painted edges. Keep the LEFT 42% completely empty and transparent, because a headline will be placed there. In the RIGHT 58%: a single-storey Indonesian madrasah school with cream walls, muted terracotta roof tiles, a wide veranda with simple arches and a geometric wooden screen, a row of shoes neatly lined up at the veranda steps and a gentle ramp beside the steps (no sign, no name, no flag). A frangipani tree with cream flowers and a mango tree frame the building. On a gentle path in front, a mother in a white kerudung and a sand-coloured long tunic walks with her 12-year-old daughter, who wears a white kerudung, a white school shirt, a navy skirt and a small sage-green backpack and holds a smartphone whose screen shows only abstract blue and white blocks. Beside them a father in a light grey peci and an olive batik-like shirt rolls along in a wheelchair while his daughter from Papua, with darker brown skin, a cream kerudung and round glasses, walks next to him with her hand on the handle; everyone smiles. Further back, small and soft, two boys in white shirts, navy trousers and black peci greet a male teacher in a black peci and batik-like shirt at the gate. Calm, welcoming morning mood, warm golden light.
+Landscape image. Transparent background (real alpha), the painting as an isolated vignette with soft painted edges. Keep the LEFT 42% completely empty and transparent, because a headline will be placed there. In the RIGHT 58%: a single-storey Indonesian madrasah school with cream walls, muted terracotta roof tiles, a wide veranda with simple arches and a geometric wooden screen, a row of shoes neatly lined up at the veranda steps (no sign, no name, no flag). A frangipani tree with cream flowers and a mango tree frame the building. On a gentle path in front, a mother in a white kerudung and a sand-coloured long tunic walks with her 12-year-old daughter, who wears a white kerudung, a white school shirt, a navy skirt and a small sage-green backpack and holds a smartphone whose screen shows only abstract blue and white blocks. Beside them a father in a light grey peci and an olive batik-like shirt walks along while his daughter from Papua, with darker brown skin, a cream kerudung and round glasses, walks next to him chatting; everyone smiles. Further back, small and soft, two boys in white shirts, navy trousers and black peci greet a male teacher in a black peci and batik-like shirt at the gate. Calm, welcoming morning mood, warm golden light.
 ```
 
 Variants: dark (style guide §8), green accent (§9), dark green accent (§9 applied to the dark image).
@@ -88,7 +87,7 @@ Keluarga dari berbagai daerah datang ke sekolah untuk mendaftar pada pagi hari.
 - [ ] No text, letters, numbers, Arabic-like marks, emblems or flags anywhere (zoom in on screens, papers, walls, clothing)
 - [ ] Real transparency; no checkerboard, paper texture or colour wash outside the vignette
 - [ ] Left 42 % is fully transparent (a headline must fit there at 1280 px)
-- [ ] The wheelchair user looks included and cheerful, not pitied
+- [ ] No wheelchair, hearing aid, cane or other assistive device anywhere (D-089)
 - [ ] Salim at the gate reads as respectful greeting, not as prayer
 - [ ] Blue accent only on the elements named in "Colour and light"; the `-hijau` copy changes only those
 - [ ] Dark variant reads well on `#111827` without a bright halo; colours not inverted

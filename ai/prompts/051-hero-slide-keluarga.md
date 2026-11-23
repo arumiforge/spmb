@@ -30,7 +30,7 @@ Home hero slideshow (D-084, `[data-slide-hero]` in `app/Views/home.php`): defaul
 ## Characters (cast in `ai/style-guide.md`)
 
 - Pak Hadi with his son Fajar: Fajar does salim to Pak Budi (bows slightly and touches the back of his hand to his forehead), Pak Hadi smiles beside them.
-- Mak Ijah with her cane and Nurul: Nurul does salim to Bu Nur, Mak Ijah chats with Bu Nur.
+- Mak Ijah and Nurul: Nurul does salim to Bu Nur, Mak Ijah chats with Bu Nur.
 - Kiai Mansur small in the background under the veranda, smiling.
 - No physical contact between unrelated adult men and women.
 
@@ -45,7 +45,7 @@ Cream, sand, green family, warm light under the tree. Blue accent: a small water
 
 ## Avoid
 
-- Repeating 019 (families walking towards the gate, the wheelchair scene)
+- Repeating 019 (families walking towards the gate)
 - Handshakes between unrelated adult men and women
 - Signs, flags or a school name
 - Realistic faces
@@ -69,7 +69,7 @@ drawn checkerboard. The painting must read on a white page and on a very dark na
 give every shape a soft painted outline in soft charcoal, keep the outer edges mid-toned (neither
 near-white nor near-black) and do not add a light rim.
 
-Landscape image that fills the frame, the painting fading softly into transparency at all four edges, faces and main action in the centre. In a shady Indonesian schoolyard under a big mango tree, with a low cream wall and gate in the background: a father in a black peci and a sage-and-sand batik-like shirt watches his 12-year-old son with lighter skin, a black peci, white shirt and navy trousers greet a male teacher in a black peci, glasses and a light batik-like shirt by bowing slightly and touching the back of the teacher's hand to his forehead (salim); a small medium-blue water bottle hangs on the boy's backpack. Next to them a grandmother in a dark green long kerudung and brown batik cloth with a small cane chats with a female teacher in a white kerudung and navy cardigan, while a 12-year-old girl with darker brown skin, a cream kerudung and round glasses greets that teacher with salim, holding a sand-coloured folder. Small in the background on a veranda an elderly teacher in a white peci and white baju koko smiles. Fallen frangipani flowers, a bench and potted plants. Warm, respectful, welcoming mood.
+Landscape image that fills the frame, the painting fading softly into transparency at all four edges, faces and main action in the centre. In a shady Indonesian schoolyard under a big mango tree, with a low cream wall and gate in the background: a father in a black peci and a sage-and-sand batik-like shirt watches his 12-year-old son with lighter skin, a black peci, white shirt and navy trousers greet a male teacher in a black peci, glasses and a light batik-like shirt by bowing slightly and touching the back of the teacher's hand to his forehead (salim); a small medium-blue water bottle hangs on the boy's backpack. Next to them a grandmother in a dark green long kerudung and brown batik cloth chats with a female teacher in a white kerudung and navy cardigan, while a 12-year-old girl with darker brown skin, a cream kerudung and round glasses greets that teacher with salim, holding a sand-coloured folder. Small in the background on a veranda an elderly teacher in a white peci and white baju koko smiles. Fallen frangipani flowers, a bench and potted plants. Warm, respectful, welcoming mood.
 ```
 
 Variant: green accent (style guide §9) only. No dark variant (D-083).
