@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pratinjau aset SPMB</title>
+    <link rel="stylesheet" href="../install/css/pola.css">
+    <link rel="stylesheet" href="../install/css/pemisah.css">
+    <link rel="stylesheet" href="../install/css/tombol-daftar.css">
+    <link rel="stylesheet" href="../install/css/memuat.css">
+    <style>
+        :root {
+            color-scheme: light;
+            --color-primary-50: color-mix(in oklab, var(--brand, #2563eb) 6%, white);
+            --color-primary-100: color-mix(in oklab, var(--brand, #2563eb) 12%, white);
+            --color-primary-200: color-mix(in oklab, var(--brand, #2563eb) 25%, white);
+            --color-primary-300: color-mix(in oklab, var(--brand, #2563eb) 42%, white);
+            --color-primary-400: color-mix(in oklab, var(--brand, #2563eb) 62%, white);
+            --color-primary-500: color-mix(in oklab, var(--brand, #2563eb) 82%, white);
+            --color-primary-600: var(--brand, #2563eb);
+            --color-primary-700: color-mix(in oklab, var(--brand, #2563eb) 85%, black);
+            --color-primary-800: color-mix(in oklab, var(--brand, #2563eb) 70%, black);
+            --color-primary-900: color-mix(in oklab, var(--brand, #2563eb) 55%, black);
+            --color-primary-950: color-mix(in oklab, var(--brand, #2563eb) 40%, black);
+            --halaman: #fff;
+            --permukaan: #f9fafb;
+            --teks: #111827;
+            --teks-sekunder: #374151;
+            --batas: #e5e7eb;
+        }
+
+        :root[data-warna="hijau"] { --brand: #005c2f; }
+
+        .dark {
+            color-scheme: dark;
+            --color-primary-300: color-mix(in oklab, var(--brand, #2563eb) 30%, white);
+            --color-primary-400: color-mix(in oklab, var(--brand, #2563eb) 45%, white);
+            --halaman: #111827;
+            --permukaan: #1f2937;
+            --teks: #f9fafb;
+            --teks-sekunder: #d1d5db;
+            --batas: #374151;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            color: var(--teks);
+            background: var(--halaman);
+            font: 1rem/1.55 system-ui, sans-serif;
+        }
+
+        header, .isi {
+            width: min(100% - 2rem, 76rem);
+            margin-inline: auto;
+        }
+
+        header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem 2rem;
+            padding-block: 1.5rem;
+        }
+
+        h1, h2, h3, p, figure { margin: 0; }
+        h1 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+        h2 { font-size: 1.5rem; }
+        h3 { font-size: 1.125rem; }
+        p { color: var(--teks-sekunder); }
+
+        .pengaturan {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .75rem 1.25rem;
+        }
+
+        .pengaturan label {
+            display: grid;
+            gap: .25rem;
+            font-size: .875rem;
+        }
+
+        select {
+            min-height: 44px;
+            padding-inline: .75rem;
+            border: 1px solid var(--batas);
+            border-radius: .5rem;
+            background: var(--halaman);
+            color: var(--teks);
+            font: inherit;
+        }
+
+        main > section { padding-block: clamp(1.25rem, 4vw, 3rem); }
+        h2 + * { margin-top: 1rem; }
+
+        /* Mask URLs resolve from the linked asset stylesheet. */
+        .pola-kawung { --pola-gambar: url("../img/pola/pola-kawung.svg"); }
+        .pola-khatam { --pola-gambar: url("../img/pola/pola-khatam.svg"); }
+        .pola-anyaman { --pola-gambar: url("../img/pola/pola-anyaman.svg"); }
+        .pola-ceplok-daun { --pola-gambar: url("../img/pola/pola-ceplok-daun.svg"); }
+        .pemisah-lengkung { --pemisah-gambar: url("../img/pemisah/pemisah-lengkung.svg"); }
+        .pemisah-tumpal { --pemisah-gambar: url("../img/pemisah/pemisah-tumpal.svg"); }
+        .pemisah-mega { --pemisah-gambar: url("../img/pemisah/pemisah-mega.svg"); }
+        .pemisah-bukit { --pemisah-gambar: url("../img/pemisah/pemisah-bukit.svg"); }
+
+        .tombol-daftar {
+            --tombol-pola: url("../img/pola/pola-kawung.svg");
+            --tombol-ornamen: url("../img/tombol/tombol-ornamen.svg");
+        }
+
+        .tombol-daftar, .memuat-kecil {
+            --memuat-topeng: url("../img/memuat/memuat-kecil.svg");
+            --memuat-topeng-diam: url("../img/memuat/memuat-kecil.svg#diam");
+        }
+
+        .contoh-pudar, .bidang-pola {
+            position: relative;
+            overflow: hidden;
+            background: var(--permukaan);
+        }
+
+        .contoh-pudar {
+            display: grid;
+            align-content: center;
+            min-height: 10rem;
+            padding: clamp(1rem, 4vw, 2.5rem);
+            border: 1px solid var(--batas);
+            border-radius: .75rem;
+        }
+
+        .contoh-pudar p { max-width: 32ch; }
+
+        .contoh-pola {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .bidang-pola {
+            width: min(100%, var(--contoh-ukuran));
+            aspect-ratio: 1;
+            outline: 1px solid var(--batas);
+        }
+
+        .bidang-pola .pola { --pola-ukuran: 25%; }
+
+        figcaption { margin-top: .5rem; }
+
+        #judul-pemisah { margin-bottom: 1rem; }
+
+        .contoh-pemisah {
+            margin-top: 1rem;
+            padding-bottom: .75rem;
+        }
+
+        .bidang-warna {
+            position: relative;
+            background: var(--color-primary-600);
+        }
+
+        .ruang-warna { min-height: 4rem; }
+
+        .kelompok-tombol { margin-top: 1.5rem; }
+
+        .deret-tombol {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: start;
+            gap: 1rem;
+            margin-top: .75rem;
+        }
+
+        .bidang-memuat {
+            display: grid;
+            justify-items: center;
+            gap: 1.5rem;
+            padding: 2rem 1rem;
+            border: 1px solid var(--batas);
+            border-radius: .75rem;
+            background: var(--permukaan);
+        }
+
+        .contoh-tombol-memuat {
+            min-height: 48px;
+            padding-inline: 1rem;
+            border: 1px solid var(--batas);
+            border-radius: .5rem;
+            background: var(--halaman);
+            color: var(--teks);
+            font: inherit;
+        }
+
+        .contoh-tombol-memuat .memuat-kecil { margin-inline-end: .25em; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pratinjau aset SPMB</h1>
+        <div class="pengaturan">
+            <label>Warna sekolah
+                <select id="warna">
+                    <option value="biru">Biru</option>
+                    <option value="hijau">Hijau</option>
+                </select>
+            </label>
+            <label>Tampilan
+                <select id="tampilan">
+                    <option value="terang">Terang</option>
+                    <option value="gelap">Gelap</option>
+                </select>
+            </label>
+        </div>
+    </header>
+    <main>
+        <section class="isi" aria-labelledby="judul-pola">
+            <h2 id="judul-pola">Pola latar</h2>
+            <div class="contoh-pudar">
+                <div class="pola pola-kawung pola-pudar" aria-hidden="true"></div>
+                <p>Lihat jadwal dan siapkan berkas sebelum Anda mendaftar.</p>
+            </div>
+            <div class="contoh-pola">
+                <figure>
+                    <div class="bidang-pola" style="--contoh-ukuran: 256px">
+                        <div class="pola pola-kawung" aria-hidden="true"></div>
+                    </div>
+                    <figcaption>Kawung</figcaption>
+                </figure>
+                <figure>
+                    <div class="bidang-pola" style="--contoh-ukuran: 288px">
+                        <div class="pola pola-khatam" aria-hidden="true"></div>
+                    </div>
+                    <figcaption>Khatam</figcaption>
+                </figure>
+                <figure>
+                    <div class="bidang-pola" style="--contoh-ukuran: 192px">
+                        <div class="pola pola-anyaman" aria-hidden="true"></div>
+                    </div>
+                    <figcaption>Anyaman</figcaption>
+                </figure>
+                <figure>
+                    <div class="bidang-pola" style="--contoh-ukuran: 256px">
+                        <div class="pola pola-ceplok-daun" aria-hidden="true"></div>
+                    </div>
+                    <figcaption>Ceplok daun</figcaption>
+                </figure>
+            </div>
+        </section>
+        <section aria-labelledby="judul-pemisah">
+            <h2 class="isi" id="judul-pemisah">Pemisah bagian</h2>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="ruang-warna">
+                        <div class="pola pola-kawung pola-terang" aria-hidden="true"></div>
+                    </div>
+                    <div class="pemisah pemisah-lengkung" aria-hidden="true"></div>
+                </div>
+                <figcaption class="isi">Lengkung</figcaption>
+            </figure>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="ruang-warna"></div>
+                    <div class="pemisah pemisah-tumpal" aria-hidden="true"></div>
+                </div>
+                <figcaption class="isi">Tumpal</figcaption>
+            </figure>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="ruang-warna"></div>
+                    <div class="pemisah pemisah-mega" aria-hidden="true"></div>
+                </div>
+                <figcaption class="isi">Mega</figcaption>
+            </figure>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="ruang-warna"></div>
+                    <div class="pemisah pemisah-bukit pemisah-cermin" aria-hidden="true"></div>
+                </div>
+                <figcaption class="isi">Bukit bercermin</figcaption>
+            </figure>
+            <figure class="contoh-pemisah">
+                <div class="bidang-warna">
+                    <div class="pemisah pemisah-lengkung pemisah-balik" aria-hidden="true"></div>
+                    <div class="ruang-warna"></div>
+                </div>
+                <figcaption class="isi">Lengkung terbalik</figcaption>
+            </figure>
+        </section>
+        <section class="isi" aria-labelledby="judul-tombol">
+            <h2 id="judul-tombol">Tombol pendaftaran</h2>
+            <p>Arahkan penunjuk, tekan tombol, atau gunakan Tab untuk melihat perubahan tampilannya.</p>
+            <div class="kelompok-tombol">
+                <h3>Ukuran biasa</h3>
+                <div class="deret-tombol">
+                    <a class="tombol-daftar tombol-daftar-penuh" href="#judul-tombol">
+                        <span class="tombol-daftar-isi">Daftar sekarang
+                            <svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M5 12h14m-7-7 7 7-7 7"></path>
+                            </svg>
+                        </span>
+                    </a>
+                    <button class="tombol-daftar tombol-daftar-penuh" type="button" disabled>
+                        <span class="tombol-daftar-isi">Daftar sekarang
+                            <svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M5 12h14m-7-7 7 7-7 7"></path>
+                            </svg>
+                        </span>
+                    </button>
+                    <button class="tombol-daftar tombol-daftar-penuh" type="button" aria-busy="true">
+                        <span class="tombol-daftar-isi">Menyimpan…
+                            <svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M5 12h14m-7-7 7 7-7 7"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div class="kelompok-tombol">
+                <h3>Ukuran besar</h3>
+                <div class="deret-tombol">
+                    <button class="tombol-daftar tombol-daftar-besar tombol-daftar-penuh" type="button">
+                        <span class="tombol-daftar-isi">Daftar sekarang
+                            <svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M5 12h14m-7-7 7 7-7 7"></path>
+                            </svg>
+                        </span>
+                    </button>
+                    <button class="tombol-daftar tombol-daftar-besar tombol-daftar-penuh" type="button" disabled>
+                        <span class="tombol-daftar-isi">Daftar sekarang
+                            <svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M5 12h14m-7-7 7 7-7 7"></path>
+                            </svg>
+                        </span>
+                    </button>
+                    <button class="tombol-daftar tombol-daftar-besar tombol-daftar-penuh" type="button" aria-busy="true">
+                        <span class="tombol-daftar-isi">Menyimpan…
+                            <svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M5 12h14m-7-7 7 7-7 7"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </section>
+        <section class="isi" aria-labelledby="judul-memuat">
+            <h2 id="judul-memuat">Indikator pemuatan</h2>
+            <div class="bidang-memuat">
+                <div class="memuat" role="status">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="memuat-gambar" viewBox="0 0 96 96" aria-hidden="true">
+                    <style>
+                    @media(prefers-reduced-motion:no-preference){
+                    .memuat-bintang{transform-origin:48px 48px;animation:memuat-putar 8s linear infinite}
+                    .memuat-bintang>path{animation:memuat-nyala 1.6s ease-in-out infinite;animation-delay:calc(var(--urutan)*.2s - 1.6s)}
+                    @keyframes memuat-putar{to{transform:rotate(360deg)}}
+                    @keyframes memuat-nyala{0%,100%{opacity:.25}50%{opacity:1}}
+                    }
+                    </style>
+                    <g class="memuat-bintang" fill="none" stroke="currentColor" stroke-width="4.8" stroke-linejoin="round" stroke-linecap="round">
+                    <path style="--urutan:0" d="M39 20 47 12Q48 11 49 12L57 20"/>
+                    <path style="--urutan:1" d="M62 22H72Q74 22 74 24V34"/>
+                    <path style="--urutan:2" d="M39 20 47 12Q48 11 49 12L57 20" transform="rotate(90 48 48)"/>
+                    <path style="--urutan:3" d="M62 22H72Q74 22 74 24V34" transform="rotate(90 48 48)"/>
+                    <path style="--urutan:4" d="M39 20 47 12Q48 11 49 12L57 20" transform="rotate(180 48 48)"/>
+                    <path style="--urutan:5" d="M62 22H72Q74 22 74 24V34" transform="rotate(180 48 48)"/>
+                    <path style="--urutan:6" d="M39 20 47 12Q48 11 49 12L57 20" transform="rotate(270 48 48)"/>
+                    <path style="--urutan:7" d="M62 22H72Q74 22 74 24V34" transform="rotate(270 48 48)"/>
+                    </g>
+                    <g fill="currentColor"><ellipse cx="48" cy="39" rx="2.7" ry="4.8"/><ellipse cx="57" cy="48" rx="4.8" ry="2.7"/><ellipse cx="48" cy="57" rx="2.7" ry="4.8"/><ellipse cx="39" cy="48" rx="4.8" ry="2.7"/></g>
+                    </svg>
+                    <span class="memuat-teks">Sedang memuat data…</span>
+                </div>
+                <button class="contoh-tombol-memuat" type="button" aria-busy="true" disabled>
+                    <span class="memuat-kecil" aria-hidden="true"></span> Memeriksa jadwal…
+                </button>
+            </div>
+        </section>
+    </main>
+    <script>
+        const warna = document.querySelector('#warna');
+        const tampilan = document.querySelector('#tampilan');
+
+        function terapkanPengaturan() {
+            document.documentElement.dataset.warna = warna.value;
+            document.documentElement.classList.toggle('dark', tampilan.value === 'gelap');
+        }
+
+        warna.addEventListener('change', terapkanPengaturan);
+        tampilan.addEventListener('change', terapkanPengaturan);
+        terapkanPengaturan();
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+@layer components {
+    .pola {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-color: var(--pola-warna, var(--color-primary-600));
+        opacity: var(--pola-opasitas, .07);
+        -webkit-mask-image: var(--pola-gambar);
+        mask-image: var(--pola-gambar);
+        -webkit-mask-repeat: repeat;
+        mask-repeat: repeat;
+        -webkit-mask-size: var(--pola-ukuran, 64px);
+        mask-size: var(--pola-ukuran, 64px);
+    }
+
+    .pola-kawung {
+        --pola-gambar: url("/assets/img/pola/pola-kawung.svg");
+    }
+
+    .pola-khatam {
+        --pola-gambar: url("/assets/img/pola/pola-khatam.svg");
+        --pola-ukuran: 72px;
+    }
+
+    .pola-anyaman {
+        --pola-gambar: url("/assets/img/pola/pola-anyaman.svg");
+        --pola-ukuran: 48px;
+    }
+
+    .pola-ceplok-daun {
+        --pola-gambar: url("/assets/img/pola/pola-ceplok-daun.svg");
+    }
+
+    .pola-pudar {
+        --pola-gradasi: linear-gradient(to left, #000 0%, transparent 70%);
+        -webkit-mask-image: var(--pola-gambar), var(--pola-gradasi);
+        mask-image: var(--pola-gambar), var(--pola-gradasi);
+        -webkit-mask-repeat: repeat, no-repeat;
+        mask-repeat: repeat, no-repeat;
+        -webkit-mask-size: var(--pola-ukuran, 64px), 100% 100%;
+        mask-size: var(--pola-ukuran, 64px), 100% 100%;
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
+    }
+
+    .dark .pola {
+        --pola-warna: var(--color-primary-300);
+        --pola-opasitas: .09;
+    }
+
+    .pola.pola-terang {
+        --pola-warna: #fff;
+    }
+}

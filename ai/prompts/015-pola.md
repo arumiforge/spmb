@@ -4,7 +4,7 @@ name: pola
 kind: svg
 batch: svg-kit
 files: img/pola/pola-kawung.svg, img/pola/pola-khatam.svg, img/pola/pola-anyaman.svg, img/pola/pola-ceplok-daun.svg, css/pola.css
-status: requested
+status: generated
 ---
 
 # 015 — pola (tileable background patterns)
