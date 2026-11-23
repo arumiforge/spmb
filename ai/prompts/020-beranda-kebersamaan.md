@@ -28,7 +28,7 @@ Public home page (`/`), section about the school's character (text from settings
 ## Characters (cast in `ai/style-guide.md`)
 
 - Aisyah, Nurul, Raka, Fajar and Daeng Arif sit around a low wooden table (dampar) on a veranda, sharing books and a tablet, laughing together.
-- Fajar wears his small sage hearing aid; Nurul her round glasses. Everyone in school uniform; Daeng Arif in white baju koko and a deep green check sarung.
+- Nurul wears her round glasses. Everyone in school uniform; Daeng Arif in white baju koko and a deep green check sarung.
 
 ## Setting and props
 
@@ -58,7 +58,7 @@ green, soft terracotta and a touch of soft gold, with ONE small accent in medium
 morning light. Modest Indonesian Muslim school life: girls in kerudung, boys in black peci. Absolutely no
 text, letters, numbers, Arabic script, calligraphy, logos, emblems, flags, signatures or watermarks anywhere.
 
-Square image. Transparent background (real alpha), the painting as an isolated vignette with soft painted edges. Five 12-year-old students sit cross-legged around a low wooden table on a woven pandan mat on a school veranda and learn together, laughing: a Javanese girl in a white kerudung, a girl from Papua with darker brown skin, a cream kerudung and round glasses, a Sundanese boy in a black peci, a Chinese-Indonesian boy in a black peci with a small sage-green hearing aid, and a Bugis boy in a white baju koko and a deep green check sarung. The girls wear white shirts and navy skirts, the boys white shirts and navy trousers. They share generic books with abstract lines and a tablet whose screen shows abstract blue blocks. A potted plant and a frangipani branch at one side. Compact centred group with generous empty margin, joyful and equal.
+Square image. Transparent background (real alpha), the painting as an isolated vignette with soft painted edges. Five 12-year-old students sit cross-legged around a low wooden table on a woven pandan mat on a school veranda and learn together, laughing: a Javanese girl in a white kerudung, a girl from Papua with darker brown skin, a cream kerudung and round glasses, a Sundanese boy in a black peci, a Chinese-Indonesian boy in a black peci, and a Bugis boy in a white baju koko and a deep green check sarung. The girls wear white shirts and navy skirts, the boys white shirts and navy trousers. They share generic books with abstract lines and a tablet whose screen shows abstract blue blocks. A potted plant and a frangipani branch at one side. Compact centred group with generous empty margin, joyful and equal.
 ```
 
 Variants: dark (style guide §8), green accent (§9), dark green accent (§9 applied to the dark image).

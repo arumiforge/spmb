@@ -429,3 +429,7 @@ Decision: Both the public and the dashboard footer end with the plain text "Deve
 ## D-088 — Long text folds, contents highlight, friendlier dates (2026-11-23)
 Status: accepted (user, 2026-11-23)
 Decision: Long blocks (table of contents, long guide sections, long answers) are folded with "Lihat selengkapnya" / "Tutup" (keyboard and screen-reader friendly, open when JavaScript is off). The table of contents on guide pages highlights the section in view. Date fields use the app's own Indonesian date picker (day names and months in Indonesian, quick month and year choice for birth dates, typing still allowed), progressively enhancing `input[type=date]`.
+
+## D-089 — No disability or assistive devices in illustrations (2026-11-24)
+Status: accepted (user, 2026-11-24; narrows the Bhinneka row of D-073)
+Decision: Illustrations do not show disability or assistive devices: no wheelchairs, hearing aids, walking canes, crutches, white canes, prosthetics, sign-language poses or ramps as a subject. Diversity is shown through regions, skin tones, ages, builds, kerudung styles and everyday clothing; glasses are fine. The cast in `ai/style-guide.md` was changed accordingly (Pak Rahmat is a Minang father, Fajar has no hearing aid, Mak Ijah has no cane) and briefs 019, 020, 027 and 051 were edited before Codex made them; none of the installed paintings shows such a device.

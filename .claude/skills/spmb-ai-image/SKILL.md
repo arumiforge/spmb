@@ -23,7 +23,7 @@ them. Read `ai/style-guide.md` (identity, respect rules, palette, cast, sizes) a
 - Identity (D-073): santri, Islamic, Nahdlatul Ulama, Indonesian, Bhinneka. Respect rules in style guide §2
   are strict: no Arabic script or calligraphy, the mushaf never as decoration or near the floor, no figures
   in prayer, no mosque silhouettes in patterns/dividers/printed things, no NU emblem or nine stars, no
-  regional-costume parade, modest clothing. School logos and names are never painted into generic art.
+  regional-costume parade, modest clothing, no disability or assistive devices such as wheelchairs, hearing aids or canes (D-089). School logos and names are never painted into generic art.
 - Visual rules (D-070) apply to assets and their CSS: no eyebrows, no short decorative lines, no
   coloured top/side borders, no icon backgrounds, motion off under `prefers-reduced-motion`.
 - SVG never hard-codes the brand colour: patterns and dividers are `#000` masks painted with
