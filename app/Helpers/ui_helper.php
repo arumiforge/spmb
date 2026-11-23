@@ -334,6 +334,19 @@ if (! function_exists('map_embed_url')) {
     }
 }
 
+if (! function_exists('map_search_embed_url')) {
+    /**
+     * Map preview for a place when the school has not pasted a Google Maps embed (D-091): the keyless
+     * "output=embed" search map, so the address always comes with a map, not only a directions link.
+     */
+    function map_search_embed_url(string $query): string
+    {
+        $query = trim(preg_replace('/\s+/', ' ', $query) ?? '');
+
+        return $query === '' ? '' : 'https://maps.google.com/maps?q=' . rawurlencode($query) . '&z=16&output=embed';
+    }
+}
+
 if (! function_exists('public_nav')) {
     /**
      * Public website menu: Beranda and Panduan plus the links of enabled modules (Config/PublicMenu.php),

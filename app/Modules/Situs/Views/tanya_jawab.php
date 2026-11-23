@@ -25,13 +25,17 @@ $contacts  = array_filter([
 
 <?= $this->section('content') ?>
 <div class="mx-auto max-w-screen-md px-4 py-6 sm:py-10">
-    <header class="mb-8">
-        <h1 class="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.qaTitle') ?></h1>
-        <p class="text-lg text-gray-600 dark:text-gray-300"><?= lang('Situs.qaIntro') ?></p>
+    <?php $art = illustration('section/tanya-jawab', lang('App.altSections')['section/tanya-jawab'], 'mx-auto h-44 w-auto sm:h-52 lg:h-auto lg:w-full', false); ?>
+    <header class="mb-8 <?= $art !== '' ? 'grid items-center gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10' : '' ?>">
+        <?php if ($art !== '') : ?><div class="lg:order-2"><?= $art ?></div><?php endif ?>
+        <div class="lg:order-1">
+            <h1 class="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.qaTitle') ?></h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300"><?= lang('Situs.qaIntro') ?></p>
+        </div>
     </header>
 
     <?php if ($page['topics'] === []) : ?>
-        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.qaEmptyTitle'), 'text' => lang('Situs.qaEmptyText'), 'image' => 'state/kosong-tanya-jawab', 'fallback' => 'state/kosong-data', 'imageAlt' => '']]) ?>
+        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.qaEmptyTitle'), 'text' => lang('Situs.qaEmptyText'), 'image' => 'state/kosong-tanya-jawab', 'fallback' => null, 'icon' => 'message-circle-question-mark', 'imageAlt' => '']]) ?>
     <?php else : ?>
         <?php if (count($page['topics']) > 1) : ?>
             <?php // Topic contents (D-088): sticks under the header while reading and highlights the topic in view. ?>

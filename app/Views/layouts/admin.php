@@ -14,7 +14,7 @@ $name     = $user->full_name ?: $user->username;
 $menu     = service('menu')->forUser($user, uri_string());
 $subtitle ??= null;
 
-// Mobile bottom bar (D-081): Dasbor · Data Pendaftar · CARI (raised) · Periksa Berkas · Menu,
+// Mobile bottom bar (D-081): Dasbor · Data Pendaftar · CARI (raised) · Periksa Berkas · Pengaturan,
 // only with links this user may open; a missing slot takes the next allowed fallback.
 $allowed = [];
 foreach ($menu as $group) {
@@ -51,7 +51,17 @@ if ($canSearch) {
 if (($fourth = $pick(['admin/berkas', 'admin/tes/kehadiran', 'admin/kartu', 'admin/tes/peserta', 'panduan'])) !== null) {
     $bottom[] = $toItem($fourth);
 }
-$bottom[] = ['label' => lang('App.menu'), 'icon' => 'menu', 'attrs' => 'data-drawer-target="sidebar" data-drawer-toggle="sidebar" aria-controls="sidebar"'];
+// Last slot: Pengaturan (D-095) — the first settings page this user may open, active on any of them.
+// Without any settings access it stays the Menu button; the drawer also opens from the top bar.
+$settings = [];
+foreach ($menu as $group) {
+    if ($group['label'] === 'Pengaturan') {
+        $settings = $group['items'];
+    }
+}
+$bottom[] = $settings !== []
+    ? ['label' => lang('App.navSettings'), 'url' => $settings[0]['url'], 'icon' => 'settings', 'active' => in_array(true, array_column($settings, 'active'), true)]
+    : ['label' => lang('App.menu'), 'icon' => 'menu', 'attrs' => 'data-drawer-target="sidebar" data-drawer-toggle="sidebar" aria-controls="sidebar"'];
 ?>
 <!doctype html>
 <html lang="id">
@@ -77,6 +87,10 @@ $bottom[] = ['label' => lang('App.menu'), 'icon' => 'menu', 'attrs' => 'data-dra
         </div>
 
         <div class="flex shrink-0 items-center gap-1">
+            <a href="<?= site_url('/') ?>" target="_blank" rel="noopener" title="<?= lang('App.viewSite') ?>"
+               class="hidden items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-300 sm:inline-flex dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">
+                <?= icon('house', 'h-5 w-5') ?><span class="hidden md:inline"><?= lang('App.viewSite') ?></span><span class="sr-only md:hidden"><?= lang('App.viewSite') ?></span>
+            </a>
             <?= view('partials/theme_toggle') ?>
             <button type="button" id="user-menu-button" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom-end" aria-expanded="false"
                     class="ms-1 flex items-center gap-2 rounded-full text-sm focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
@@ -125,7 +139,12 @@ $bottom[] = ['label' => lang('App.menu'), 'icon' => 'menu', 'attrs' => 'data-dra
                 <?php endforeach ?>
             </ul>
         <?php endforeach ?>
-        <div class="mt-auto border-t border-gray-200 pt-4 dark:border-gray-700">
+        <div class="mt-auto space-y-1 border-t border-gray-200 pt-4 dark:border-gray-700">
+            <a href="<?= site_url('/') ?>" target="_blank" rel="noopener" title="<?= lang('App.viewSite') ?>" class="group flex items-center rounded-lg p-2 text-base font-medium text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                <?= icon('house', 'h-5 w-5 shrink-0 text-gray-500 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white') ?>
+                <span class="ms-3 flex-1 truncate" data-sidebar-label><?= lang('App.viewSite') ?></span>
+                <span class="shrink-0" data-sidebar-label><?= icon('external-link', 'h-4 w-4 text-gray-400') ?><span class="sr-only"><?= lang('App.opensNewTab') ?></span></span>
+            </a>
             <a href="<?= url_to('logout') ?>" title="<?= lang('App.logout') ?>" class="group flex items-center rounded-lg p-2 text-base font-medium text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                 <?= icon('logout', 'h-5 w-5 shrink-0 text-gray-500 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white') ?>
                 <span class="ms-3" data-sidebar-label><?= lang('App.logout') ?></span>

@@ -10,7 +10,10 @@ $error = session('check_error');
 <?= $this->extend('layouts/public') ?>
 
 <?= $this->section('content') ?>
-<div class="mx-auto max-w-md px-4 py-8 sm:py-12">
+<?php $art = illustration('section/cek-status', lang('App.altSections')['section/cek-status'], 'mx-auto h-44 w-auto sm:h-52 lg:h-auto lg:w-full', false); ?>
+<div class="mx-auto px-4 py-8 sm:py-12 <?= $art !== '' ? 'grid max-w-md items-center gap-6 lg:max-w-5xl lg:grid-cols-[minmax(0,1fr)_28rem] lg:gap-12' : 'max-w-md' ?>">
+    <?php if ($art !== '') : ?><div><?= $art ?></div><?php endif ?>
+    <div>
     <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white"><?= lang('Pendaftaran.checkTitle') ?></h1>
     <p class="mt-2 text-base text-gray-600 dark:text-gray-300"><?= lang('Pendaftaran.checkIntro') ?></p>
 
@@ -33,5 +36,6 @@ $error = session('check_error');
 
     <p class="mt-5 text-sm text-gray-600 dark:text-gray-400"><?= lang('Pendaftaran.checkForgot') ?></p>
     <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><?= lang('Pendaftaran.checkNotYet') ?> <a href="<?= url_to('daftar') ?>" class="font-medium text-primary-700 hover:underline dark:text-primary-400"><?= lang('Pendaftaran.checkRegister') ?></a></p>
+    </div>
 </div>
 <?= $this->endSection() ?>

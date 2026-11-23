@@ -21,14 +21,18 @@ $banner = $page['banner'];
 
 <?= $this->section('content') ?>
 <div class="mx-auto max-w-screen-lg px-4 py-6 sm:py-10">
-    <header class="mb-6">
-        <h1 class="mb-1 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.scheduleTitle') ?></h1>
-        <p class="mb-3 text-lg font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.academicYear', [$page['academicYear']]) ?></p>
-        <p class="max-w-2xl text-lg text-gray-600 dark:text-gray-300"><?= lang('Situs.scheduleIntro') ?></p>
+    <?php $art = illustration('section/jadwal', lang('App.altSections')['section/jadwal'], 'mx-auto h-44 w-auto sm:h-52 lg:h-auto lg:w-full', false); ?>
+    <header class="mb-6 <?= $art !== '' ? 'grid items-center gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10' : '' ?>">
+        <?php if ($art !== '') : ?><div class="lg:order-2"><?= $art ?></div><?php endif ?>
+        <div class="lg:order-1">
+            <h1 class="mb-1 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.scheduleTitle') ?></h1>
+            <p class="mb-3 text-lg font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.academicYear', [$page['academicYear']]) ?></p>
+            <p class="max-w-2xl text-lg text-gray-600 dark:text-gray-300"><?= lang('Situs.scheduleIntro') ?></p>
+        </div>
     </header>
 
     <?php if ($page['waves'] === []) : ?>
-        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noWavesTitle'), 'text' => lang('Situs.noWavesText'), 'image' => 'state/kosong-jadwal-pendaftaran', 'fallback' => 'state/kosong-data', 'imageAlt' => '']]) ?>
+        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noWavesTitle'), 'text' => lang('Situs.noWavesText'), 'image' => 'state/kosong-jadwal-pendaftaran', 'fallback' => null, 'icon' => 'calendar-days', 'imageAlt' => '']]) ?>
     <?php else : ?>
         <div class="mb-6 flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between <?= $banners[$banner['state']]['box'] ?>" role="status">
             <p class="flex items-start gap-3 font-medium"><?= icon($banners[$banner['state']]['icon'], 'h-6 w-6 shrink-0') ?><span><?= esc($banner['text']) ?></span></p>
