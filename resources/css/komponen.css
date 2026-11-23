@@ -3,6 +3,12 @@
  * read-more folds and table of contents (D-088), date picker (D-088), map frame (D-085).
  */
 @layer components {
+    /* Scroll containers hold their screen-reader-only children (sr-only is absolute), so a hidden
+       table header can never widen the page (worker C, UI round). */
+    .overflow-x-auto {
+        position: relative;
+    }
+
     /* ---------- Admin forms use the full width (D-081 follow-up): two columns of cards from xl ---------- */
     .form-lebar {
         display: grid;
@@ -16,7 +22,8 @@
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        .form-lebar > :last-child,
+        /* The last child spans both columns when it is the button row, not when it is a card. */
+        .form-lebar > :last-child:not(section):not(fieldset),
         .form-lebar > [role="alert"],
         .form-lebar > [role="status"],
         .form-lebar > .span-penuh,

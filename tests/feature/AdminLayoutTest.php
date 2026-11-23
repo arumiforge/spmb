@@ -50,7 +50,8 @@ final class AdminLayoutTest extends CIUnitTestCase
     private function bottomBar(TestResponse $result): array
     {
         $this->assertSame(1, preg_match('#<nav class="nav-bawah[^"]*"[^>]*>(.*?)</nav>#s', $result->getBody(), $nav), 'bottom bar missing');
-        preg_match_all('#<span class="nav-bawah-label">([^<]*)</span>#', $nav[1], $labels);
+        // The raised middle button has no visible text; its name is in a screen-reader-only span.
+        preg_match_all('#<span class="(?:nav-bawah-label|sr-only)">([^<]*)</span>#', $nav[1], $labels);
 
         return array_map(static fn (string $label): string => html_entity_decode($label), $labels[1]);
     }
