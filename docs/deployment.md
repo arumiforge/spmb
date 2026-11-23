@@ -190,6 +190,8 @@ Server IPs, ports and passwords stay out of the repository.
 | Backup now | `spmb backup <env>` |
 | Restore | `spmb restore <env> /opt/apps/spmb/<env>/backups/<file>.tar` |
 | Spark command | `spmb spark <env> <command> [args]`, e.g. `spmb spark production spmb:install` |
+| Change a domain | `spmb domain <env> <new domain>` (production asks; see "Changing a domain") |
+| Edit settings (`.env`) | `nano /opt/apps/spmb/<env>/app.env`, then `docker restart spmb-<env>-app-1` |
 
 ### What `spmb deploy` does
 
@@ -230,6 +232,19 @@ time (lock file).
 dump, replaces `writable/uploads`, takes `encryption.key` from the archive when it differs (the old
 `app.env` is kept as `app.env.before-restore`), restarts the app, runs migrations and the health check.
 The stack must be running (deploy first on a new server).
+
+## Changing a domain
+
+1. Add the new domain to the Cloudflare account (registrar nameservers → Cloudflare).
+2. On the server: `spmb domain <env> <new domain>`. It writes `SPMB_DOMAIN` in `stack.env` and
+   `app.baseURL` in `app.env` (old copies `*.before-domain`), restarts the app and runs the health check.
+   Passwords, `encryption.key`, port, data and image stay as they are. Production asks first (`--yes`).
+3. Cloudflare: a tunnel route for the new hostname to the same `127.0.0.1` port; keep the old hostname for a
+   while with a 301 Redirect Rule to the new one; for staging, replace the hostname in the Access application.
+4. A new base domain also changes `konsol.` and `ssh.`: add their routes and Access hostnames and run
+   `setup.sh` again with the new `DOMAIN` (Cockpit accepts only its own origin).
+5. Update the website address in Pengaturan → Identitas Sekolah; re-render the share image if it shows the domain.
+   People signed in on the old domain sign in again.
 
 ## Moving to another server
 

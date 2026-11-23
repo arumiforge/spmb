@@ -5,6 +5,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- `spmb domain <env> <domain>` changes an environment's domain on the server (stack.env, `app.baseURL`), restarts the
+  app, checks it and prints the Cloudflare steps.
 - Codex visual kit installed (briefs 015–018): tileable patterns, section dividers, the special "Daftar Sekarang"
   button and loaders (`resources/css/visual/`, `public/assets/img/{pola,pemisah,tombol,memuat}/`). Used on the home
   hero (pattern, curved divider, large button) and the registration buttons on Persyaratan, Jadwal and Tanya Jawab.
