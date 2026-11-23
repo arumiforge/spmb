@@ -115,7 +115,6 @@ class Errors extends BaseController
             h1{font-size:1.5rem;margin:.5rem 0}
             p{color:#4b5563;line-height:1.5}
             a{display:inline-block;margin-top:1rem;padding:.75rem 1.25rem;border-radius:.5rem;background:#1d4ed8;color:#fff;text-decoration:none;font-weight:600}
-            @media (prefers-color-scheme:dark){body{background:#111827;color:#f9fafb}p{color:#d1d5db}}
             </style>
             </head>
             <body>

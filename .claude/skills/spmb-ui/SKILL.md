@@ -79,7 +79,7 @@ Admin content uses the full width on large screens; forms cap at a readable widt
   layout `<head>`; Tailwind v4 `@theme` maps `primary` to those variables.
   Never hard-code a school colour or name in a view.
 - Logo, favicon, school name, footer text from settings.
-- Support dark mode via Flowbite's `dark:` classes.
+- Support dark mode via Flowbite's `dark:` classes. Pages start light; dark mode is opt-in through the toggle (D-078).
 
 ## Components
 
