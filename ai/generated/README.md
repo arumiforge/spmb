@@ -32,6 +32,14 @@ status to `done`. Nothing here is served by the app directly.
 | 020 | `install/img/section/beranda-kebersamaan-hijau.webp` | 750×645 | 137.25 | Transparent | Shared crop, tablet and one book cover in leaf green |
 | 020 | `beranda-kebersamaan-dark-hijau.webp` | 1254×1254 | 312.93 | Transparent | Gentle tonal lift and a faint rim; tablet and one book cover in leaf green |
 | 020 | `install/img/section/beranda-kebersamaan-dark-hijau.webp` | 750×645 | 134.48 | Transparent | Shared crop, gentle tonal lift and a faint rim; tablet and one book cover in leaf green |
+| 021 | `beranda-langkah.webp` | 1254×1254 | 569.74 | Transparent | Three registration stops linked by a winding path |
+| 021 | `install/img/section/beranda-langkah.webp` | 614×605 | 136.51 | Transparent | Shared crop, three registration stops linked by a winding path |
+| 021 | `beranda-langkah-dark.webp` | 1254×1254 | 575.10 | Transparent | Gentle tonal lift and a faint rim |
+| 021 | `install/img/section/beranda-langkah-dark.webp` | 614×605 | 134.03 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 021 | `beranda-langkah-hijau.webp` | 1254×1254 | 569.53 | Transparent | Folder and phone display in leaf green |
+| 021 | `install/img/section/beranda-langkah-hijau.webp` | 614×605 | 136.48 | Transparent | Shared crop, folder and phone display in leaf green |
+| 021 | `beranda-langkah-dark-hijau.webp` | 1254×1254 | 574.90 | Transparent | Gentle tonal lift and a faint rim; folder and phone display in leaf green |
+| 021 | `install/img/section/beranda-langkah-dark-hijau.webp` | 614×605 | 133.95 | Transparent | Shared crop, gentle tonal lift and a faint rim; folder and phone display in leaf green |
 
 ### svg-kit (2026-11-23)
 
