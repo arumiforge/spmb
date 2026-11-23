@@ -40,6 +40,10 @@ status to `done`. Nothing here is served by the app directly.
 | 027 | `install/img/section/tes-hijau.webp` | 700×651 | 84.17 | Transparent | Shared crop, pencil case in leaf green |
 | 027 | `tes-dark-hijau.webp` | 1254×1254 | 282.38 | Transparent | Gentle tonal lift and a faint rim, pencil case in leaf green |
 | 027 | `install/img/section/tes-dark-hijau.webp` | 700×651 | 81.49 | Transparent | Shared crop, gentle tonal lift and a faint rim, pencil case in leaf green |
+| 046 | `langkah-1.webp` | 1448×1086 | 498.51 | Transparent | Pak Rahmat and Nurul prepare documents on a veranda bench |
+| 046 | `install/img/langkah/langkah-1.webp` | 613×445 | 89.96 | Transparent | Shared crop, pak Rahmat and Nurul prepare documents on a veranda bench |
+| 046 | `langkah-1-hijau.webp` | 1448×1086 | 498.60 | Transparent | Folder index tab in leaf green |
+| 046 | `install/img/langkah/langkah-1-hijau.webp` | 613×445 | 85.91 | Transparent | Shared crop, folder index tab in leaf green |
 
 ### paintings-pages (2026-11-24)
 
