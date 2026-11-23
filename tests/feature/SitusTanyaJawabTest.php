@@ -230,8 +230,11 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
         $this->assertLessThan(strpos($page->getBody(), 'id="biaya"'), strpos($page->getBody(), 'id="pendaftaran"'));
         // Public menu link while something is published, each link once.
         $page->assertSee('href="' . site_url('tanya-jawab') . '"', null, false);
-        // (once in the menu, once in the contact block)
-        $this->assertSame(2, substr_count($page->getBody(), 'href="' . site_url('persyaratan') . '"'));
+        // Inside the page content the requirements page is linked once (contact block); the layout adds its
+        // own links (header menu, drawer, bottom bar, footer).
+        $body = $page->getBody();
+        $main = substr($body, (int) strpos($body, '<main'), (int) strpos($body, '</main>') - (int) strpos($body, '<main'));
+        $this->assertSame(1, substr_count($main, 'href="' . site_url('persyaratan') . '"'));
     }
 
     public function testPublicPageWithoutQuestions(): void
