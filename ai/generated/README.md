@@ -72,6 +72,14 @@ status to `done`. Nothing here is served by the app directly.
 | 025 | `install/img/section/cek-status-hijau.webp` | 710×689 | 125.65 | Transparent | Shared crop, blue blocks on phone display in leaf green |
 | 025 | `cek-status-dark-hijau.webp` | 1254×1254 | 433.14 | Transparent | Gentle tonal lift and a faint rim; blue blocks on phone display in leaf green |
 | 025 | `install/img/section/cek-status-dark-hijau.webp` | 710×689 | 129.12 | Transparent | Shared crop, gentle tonal lift and a faint rim; blue blocks on phone display in leaf green |
+| 026 | `kartu.webp` | 1254×1254 | 358.46 | Transparent | Abstract portrait, lines and a few separate squares on the card |
+| 026 | `install/img/section/kartu.webp` | 710×623 | 107.28 | Transparent | Shared crop, abstract portrait, lines and a few separate squares on the card |
+| 026 | `kartu-dark.webp` | 1254×1254 | 362.94 | Transparent | Gentle tonal lift and a faint rim |
+| 026 | `install/img/section/kartu-dark.webp` | 710×623 | 112.08 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 026 | `kartu-hijau.webp` | 1254×1254 | 358.34 | Transparent | Card header band in leaf green |
+| 026 | `install/img/section/kartu-hijau.webp` | 710×623 | 107.23 | Transparent | Shared crop, card header band in leaf green |
+| 026 | `kartu-dark-hijau.webp` | 1254×1254 | 362.88 | Transparent | Gentle tonal lift and a faint rim; card header band in leaf green |
+| 026 | `install/img/section/kartu-dark-hijau.webp` | 710×623 | 111.97 | Transparent | Shared crop, gentle tonal lift and a faint rim; card header band in leaf green |
 
 ### svg-kit (2026-11-23)
 

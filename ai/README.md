@@ -62,7 +62,7 @@ Batches are delivered in this order: `svg-kit` (no image generator needed) → `
 | 023 | [jadwal](prompts/023-jadwal.md) | paintings-pages | painting | `/jadwal` | generated |
 | 024 | [tanya-jawab](prompts/024-tanya-jawab.md) | paintings-pages | painting | `/tanya-jawab` | generated |
 | 025 | [cek-status](prompts/025-cek-status.md) | paintings-pages | painting | `/cek-status` | generated |
-| 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | requested |
+| 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | generated |
 | 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | requested |
 | 035 | [bagikan-umum](prompts/035-bagikan-umum.md) | paintings-pages | painting | Default link-preview image | requested |
 | 028 | [akses-ditolak](prompts/028-akses-ditolak.md) | paintings-states | painting | 403 / no permission | requested |
