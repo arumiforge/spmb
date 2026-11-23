@@ -57,16 +57,16 @@ generator needed) → `tombol-seni` (no image generator needed) → `ikon-berand
 | 016 | [pemisah](prompts/016-pemisah.md) | svg-kit | SVG + CSS | Full-width section dividers: lengkung, tumpal, mega, bukit | done |
 | 017 | [tombol-daftar](prompts/017-tombol-daftar.md) | svg-kit | SVG + CSS | Special "Daftar sekarang" button, all states | done |
 | 018 | [memuat](prompts/018-memuat.md) | svg-kit | SVG + CSS | Loading animation, large and in-button | done |
-| 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | requested |
-| 020 | [beranda-kebersamaan](prompts/020-beranda-kebersamaan.md) | paintings-pages | painting | Home: learning together (Bhinneka) | requested |
-| 021 | [beranda-langkah](prompts/021-beranda-langkah.md) | paintings-pages | painting | Home: three steps to register | requested |
-| 022 | [persyaratan](prompts/022-persyaratan.md) | paintings-pages | painting | `/persyaratan` | requested |
-| 023 | [jadwal](prompts/023-jadwal.md) | paintings-pages | painting | `/jadwal` | requested |
-| 024 | [tanya-jawab](prompts/024-tanya-jawab.md) | paintings-pages | painting | `/tanya-jawab` | requested |
-| 025 | [cek-status](prompts/025-cek-status.md) | paintings-pages | painting | `/cek-status` | requested |
-| 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | requested |
-| 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | requested |
-| 035 | [bagikan-umum](prompts/035-bagikan-umum.md) | paintings-pages | painting | Default link-preview image | requested |
+| 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | generated |
+| 020 | [beranda-kebersamaan](prompts/020-beranda-kebersamaan.md) | paintings-pages | painting | Home: learning together (Bhinneka) | generated |
+| 021 | [beranda-langkah](prompts/021-beranda-langkah.md) | paintings-pages | painting | Home: three steps to register | generated |
+| 022 | [persyaratan](prompts/022-persyaratan.md) | paintings-pages | painting | `/persyaratan` | generated |
+| 023 | [jadwal](prompts/023-jadwal.md) | paintings-pages | painting | `/jadwal` | generated |
+| 024 | [tanya-jawab](prompts/024-tanya-jawab.md) | paintings-pages | painting | `/tanya-jawab` | generated |
+| 025 | [cek-status](prompts/025-cek-status.md) | paintings-pages | painting | `/cek-status` | generated |
+| 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | generated |
+| 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | generated |
+| 035 | [bagikan-umum](prompts/035-bagikan-umum.md) | paintings-pages | painting | Default link-preview image | generated |
 | 028 | [akses-ditolak](prompts/028-akses-ditolak.md) | paintings-states | painting | 403 / no permission | requested |
 | 029 | [sesi-berakhir](prompts/029-sesi-berakhir.md) | paintings-states | painting | Session expired | requested |
 | 030 | [pendaftaran-ditutup](prompts/030-pendaftaran-ditutup.md) | paintings-states | painting | Registration not open | requested |
