@@ -50,8 +50,8 @@ The framework is a Composer dependency (`vendor/codeigniter4/framework`); never 
   Modules can be switched on/off from settings. Use the `spmb-module` skill.
 - **Configurable / white label**: school name, logo, colours, registration number
   format, waves, quotas, required documents — all from the `settings` table, never constants.
-- **Roles & permissions**: permission-based (not role-name checks). Roles:
-  super admin, admin sekolah, then operational roles (see `docs/requirements.md`).
+- **Roles & permissions**: permission-based (not role-name checks). Roles: Super Admin
+  (Arumi Studios), Admin Sekolah, Panitia, and applicants without an account (D-063, D-008).
 - **Security**: uploaded files outside `public/`, served through an authorised
   controller; QR codes carry a random token, never NIK/NISN; audit log for every
   change to applicant data; optional TOTP 2FA (Google Authenticator) for dashboard users.
@@ -66,7 +66,12 @@ php spark spmb:install --demo   # migrations + Super Admin + demo accounts (dev)
 php spark migrate --all         # run all module migrations
 composer test                   # PHPUnit
 composer lint                   # php-cs-fixer dry run
+npm ci && npm run build         # frontend assets (Node 24)
+npm run icons                   # regenerate Lucide icons after editing resources/icons.json
 ```
+
+Server (Docker, staging + production): `spmb deploy staging`, `spmb deploy production`,
+`spmb status`, `spmb backup <env>` — see the `spmb-deploy` skill and `docs/deployment.md`.
 
 ## Project skills (`.claude/skills/`)
 

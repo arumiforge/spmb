@@ -1,19 +1,21 @@
 # Architecture
 
-> Stage: phase 2 (registration) built; see `phase-2-plan.md` for the module interfaces. Sections marked *(planned)* describe the target design and
-> become descriptive as modules are built.
+> Stage: phases 1–3 and the platform round built (registration, placement test, Docker deployment, Tanya Jawab);
+> see `phase-2-plan.md`, `phase-3-plan.md` and `platform-plan.md`. Sections marked *(planned)* describe the target
+> design and become descriptive as modules are built.
 
 ## Stack
 
 | Layer | Choice |
 | --- | --- |
-| Language / framework | PHP 8.3, CodeIgniter 4.7 (Composer dependency, appstarter layout) |
-| Database | MySQL 8.0, `utf8mb4_unicode_ci` |
-| Web server | Nginx + PHP-FPM 8.3 on Ubuntu Server 24.04 LTS |
-| Edge | Cloudflare (DNS, TLS, WAF) via Cloudflare Tunnel (`cloudflared`), no inbound ports |
-| Remote access | SSH through Cloudflare Access (`cloudflared access ssh`) |
-| Frontend | Tailwind CSS v4 + Flowbite, ApexCharts, built with npm (esbuild) |
-| CI/CD | GitHub Actions: lint, tests on MySQL, commit policy, manual release deploy |
+| Language / framework | PHP 8.5.13+, CodeIgniter 4.7 (Composer dependency, appstarter layout) (D-069) |
+| Database | MySQL 8.4, `utf8mb4_unicode_ci` |
+| Web server | Nginx + PHP-FPM 8.5 in Docker (images `spmb-web`, `spmb-app`) on Ubuntu Server 24.04 LTS (D-066) |
+| Environments | Staging and production as two Docker Compose stacks on one VPS, each with its own database (D-067) |
+| Edge | Cloudflare (DNS, TLS, WAF) via Cloudflare Tunnel (`cloudflared` on the host); stacks listen on `127.0.0.1` only |
+| Remote access | Cockpit (browser console) and SSH through Cloudflare Access; direct SSH stays open, key-only (D-077) |
+| Frontend | Tailwind CSS v4 + Flowbite, Lucide icons, ApexCharts, built with Node.js 24 (esbuild) |
+| CI/CD | GitHub Actions: lint, tests (PHP 8.5, MySQL 8.4), frontend build, commit policy. Deploys are pulled and built by the server (`spmb deploy`, D-068) |
 
 Installed: CodeIgniter Shield 1.4 (auth, groups, permissions) with `codeigniter4/settings`,
 `pragmarx/google2fa` (TOTP), `codeigniter4/translations` (Indonesian framework messages).
@@ -22,8 +24,10 @@ Phase 2 added `setasign/fpdf` (card PDF) and `phpoffice/phpspreadsheet` (XLSX/CS
 
 Frontend (`package.json`): Tailwind CSS v4 (`@tailwindcss/cli`), Flowbite 3 (open-source package), ApexCharts,
 bundled with esbuild. Sources in `resources/css/app.css` and `resources/js/{app,charts}.js`; `npm run build`
-writes `public/build/` (git-ignored; built by CI and the deploy workflow). Automatic class detection is off
+writes `public/build/` (git-ignored; built by CI and inside the Docker image). Automatic class detection is off
 (`source(none)`), so only `app/Views`, `app/Modules` and `resources/js` are scanned — never `flowbite/`.
+Icons are Lucide (`lucide-static`, ISC): `npm run icons` copies the icons listed in `resources/icons.json` into
+`app/Helpers/lucide_icons.php`, which `icon()` reads, so production needs no Node (D-070).
 
 ## Code layout
 
@@ -32,18 +36,23 @@ app/
 ├── Config/            framework + app config (Autoload registers Modules\)
 ├── Authentication/    Shield login action for TOTP (TotpAction)
 ├── Filters/           StaffArea (forced password change, 2FA required by role)
-├── Helpers/ui_helper  asset_url, brand_color, icon, tanggal_indo, initials
+├── Helpers/ui_helper  asset_url, brand_color, icon (Lucide), illustration, tanggal_indo, initials
+├── Helpers/lucide_icons.php  generated icon data (npm run icons)
 ├── Libraries/         AuditLogger, TwoFactor, QrCode, ModuleRegistry, Menu
 ├── Modules/<Name>/    feature modules — see .claude/skills/spmb-module
 ├── Views/layouts/     admin (full width) · public · auth
 ├── Views/partials/    head, breadcrumbs, flash, empty_state, form_field, status_badge, pagination
-resources/             frontend sources (Tailwind CSS, JS)
+resources/             frontend sources (Tailwind CSS, JS, icons.json)
+scripts/               icons.mjs (Lucide generator)
 public/                web root (index.php, build/ = compiled assets)
 writable/              logs, cache, sessions, uploads (private)
 deploy/server/         setup.sh (one-time server setup) and spmb (server CLI: deploy, rollback, backup)
 deploy/compose.yaml    Docker Compose stack per environment (staging, production)
+deploy/env/            example stack.env / app.env per environment (placeholders only)
 docker/                Dockerfile (app: PHP-FPM 8.5, web: Nginx), Nginx and PHP config
-ai/                    Codex briefs, delivered assets and the asset checker
+ai/                    Codex briefs, delivered assets and the asset checker (D-073, D-075)
+clients/<school>/      per-school branding pack and starter Tanya Jawab (loaded by spmb:branding)
+.claude/               agent skills; cloud/setup.sh for Claude Code cloud environments (D-074)
 flowbite/              Flowbite Pro templates — markup reference only (private repo)
 ```
 
@@ -66,9 +75,9 @@ flowbite/              Flowbite Pro templates — markup reference only (private
 | DaftarUlang | Re-registration processing | 4 |
 | Seragam | Uniform status (stock/packages later) | 4 |
 | Laporan | Dashboard stats, filters, XLSX/CSV/PDF export, XLSX import | 4 |
-| Situs | Public pages and announcements | 2 (Persyaratan, Jadwal) → 5 |
+| Situs | Public pages: Persyaratan, Jadwal, Tanya Jawab (edited under Website) and later announcements | 2 (Persyaratan, Jadwal), platform round (Tanya Jawab, `modules/situs.md`) → 5 |
 | Analitik | Light visitor tracking | 5 |
-| Chat | Interactive chat (scope pending) | 5 |
+| (messages, name to be chosen) | Messages, criticism and suggestions from applicants with committee replies — not live chat (D-052) | 5 |
 
 ### Module registry and menu
 
@@ -96,7 +105,10 @@ Permissions stay declared centrally in `Config\AuthGroups` (tested by `AuthGroup
 - Dark mode via `.dark` on `<html>` (toggle, remembered per browser).
 - Illustrations: `illustration('state/kosong-data', $alt, $class, $lazy)` (`ui_helper`) prints the WebP from
   `public/assets/img/` plus its `-dark` variant for dark mode when present; `partials/empty_state` takes
-  `image`/`imageAlt`. Sources and briefs live in `ai/` (D-027, D-028).
+  `image`/`imageAlt`. Codex makes the assets from briefs in `ai/` (D-073, D-075).
+- Visual rules (D-070): Lucide icons without background shapes, no eyebrow labels, no accent bars or coloured
+  side/top borders on cards; motion classes `motion-rise`, `motion-lift`, `motion-icon` switch off under
+  `prefers-reduced-motion`; `resources/js/charts.js` applies responsive chart defaults so text never overlaps at 360 px.
 - Partials receive one array (`field`, `badge`, `empty`, `brand`) because CI view data is shared
   between renders (`saveData`); a partial must not rely on loose variables.
 
@@ -167,6 +179,8 @@ sign-in (`TwoFactor.maxAttempts`).
 | `waves`, `registration_counters`, `applicants` | Pendaftaran | Waves, numbering (D-031), applicants (D-037) |
 | `document_types`, `applicant_documents` | Berkas | Required documents and uploads (D-036, D-043) |
 | `card_tokens` | Kartu | Revocable QR tokens (D-034) |
+| `test_rooms`, `test_holidays`, `test_sessions`, `test_assignments`, `test_schedule_changes` | Tes | Rooms, calendar, sessions, seats and the schedule change log (D-059…D-064) |
+| `site_questions` | Situs | Tanya Jawab questions and answers (Markdown), audited (D-072) |
 
 Module extension points (D-033): `Config/Module.php` `requires`, `Config/PublicMenu.php`, `Config/Audit.php`,
 `Views/panels/<slot>.php` rendered with `module_panels()`, and `InstallSeeder`/`DemoSeeder` run by `spmb:install`.
@@ -186,7 +200,7 @@ The public applicant session is `service('applicantAccess')` (D-034).
 - **Permissions**: `<module>.<action>` keys; Super Admin bypass; checked in filters and views.
 - **Audit**: model events write who/what/before/after for applicant-related tables.
 
-## Public school reference data *(planned, phase 2)*
+## Public school reference data
 
 Source: Dapodik public recap data at <https://dapo.kemendikdasmen.go.id/>
 (Kemendikdasmen; the old `dapo.kemdikbud.go.id` address is obsolete) for SD in Central Java,

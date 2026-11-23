@@ -16,7 +16,7 @@ The server pulls and builds; there is no deploy key in the repository or in GitH
 
 ```
 Browser ──HTTPS──▶ Cloudflare (DNS, TLS, WAF, Access)
-                      │  Cloudflare Tunnel (outbound from the server; no inbound ports)
+                      │  Cloudflare Tunnel (outbound from the server; only SSH is open, key-only)
                       ▼
  Ubuntu 24.04 host ── cloudflared ──┬─▶ 127.0.0.1:<prod port>    ─▶ spmb-production: web (Nginx) ─▶ app (PHP-FPM) ─▶ db (MySQL)
    (Cockpit, sshd,                  ├─▶ 127.0.0.1:<staging port> ─▶ spmb-staging:    web ─▶ app ─▶ db

@@ -44,6 +44,22 @@ BSD-3-Clause and are not deployed (`composer install --no-dev`).
 | apexcharts | ApexCharts licence (v4+) | **Verify** the current terms on apexcharts.com: v4 is free only below a revenue threshold for the licensee; buy a licence if Arumi Studios or a client exceeds it, or switch charts library |
 | qr-scanner (nimiq) | MIT | Camera QR scanning for test attendance (phase 3, `resources/js/scanner.js`) |
 
+## Server images and tools (not distributed with the product)
+
+The Docker images are built on the server from these public base images and packages; they are installed
+on servers that Arumi Studios operates, not shipped to clients as software.
+
+| Component | Licence | Use |
+| --- | --- | --- |
+| PHP (`php:8.5-fpm` image) | PHP License (see php.net/license) | Runtime of the `app` image |
+| Nginx (`nginx:1.28-alpine` image) | BSD-2-Clause | Web server of the `web` image |
+| MySQL 8.4 (`mysql:8.4` image) | GPL-2.0 with the Universal FOSS Exception | Separate database service; the app talks to it over the network only |
+| Node.js 24 (`node:24` image) | MIT | Asset build stage only; not in the running images |
+| Composer 2 (`composer:2` image) | MIT | Dependency install stage only |
+| Docker Engine, Compose plugin | Apache-2.0 | Server runtime (`deploy/server/setup.sh`) |
+| cloudflared | Apache-2.0 | Cloudflare Tunnel on the host |
+| Cockpit | LGPL-2.1-or-later | Browser console on the host |
+
 ## Commercial
 
 | Component | Licence | Note |

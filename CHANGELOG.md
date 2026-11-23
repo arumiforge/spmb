@@ -105,6 +105,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
+- README, roadmap, architecture, requirements, module index, third-party notices and agent guide updated to the
+  current state (Docker deployment, PHP 8.5 / MySQL 8.4, Lucide icons, Tanya Jawab, Codex, D-066…D-077).
 - The direct SSH port stays open with key-only login as the last way in, because the VPS has no provider console
   (D-077); `setup.sh` keeps it open for good and no longer tells the admin to close it.
 - Minimum runtimes: PHP 8.5.13 (Composer platform too), Node.js 24, MySQL 8.4 in CI (D-069); 424 tests green on PHP 8.5.13.

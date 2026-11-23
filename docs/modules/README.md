@@ -14,7 +14,8 @@ exports, and which role guides cover it.
 | Pengguna | [pengguna.md](pengguna.md) |
 | Profil | [profil.md](profil.md) |
 | Referensi | [referensi.md](referensi.md) |
-| Situs | [situs.md](situs.md) |
+| Situs | [situs.md](situs.md) (Persyaratan, Jadwal, Tanya Jawab) |
+| Tes | [tes.md](tes.md) · [tes-jadwal.md](tes-jadwal.md) · [tes-penjadwalan.md](tes-penjadwalan.md) · [tes-kehadiran.md](tes-kehadiran.md) |
 
-Core pieces outside modules (layouts, sign-in, dashboard, filters) are described in
-[`../architecture.md`](../architecture.md).
+Core pieces outside modules (layouts, sign-in, dashboard, filters) and the Riwayat audit log viewer are
+described in [`../architecture.md`](../architecture.md).

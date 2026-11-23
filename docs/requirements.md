@@ -62,6 +62,7 @@ extra per-user permissions; changing a role's permission set is a configuration 
 
 ### Public website (WEB)
 - FR-WEB-01 Pages: Beranda, Profil, Persyaratan, Jadwal Gelombang, Pengumuman, Kontak/Bantuan — content editable by Admin Sekolah. **[phase 2: Beranda actions, Persyaratan, Jadwal Gelombang; the rest and editing in phase 5]**
+- FR-WEB-03 Tanya Jawab page for parents: questions grouped by topic, edited by Admin Sekolah, answers link to the real pages; starter questions per school in the client pack. [confirmed, D-072] **[built in the platform round: `/tanya-jawab`, Website → Tanya jawab]**
 - FR-WEB-02 Indonesian, friendly, readable URLs (`/daftar`, `/cek-status`, `/persyaratan`).
 
 ### Platform (PLT)
@@ -79,9 +80,10 @@ extra per-user permissions; changing a role's permission set is a configuration 
 ## 3. Non-functional requirements
 
 - NFR-01 Responsive 360 px → 1920 px; admin dashboard full width.
-- NFR-02 HTTPS only (Cloudflare), no inbound ports on the server (Cloudflare Tunnel).
-- NFR-03 Daily automated database + uploads backup with tested restore procedure.
+- NFR-02 HTTPS only (Cloudflare Tunnel); the apps listen on `127.0.0.1` only. The one open port is SSH with key-only login, kept as the last way in because the VPS has no provider console (D-077). **[built: `deploy/server/setup.sh`]**
+- NFR-03 Daily automated database + uploads backup with tested restore procedure. **[built: daily `spmb backup` timer (14 days kept), backup before every deploy, `spmb restore`; off-site copy and restore drill at go-live]**
 - NFR-04 Non-technical Indonesian language for everyone except Super Admin.
 - NFR-05 Personal data handled per UU No. 27/2022 (PDP): minimum data, access control, retention policy.
 - NFR-06 Peak load: registration opening day — target 200 concurrent users on a small VPS.
-- NFR-07 Accessibility: WCAG 2.1 AA for contrast, labels, keyboard use.
+- NFR-07 Accessibility: WCAG 2.1 AA for contrast, labels, keyboard use; motion off under `prefers-reduced-motion` (D-070).
+- NFR-08 Runtimes: PHP 8.5.13+, Node.js 24+, MySQL 8.4 (D-069); staging and production as separate Docker stacks on one server, production only runs images tested on staging (D-066…D-068).
