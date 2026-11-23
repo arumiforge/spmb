@@ -7,7 +7,7 @@ personal data.
 
 ## Current phase
 
-**UI round (D-080…D-088, `docs/ui-round-plan.md`)**: done on `nty/vigilant-wozniak-lvnhku` with workers A–D merged; PR into `main` open
+**UI round (D-080…D-088, `docs/ui-round-plan.md`)**: done and merged into `main` (PR #47, 2026-11-24) with workers A–D
 (465 tests green on PHP 8.5.13). Paintings for the new art slots wait for Codex (briefs 036–071).
 
 **Platform round**: done and merged into `main` (PR #26, 2026-11-23; supersedes #25, which can be closed). Docker
@@ -47,7 +47,7 @@ create your own branch from `main` instead.
 | `feat/ui-minify` | worker B (ui-round) | Minified assets, SVG originals in `resources/img/` (B) | merged into the integration branch (#44) |
 | `feat/ui-admin` | worker C (ui-round) | Dashboard full-width pass, AdminLayoutTest (C) | merged into the integration branch (#45) |
 | `feat/ui-publik` | worker D (ui-round) | Public pages pass, home/settings tests (D) | merged into the integration branch |
-| `nty/vigilant-wozniak-lvnhku` | coordinator (session ui-round) | Integration branch of the UI round. Foundation: email-or-username login, mobile bottom bar, right drawer, top bar, hero slideshow, three.js icons, date picker, folds/TOC, map + contact, full-width admin, Codex briefs 036+ (D-080…D-088) | PR into `main` open |
+| `nty/vigilant-wozniak-lvnhku` | coordinator (session ui-round) | Integration branch of the UI round. Foundation: email-or-username login, mobile bottom bar, right drawer, top bar, hero slideshow, three.js icons, date picker, folds/TOC, map + contact, full-width admin, Codex briefs 036+ (D-080…D-088) | merged into `main` (PR #47) |
 | `pw/eager-archimedes-s119yf` | session go-live 2 | Go-live support: environment check, server rehearsal, docs | in progress |
 | `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`) | merged into `main` (PR #26) |
 | `feat/plat-tanya-jawab` | worker C | Tanya Jawab page | merged into the integration branch (#30) |
@@ -62,7 +62,7 @@ create your own branch from `main` instead.
 
 ## Next steps
 
-00. **UI round**: the user merges the UI round PR into `main`. Then: start Codex with the starter prompt in
+00. **UI round** (merged, PR #47): start Codex with the starter prompt in
    `ai/README.md` (home art first: `tombol-seni`, `ikon-beranda`, `langkah`, `slide-beranda`, then `kosong-states`) and install
    each batch per `spmb-ai-image` (WebP → `public/assets/img/`, SVG → `resources/img/`); when 049 lands, remove the interim
    `.tombol-seni` / `.nav-bawah-tengah-bulat` blocks in `resources/css/komponen.css`. On the server: `spmb deploy staging`,
@@ -113,7 +113,7 @@ when the container idles).
 
 ## Session log (newest first, keep the last 10)
 
-- 2026-11-24 · coordinator (session ui-round) · `nty/vigilant-wozniak-lvnhku` — UI round: email-or-username sign-in, mobile bottom bar (raised middle button without text), right drawer, top bar, slogan/map/social settings, hero slideshow with uploads, art buttons and painted-icon slots with three.js, date picker, folds and contents highlight, full-width admin; workers A (Codex briefs 036–071, #42), B (minified SVGs, #44), C (dashboard pass, #45), D (public pages, tests) merged; cloud setup script moved to packages.sury.org; 465 tests green. Next: user merges the PR, Codex batches.
+- 2026-11-24 · coordinator (session ui-round) · `nty/vigilant-wozniak-lvnhku` — UI round: email-or-username sign-in, mobile bottom bar (raised middle button without text), right drawer, top bar, slogan/map/social settings, hero slideshow with uploads, art buttons and painted-icon slots with three.js, date picker, folds and contents highlight, full-width admin; workers A (Codex briefs 036–071, #42), B (minified SVGs, #44), C (dashboard pass, #45), D (public pages, tests) merged; cloud setup script moved to packages.sury.org; 465 tests green. Next: Codex batches. User merged PR #47; CI additions (Docker build check, dependency audit, server-side staging auto-deploy) offered and declined for now.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — staging and production live on `spmb-prod` (04b2ccc), staging behind Access, Laragon exposure removed; `spmb domain` (#40); off-site backups to Cloudflare R2 with restic (D-079). Next: `spmb offsite setup` on the server, Admin Sekolah account, school data.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — `setup.sh` waits for first-boot updates (#36, #37), per-repo deploy key docs (#38), light theme by default (D-078), Codex `svg-kit` installed; server: setup, tunnel, key-only SSH, clone done. Next: staging check, production, Admin Sekolah.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — new account's cloud environment checked (442 tests green); domain on Cloudflare confirmed; full server flow rehearsed in the container (all steps passed). Next: user runs `setup.sh` on `spmb-prod`, then tunnel.
