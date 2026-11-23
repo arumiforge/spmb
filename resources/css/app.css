@@ -7,6 +7,12 @@
 @import "tailwindcss" source(none);
 @import "flowbite/src/themes/default";
 
+/* Visual assets made by Codex (D-073, D-075): patterns, dividers, the registration button, loaders. */
+@import "./visual/pola.css";
+@import "./visual/pemisah.css";
+@import "./visual/tombol-daftar.css";
+@import "./visual/memuat.css";
+
 @plugin "flowbite/plugin";
 
 @source "../../app/Views";

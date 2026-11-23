@@ -4,7 +4,7 @@ name: memuat
 kind: svg
 batch: svg-kit
 files: img/memuat/memuat.svg, img/memuat/memuat-kecil.svg, css/memuat.css
-status: requested
+status: done
 ---
 
 # 018 — memuat (loading animation, SVG + CSS, no Lottie)

@@ -33,7 +33,7 @@ $banner = $page['banner'];
         <div class="mb-6 flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between <?= $banners[$banner['state']]['box'] ?>" role="status">
             <p class="flex items-start gap-3 font-medium"><?= icon($banners[$banner['state']]['icon'], 'h-6 w-6 shrink-0') ?><span><?= esc($banner['text']) ?></span></p>
             <?php if ($banner['state'] === 'open') : ?>
-                <a href="<?= site_url('daftar') ?>" class="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 sm:w-auto dark:focus:ring-primary-800"><?= lang('Situs.register') ?><?= icon('arrow-right', 'h-4 w-4') ?></a>
+                <a href="<?= site_url('daftar') ?>" class="tombol-daftar tombol-daftar-penuh shrink-0"><span class="tombol-daftar-isi"><?= lang('Situs.register') ?><?= icon('arrow-right', 'h-4 w-4') ?></span></a>
             <?php endif ?>
         </div>
 

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+<style>
+@media(prefers-reduced-motion:no-preference){
+:root:not(:has(#diam:target)) .memuat-cincin{transform-origin:10px 10px;animation:memuat-kecil-putar .9s linear infinite}
+@keyframes memuat-kecil-putar{to{transform:rotate(360deg)}}
+}
+</style>
+<view id="diam" viewBox="0 0 20 20"/>
+<path class="memuat-cincin" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M13.8 4.5H15.3Q15.5 4.5 15.5 4.7V7.6L18 9.8Q18.2 10 18 10.2L15.5 12.4V15.2Q15.5 15.5 15.2 15.5H12.4L10.2 18Q10 18.2 9.8 18L7.6 15.5H4.8Q4.5 15.5 4.5 15.2V12.4L2 10.2Q1.8 10 2 9.8L4.5 7.6V4.8Q4.5 4.5 4.8 4.5H7.6L9.8 2Q10 1.8 10.2 2L11 2.9"/>
+</svg>

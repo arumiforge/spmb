@@ -51,10 +51,10 @@ Batches are delivered in this order: `svg-kit` (no image generator needed) → `
 | 010 | [fitur-tambahan](prompts/010-fitur-tambahan.md) | — | painting | Fitur page empty state | done |
 | 011 | [panduan-petugas](prompts/011-panduan-petugas.md) | — | painting | Staff guide cover | done |
 | 012 | [panduan-calon-murid](prompts/012-panduan-calon-murid.md) | — | painting | Applicant guide cover | done |
-| 015 | [pola](prompts/015-pola.md) | svg-kit | SVG + CSS | Tileable patterns: kawung, khatam, anyaman, ceplok daun | requested |
-| 016 | [pemisah](prompts/016-pemisah.md) | svg-kit | SVG + CSS | Full-width section dividers: lengkung, tumpal, mega, bukit | requested |
-| 017 | [tombol-daftar](prompts/017-tombol-daftar.md) | svg-kit | SVG + CSS | Special "Daftar sekarang" button, all states | requested |
-| 018 | [memuat](prompts/018-memuat.md) | svg-kit | SVG + CSS | Loading animation, large and in-button | requested |
+| 015 | [pola](prompts/015-pola.md) | svg-kit | SVG + CSS | Tileable patterns: kawung, khatam, anyaman, ceplok daun | done |
+| 016 | [pemisah](prompts/016-pemisah.md) | svg-kit | SVG + CSS | Full-width section dividers: lengkung, tumpal, mega, bukit | done |
+| 017 | [tombol-daftar](prompts/017-tombol-daftar.md) | svg-kit | SVG + CSS | Special "Daftar sekarang" button, all states | done |
+| 018 | [memuat](prompts/018-memuat.md) | svg-kit | SVG + CSS | Loading animation, large and in-button | done |
 | 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | requested |
 | 020 | [beranda-kebersamaan](prompts/020-beranda-kebersamaan.md) | paintings-pages | painting | Home: learning together (Bhinneka) | requested |
 | 021 | [beranda-langkah](prompts/021-beranda-langkah.md) | paintings-pages | painting | Home: three steps to register | requested |

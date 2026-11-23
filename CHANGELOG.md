@@ -5,6 +5,9 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Codex visual kit installed (briefs 015–018): tileable patterns, section dividers, the special "Daftar Sekarang"
+  button and loaders (`resources/css/visual/`, `public/assets/img/{pola,pemisah,tombol,memuat}/`). Used on the home
+  hero (pattern, curved divider, large button) and the registration buttons on Persyaratan, Jadwal and Tanya Jawab.
 - Example settings files for the server stacks: `deploy/env/production/` and `deploy/env/staging/`
   (`stack.env.example`, `app.env.example`), matching what `spmb init` writes, with placeholders only.
 - Platform round (D-066…D-075): writing standard skill `bahasa-indonesia-plain`; visual and chart rules in `spmb-ui`;
@@ -105,6 +108,7 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
+- Pages start in the light theme whatever the device theme; dark mode only after the theme toggle (D-078).
 - README, roadmap, architecture, requirements, module index, third-party notices and agent guide updated to the
   current state (Docker deployment, PHP 8.5 / MySQL 8.4, Lucide icons, Tanya Jawab, Codex, D-066…D-077).
 - The direct SSH port stays open with key-only login as the last way in, because the VPS has no provider console

@@ -4,7 +4,7 @@ name: pemisah
 kind: svg
 batch: svg-kit
 files: img/pemisah/pemisah-lengkung.svg, img/pemisah/pemisah-tumpal.svg, img/pemisah/pemisah-mega.svg, img/pemisah/pemisah-bukit.svg, css/pemisah.css
-status: requested
+status: done
 ---
 
 # 016 — pemisah (full-width section dividers)

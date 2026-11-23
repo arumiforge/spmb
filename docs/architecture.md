@@ -102,7 +102,7 @@ Permissions stay declared centrally in `Config\AuthGroups` (tested by `AuthGroup
 - `layouts/auth`: sign-in and verification card (also Shield's layout); `layouts/public`: website and guides.
 - White label: `partials/head` prints `:root{--brand:#rrggbb}` from `setting('School.primaryColor')`
   (validated hex). `@theme` derives `primary-50…950` from `--brand` with `color-mix()`.
-- Dark mode via `.dark` on `<html>` (toggle, remembered per browser).
+- Dark mode via `.dark` on `<html>`: pages start light whatever the device theme; dark only after the toggle (remembered per browser, D-078).
 - Illustrations: `illustration('state/kosong-data', $alt, $class, $lazy)` (`ui_helper`) prints the WebP from
   `public/assets/img/` plus its `-dark` variant for dark mode when present; `partials/empty_state` takes
   `image`/`imageAlt`. Codex makes the assets from briefs in `ai/` (D-073, D-075).

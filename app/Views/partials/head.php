@@ -36,7 +36,8 @@ $appIcon    = brand_asset_url('icon');
 <script>
     try {
         var t = localStorage.getItem('spmb-theme');
-        if (t === 'dark' || (t === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        // Light by default whatever the device theme (D-078); dark only when chosen with the toggle.
+        if (t === 'dark') {
             document.documentElement.classList.add('dark');
         }
         if (localStorage.getItem('spmb-sidebar') === 'collapsed') {

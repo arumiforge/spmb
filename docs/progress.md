@@ -77,7 +77,11 @@ when the container idles).
 2. **Phase 4 — Re-registration & reports** (FR-DU-01, FR-SRG-01, dashboard stats, filters, XLSX/CSV/PDF export, XLSX
    import): same protocol (`docs/coordination.md`, integration branch `phase-4`, foundation first, workers). Panitia does
    re-registration and uniform pickup (D-051, D-063); reports are for Admin Sekolah.
-3. **Visual assets (Codex, D-073/D-075)**: the user runs the Codex starter prompt in `ai/README.md`, batch `svg-kit` first (015–018), then `paintings-pages`, `paintings-states`, `variants-001-012` (013/014). Review each Codex PR with `python3 ai/tools/check_assets.py` and install per `spmb-ai-image` (needs `resources/css/visual/`, a loader partial, `.tombol-daftar` on the main CTA, fallback share image).
+3. **Visual assets (Codex, D-073/D-075)**: batch `svg-kit` (015–018) installed (patterns, dividers, `.tombol-daftar`, loaders;
+   home hero and the registration buttons). Still to wire: the loader (`.memuat`, `role="status"`) where content loads
+   (charts, school importer, card generation, `/cek-status`), the busy state of submit buttons, patterns on `/masuk`,
+   the card header and the dashboard welcome band. Next Codex batches: `paintings-pages`, `paintings-states`,
+   `variants-001-012` (013/014); review each with `python3 ai/tools/check_assets.py` and install per `spmb-ai-image`.
 4. **Copy sweep (D-071)**: sentence case for existing headings, buttons and labels in all `Language/id` files (for example `Situs.academicYear` "Tahun Ajaran {0}", "Daftar Sekarang", "Cek Status"), in one pass.
 5. **Small follow-ups**: Indonesian "Pilih berkas" button instead of the browser's "Choose File" on the applicant page;
    use the Lucide icons `camera`, `printer`, `undo-2` (now available) on the attendance page instead of `eye`/`clipboard`/`x`; update the
@@ -88,11 +92,14 @@ when the container idles).
 - School still to confirm (phase 3 works with any answer): test days, sessions per day, rooms and capacity; tests per wave or after all waves.
 - Each Claude account needs its cloud environment set up once from `docs/cloud-environment.md` (old inline scripts fail on PHP 8.5.13).
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
-- Go-live (D-056): VPS ready, domain active on Cloudflare; the user runs `docs/deployment.md` → "First server" on the VPS (not reachable from cloud sessions).
+- Go-live (D-056): on `spmb-prod` steps 1–5 done (setup.sh, tunnel + Access for `konsol`/`ssh`, key-only SSH, deploy key
+  `github-spmb`, clone); staging being deployed by the user. To check in Cloudflare: `staging.` must be behind Access, and the
+  apex domain served a Laragon page from the developer's Windows PC (remove that route/connector before `spmb init production`).
 - Codex batches (briefs 013–035) are queued in `ai/README.md`; waiting for the user to start Codex.
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — `setup.sh` waits for first-boot updates (#36, #37), per-repo deploy key docs (#38), light theme by default (D-078), Codex `svg-kit` installed; server: setup, tunnel, key-only SSH, clone done. Next: staging check, production, Admin Sekolah.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — new account's cloud environment checked (442 tests green); domain on Cloudflare confirmed; full server flow rehearsed in the container (all steps passed). Next: user runs `setup.sh` on `spmb-prod`, then tunnel.
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — PR #32 (example env files) merged; docs refreshed to the current state: README, roadmap (phase 1 done, platform round row, phase 6 partly done), architecture (stack, tables, visual rules), requirements (FR-WEB-03, NFR-02/03/08), module index, third-party server images, CLAUDE.md roles and commands, coordination notes. Next: go-live, Codex `svg-kit`.
 - 2026-11-23 · coordinator (session docker) · `main` — CI green on all checks; PR #26 merged into `main` on the user's request. Next: go-live on `spmb-prod` (`docs/deployment.md` → First server), Codex `svg-kit` batch.
@@ -102,4 +109,3 @@ when the container idles).
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user's answers: Docker on the VPS with Cockpit + host cloudflared (no Proxmox), staging + production stacks on one VPS from `main`, server pulls and builds (no deploy key), public Tanya Jawab page; foundation landed (PHP ^8.5.13 / Node 24 / MySQL 8.4 in CI, 424 tests green on 8.5.13, lucide-static, `bahasa-indonesia-plain` skill, visual and chart rules, D-066…D-073, `docs/platform-plan.md`); PR #25 merged in; workers A–D started. Next: review worker PRs, integrate, PR to `main`.
 - 2026-11-19 · session go-live · `nty/exciting-mendel-ukwgth` — domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image re-rendered); `provision.sh` keeps the SSH port (custom too) open until the tunnel runs and turns password login off only when an admin key exists; deployment doc: 127.0.0.1 ingress, real SSH port, known_hosts from the server, Bitvise via `cloudflared access tcp` (D-065). Next: user merges, go-live.
 - 2026-11-18 · coordinator · `main` — PR #23 (phase 3) merged into `main` on the user's request; workers A–C done. Next: go-live, phase 4.
-- 2026-11-18 · coordinator · `phase-3` — merged B (#20), A (#22), C (#21) after combined local runs (424 tests, demo install seats all applicants, pages checked at 360 px); docs: D-064, requirements FR-TEST-01…04 built, changelog, roadmap; PR `phase-3` → `main` opened. Next: user merges, go-live, phase 4.
