@@ -1,7 +1,7 @@
 ## Masuk ke dasbor
 
 1. Buka halaman [Masuk Petugas]({url_masuk}).
-2. Ketik email dan kata sandi yang diberikan oleh Admin Sekolah.
+2. Ketik email atau nama pengguna Anda, lalu kata sandi yang diberikan oleh Admin Sekolah.
 3. Centang **Ingat saya di perangkat ini** hanya jika memakai perangkat pribadi.
 4. Tekan **Masuk**.
 5. Jika ini pertama kali masuk, Anda akan diminta membuat kata sandi baru.
@@ -35,7 +35,7 @@ Verifikasi dua langkah menambah keamanan: setelah kata sandi, Anda juga memasukk
 
 ### Saat masuk
 
-1. Masuk dengan email dan kata sandi seperti biasa.
+1. Masuk dengan email atau nama pengguna dan kata sandi seperti biasa.
 2. Buka aplikasi Google Authenticator, lalu ketik 6 angka untuk akun sekolah.
 3. Tekan **Verifikasi**.
 
