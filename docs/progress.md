@@ -7,7 +7,7 @@ personal data.
 
 ## Current phase
 
-**Platform round**: done on `pw/zealous-albattani-2rz2z1`, PR #26 → `main` waits for the user (supersedes #25). Docker
+**Platform round**: done and merged into `main` (PR #26, 2026-11-23; supersedes #25, which can be closed). Docker
 on the VPS (staging + production, server pulls and builds, Cockpit + cloudflared on the host), PHP 8.5.13 / Node 24 /
 MySQL 8.4, Lucide icons and visual rules, public Tanya Jawab page, Codex briefs, cloud environment setup in the repo
 (D-066…D-076, `docs/platform-plan.md`). 442 tests green on PHP 8.5.13.
@@ -40,12 +40,12 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`): Docker, PHP 8.5/Node 24, design rules, Tanya Jawab, Codex; includes PR #25 | all packages merged; PR #26 → `main` ready for the user |
+| `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`) | merged into `main` (PR #26) |
 | `feat/plat-tanya-jawab` | worker C | Tanya Jawab page | merged into the integration branch (#30) |
 | `feat/plat-docker` | worker A | Docker and server | merged into the integration branch (#29) |
 | `feat/plat-ui` | worker B | Lucide icons and visual rules | merged into the integration branch (#28) |
 | `feat/plat-codex` | worker D | Codex briefs and identity | merged into the integration branch (#27) |
-| `nty/exciting-mendel-ukwgth` | session go-live | Domain typo fix, `provision.sh` lock-out guards (D-065) | PR #25 open; merged into `pw/zealous-albattani-2rz2z1` |
+| `nty/exciting-mendel-ukwgth` | session go-live | Domain typo fix, `provision.sh` lock-out guards (D-065) | in `main` through PR #26; PR #25 can be closed |
 | `phase-3` | coordinator | Phase 3 integration branch | merged into `main` (PR #23) |
 | `nty/nifty-mendel-u2jf9s` | coordinator | SD/MI default data + foundation (#18), three roles (#19), phase 3 docs | merged into `phase-3` |
 | `feat/p3-jadwal`, `feat/p3-penjadwalan`, `feat/p3-kehadiran` | workers A, B, C | Phase 3 packages | merged into `phase-3` (#22, #20, #21) |
@@ -53,7 +53,7 @@ create your own branch from `main` instead.
 
 ## Next steps
 
-0. **User merges PR #26**, then go-live (step 1).
+0. PR #26 is merged: go-live is next (step 1).
    The school fills in the 4 hidden Tanya Jawab answers (`[ISI SEKOLAH: …]`: costs, contacts) in Website → Tanya jawab.
 
 Start a new session from `origin/main` (`spmb-session`; `composer install`, `npm ci && npm run build`,
@@ -88,6 +88,7 @@ when the container idles).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-23 · coordinator (session docker) · `main` — CI green on all checks; PR #26 merged into `main` on the user's request. Next: go-live on `spmb-prod` (`docs/deployment.md` → First server), Codex `svg-kit` batch.
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user decided: direct SSH port stays open, key-only (D-077); `setup.sh`, deployment guide (Bitvise key steps, no fail2ban on the NAT VPS), deploy skill and CLAUDE.md updated. Next: user merges #26, go-live.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — merged D (#27 Codex briefs, AGENTS.md, D-075), B (#28 Lucide, visual rules, motion, charts), A (#29 Docker, setup.sh, `spmb` CLI, D-076), C (#30 Tanya Jawab, menu fix); combined run 442 tests green, lint clean, build OK, pages checked at 360/1280 px; Docker web image and PHP base build here (Composer download blocked only by this container's proxy). Next: user merges #26, SSH port decision, go-live.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — first workers failed at environment setup (old inline script on PHP 8.3); cloud setup moved into the repo (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`, D-074), the SPMB environment now runs it, Composer platform set to 8.5.13 (CI green); workers A–D restarted. Next: review worker PRs.
@@ -97,4 +98,3 @@ when the container idles).
 - 2026-11-18 · coordinator · `phase-3` — merged B (#20), A (#22), C (#21) after combined local runs (424 tests, demo install seats all applicants, pages checked at 360 px); docs: D-064, requirements FR-TEST-01…04 built, changelog, roadmap; PR `phase-3` → `main` opened. Next: user merges, go-live, phase 4.
 - 2026-11-18 · coordinator · `nty/nifty-mendel-u2jf9s` → `phase-3` — only three roles (Admin Sekolah, Panitia, Siswa; D-063): removed Kepala Sekolah and Petugas roles, accounts migrated to Panitia, guide `/panduan/panitia`, tests use per-user permissions for read-only staff; workers told. Next: worker PRs.
 - 2026-11-18 · coordinator · `nty/nifty-mendel-u2jf9s` → `phase-3` — national SD/MI list shipped as default data (D-058, 177,422 schools, loaded by `spmb:install` and deploys); phase 3 foundation (module Tes, D-059…D-062, `phase-3-plan.md`); workers A–C started. Next: review worker PRs.
-- 2026-11-18 · coordinator · `phase-2` → `main` — merged #17 into `phase-2` and PR #14 into `main` (user's request); handoff: JSON import, go-live, illustrations, phase 3. Coordinator session ended.
