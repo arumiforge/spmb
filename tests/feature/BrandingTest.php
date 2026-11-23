@@ -111,6 +111,27 @@ final class BrandingTest extends CIUnitTestCase
         $this->get('aset/tidak-ada')->assertStatus(404);
     }
 
+    public function testAssetAnswersNotModifiedForAMatchingEtag(): void
+    {
+        $this->loadPack();
+
+        $first = $this->get('aset/logo');
+        $first->assertOK();
+        $etag = $first->response()->getHeaderLine('ETag');
+        $this->assertMatchesRegularExpression('/\A"[0-9a-f]{16}"\z/', $etag);
+        $this->assertStringContainsString('max-age=31536000', $first->response()->getHeaderLine('Cache-Control'));
+
+        $again = $this->withHeaders(['If-None-Match' => $etag])->get('aset/logo');
+        $again->assertStatus(304);
+        $this->assertSame('', trim((string) $again->getBody()));
+        $this->assertSame($etag, $again->response()->getHeaderLine('ETag'));
+
+        // Another tag (an older file) gets the whole picture again.
+        $other = $this->withHeaders(['If-None-Match' => '"0000000000000000"'])->get('aset/logo');
+        $other->assertOK();
+        $this->assertNotSame('', (string) $other->getBody());
+    }
+
     public function testLayoutsShowBrandImagesAndPreviewTags(): void
     {
         $this->loadPack();

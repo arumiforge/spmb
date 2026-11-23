@@ -44,8 +44,8 @@ $big = '[&_input]:py-3 [&_input]:text-base [&_select]:py-3 [&_select]:text-base 
 
         <aside class="order-1 lg:order-2">
             <div class="space-y-6 lg:sticky lg:top-24">
-                <div class="flex justify-center rounded-xl bg-primary-50 p-4 dark:bg-gray-800">
-                    <?= illustration('form/daftar-online', lang('Pendaftaran.altForm'), 'h-48 w-auto sm:h-64 lg:h-auto lg:w-full', false) ?>
+                <div class="flex justify-center">
+                    <?= illustration('form/daftar-online', lang('Pendaftaran.altForm'), 'h-40 w-auto sm:h-56 lg:h-auto lg:w-full', false) ?>
                 </div>
                 <div class="<?= $card ?>">
                     <h2 class="mb-3 text-base font-semibold text-gray-900 dark:text-white"><?= lang('Pendaftaran.publicStepsTitle') ?></h2>

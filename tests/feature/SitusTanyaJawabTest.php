@@ -237,6 +237,22 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
         $this->assertSame(1, substr_count($main, 'href="' . site_url('persyaratan') . '"'));
     }
 
+    public function testTopicsFormAContentsThatHighlightsTheTopicInView(): void
+    {
+        $this->seed();
+
+        $body = $this->get('tanya-jawab')->getBody();
+
+        // The topic chips are a contents list (D-088): ui.js marks the topic in view.
+        $this->assertMatchesRegularExpression('/<nav class="daftar-isi sticky[^"]*" aria-label="Topik" data-daftar-isi>/', $body);
+        $nav = substr($body, (int) strpos($body, 'data-daftar-isi>'));
+        $nav = substr($nav, 0, (int) strpos($nav, '</nav>'));
+        $this->assertStringContainsString('href="#pendaftaran"', $nav);
+        $this->assertStringContainsString('href="#biaya"', $nav);
+        // Headings leave room for the sticky header and contents.
+        $this->assertStringContainsString('id="biaya" class="mb-4 scroll-mt-56', $body);
+    }
+
     public function testPublicPageWithoutQuestions(): void
     {
         $this->questions->insert(['topic' => 'Biaya', 'question' => 'Tersembunyi?', 'answer' => 'Ya.', 'is_published' => 0]);

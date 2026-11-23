@@ -53,7 +53,9 @@ $banner = $page['banner'];
                         <p class="mt-2 flex items-start gap-2 text-gray-700 dark:text-gray-300"><?= icon('users', 'mt-0.5 h-5 w-5 shrink-0 text-gray-400') ?><span><?= esc(lang('Situs.quota', [number_format((int) $wave['quota'], 0, ',', '.')])) ?></span></p>
                     <?php endif ?>
                     <?php if (! empty($wave['description'])) : ?>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><?= nl2br(esc($wave['description'])) ?></p>
+                        <div class="lipat mt-3 [--lipat-latar-gelap:var(--color-gray-800)]" data-lipat data-lipat-tinggi="6rem">
+                            <p class="lipat-isi text-sm text-gray-600 dark:text-gray-400"><?= nl2br(esc($wave['description'])) ?></p>
+                        </div>
                     <?php endif ?>
                 </li>
             <?php endforeach ?>

@@ -59,7 +59,9 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
                                 <?php endif ?>
                             </div>
                             <?php if (! empty($doc['description'])) : ?>
-                                <p class="mb-1 text-sm text-gray-600 dark:text-gray-300"><?= esc($doc['description']) ?></p>
+                                <div class="lipat mb-1 [--lipat-latar-gelap:var(--color-gray-800)]" data-lipat data-lipat-tinggi="5rem">
+                                    <p class="lipat-isi text-sm text-gray-600 dark:text-gray-300"><?= nl2br(esc($doc['description'])) ?></p>
+                                </div>
                             <?php endif ?>
                             <?php if ((int) $doc['may_follow'] === 1) : ?>
                                 <p class="mb-1 text-sm text-gray-600 dark:text-gray-300"><?= lang('Situs.mayFollowHelp') ?></p>

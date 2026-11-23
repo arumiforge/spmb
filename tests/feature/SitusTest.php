@@ -125,6 +125,17 @@ final class SitusTest extends CIUnitTestCase
         $result->assertDontSee('Gelombang Tahun Lalu');
     }
 
+    public function testLongWaveDescriptionFolds(): void
+    {
+        $this->makeWave(['name' => 'Gelombang Utama', 'starts_on' => '2027-01-04', 'ends_on' => '2027-02-27', 'description' => "Baris pertama.\nBaris kedua."]);
+
+        $body = $this->get('jadwal')->getBody();
+
+        // Folded by ui.js only when it is really long ("Lihat selengkapnya", D-088); open without JavaScript.
+        $this->assertStringContainsString('data-lipat data-lipat-tinggi="6rem"', $body);
+        $this->assertMatchesRegularExpression('#Baris pertama\.<br ?/?>\s*Baris kedua\.#', $body);
+    }
+
     public function testScheduleWhenOnlineFormIsOff(): void
     {
         setting('Pendaftaran.onlineOpen', false);
