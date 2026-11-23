@@ -398,7 +398,7 @@ Decision: The sign-in page has one field "Email atau nama pengguna" plus the pas
 ## D-081 — Mobile navigation: bottom bar, right-hand drawer, small top bar (2026-11-23)
 Status: accepted (user, 2026-11-23)
 Decision: Below `md` every page has a fixed bottom bar with five items.
-- Public site: Beranda · Persyaratan · **Daftar** · Jadwal · Cek Status. Daftar sits in the middle, larger and raised above the bar. Items whose module is off are replaced by Panduan / Tanya Jawab so the bar keeps its shape.
+- Public site: Beranda · Persyaratan · **Daftar** · Jadwal · Cek Status. Daftar sits in the middle as a larger round button raised above the bar, with no text under it (name for screen readers only; user, 2026-11-23). Items whose module is off are replaced by Panduan / Tanya Jawab so the bar keeps its shape.
 - Dashboard: Dasbor · Data Pendaftar · **Cari pendaftar** (raised, opens the search) · Periksa Berkas · Menu (opens the sidebar). Items are filtered by permission; empty slots fall back to other allowed menu items.
 The top hamburger menu opens as a drawer that slides in from the right (not a drop-down). The public site gets a small bar above the header with the school's social media links and the staff sign-in link (moved out of the footer). Social links are settings (`School.social*`), hidden when empty.
 

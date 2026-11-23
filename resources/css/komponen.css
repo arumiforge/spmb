@@ -114,12 +114,12 @@
 
     .nav-bawah-tengah-bulat {
         position: absolute;
-        inset-block-start: -1.75rem;
+        inset-block-start: -1.5rem;
         inset-inline-start: 50%;
         display: grid;
         place-items: center;
-        width: 4.25rem;
-        height: 4.25rem;
+        width: 4.5rem;
+        height: 4.5rem;
         translate: -50% 0;
         border-radius: 9999px;
         background:
