@@ -64,6 +64,14 @@ status to `done`. Nothing here is served by the app directly.
 | 024 | `install/img/section/tanya-jawab-hijau.webp` | 700×676 | 131.89 | Transparent | Shared crop, one speech bubble in leaf green |
 | 024 | `tanya-jawab-dark-hijau.webp` | 1254×1254 | 438.54 | Transparent | Gentle tonal lift and a faint rim; one speech bubble in leaf green |
 | 024 | `install/img/section/tanya-jawab-dark-hijau.webp` | 700×676 | 130.14 | Transparent | Shared crop, gentle tonal lift and a faint rim; one speech bubble in leaf green |
+| 025 | `cek-status.webp` | 1254×1254 | 444.98 | Transparent | Abstract phone display with a sage check mark |
+| 025 | `install/img/section/cek-status.webp` | 710×689 | 125.64 | Transparent | Shared crop, abstract phone display with a sage check mark |
+| 025 | `cek-status-dark.webp` | 1254×1254 | 433.20 | Transparent | Gentle tonal lift and a faint rim |
+| 025 | `install/img/section/cek-status-dark.webp` | 710×689 | 129.08 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 025 | `cek-status-hijau.webp` | 1254×1254 | 445.04 | Transparent | Blue blocks on phone display in leaf green |
+| 025 | `install/img/section/cek-status-hijau.webp` | 710×689 | 125.65 | Transparent | Shared crop, blue blocks on phone display in leaf green |
+| 025 | `cek-status-dark-hijau.webp` | 1254×1254 | 433.14 | Transparent | Gentle tonal lift and a faint rim; blue blocks on phone display in leaf green |
+| 025 | `install/img/section/cek-status-dark-hijau.webp` | 710×689 | 129.12 | Transparent | Shared crop, gentle tonal lift and a faint rim; blue blocks on phone display in leaf green |
 
 ### svg-kit (2026-11-23)
 
