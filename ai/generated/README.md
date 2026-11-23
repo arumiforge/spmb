@@ -40,6 +40,14 @@ status to `done`. Nothing here is served by the app directly.
 | 021 | `install/img/section/beranda-langkah-hijau.webp` | 614×605 | 136.48 | Transparent | Shared crop, folder and phone display in leaf green |
 | 021 | `beranda-langkah-dark-hijau.webp` | 1254×1254 | 574.90 | Transparent | Gentle tonal lift and a faint rim; folder and phone display in leaf green |
 | 021 | `install/img/section/beranda-langkah-dark-hijau.webp` | 614×605 | 133.95 | Transparent | Shared crop, gentle tonal lift and a faint rim; folder and phone display in leaf green |
+| 022 | `persyaratan.webp` | 1254×1254 | 467.27 | Transparent | Neat papers with abstract lines, no seals |
+| 022 | `install/img/section/persyaratan.webp` | 690×663 | 138.73 | Transparent | Shared crop, neat papers with abstract lines, no seals |
+| 022 | `persyaratan-dark.webp` | 1254×1254 | 451.55 | Transparent | Gentle tonal lift and a faint rim |
+| 022 | `install/img/section/persyaratan-dark.webp` | 690×663 | 136.11 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 022 | `persyaratan-hijau.webp` | 1254×1254 | 466.84 | Transparent | Folder and phone case in leaf green |
+| 022 | `install/img/section/persyaratan-hijau.webp` | 690×663 | 138.63 | Transparent | Shared crop, folder and phone case in leaf green |
+| 022 | `persyaratan-dark-hijau.webp` | 1254×1254 | 451.10 | Transparent | Gentle tonal lift and a faint rim; folder and phone case in leaf green |
+| 022 | `install/img/section/persyaratan-dark-hijau.webp` | 690×663 | 135.97 | Transparent | Shared crop, gentle tonal lift and a faint rim; folder and phone case in leaf green |
 
 ### svg-kit (2026-11-23)
 
