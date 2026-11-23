@@ -40,7 +40,11 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `nty/vigilant-wozniak-lvnhku` | session ui-round | UI round: email-or-username login, mobile bottom bar, right drawer, top bar, hero slideshow, three.js icons, date picker, folds/TOC, map + contact, full-width admin, Codex briefs 036+ (D-080…D-088) | in progress |
+| `feat/ui-codex` | worker A (ui-round) | Codex briefs 036+ (`docs/ui-round-plan.md` A) | in progress |
+| `feat/ui-minify` | worker B (ui-round) | Minified assets, SVG originals in `resources/img/` (B) | in progress |
+| `feat/ui-admin` | worker C (ui-round) | Dashboard full-width pass, AdminLayoutTest (C) | in progress |
+| `feat/ui-publik` | worker D (ui-round) | Public pages pass, home/settings tests (D) | in progress |
+| `nty/vigilant-wozniak-lvnhku` | coordinator (session ui-round) | Integration branch of the UI round. Foundation: email-or-username login, mobile bottom bar, right drawer, top bar, hero slideshow, three.js icons, date picker, folds/TOC, map + contact, full-width admin, Codex briefs 036+ (D-080…D-088) | in progress |
 | `pw/eager-archimedes-s119yf` | session go-live 2 | Go-live support: environment check, server rehearsal, docs | in progress |
 | `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`) | merged into `main` (PR #26) |
 | `feat/plat-tanya-jawab` | worker C | Tanya Jawab page | merged into the integration branch (#30) |
