@@ -5,6 +5,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Example settings files for the server stacks: `deploy/env/production/` and `deploy/env/staging/`
+  (`stack.env.example`, `app.env.example`), matching what `spmb init` writes, with placeholders only.
 - Platform round (D-066…D-075): writing standard skill `bahasa-indonesia-plain`; visual and chart rules in `spmb-ui`;
   Claude cloud environment setup kept in the repository (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`);
   `AGENTS.md` for Codex and other agents.

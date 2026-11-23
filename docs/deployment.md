@@ -64,6 +64,10 @@ without it.
   (rebuilt), `.git`, `tests`, `docs`, `ai`, `deploy`, client `originals/` and `source/`, `writable/*` content,
   `.env`.
 
+Examples of both settings files, with every key explained and no real values, are in
+`deploy/env/production/` and `deploy/env/staging/` (`stack.env.example`, `app.env.example`). `spmb init` writes
+the real files with fresh passwords and keys; use the examples to check or repair a file by hand.
+
 ## First server (once)
 
 Prerequisites: a VPS with Ubuntu Server 24.04 (2 vCPU, 2–4 GB RAM, 40 GB disk is enough for the first year),
