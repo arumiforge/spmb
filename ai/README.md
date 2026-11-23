@@ -57,15 +57,15 @@ generator needed) → `tombol-seni` (no image generator needed) → `ikon-berand
 | 016 | [pemisah](prompts/016-pemisah.md) | svg-kit | SVG + CSS | Full-width section dividers: lengkung, tumpal, mega, bukit | done |
 | 017 | [tombol-daftar](prompts/017-tombol-daftar.md) | svg-kit | SVG + CSS | Special "Daftar sekarang" button, all states | done |
 | 018 | [memuat](prompts/018-memuat.md) | svg-kit | SVG + CSS | Loading animation, large and in-button | done |
-| 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | requested (redo: D-089) |
-| 020 | [beranda-kebersamaan](prompts/020-beranda-kebersamaan.md) | paintings-pages | painting | Home: learning together (Bhinneka) | requested (redo: D-089) |
+| 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | done |
+| 020 | [beranda-kebersamaan](prompts/020-beranda-kebersamaan.md) | paintings-pages | painting | Home: learning together (Bhinneka) | done |
 | 021 | [beranda-langkah](prompts/021-beranda-langkah.md) | paintings-pages | painting | Home: three steps to register | done |
 | 022 | [persyaratan](prompts/022-persyaratan.md) | paintings-pages | painting | `/persyaratan` | done |
 | 023 | [jadwal](prompts/023-jadwal.md) | paintings-pages | painting | `/jadwal` | done |
 | 024 | [tanya-jawab](prompts/024-tanya-jawab.md) | paintings-pages | painting | `/tanya-jawab` | done |
 | 025 | [cek-status](prompts/025-cek-status.md) | paintings-pages | painting | `/cek-status` | done |
 | 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | done |
-| 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | requested (redo: D-089) |
+| 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | done |
 | 035 | [bagikan-umum](prompts/035-bagikan-umum.md) | paintings-pages | painting | Default link-preview image | done |
 | 028 | [akses-ditolak](prompts/028-akses-ditolak.md) | paintings-states | painting | 403 / no permission | requested |
 | 029 | [sesi-berakhir](prompts/029-sesi-berakhir.md) | paintings-states | painting | Session expired | requested |
@@ -126,8 +126,8 @@ Notes
   states with `'fallback'`) and show a Lucide icon or a generic painting until they arrive.
 - 049 replaces the interim `.tombol-seni` and `.nav-bawah-tengah-bulat` CSS in `resources/css/komponen.css`
   and holds the painted `ikon-daftar` (041), so deliver it after `ikon-beranda`.
-- 019, 020 and 027 were delivered (#49) before D-089 and show a wheelchair or hearing aids: paint them again
-  from the updated briefs; until then the home hero keeps `hero-beranda`.
+- 019, 020 and 027 were repainted for D-089 in #49 and are installed. 019 is the first home hero slide; 020
+  (school character section) and 027 (test pages) have no slot in the views yet.
 - The `langkah` batch is 046–048 (scenes with people, D-090) plus 072 (card backgrounds); deliver them together.
 - Every empty state (052–071) shows its own scene; no two empty states may look alike, also not like 004,
   005, 009, 010 or 028–034.
