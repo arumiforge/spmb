@@ -13,7 +13,7 @@ $button = 'inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 
 
 <?= $this->section('content') ?>
 <div class="mx-auto max-w-2xl px-4 py-10 text-center sm:py-16">
-    <div class="mb-6 flex justify-center"><?= illustration('state/kosong-data', lang('App.altNoData'), 'h-40 w-auto sm:h-52', false) ?></div>
+    <div class="mb-6 flex justify-center"><?= illustration('state/pendaftaran-ditutup', lang('App.altRegistrationClosed'), 'h-40 w-auto sm:h-52', false) ?: illustration('state/kosong-data', lang('App.altNoData'), 'h-40 w-auto sm:h-52', false) ?></div>
     <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white"><?= lang('Pendaftaran.closedTitle') ?></h1>
     <p class="mt-3 text-base text-gray-600 dark:text-gray-300"><?= lang('Pendaftaran.closedReasons.' . $reason) ?></p>
     <?php if ($next !== null) : ?>

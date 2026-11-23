@@ -6,7 +6,7 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<section class="max-w-2xl rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
+<section class="rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
     <?= view('auth/alert', ['alert' => ['type' => 'warning', 'text' => lang('Akun.tfCodesWarning')]]) ?>
     <ul class="grid grid-cols-1 gap-2 sm:grid-cols-2" aria-label="<?= lang('Akun.tfCodesTitle') ?>">
         <?php foreach ($codes as $code) : ?>

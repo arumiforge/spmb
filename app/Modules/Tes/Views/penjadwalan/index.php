@@ -107,7 +107,7 @@ $waveLabel  = $waveId === null ? lang('Tes.allWaves') : ($waves[$waveId] ?? lang
 
         <?php if ($preview['eligible'] === 0) : ?>
             <div class="p-4">
-                <?= view('partials/empty_state', ['empty' => ['title' => lang('TesPenjadwalan.previewEmpty'), 'text' => lang('TesPenjadwalan.previewEmptyText'), 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
+                <?= view('partials/empty_state', ['empty' => ['title' => lang('TesPenjadwalan.previewEmpty'), 'text' => lang('TesPenjadwalan.previewEmptyText'), 'image' => 'state/kosong-penjadwalan', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
             </div>
         <?php else : ?>
             <div class="space-y-3 p-5 sm:px-6">

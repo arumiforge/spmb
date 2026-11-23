@@ -12,7 +12,7 @@ $btnSec = 'inline-flex items-center justify-center gap-2 rounded-lg border borde
 <?= $this->section('content') ?>
 <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
     <div class="space-y-6 xl:col-span-2">
-        <form method="post" action="<?= url_to('referensi.impor') ?>" enctype="multipart/form-data" class="<?= $card ?> max-w-3xl space-y-5">
+        <form method="post" action="<?= url_to('referensi.impor') ?>" enctype="multipart/form-data" class="<?= $card ?> space-y-5">
             <?= csrf_field() ?>
             <?= view('partials/form_field', ['field' => ['name' => 'berkas', 'label' => lang('Referensi.importFile'), 'type' => 'file', 'required' => true, 'help' => lang('Referensi.importFileHelp'), 'attrs' => ['accept' => '.xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']]]) ?>
             <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
@@ -22,7 +22,7 @@ $btnSec = 'inline-flex items-center justify-center gap-2 rounded-lg border borde
         </form>
 
         <?php if (is_array($report)) : ?>
-            <section class="<?= $card ?> max-w-3xl" aria-labelledby="report-title">
+            <section class="<?= $card ?>" aria-labelledby="report-title">
                 <h2 id="report-title" class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Referensi.importReport') ?></h2>
                 <p class="mt-1 break-all text-sm text-gray-500 dark:text-gray-400"><?= esc($report['file']) ?></p>
                 <dl class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">

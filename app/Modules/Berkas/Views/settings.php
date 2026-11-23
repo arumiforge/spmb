@@ -45,7 +45,7 @@ $rules = static fn (array $type): string => lang('Berkas.rulesLine', [DocumentTy
 
         <?php if ($types === []) : ?>
             <div class="p-4">
-                <?= view('partials/empty_state', ['empty' => ['title' => lang('Berkas.typesEmptyTitle'), 'text' => lang('Berkas.typesEmptyText'), 'icon' => 'clipboard', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => ['label' => lang('Berkas.addType'), 'url' => 'admin/pengaturan/berkas/tambah']]]) ?>
+                <?= view('partials/empty_state', ['empty' => ['title' => lang('Berkas.typesEmptyTitle'), 'text' => lang('Berkas.typesEmptyText'), 'icon' => 'clipboard', 'image' => 'state/kosong-jenis-berkas', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => ['label' => lang('Berkas.addType'), 'url' => 'admin/pengaturan/berkas/tambah']]]) ?>
             </div>
         <?php else : ?>
             <ol class="divide-y divide-gray-100 dark:divide-gray-700">
@@ -86,7 +86,7 @@ $rules = static fn (array $type): string => lang('Berkas.rulesLine', [DocumentTy
         <?php endif ?>
     </section>
 
-    <form method="post" action="<?= url_to('berkas.pengaturan') ?>" class="<?= $card ?> max-w-3xl p-5 sm:p-6" aria-labelledby="image-heading">
+    <form method="post" action="<?= url_to('berkas.pengaturan') ?>" class="<?= $card ?> p-5 sm:p-6" aria-labelledby="image-heading">
         <?= csrf_field() ?>
         <h2 id="image-heading" class="<?= $h2 ?>"><?= lang('Berkas.imageHeading') ?></h2>
         <p class="mb-4 mt-1 text-sm text-gray-500 dark:text-gray-400"><?= lang('Berkas.imageHelp') ?></p>

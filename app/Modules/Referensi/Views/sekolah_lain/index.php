@@ -11,7 +11,7 @@
 
 <?= $this->section('content') ?>
 <?php if ($groups === []) : ?>
-    <?= view('partials/empty_state', ['empty' => ['title' => lang('Referensi.othersEmptyTitle'), 'text' => lang('Referensi.othersEmptyText'), 'icon' => 'school', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => ['label' => lang('Referensi.listTitle'), 'url' => url_to('referensi.sekolah')]]]) ?>
+    <?= view('partials/empty_state', ['empty' => ['title' => lang('Referensi.othersEmptyTitle'), 'text' => lang('Referensi.othersEmptyText'), 'icon' => 'school', 'image' => 'state/kosong-sekolah-lain', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => ['label' => lang('Referensi.listTitle'), 'url' => url_to('referensi.sekolah')]]]) ?>
 <?php else : ?>
     <div class="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
         <ul class="divide-y divide-gray-100 dark:divide-gray-700">

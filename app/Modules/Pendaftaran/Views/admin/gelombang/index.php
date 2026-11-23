@@ -51,7 +51,7 @@ $button = 'inline-flex items-center justify-center gap-1.5 rounded-lg border px-
                 'title'    => lang('Pendaftaran.waveEmptyTitle'),
                 'text'     => lang('Pendaftaran.waveEmptyText'),
                 'icon'     => 'calendar',
-                'image'    => 'state/kosong-data',
+                'image'    => 'state/kosong-gelombang', 'fallback' => 'state/kosong-data',
                 'imageAlt' => lang('App.altNoData'),
                 'action'   => $year === $currentYear ? ['label' => lang('Pendaftaran.waveAdd'), 'url' => 'admin/pengaturan/gelombang/tambah'] : null,
             ]]) ?>

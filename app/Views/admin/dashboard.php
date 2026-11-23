@@ -48,7 +48,7 @@ $tiles = $stats === null ? [] : [
                 'title'    => 'Belum ada pendaftar',
                 'text'     => $stats === null ? 'Ringkasan pendaftaran tampil di sini setelah fitur Pendaftaran diaktifkan.' : 'Ringkasan per gelombang akan tampil di sini setelah ada calon murid yang mendaftar.',
                 'icon'     => 'chart',
-                'image'    => 'state/kosong-data',
+                'image'    => 'state/kosong-dasbor', 'fallback' => 'state/kosong-data',
                 'imageAlt' => lang('App.altNoData'),
             ]]) ?>
         <?php else : ?>

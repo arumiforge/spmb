@@ -118,13 +118,13 @@ $cap  = 20;
 <?php endif ?>
 
 <?php if ($rooms === []) : ?>
-    <div class="flex max-w-3xl items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-sm text-yellow-900 dark:border-yellow-800 dark:bg-gray-800 dark:text-yellow-300">
+    <div class="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-sm text-yellow-900 dark:border-yellow-800 dark:bg-gray-800 dark:text-yellow-300">
         <?= icon('warning', 'h-5 w-5 shrink-0') ?>
         <p><?= lang('TesJadwal.sessionNoRooms') ?> <a href="<?= url_to('tes.ruang.tambah') ?>" class="font-medium underline"><?= lang('TesJadwal.roomAdd') ?></a></p>
     </div>
 <?php endif ?>
 
-<form method="post" action="<?= url_to('tes.sesi.pratinjau') ?>" class="max-w-3xl space-y-6" data-session-generator data-duration="<?= (int) $duration ?>">
+<form method="post" action="<?= url_to('tes.sesi.pratinjau') ?>" class="form-lebar" data-session-generator data-duration="<?= (int) $duration ?>">
     <?= csrf_field() ?>
 
     <section class="<?= $card ?>">

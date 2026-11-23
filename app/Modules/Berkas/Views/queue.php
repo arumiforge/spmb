@@ -62,7 +62,7 @@ $check = 'inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary-
         <div class="p-4">
             <?= view('partials/empty_state', ['empty' => $filtered
                 ? ['title' => lang('Berkas.queueNoResultTitle'), 'text' => lang('Berkas.queueNoResultText'), 'icon' => 'search', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]
-                : ['title' => lang('Berkas.queueEmptyTitle'), 'text' => lang('Berkas.queueEmptyText'), 'icon' => 'inbox', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
+                : ['title' => lang('Berkas.queueEmptyTitle'), 'text' => lang('Berkas.queueEmptyText'), 'icon' => 'inbox', 'image' => 'state/kosong-antrean-berkas', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
         </div>
     <?php else : ?>
         <div class="hidden overflow-x-auto md:block">

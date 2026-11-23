@@ -14,7 +14,7 @@ $action = $room === null ? url_to('tes.ruang.tambah') : url_to('tes.ruang.ubah',
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= esc($action, 'attr') ?>" class="max-w-3xl space-y-6">
+<form method="post" action="<?= esc($action, 'attr') ?>" class="form-lebar">
     <?= csrf_field() ?>
     <section class="rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">

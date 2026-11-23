@@ -21,7 +21,7 @@ $card   = static fn (string $slug, array $role, bool $highlight): string => '<a 
             <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white"><?= lang('Panduan.title') ?></h1>
             <p class="mt-2 max-w-2xl text-gray-500 dark:text-gray-400"><?= lang('Panduan.intro') ?></p>
         </div>
-        <div class="hidden overflow-hidden rounded-2xl bg-white md:block">
+        <div class="hidden md:block">
             <?= illustration('guide/panduan-calon-murid', lang('App.altGuideApplicant'), 'h-auto w-full', false) ?>
         </div>
     </div>

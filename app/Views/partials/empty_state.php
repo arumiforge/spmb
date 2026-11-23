@@ -2,11 +2,22 @@
 /**
  * Friendly empty state with one clear action.
  *
- * image: painted illustration path for illustration(), e.g. 'state/kosong-data' (preferred over icon).
+ * image: painted illustration path for illustration(), e.g. 'state/kosong-ruang' (preferred over icon).
+ * Every different empty condition has its own painting (D-082); until Codex delivers it, the
+ * picture named in 'fallback' (default 'state/kosong-data') is shown.
  *
- * @var array{title: string, text?: string, icon?: string, image?: string, imageAlt?: string, action?: array{label: string, url: string}} $empty
+ * @var array{title: string, text?: string, icon?: string, image?: string, fallback?: string, imageAlt?: string, action?: array{label: string, url: string}} $empty
  */
-$picture = empty($empty['image']) ? '' : illustration($empty['image'], $empty['imageAlt'] ?? '', 'mx-auto h-32 w-auto sm:h-40');
+$picture = '';
+foreach (array_filter([$empty['image'] ?? null, $empty['fallback'] ?? 'state/kosong-data']) as $candidate) {
+    $picture = illustration($candidate, $empty['imageAlt'] ?? '', 'mx-auto h-32 w-auto sm:h-40');
+    if ($picture !== '') {
+        break;
+    }
+}
+if (empty($empty['image'])) {
+    $picture = '';
+}
 ?>
 <div class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white px-6 py-12 text-center dark:border-gray-600 dark:bg-gray-800">
     <?php if ($picture !== '') : ?>

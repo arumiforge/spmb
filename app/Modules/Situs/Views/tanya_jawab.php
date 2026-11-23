@@ -31,7 +31,7 @@ $contacts  = array_filter([
     </header>
 
     <?php if ($page['topics'] === []) : ?>
-        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.qaEmptyTitle'), 'text' => lang('Situs.qaEmptyText'), 'image' => 'state/kosong-data', 'imageAlt' => '']]) ?>
+        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.qaEmptyTitle'), 'text' => lang('Situs.qaEmptyText'), 'image' => 'state/kosong-tanya-jawab', 'fallback' => 'state/kosong-data', 'imageAlt' => '']]) ?>
     <?php else : ?>
         <?php if (count($page['topics']) > 1) : ?>
             <nav class="mb-8" aria-label="<?= lang('Situs.qaTopicsLabel') ?>">

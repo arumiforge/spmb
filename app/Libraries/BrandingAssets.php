@@ -35,7 +35,28 @@ class BrandingAssets
         'shareImage'   => ['setting' => 'shareImagePath', 'slug' => 'gambar-bagikan', 'max' => [1200, 630], 'ext' => ['png', 'jpg', 'jpeg']],
         'icon'         => ['setting' => 'iconPath', 'slug' => 'ikon', 'max' => [512, 512], 'ext' => ['png']],
         'favicon'      => ['setting' => 'faviconPath', 'slug' => 'favicon', 'max' => [64, 64], 'ext' => ['png', 'ico']],
+        'heroSlide1'   => ['setting' => 'heroSlide1Path', 'slug' => 'slide-1', 'max' => [1600, 1600], 'ext' => ['png', 'jpg', 'jpeg', 'webp']],
+        'heroSlide2'   => ['setting' => 'heroSlide2Path', 'slug' => 'slide-2', 'max' => [1600, 1600], 'ext' => ['png', 'jpg', 'jpeg', 'webp']],
+        'heroSlide3'   => ['setting' => 'heroSlide3Path', 'slug' => 'slide-3', 'max' => [1600, 1600], 'ext' => ['png', 'jpg', 'jpeg', 'webp']],
+        'heroSlide4'   => ['setting' => 'heroSlide4Path', 'slug' => 'slide-4', 'max' => [1600, 1600], 'ext' => ['png', 'jpg', 'jpeg', 'webp']],
+        'heroSlide5'   => ['setting' => 'heroSlide5Path', 'slug' => 'slide-5', 'max' => [1600, 1600], 'ext' => ['png', 'jpg', 'jpeg', 'webp']],
+        'heroSlide6'   => ['setting' => 'heroSlide6Path', 'slug' => 'slide-6', 'max' => [1600, 1600], 'ext' => ['png', 'jpg', 'jpeg', 'webp']],
     ];
+
+    /**
+     * Keys of the home hero slides (D-084), in order.
+     */
+    public const HERO_SLIDES = ['heroSlide1', 'heroSlide2', 'heroSlide3', 'heroSlide4', 'heroSlide5', 'heroSlide6'];
+
+    /**
+     * URLs of the slides the school uploaded, in order (empty slots skipped).
+     *
+     * @return list<string>
+     */
+    public static function heroSlides(): array
+    {
+        return array_values(array_filter(array_map(self::url(...), self::HERO_SLIDES)));
+    }
 
     /**
      * MIME types ever served from the branding folder.
@@ -73,6 +94,23 @@ class BrandingAssets
         }
 
         return site_url('aset/' . self::ASSETS[$key]['slug']) . '?v=' . substr(md5($file), 0, 8);
+    }
+
+    /**
+     * Width and height of a stored asset as HTML attributes (' width="…" height="…"'), or '' when unknown.
+     * Lets the browser reserve the space before the image arrives, so nothing jumps on reload.
+     */
+    public static function sizeAttributes(string $key): string
+    {
+        $file = self::file($key);
+
+        if ($file === '' || ! is_file(self::DIR . $file)) {
+            return '';
+        }
+
+        [$width, $height] = @getimagesize(self::DIR . $file) ?: [0, 0];
+
+        return $width > 0 && $height > 0 ? ' width="' . $width . '" height="' . $height . '"' : '';
     }
 
     /**

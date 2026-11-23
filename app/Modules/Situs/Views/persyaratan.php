@@ -39,7 +39,7 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
     <section class="mb-10" aria-labelledby="berkas">
         <h2 id="berkas" class="mb-1 text-xl font-bold text-gray-900 dark:text-white"><?= lang('Situs.documentsTitle') ?></h2>
         <?php if ($page['documents'] === []) : ?>
-            <div class="mt-4"><?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noDocumentsTitle'), 'text' => lang('Situs.noDocumentsText'), 'image' => 'state/kosong-data', 'imageAlt' => '']]) ?></div>
+            <div class="mt-4"><?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noDocumentsTitle'), 'text' => lang('Situs.noDocumentsText'), 'image' => 'state/kosong-persyaratan', 'fallback' => 'state/kosong-data', 'imageAlt' => '']]) ?></div>
         <?php else : ?>
             <p class="mb-4 text-gray-600 dark:text-gray-400"><?= lang('Situs.documentsIntro') ?></p>
             <ul class="grid gap-4 md:grid-cols-2">

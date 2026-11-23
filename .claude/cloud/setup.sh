@@ -12,10 +12,14 @@
 set -e
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
-apt-get install -y -qq software-properties-common mysql-server
-# PHP 8.5.13+ (D-069) from the ondrej/php PPA
-add-apt-repository -y ppa:ondrej/php
-apt-get install -y -qq php8.5-cli php8.5-intl php8.5-mbstring php8.5-mysql php8.5-gd php8.5-zip php8.5-xml php8.5-curl
+apt-get install -y -qq ca-certificates curl mysql-server
+# PHP 8.5.13+ (D-069) from packages.sury.org (the ondrej/php PPA is frozen and flaky)
+rm -f /etc/apt/sources.list.d/ondrej-ubuntu-php-*.sources /etc/apt/sources.list.d/ondrej-ubuntu-php-*.list
+curl -fsSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb
+dpkg -i /tmp/debsuryorg-archive-keyring.deb
+echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ $(. /etc/os-release && echo "$VERSION_CODENAME") main" > /etc/apt/sources.list.d/php.list
+apt-get update -qq
+apt-get install -y -qq -o Acquire::Retries=5 php8.5-cli php8.5-intl php8.5-mbstring php8.5-mysql php8.5-gd php8.5-zip php8.5-xml php8.5-curl
 update-alternatives --set php /usr/bin/php8.5
 # Node.js 24 (D-069) from NodeSource; point the image's own node links at it
 curl -fsSL https://deb.nodesource.com/setup_24.x | bash -

@@ -56,7 +56,7 @@ $change   = static fn (array $r): string => view('Modules\Tes\Views\riwayat_jadw
         <div class="p-4">
             <?= view('partials/empty_state', ['empty' => $filtered
                 ? ['title' => lang('TesPenjadwalan.emptySearchTitle'), 'text' => lang('TesPenjadwalan.emptySearchText'), 'icon' => 'search', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]
-                : ['title' => lang('TesPenjadwalan.logEmptyTitle'), 'text' => lang('TesPenjadwalan.logEmptyText'), 'icon' => 'clock', 'image' => 'state/kosong-riwayat', 'imageAlt' => lang('App.altNoData')],
+                : ['title' => lang('TesPenjadwalan.logEmptyTitle'), 'text' => lang('TesPenjadwalan.logEmptyText'), 'icon' => 'clock', 'image' => 'state/kosong-riwayat-jadwal', 'fallback' => 'state/kosong-riwayat', 'imageAlt' => lang('App.altNoData')],
             ]) ?>
         </div>
     <?php else : ?>

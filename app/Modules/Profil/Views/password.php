@@ -6,7 +6,7 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<div class="max-w-xl">
+<div class="">
     <?php if ($forced) : ?>
         <?= view('auth/alert', ['alert' => ['type' => 'warning', 'text' => lang('Akun.passwordForced')]]) ?>
     <?php endif ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Staff sign-in (email + password). Replaces Shield's Bootstrap view.
+ * Staff sign-in (email or username + password, D-080). Replaces Shield's Bootstrap view.
  */
 ?>
 <?php $this->setVar('title', lang('Akun.loginTitle')) ?>
@@ -22,10 +22,11 @@
 <form action="<?= url_to('login') ?>" method="post" class="space-y-5">
     <?= csrf_field() ?>
     <div>
-        <label for="email" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"><?= lang('Akun.email') ?></label>
-        <input type="email" name="email" id="email" inputmode="email" autocomplete="email" required autofocus
-               value="<?= esc((string) old('email'), 'attr') ?>" placeholder="<?= lang('Akun.emailPlaceholder') ?>"
+        <label for="login" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"><?= lang('Akun.loginField') ?></label>
+        <input type="text" name="login" id="login" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required autofocus
+               value="<?= esc((string) (old('login') ?? old('email') ?? old('username')), 'attr') ?>" placeholder="<?= lang('Akun.emailPlaceholder') ?>" aria-describedby="login-help"
                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-gray-900 focus:border-primary-600 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
+        <p id="login-help" class="mt-2 text-sm text-gray-500 dark:text-gray-400"><?= lang('Akun.loginFieldHelp') ?></p>
     </div>
     <div>
         <label for="password" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"><?= lang('Akun.password') ?></label>

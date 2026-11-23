@@ -37,7 +37,7 @@ $actions = static function (array $r, bool $wide) use ($button, $plain, $danger)
     <?= view('partials/empty_state', ['empty' => [
         'title'    => lang('TesJadwal.roomEmptyTitle'),
         'text'     => lang('TesJadwal.roomEmptyText'),
-        'image'    => 'state/kosong-data',
+        'image'    => 'state/kosong-ruang', 'fallback' => 'state/kosong-data',
         'imageAlt' => lang('App.altNoData'),
         'action'   => ['label' => lang('TesJadwal.roomAdd'), 'url' => 'admin/tes/ruang/tambah'],
     ]]) ?>

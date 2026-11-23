@@ -390,3 +390,42 @@ Status: accepted (user, 2026-11-23)
 Context: Daily backups stayed on the VPS itself, so losing the server (failure, break-in, provider) would lose the data and its backups together. The production backups hold personal data (UU PDP).
 Decision: `spmb offsite setup` connects a private Cloudflare R2 bucket (S3 API, token limited to that bucket, Object Read & Write). Every daily and manual `spmb backup <env>` then uploads the archive with restic, encrypted on the server with a random password that is shown once and kept in the password manager; snapshots are tagged by environment and kept 14 daily, 8 weekly, 12 monthly. The backup before a deploy stays local. Bucket URL, keys and password live only in `/opt/apps/spmb/offsite.env` (root, 0600) and the password manager, never in the repository.
 Consequences: A failed upload fails the backup unit while the local archive stays. Restoring on a new server needs the saved `offsite.env` values, then `spmb offsite get` and `spmb restore`. Whoever controls the server can also delete off-site snapshots; R2 bucket lock rules can be added later if that risk matters.
+
+## D-080 — Staff sign in with email or username (2026-11-23)
+Status: accepted (user, 2026-11-23)
+Decision: The sign-in page has one field "Email atau nama pengguna" plus the password. A value with `@` is checked as an email, anything else as the username (Shield `validFields` = email, username). Applicants still have no account (D-008, D-063).
+
+## D-081 — Mobile navigation: bottom bar, right-hand drawer, small top bar (2026-11-23)
+Status: accepted (user, 2026-11-23)
+Decision: Below `md` every page has a fixed bottom bar with five items.
+- Public site: Beranda · Persyaratan · **Daftar** · Jadwal · Cek Status. Daftar sits in the middle, larger and raised above the bar. Items whose module is off are replaced by Panduan / Tanya Jawab so the bar keeps its shape.
+- Dashboard: Dasbor · Data Pendaftar · **Cari pendaftar** (raised, opens the search) · Periksa Berkas · Menu (opens the sidebar). Items are filtered by permission; empty slots fall back to other allowed menu items.
+The top hamburger menu opens as a drawer that slides in from the right (not a drop-down). The public site gets a small bar above the header with the school's social media links and the staff sign-in link (moved out of the footer). Social links are settings (`School.social*`), hidden when empty.
+
+## D-082 — Home page art and three.js (2026-11-23)
+Status: accepted (user, 2026-11-23; extends D-073)
+Decision: Every card on the home page, each "Cara mendaftar" step and every button with a unique function on the home page gets its own Codex art instead of a generic icon or a plain CSS box (briefs 036+). Each empty state with a different condition gets its own painting. Codex art used as icons is shown with a small three.js scene (`resources/js/ikon3d.js`, MIT): it floats and tilts towards the pointer or finger; loaded only on pages that use it, after the page is idle; the plain image stays when WebGL is missing, the device is slow, or `prefers-reduced-motion` is on.
+
+## D-083 — Images are shown as they are in dark mode (2026-11-23)
+Status: accepted (user, 2026-11-23; amends the dark variant rule of D-075)
+Decision: No plate, card or background colour is added behind an illustration in dark mode (no `bg-white` box around the hero, no tinted frame). Images are shown as delivered. New Codex art is delivered on real transparency that reads on both the light and the dark page, so new briefs no longer ask for `-dark` copies; existing `-dark` files keep working through `illustration()`.
+
+## D-084 — Hero slideshow, replaceable by the school (2026-11-23)
+Status: accepted (user, 2026-11-23)
+Decision: The image on the right of the home hero is an automatic slideshow (crossfade, about 6 s, no dots, pauses on hover/focus and when the tab is hidden, no motion under reduced motion). Its default slides are Codex paintings; Admin Sekolah can upload up to 6 own pictures in Identitas Sekolah → Tampilan, which replace the defaults. The edges of every slide fade softly into the page (CSS mask), so no picture shows a straight cut against the text on the left.
+
+## D-085 — School contact block with a Google Maps embed (2026-11-23)
+Status: accepted (user, 2026-11-23)
+Decision: Identitas Sekolah gets a "Peta lokasi" field. Admin Sekolah pastes the Google Maps embed code or link; only an `https://www.google.com/maps/embed?…` URL is stored and shown in an `<iframe>` (lazy, `referrerpolicy="strict-origin-when-cross-origin"`). The home page shows a "Lokasi dan kontak" section with the map, address, phone (tap to call), WhatsApp and email; the footer repeats phone and email.
+
+## D-086 — Public assets are minified, originals kept (2026-11-23)
+Status: accepted (user, 2026-11-23)
+Decision: `npm run build` writes every public asset minified: CSS and JS (already), and SVG files through svgo into `public/assets/img/`, from originals kept unminified in `resources/img/` (the source of truth for SVG). Raster images are already compressed WebP from Codex; their masters stay in `ai/generated/`.
+
+## D-087 — Developer credit and the first client's slogan (2026-11-23)
+Status: accepted (user, 2026-11-23)
+Decision: Both the public and the dashboard footer end with the plain text "Developed by : Mr. F" (no link). SMP NU Al Ma'ruf Kudus's slogan (new setting `School.motto` "Slogan sekolah", shown under the school name on the home page and in the footer; set in the client pack) is "Beriman, Cerdas, Terampil, Mandiri, Berakhlaqul Karimah dan Berwawasan Lingkungan" (standard spelling "Terampil" chosen by the user).
+
+## D-088 — Long text folds, contents highlight, friendlier dates (2026-11-23)
+Status: accepted (user, 2026-11-23)
+Decision: Long blocks (table of contents, long guide sections, long answers) are folded with "Lihat selengkapnya" / "Tutup" (keyboard and screen-reader friendly, open when JavaScript is off). The table of contents on guide pages highlights the section in view. Date fields use the app's own Indonesian date picker (day names and months in Indonesian, quick month and year choice for birth dates, typing still allowed), progressively enhancing `input[type=date]`.

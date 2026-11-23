@@ -76,7 +76,7 @@ $totalQuota  = array_sum(array_map('intval', array_column($sessions, 'quota')));
     <?= view('partials/empty_state', ['empty' => [
         'title'    => lang('TesJadwal.sessionEmptyTitle'),
         'text'     => lang($rooms === [] ? 'TesJadwal.sessionNoRooms' : 'TesJadwal.sessionEmptyText'),
-        'image'    => 'state/kosong-data',
+        'image'    => 'state/kosong-sesi', 'fallback' => 'state/kosong-data',
         'imageAlt' => lang('App.altNoData'),
         'action'   => $rooms === []
             ? ['label' => lang('TesJadwal.roomAdd'), 'url' => 'admin/tes/ruang/tambah']

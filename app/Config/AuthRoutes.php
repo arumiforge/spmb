@@ -17,8 +17,9 @@ class AuthRoutes extends ShieldAuthRoutes
 {
     public array $routes = [
         'login' => [
-            ['get', 'masuk', 'LoginController::loginView', 'login'],
-            ['post', 'masuk', 'LoginController::loginAction'],
+            // Own subclass (leading backslash: no Shield namespace): email or username (D-080).
+            ['get', 'masuk', '\\App\\Controllers\\Auth\\LoginController::loginView', 'login'],
+            ['post', 'masuk', '\\App\\Controllers\\Auth\\LoginController::loginAction'],
         ],
         'logout' => [
             ['get', 'keluar', 'LoginController::logoutAction', 'logout'],

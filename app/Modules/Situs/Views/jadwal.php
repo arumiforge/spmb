@@ -28,7 +28,7 @@ $banner = $page['banner'];
     </header>
 
     <?php if ($page['waves'] === []) : ?>
-        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noWavesTitle'), 'text' => lang('Situs.noWavesText'), 'image' => 'state/kosong-data', 'imageAlt' => '']]) ?>
+        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noWavesTitle'), 'text' => lang('Situs.noWavesText'), 'image' => 'state/kosong-jadwal-pendaftaran', 'fallback' => 'state/kosong-data', 'imageAlt' => '']]) ?>
     <?php else : ?>
         <div class="mb-6 flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between <?= $banners[$banner['state']]['box'] ?>" role="status">
             <p class="flex items-start gap-3 font-medium"><?= icon($banners[$banner['state']]['icon'], 'h-6 w-6 shrink-0') ?><span><?= esc($banner['text']) ?></span></p>

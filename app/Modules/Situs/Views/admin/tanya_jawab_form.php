@@ -12,7 +12,7 @@ $card   = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gra
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= $action ?>" class="max-w-3xl space-y-6">
+<form method="post" action="<?= $action ?>" class="form-lebar">
     <?= csrf_field() ?>
     <section class="<?= $card ?>">
         <div class="grid grid-cols-1 gap-5">

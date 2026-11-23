@@ -38,7 +38,7 @@ $whatsapp = (string) setting('School.whatsapp');
     <article class="guide min-w-0 max-w-3xl">
         <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">Panduan <?= esc($role['title']) ?></h1>
         <p class="mt-2 text-lg text-gray-500 dark:text-gray-400"><?= esc($role['description']) ?></p>
-        <div class="mt-6 overflow-hidden rounded-2xl bg-white">
+        <div class="mt-6">
             <?= $slug === 'calon-murid'
                 ? illustration('guide/panduan-calon-murid', lang('App.altGuideApplicant'), 'mx-auto h-48 w-auto sm:h-64', false)
                 : illustration('guide/panduan-petugas', lang('App.altGuideStaff'), 'mx-auto h-48 w-auto sm:h-64', false) ?>

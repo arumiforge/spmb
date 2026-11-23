@@ -4,9 +4,12 @@
 return [
     // Sign in
     'loginTitle'       => 'Masuk ke Akun Petugas',
-    'loginIntro'       => 'Gunakan email dan kata sandi yang diberikan oleh Admin Sekolah.',
+    'loginIntro'       => 'Gunakan email atau nama pengguna dan kata sandi yang diberikan oleh Admin Sekolah.',
     'email'            => 'Email',
     'emailPlaceholder' => 'nama@sekolah.sch.id',
+    'loginField'       => 'Email atau nama pengguna',
+    'loginFieldHelp'   => 'Contoh: nama@sekolah.sch.id atau budi.santoso',
+    'loginFieldRequired' => 'Isi email atau nama pengguna Anda.',
     'password'         => 'Kata sandi',
     'rememberMe'       => 'Ingat saya di perangkat ini',
     'loginButton'      => 'Masuk',

@@ -15,7 +15,7 @@ $rows = [
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<div class="grid max-w-5xl grid-cols-1 gap-4 lg:grid-cols-2">
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
     <section class="rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
         <div class="mb-5 flex items-center gap-4">
             <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-600 text-xl font-semibold text-white"><?= esc(initials($user->full_name ?: $user->username)) ?></span>

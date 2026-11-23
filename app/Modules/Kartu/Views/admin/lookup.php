@@ -15,7 +15,7 @@ $cards  = [
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<div class="grid max-w-5xl gap-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
+<div class="grid gap-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
     <form method="get" action="<?= url_to('kartu.cari') ?>" role="search" class="self-start rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800">
         <label for="q" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"><?= lang('Kartu.lookupLabel') ?></label>
         <div class="relative">
@@ -32,9 +32,9 @@ $cards  = [
     <section aria-labelledby="hasil" aria-live="polite">
         <h2 id="hasil" class="sr-only"><?= lang('Kartu.lookupResult') ?></h2>
         <?php if ($result === null) : ?>
-            <?= view('partials/empty_state', ['empty' => ['title' => lang('Kartu.lookupEmptyTitle'), 'text' => lang('Kartu.lookupEmptyText'), 'image' => 'state/kosong-pencarian', 'imageAlt' => '']]) ?>
+            <?= view('partials/empty_state', ['empty' => ['title' => lang('Kartu.lookupEmptyTitle'), 'text' => lang('Kartu.lookupEmptyText'), 'image' => 'state/kartu-cari', 'fallback' => 'state/kosong-pencarian', 'imageAlt' => '']]) ?>
         <?php elseif (! $result['found']) : ?>
-            <?= view('partials/empty_state', ['empty' => ['title' => lang('Kartu.lookupNotFoundTitle'), 'text' => lang('Kartu.lookupNotFound', [mb_substr($lookup['query'], 0, 60)]), 'image' => 'state/tidak-ditemukan', 'imageAlt' => '']]) ?>
+            <?= view('partials/empty_state', ['empty' => ['title' => lang('Kartu.lookupNotFoundTitle'), 'text' => lang('Kartu.lookupNotFound', [mb_substr($lookup['query'], 0, 60)]), 'image' => 'state/kartu-tidak-ditemukan', 'fallback' => 'state/tidak-ditemukan', 'imageAlt' => '']]) ?>
         <?php else : ?>
             <?php
             $applicant = $result['applicant'];

@@ -15,7 +15,7 @@ $back   = $applicant === null ? url_to('pendaftar') : url_to('pendaftar.detail',
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= esc($action, 'attr') ?>" class="max-w-3xl space-y-6" novalidate>
+<form method="post" action="<?= esc($action, 'attr') ?>" class="form-lebar" novalidate>
     <?= csrf_field() ?>
 
     <?php if ($duplicates !== []) : ?>

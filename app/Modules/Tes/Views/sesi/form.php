@@ -26,7 +26,7 @@ $action      = $session === null ? url_to('tes.sesi.tambah') : url_to('tes.sesi.
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= esc($action, 'attr') ?>" class="max-w-3xl space-y-6">
+<form method="post" action="<?= esc($action, 'attr') ?>" class="form-lebar">
     <?= csrf_field() ?>
 
     <?php if ($confirm !== null) : ?>

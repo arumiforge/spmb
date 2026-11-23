@@ -245,3 +245,176 @@ if (! function_exists('brand_asset_url')) {
         return BrandingAssets::url($key);
     }
 }
+
+if (! function_exists('social_icon')) {
+    /**
+     * Brand mark of a social network (instagram, facebook, youtube, tiktok, whatsapp) from Simple Icons
+     * (CC0), copied into lucide_icons.php by `npm run icons`. Filled with currentColor.
+     */
+    function social_icon(string $network, string $class = 'h-5 w-5'): string
+    {
+        static $set = null;
+        $set ??= require __DIR__ . '/lucide_icons.php';
+        $path = $set['brands'][$network] ?? null;
+
+        if ($path === null) {
+            return icon('external-link', $class);
+        }
+
+        return '<svg class="' . esc($class) . '" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">'
+            . '<path d="' . esc($path, 'attr') . '"/></svg>';
+    }
+}
+
+if (! function_exists('whatsapp_url')) {
+    /**
+     * wa.me link for an Indonesian number as typed in settings ("0812 3456 7890" → https://wa.me/6281234567890).
+     */
+    function whatsapp_url(string $number, string $text = ''): string
+    {
+        $digits = preg_replace('/\D+/', '', $number) ?? '';
+
+        if (str_starts_with($digits, '0')) {
+            $digits = '62' . substr($digits, 1);
+        }
+
+        return 'https://wa.me/' . $digits . ($text !== '' ? '?text=' . rawurlencode($text) : '');
+    }
+}
+
+if (! function_exists('school_social_links')) {
+    /**
+     * Social media links set in Identitas Sekolah, in display order (D-081).
+     *
+     * @return list<array{network: string, label: string, url: string}>
+     */
+    function school_social_links(): array
+    {
+        $links = [];
+
+        foreach (['instagram' => 'Instagram', 'facebook' => 'Facebook', 'youtube' => 'YouTube', 'tiktok' => 'TikTok'] as $network => $label) {
+            $url = trim((string) setting('School.social' . ucfirst($network)));
+
+            if ($url !== '' && preg_match('#\Ahttps?://#i', $url) === 1) {
+                $links[] = ['network' => $network, 'label' => $label, 'url' => $url];
+            }
+        }
+
+        $whatsapp = (string) setting('School.whatsapp');
+
+        if ($whatsapp !== '') {
+            $links[] = ['network' => 'whatsapp', 'label' => 'WhatsApp', 'url' => whatsapp_url($whatsapp)];
+        }
+
+        return $links;
+    }
+}
+
+if (! function_exists('map_embed_url')) {
+    /**
+     * The Google Maps embed URL from what Admin Sekolah pasted (the whole <iframe> code or only its src),
+     * or '' when it is not a Google Maps embed (D-085). Only https://www.google.com/maps/embed?… is accepted.
+     */
+    function map_embed_url(string $input): string
+    {
+        $input = trim(html_entity_decode($input, ENT_QUOTES | ENT_HTML5));
+
+        if (preg_match('/src\s*=\s*(["\'])(.*?)\1/is', $input, $m) === 1) {
+            $input = $m[2];
+        }
+
+        // Google puts apostrophes from place names ("Ma'ruf") in the URL as they are.
+        $input = str_replace(["'", ' '], ['%27', '%20'], trim($input));
+
+        if (preg_match('#\Ahttps://(www\.)?google\.com/maps/embed\?[A-Za-z0-9!%._~:/?=&*+,;@-]+\z#', $input) !== 1 || strlen($input) > 2000) {
+            return '';
+        }
+
+        return preg_replace('#\Ahttps://google\.com/#', 'https://www.google.com/', $input) ?? '';
+    }
+}
+
+if (! function_exists('public_nav')) {
+    /**
+     * Public website menu: Beranda and Panduan plus the links of enabled modules (Config/PublicMenu.php),
+     * sorted, each with an icon and whether it is the current page.
+     *
+     * @return list<array{label: string, url: string, icon: string, active: bool}>
+     */
+    function public_nav(): array
+    {
+        $nav = [
+            ['label' => lang('App.home'), 'url' => '/', 'order' => 0],
+            ['label' => lang('App.guide'), 'url' => 'panduan', 'order' => 90],
+            ...service('modules')->collect('Config/PublicMenu.php'),
+        ];
+        usort($nav, static fn (array $a, array $b): int => ($a['order'] ?? 50) <=> ($b['order'] ?? 50));
+
+        $icons = ['/' => 'house', 'persyaratan' => 'clipboard-list', 'daftar' => 'user-round-plus', 'jadwal' => 'calendar-days',
+            'cek-status' => 'search', 'panduan' => 'book-open', 'tanya-jawab' => 'message-circle-question-mark'];
+        $current = trim(uri_string(), '/');
+
+        return array_map(static function (array $item) use ($icons, $current): array {
+            $url = trim($item['url'], '/');
+
+            return [
+                'label'  => $item['label'],
+                'url'    => $item['url'],
+                'icon'   => $icons[$item['url']] ?? 'chevron-right',
+                'active' => $item['url'] === '/' ? $current === '' : ($current === $url || str_starts_with($current . '/', $url . '/')),
+            ];
+        }, $nav);
+    }
+}
+
+if (! function_exists('public_bottom_nav')) {
+    /**
+     * Mobile bottom bar of the public site (D-081): Beranda · Persyaratan · DAFTAR · Jadwal · Cek Status.
+     * A slot whose module is off takes the next unused fallback, so the bar keeps its shape.
+     *
+     * @param list<array{label: string, url: string, icon: string, active: bool}> $nav public_nav()
+     *
+     * @return list<array{label: string, url: string, icon: string, active: bool, center: bool}>
+     */
+    function public_bottom_nav(array $nav): array
+    {
+        $byUrl  = array_column($nav, null, 'url');
+        $used   = [];
+        $bottom = [];
+
+        foreach ([['/'], ['persyaratan', 'panduan', 'tanya-jawab'], ['daftar'], ['jadwal', 'tanya-jawab', 'panduan'], ['cek-status', 'panduan', 'tanya-jawab']] as $wanted) {
+            foreach ($wanted as $url) {
+                if (isset($byUrl[$url]) && ! in_array($url, $used, true)) {
+                    $used[]   = $url;
+                    $bottom[] = $byUrl[$url] + ['center' => $url === 'daftar'];
+                    if ($url === 'daftar') {
+                        $bottom[array_key_last($bottom)]['label'] = lang('App.navRegister');
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return $bottom;
+    }
+}
+
+if (! function_exists('art_icon')) {
+    /**
+     * A Codex painted icon (public/assets/img/<path>.webp, D-082) inside a three.js-ready holder
+     * ([data-ikon-3d]: it floats and tilts once ikon3d.js runs). While the painting is not delivered
+     * yet, the Lucide icon $fallback is shown instead, without 3D.
+     */
+    function art_icon(string $path, string $fallback, string $class = 'h-20 w-20', string $alt = ''): string
+    {
+        $picture = illustration($path, $alt, 'h-full w-full object-contain');
+
+        if ($picture === '') {
+            return '<span class="inline-flex ' . esc($class) . ' items-center justify-center text-primary-600 dark:text-primary-400" aria-hidden="true">'
+                . icon($fallback, 'h-3/5 w-3/5') . '</span>';
+        }
+
+        return '<span class="ikon-3d ' . esc($class) . '" data-ikon-3d' . ($alt === '' ? ' aria-hidden="true"' : '') . '>' . $picture . '</span>';
+    }
+}

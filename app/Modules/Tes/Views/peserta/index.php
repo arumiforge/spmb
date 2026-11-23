@@ -62,7 +62,7 @@ $select = static function (string $name, string $all, array $options) use ($filt
         <div class="p-4">
             <?= view('partials/empty_state', ['empty' => $filtered
                 ? ['title' => lang('TesPenjadwalan.emptySearchTitle'), 'text' => lang('TesPenjadwalan.emptySearchText'), 'icon' => 'search', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]
-                : ['title' => lang('TesPenjadwalan.emptyTitle'), 'text' => lang('TesPenjadwalan.emptyText'), 'icon' => 'users', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => $canAtur ? ['label' => lang('TesPenjadwalan.toAllocation'), 'url' => 'admin/tes/penjadwalan'] : null],
+                : ['title' => lang('TesPenjadwalan.emptyTitle'), 'text' => lang('TesPenjadwalan.emptyText'), 'icon' => 'users', 'image' => 'state/kosong-peserta', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => $canAtur ? ['label' => lang('TesPenjadwalan.toAllocation'), 'url' => 'admin/tes/penjadwalan'] : null],
             ]) ?>
         </div>
     <?php else : ?>

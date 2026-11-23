@@ -5,3 +5,7 @@ bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300
 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300
 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300
 bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300
+lg:grid-cols-2
+lg:grid-cols-3
+lg:grid-cols-4
+lg:grid-cols-5

@@ -42,7 +42,7 @@ $move = static function (string $action, array $hidden, string $direction, bool 
 
 <?= $this->section('content') ?>
 <?php if ($groups === []) : ?>
-    <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.qaAdminEmptyTitle'), 'text' => lang('Situs.qaAdminEmptyText'), 'icon' => 'message-circle-question-mark', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => ['label' => lang('Situs.qaAdd'), 'url' => 'admin/tanya-jawab/tambah']]]) ?>
+    <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.qaAdminEmptyTitle'), 'text' => lang('Situs.qaAdminEmptyText'), 'icon' => 'message-circle-question-mark', 'image' => 'state/kosong-tanya-jawab', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => ['label' => lang('Situs.qaAdd'), 'url' => 'admin/tanya-jawab/tambah']]]) ?>
 <?php else : ?>
     <div class="space-y-6">
         <?php if ($incomplete > 0) : ?>

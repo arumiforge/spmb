@@ -65,7 +65,7 @@ $select   = static function (string $name, string $all, array $options) use ($fi
         <div class="p-4">
             <?= view('partials/empty_state', ['empty' => $filtered
                 ? ['title' => lang('Pendaftaran.emptySearchTitle'), 'text' => lang('Pendaftaran.emptySearchText'), 'icon' => 'search', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]
-                : ['title' => lang('Pendaftaran.emptyTitle'), 'text' => lang('Pendaftaran.emptyText'), 'icon' => 'users', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => $canCreate ? ['label' => lang('Pendaftaran.add'), 'url' => 'admin/pendaftar/tambah'] : null],
+                : ['title' => lang('Pendaftaran.emptyTitle'), 'text' => lang('Pendaftaran.emptyText'), 'icon' => 'users', 'image' => 'state/kosong-pendaftar', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => $canCreate ? ['label' => lang('Pendaftaran.add'), 'url' => 'admin/pendaftar/tambah'] : null],
             ]) ?>
         </div>
     <?php else : ?>

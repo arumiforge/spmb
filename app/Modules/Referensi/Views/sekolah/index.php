@@ -78,7 +78,7 @@ $filtered = array_filter($filters) !== [];
         <div class="p-4">
             <?= view('partials/empty_state', ['empty' => $filtered
                 ? ['title' => lang('Referensi.noResultTitle'), 'text' => lang('Referensi.noResultText'), 'icon' => 'school', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]
-                : ['title' => lang('Referensi.emptyTitle'), 'text' => lang('Referensi.emptyText'), 'icon' => 'school', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
+                : ['title' => lang('Referensi.emptyTitle'), 'text' => lang('Referensi.emptyText'), 'icon' => 'school', 'image' => 'state/kosong-sekolah-asal', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
         </div>
     <?php else : ?>
         <!-- Table on md and up -->

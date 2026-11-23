@@ -8,7 +8,7 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('pengaturan.keamanan') ?>" class="max-w-3xl rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
+<form method="post" action="<?= url_to('pengaturan.keamanan') ?>" class="rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
     <?= csrf_field() ?>
     <fieldset>
         <legend class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Pengaturan.requiredRoles') ?></legend>

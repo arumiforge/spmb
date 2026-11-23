@@ -23,7 +23,7 @@ $active  = $editing && (int) $school['is_active'] === 1;
 <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
     <form method="post" action="<?= $action ?>" class="space-y-6 xl:col-span-2">
         <?= csrf_field() ?>
-        <section class="<?= $card ?> max-w-3xl">
+        <section class="<?= $card ?>">
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div class="sm:col-span-2"><?= view('partials/form_field', ['field' => ['name' => 'name', 'label' => lang('Referensi.field.name'), 'required' => true, 'value' => $school['name'] ?? '', 'help' => lang('Referensi.nameHelp'), 'attrs' => ['maxlength' => '150', 'autocomplete' => 'off']]]) ?></div>
                 <?= view('partials/form_field', ['field' => ['name' => 'level', 'label' => lang('Referensi.field.level'), 'type' => 'select', 'required' => true, 'options' => $levels, 'value' => $school['level'] ?? 'SD']]) ?>
@@ -32,7 +32,7 @@ $active  = $editing && (int) $school['is_active'] === 1;
             </div>
         </section>
 
-        <section class="<?= $card ?> max-w-3xl">
+        <section class="<?= $card ?>">
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <?= view('partials/form_field', ['field' => ['name' => 'province', 'label' => lang('Referensi.field.province'), 'value' => $school['province'] ?? ($provinces[0] ?? ''), 'attrs' => ['maxlength' => '60', 'list' => 'province-options']]]) ?>
                 <?= view('partials/form_field', ['field' => ['name' => 'regency', 'label' => lang('Referensi.field.regency'), 'value' => $school['regency'] ?? '', 'help' => lang('Referensi.regencyHelp'), 'attrs' => ['maxlength' => '60']]]) ?>
@@ -45,7 +45,7 @@ $active  = $editing && (int) $school['is_active'] === 1;
             </datalist>
         </section>
 
-        <div class="flex max-w-3xl flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <a href="<?= url_to('referensi.sekolah') ?>" class="<?= $btnSec ?> text-center"><?= lang('App.back') ?></a>
             <button type="submit" class="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800"><?= lang('Referensi.save') ?></button>
         </div>

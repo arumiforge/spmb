@@ -27,7 +27,7 @@ $chip    = 'inline-flex min-h-10 items-center gap-2 rounded-lg border px-3 py-2 
             <?= view('partials/empty_state', ['empty' => [
                 'title'    => lang('TesKehadiran.noSessions'),
                 'text'     => $isToday ? lang('TesKehadiran.noToday') : lang('TesKehadiran.noOnDate'),
-                'image'    => 'state/kosong-data',
+                'image'    => 'state/kosong-sesi-hari-ini', 'fallback' => 'state/kosong-data',
                 'imageAlt' => lang('App.altNoData'),
             ]]) ?>
         <?php else : ?>

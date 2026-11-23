@@ -15,7 +15,7 @@ $btnDanger    = 'rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-whit
 
 <?= $this->section('content') ?>
 <?php if ($enabled) : ?>
-    <div class="grid max-w-5xl grid-cols-1 gap-4 lg:grid-cols-2">
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <section class="rounded-lg border border-gray-200 bg-white p-5 sm:p-6 lg:col-span-2 dark:border-gray-700 dark:bg-gray-800">
             <div class="flex items-start gap-4">
                 <?= icon('shield', 'h-7 w-7 shrink-0 text-green-700 dark:text-green-400') ?>
@@ -56,7 +56,7 @@ $btnDanger    = 'rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-whit
         <?php endif ?>
     </div>
 <?php else : ?>
-    <section class="max-w-4xl rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
+    <section class="rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
         <ol class="space-y-6">
             <li class="flex gap-4">
                 <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-100 font-semibold text-primary-700 dark:bg-gray-700 dark:text-primary-300">1</span>

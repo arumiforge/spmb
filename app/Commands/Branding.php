@@ -70,6 +70,10 @@ class Branding extends BaseCommand
                 continue;
             }
 
+            if ($key === 'mapEmbed') {
+                $value = map_embed_url($value);
+            }
+
             if ($key === 'primaryColor' && valid_hex_color($value) === null) {
                 CLI::error("primaryColor {$value} is not a #rrggbb colour.");
 

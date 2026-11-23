@@ -13,6 +13,45 @@ $user     = auth()->user();
 $name     = $user->full_name ?: $user->username;
 $menu     = service('menu')->forUser($user, uri_string());
 $subtitle ??= null;
+
+// Mobile bottom bar (D-081): Dasbor · Data Pendaftar · CARI (raised) · Periksa Berkas · Menu,
+// only with links this user may open; a missing slot takes the next allowed fallback.
+$allowed = [];
+foreach ($menu as $group) {
+    foreach ($group['items'] as $item) {
+        $allowed[trim($item['url'], '/')] = $item;
+    }
+}
+$used = [];
+$pick = static function (array $urls) use ($allowed, &$used): ?array {
+    foreach ($urls as $url) {
+        if (isset($allowed[$url]) && ! in_array($url, $used, true)) {
+            $used[] = $url;
+
+            return $allowed[$url];
+        }
+    }
+
+    return null;
+};
+$short  = ['admin' => lang('App.dashboard'), 'admin/pendaftar' => lang('App.navApplicants'), 'admin/berkas' => lang('App.navDocuments'),
+    'admin/tes/kehadiran' => lang('App.navAttendance'), 'admin/kartu' => lang('App.navCards'), 'admin/tes/peserta' => lang('App.navTestTakers')];
+$toItem = static fn (array $item): array => ['label' => $short[trim($item['url'], '/')] ?? $item['label'], 'url' => $item['url'], 'icon' => $item['icon'] ?? 'info', 'active' => $item['active']];
+$canSearch = isset($allowed['admin/pendaftar']);
+$bottom    = [];
+if (($first = $pick(['admin'])) !== null) {
+    $bottom[] = $toItem($first);
+}
+if (($second = $pick(['admin/pendaftar', 'admin/tes/kehadiran', 'admin/kartu'])) !== null) {
+    $bottom[] = $toItem($second);
+}
+if ($canSearch) {
+    $bottom[] = ['label' => lang('App.searchApplicant'), 'icon' => 'user-round-search', 'center' => true, 'attrs' => 'data-dialog-open="cari-cepat" aria-haspopup="dialog"'];
+}
+if (($fourth = $pick(['admin/berkas', 'admin/tes/kehadiran', 'admin/kartu', 'admin/tes/peserta', 'panduan'])) !== null) {
+    $bottom[] = $toItem($fourth);
+}
+$bottom[] = ['label' => lang('App.menu'), 'icon' => 'menu', 'attrs' => 'data-drawer-target="sidebar" data-drawer-toggle="sidebar" aria-controls="sidebar"'];
 ?>
 <!doctype html>
 <html lang="id">
@@ -20,7 +59,7 @@ $subtitle ??= null;
     <?= view('partials/head', ['title' => $title ?? '']) ?>
     <?= $this->renderSection('head') ?>
 </head>
-<body class="bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100">
+<body class="bg-gray-50 pb-24 text-gray-900 antialiased md:pb-0 dark:bg-gray-900 dark:text-gray-100">
 <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-primary-700 focus:shadow"><?= lang('App.skipToContent') ?></a>
 
 <nav class="fixed top-0 z-40 flex h-16 w-full items-center border-b border-gray-200 bg-white px-3 sm:px-4 dark:border-gray-700 dark:bg-gray-800">
@@ -111,10 +150,32 @@ $subtitle ??= null;
         </div>
         <?= $this->renderSection('content') ?>
     </main>
-    <footer class="px-4 pb-6 text-sm text-gray-500 sm:px-6 dark:text-gray-400">
-        &copy; <?= date('Y') ?> <?= esc(setting('School.name')) ?>
+    <footer class="flex flex-col gap-1 px-4 pb-6 text-sm text-gray-500 sm:flex-row sm:justify-between sm:px-6 dark:text-gray-400">
+        <p>&copy; <?= date('Y') ?> <?= esc(setting('School.name')) ?></p>
+        <p><?= lang('App.developedBy') ?></p>
     </footer>
 </div>
+
+<?= view('partials/bottom_nav', ['bottomNav' => ['label' => lang('App.bottomNavLabel'), 'items' => $bottom]]) ?>
+<?php if ($canSearch) : ?>
+    <dialog id="cari-cepat" class="lembar-cari" aria-labelledby="cari-cepat-judul">
+        <form method="get" action="<?= site_url('admin/pendaftar') ?>" class="space-y-4 p-5">
+            <div class="flex items-center justify-between gap-3">
+                <h2 id="cari-cepat-judul" class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('App.quickSearchTitle') ?></h2>
+                <button type="button" data-dialog-close class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700">
+                    <?= icon('x', 'h-5 w-5') ?><span class="sr-only"><?= lang('App.close') ?></span>
+                </button>
+            </div>
+            <label for="cari-cepat-q" class="sr-only"><?= lang('App.quickSearchLabel') ?></label>
+            <div class="relative">
+                <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-gray-500"><?= icon('search', 'h-5 w-5') ?></span>
+                <input type="search" id="cari-cepat-q" name="q" required autocomplete="off" enterkeyhint="search" placeholder="<?= lang('App.quickSearchPlaceholder') ?>"
+                       class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3.5 ps-11 text-base text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+            </div>
+            <button type="submit" class="w-full rounded-xl bg-primary-600 px-5 py-3 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800"><?= lang('App.search') ?></button>
+        </form>
+    </dialog>
+<?php endif ?>
 
 <?= view('partials/flash') ?>
 <script src="<?= esc(asset_url('app.js'), 'attr') ?>"></script>
