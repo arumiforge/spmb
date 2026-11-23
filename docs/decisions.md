@@ -384,3 +384,9 @@ Status: accepted (user, 2026-11-23)
 Context: Pages followed the device theme (`prefers-color-scheme`) until a visitor used the theme toggle, so phones and laptops set to dark showed the school's site dark on first visit.
 Decision: Every page starts light, whatever the device theme. Dark mode applies only after someone picks it with the theme toggle (remembered per browser as `spmb-theme`). The plain error page is light only.
 Consequences: Dark variants of illustrations, logos and charts stay in use for people who choose dark mode.
+
+## D-079 — Off-site backups to Cloudflare R2 with restic (2026-11-23)
+Status: accepted (user, 2026-11-23)
+Context: Daily backups stayed on the VPS itself, so losing the server (failure, break-in, provider) would lose the data and its backups together. The production backups hold personal data (UU PDP).
+Decision: `spmb offsite setup` connects a private Cloudflare R2 bucket (S3 API, token limited to that bucket, Object Read & Write). Every daily and manual `spmb backup <env>` then uploads the archive with restic, encrypted on the server with a random password that is shown once and kept in the password manager; snapshots are tagged by environment and kept 14 daily, 8 weekly, 12 monthly. The backup before a deploy stays local. Bucket URL, keys and password live only in `/opt/apps/spmb/offsite.env` (root, 0600) and the password manager, never in the repository.
+Consequences: A failed upload fails the backup unit while the local archive stays. Restoring on a new server needs the saved `offsite.env` values, then `spmb offsite get` and `spmb restore`. Whoever controls the server can also delete off-site snapshots; R2 bucket lock rules can be added later if that risk matters.

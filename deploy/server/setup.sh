@@ -80,7 +80,7 @@ step "Base packages"
 apt_get update -q
 apt_get install -y -q --no-install-recommends \
     ca-certificates curl gnupg git openssl ufw unattended-upgrades apt-transport-https \
-    rsync less nano htop jq cron
+    rsync less nano htop jq cron restic
 timedatectl set-timezone Asia/Jakarta 2>/dev/null || true
 
 step "Security updates (automatic, no automatic reboot)"

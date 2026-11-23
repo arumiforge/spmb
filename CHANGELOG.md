@@ -5,6 +5,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Off-site backups (D-079): `spmb offsite setup|status|get`; daily and manual backups also upload an encrypted copy
+  (restic) to a private Cloudflare R2 bucket; `setup.sh` installs restic; `spmb status` shows the last upload.
 - `spmb domain <env> <domain>` changes an environment's domain on the server (stack.env, `app.baseURL`), restarts the
   app, checks it and prints the Cloudflare steps.
 - Codex visual kit installed (briefs 015–018): tileable patterns, section dividers, the special "Daftar Sekarang"
