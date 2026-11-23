@@ -54,6 +54,7 @@ spmb backup production              # also daily via spmb-backup@production.time
 spmb restore production /opt/apps/spmb/production/backups/spmb-production-<time>.tar
 spmb spark production spmb:install  # any spark command in the app container
 spmb domain production <domain>     # change a domain (stack.env + app.baseURL, restart, check)
+spmb offsite setup                  # encrypted off-site copies to Cloudflare R2 (D-079); then status / get <env>
 spmb status; spmb logs staging app
 ```
 

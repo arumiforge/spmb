@@ -187,7 +187,8 @@ Server IPs, ports and passwords stay out of the repository.
 | Back to the previous image | `spmb rollback <env>` |
 | Overview | `spmb status` |
 | Logs | `spmb logs <env> [web|app|db]` |
-| Backup now | `spmb backup <env>` |
+| Backup now (also off-site when set up) | `spmb backup <env>` |
+| Off-site backups | `spmb offsite setup` · `spmb offsite status` · `spmb offsite get <env> [snapshot]` |
 | Restore | `spmb restore <env> /opt/apps/spmb/<env>/backups/<file>.tar` |
 | Spark command | `spmb spark <env> <command> [args]`, e.g. `spmb spark production spmb:install` |
 | Change a domain | `spmb domain <env> <new domain>` (production asks; see "Changing a domain") |
@@ -221,10 +222,30 @@ time (lock file).
   `uploads.tar.gz` (`writable/uploads`: documents, photos, branding), `app.env` (with `encryption.key`)
   and `backup.info` (environment, time, image, commit). Archives are `0600` in a `0700` folder; they are
   kept 14 days.
-- **Copy production backups off the server** (they hold personal data: encrypted storage only, e.g. a
-  private bucket or the developer's encrypted disk). Pull them over the tunnel, e.g. with Bitvise SFTP or
-  `rsync` through `cloudflared access ssh`.
+- **Off-site copies (D-079):** after `spmb offsite setup`, every daily and manual `spmb backup <env>` also
+  uploads the archive, encrypted by restic on the server, to a private Cloudflare R2 bucket. Retention there:
+  14 daily, 8 weekly, 12 monthly per environment. The backup before a deploy stays local only.
 - Restore drill: monthly, restore a **staging** backup on staging (`spmb restore staging <file>`).
+
+### Off-site backups (Cloudflare R2)
+
+1. Cloudflare → **R2** → create a private bucket (no public access, no custom domain).
+2. R2 → **Manage API tokens** → *Create API token*: permission **Object Read & Write**, **only this bucket**.
+   Note the *Access Key ID* and *Secret Access Key* (shown once) and the S3 endpoint
+   `https://<account id>.r2.cloudflarestorage.com`. Never put them in the repository or in a chat.
+3. On the server: `spmb offsite setup`. It asks for the bucket URL (`https://<account id>.r2.cloudflarestorage.com/<bucket>`)
+   and both keys, writes `/opt/apps/spmb/offsite.env` (root, `0600`), creates the restic repository
+   (`<bucket>/spmb`) and prints the **encryption password once**: save it in the password manager. Without it
+   the off-site backups cannot be read.
+4. First upload: `spmb backup production` (and `spmb backup staging`). Check with `spmb offsite status`;
+   `spmb status` shows the last upload.
+5. Restore from off-site (e.g. on a new server): `spmb offsite setup` cannot reuse an existing repository, so
+   copy `offsite.env` from the password manager (bucket URL, keys, `RESTIC_PASSWORD`) to
+   `/opt/apps/spmb/offsite.env` (`chmod 600`), then `spmb offsite get production` (or a snapshot ID from
+   `spmb offsite status`) and `spmb restore production <file>`.
+
+A failed upload makes `spmb backup` (and the systemd unit) fail while the local archive stays; check
+`systemctl status spmb-backup@production` or run `spmb backup production` by hand.
 
 ### Restore
 

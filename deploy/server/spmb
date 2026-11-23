@@ -31,8 +31,12 @@ PORT_MIN=8100
 PORT_MAX=8199
 KEEP_IMAGES=5
 KEEP_BACKUP_DAYS=14
+OFFSITE_FILE="$APP_DIR/offsite.env"
+OFFSITE_LAST="$APP_DIR/offsite.last"
+OFFSITE_HOST=spmb
 ASSUME_YES=0
 ROLLBACK_PREVIOUS=""
+LAST_BACKUP=""
 
 say()  { printf '%s\n' "$*"; }
 step() { printf '\n== %s\n' "$*"; }
@@ -51,11 +55,17 @@ Usage: spmb <command> [arguments]
   rollback <env>              Switch back to the previous image (the database is not rolled back).
   status                      Environments, ports, images, containers.
   logs <env> [service]        Follow the logs (services: web, app, db).
-  backup <env>                Database dump + uploaded files into <env>/backups/ (kept 14 days).
+  backup <env>                Database dump + uploaded files into <env>/backups/ (kept 14 days), then
+                              an encrypted copy off-site when `offsite setup` was done.
   restore <env> <file>        Restore a backup made by `spmb backup` (asks first).
   spark <env> <args...>       Run `php spark <args...>` in the app container.
   domain <env> <domain>       Change the domain of an environment (stack.env, app.baseURL), restart
                               the app and check it; prints the Cloudflare steps.
+  offsite setup               Connect off-site backups (restic, encrypted) to an S3 bucket such as
+                              Cloudflare R2; asks for the bucket URL and keys.
+  offsite status              Snapshots kept off-site and the last upload.
+  offsite get <env> [id]      Download an off-site backup (default: latest) into <env>/backups/,
+                              ready for `spmb restore`.
 
 Options: -y / --yes answers "yes" to confirmations (production deploy, restore, production domain).
 USAGE
@@ -540,6 +550,11 @@ cmd_status() {
     printf '\n== host\n'
     say "   cloudflared $(systemctl is-active cloudflared 2>/dev/null || echo unknown), cockpit $(systemctl is-active cockpit.socket 2>/dev/null || echo unknown)"
     say "   disk $(df -h "$SPMB_ROOT" | awk 'NR == 2 {print $4 " free of " $2}')"
+    if [ -f "$OFFSITE_FILE" ]; then
+        say "   offsite last upload $(cat "$OFFSITE_LAST" 2>/dev/null || echo none) (spmb offsite status)"
+    else
+        say "   offsite not set up (spmb offsite setup)"
+    fi
 }
 
 cmd_logs() {
@@ -567,6 +582,10 @@ cmd_backup() {
     require_init "$env"
     lock
     cmd_backup_unlocked "$env"
+    # Daily and manual backups also go off-site; the backup before a deploy stays local.
+    if [ -f "$OFFSITE_FILE" ]; then
+        offsite_push "$env" "$LAST_BACKUP" || die "The local backup is fine, but the off-site copy failed (see above)."
+    fi
 }
 
 cmd_backup_unlocked() {
@@ -592,7 +611,130 @@ cmd_backup_unlocked() {
     (umask 077 && tar -C "$work" -cf "$archive" backup.info db.sql.gz uploads.tar.gz app.env)
     rm -rf "$work"
     find "$dir/backups" -name "spmb-$env-*.tar" -mtime +$((KEEP_BACKUP_DAYS - 1)) -delete
+    LAST_BACKUP="$archive"
     say "   Backup: $archive ($(du -h "$archive" | cut -f1))"
+}
+
+# --- off-site backups (restic, D-079) -------------------------------------------------------
+# One restic repository for the server; snapshots are tagged with the environment. restic
+# encrypts everything with RESTIC_PASSWORD before it leaves the server.
+restic_run() {
+    [ -f "$OFFSITE_FILE" ] || die "Off-site backups are not set up. Run: spmb offsite setup"
+    command -v restic >/dev/null || die "restic is not installed (apt-get install restic, or run setup.sh again)."
+    (
+        set -a
+        # shellcheck disable=SC1090
+        . "$OFFSITE_FILE"
+        set +a
+        export RESTIC_CACHE_DIR="${RESTIC_CACHE_DIR:-/var/cache/restic}"
+        restic "$@"
+    )
+}
+
+offsite_push() {
+    local env="$1" archive="$2"
+    step "Off-site copy ($env)"
+    restic_run backup --quiet --host "$OFFSITE_HOST" --tag "$env" "$archive" || return 1
+    # Snapshots differ by file name, so group by tag to apply the retention per environment.
+    restic_run forget --quiet --host "$OFFSITE_HOST" --tag "$env" --group-by host,tags \
+        --keep-daily 14 --keep-weekly 8 --keep-monthly 12 --prune || return 1
+    printf '%s %s\n' "$(date -Iseconds)" "$(basename "$archive")" > "$OFFSITE_LAST"
+    say "   Off-site: $(basename "$archive") uploaded (kept: 14 daily, 8 weekly, 12 monthly)."
+}
+
+cmd_offsite() {
+    local sub="${1:-status}"; shift || true
+    need_root
+    case "$sub" in
+        setup)  offsite_setup ;;
+        status) offsite_status ;;
+        get)    offsite_get "$@" ;;
+        *)      die "Usage: spmb offsite setup | status | get <env> [snapshot]" ;;
+    esac
+}
+
+offsite_setup() {
+    local url key_id secret password repo
+    if [ -f "$OFFSITE_FILE" ]; then
+        say "   Off-site backups are already set up ($OFFSITE_FILE). Edit that file to change the keys."
+        restic_run snapshots --compact >/dev/null && say "   Connection OK."
+        return 0
+    fi
+    [ -t 0 ] || die "spmb offsite setup asks questions; run it in a terminal."
+    command -v restic >/dev/null || { step "Installing restic"; apt-get install -y -q restic >/dev/null; }
+    lock
+    step "Off-site backups (Cloudflare R2 or another S3 bucket)"
+    say "   Bucket URL, e.g. https://<account id>.r2.cloudflarestorage.com/<bucket>"
+    read -r -p "   Bucket URL: " url
+    url="${url%/}"
+    [[ "$url" =~ ^https://[A-Za-z0-9.-]+/[a-z0-9][a-z0-9.-]{1,62}$ ]] \
+        || die "Give https://<host>/<bucket> (no path after the bucket name)."
+    read -r -p "   Access Key ID: " key_id
+    read -r -s -p "   Secret Access Key (hidden): " secret; echo
+    [[ "$key_id" =~ ^[A-Za-z0-9]+$ && "$secret" =~ ^[A-Za-z0-9/+=]+$ ]] || die "The keys look wrong (letters and digits only)."
+    password="$(openssl rand -hex 32)"
+    repo="s3:$url/spmb"
+
+    (umask 077 && cat > "$OFFSITE_FILE" <<OFFSITE
+# Off-site backups of SPMB (made by spmb offsite setup). Keep it on the server; never commit it.
+# RESTIC_PASSWORD encrypts the backups: without it they cannot be read. Keep a copy in the password manager.
+RESTIC_REPOSITORY='$repo'
+AWS_ACCESS_KEY_ID='$key_id'
+AWS_SECRET_ACCESS_KEY='$secret'
+AWS_DEFAULT_REGION='auto'
+RESTIC_PASSWORD='$password'
+OFFSITE
+    )
+    install -d -m 0700 /var/cache/restic
+    if restic_run cat config >/dev/null 2>&1; then
+        warn "A restic repository already exists at $repo; it needs its own password. Put it in $OFFSITE_FILE (RESTIC_PASSWORD)."
+        return 1
+    fi
+    if ! restic_run init >/dev/null; then
+        rm -f "$OFFSITE_FILE"
+        die "Could not create the repository in the bucket (check the URL, the keys and the token's bucket access)."
+    fi
+    say "   Repository created: $repo"
+    cat <<NOTE
+
+   SAVE THIS IN THE PASSWORD MANAGER NOW (title: "SPMB off-site backup"), together with the
+   bucket URL and both keys (or the whole file: cat $OFFSITE_FILE). Without this password
+   the off-site backups cannot be decrypted, also not by Arumi Studios:
+
+      $password
+
+   It is also in $OFFSITE_FILE (root only). From now on 'spmb backup <env>' and the daily
+   timer upload an encrypted copy. First upload now: spmb backup production
+NOTE
+}
+
+offsite_status() {
+    step "Off-site backups"
+    [ -f "$OFFSITE_FILE" ] || { say "   not set up (spmb offsite setup)"; return 0; }
+    say "   repository $(sed -n "s/^RESTIC_REPOSITORY='\(.*\)'$/\1/p" "$OFFSITE_FILE" | sed 's|//[^.]*\.|//…|')"
+    say "   last upload $(cat "$OFFSITE_LAST" 2>/dev/null || echo none)"
+    restic_run snapshots --compact --host "$OFFSITE_HOST"
+}
+
+offsite_get() {
+    local env="${1:-}" id="${2:-latest}" dir work file
+    check_env "$env"
+    require_init "$env"
+    dir="$(env_dir "$env")"
+    work="$(mktemp -d)"
+    step "Downloading off-site backup $id ($env)"
+    if [ "$id" = latest ]; then
+        restic_run restore latest --host "$OFFSITE_HOST" --tag "$env" --target "$work" >/dev/null
+    else
+        restic_run restore "$id" --target "$work" >/dev/null
+    fi
+    file="$(find "$work" -type f -name "spmb-*.tar" | head -n 1)"
+    [ -n "$file" ] || { rm -rf "$work"; die "No backup archive in that snapshot."; }
+    install -d -m 0700 "$dir/backups"
+    mv "$file" "$dir/backups/"
+    rm -rf "$work"
+    say "   Saved: $dir/backups/$(basename "$file")"
+    say "   Restore it with: spmb restore $env $dir/backups/$(basename "$file")"
 }
 
 cmd_restore() {
@@ -667,6 +809,7 @@ case "$cmd" in
     restore)  cmd_restore "$@" ;;
     spark)    cmd_spark "$@" ;;
     domain)   cmd_domain "$@" ;;
+    offsite)  cmd_offsite "$@" ;;
     ''|help)  usage ;;
     *)        usage >&2; die "Unknown command '$cmd'." ;;
 esac
