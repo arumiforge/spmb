@@ -16,14 +16,14 @@ status to `done`. Nothing here is served by the app directly.
 
 | ID | File | Size (px) | KB | Background | Review notes |
 | --- | --- | --- | --- | --- | --- |
-| 019 | `hero-beranda-santri.webp` | 1536×1024 | 343.66 | Transparent | School arrival, accessible ramp and a clear handshake at the gate |
-| 019 | `install/img/hero/hero-beranda-santri.webp` | 814×835 | 215.22 | Transparent | Shared crop, school arrival, accessible ramp and a clear handshake at the gate |
-| 019 | `hero-beranda-santri-dark.webp` | 1536×1024 | 345.72 | Transparent | Gentle tonal lift and a faint rim |
-| 019 | `install/img/hero/hero-beranda-santri-dark.webp` | 814×835 | 215.10 | Transparent | Shared crop, gentle tonal lift and a faint rim |
-| 019 | `hero-beranda-santri-hijau.webp` | 1536×1024 | 343.63 | Transparent | Phone display in leaf green |
-| 019 | `install/img/hero/hero-beranda-santri-hijau.webp` | 814×835 | 215.21 | Transparent | Shared crop, phone display in leaf green |
-| 019 | `hero-beranda-santri-dark-hijau.webp` | 1536×1024 | 345.68 | Transparent | Gentle tonal lift and a faint rim; phone display in leaf green |
-| 019 | `install/img/hero/hero-beranda-santri-dark-hijau.webp` | 814×835 | 215.11 | Transparent | Shared crop, gentle tonal lift and a faint rim; phone display in leaf green |
+| 019 | `hero-beranda-santri.webp` | 1536×1024 | 250.44 | Transparent | Families walk towards the school veranda and greet the teacher at the gate |
+| 019 | `install/img/hero/hero-beranda-santri.webp` | 898×916 | 170.37 | Transparent | Shared crop, families walk towards the school veranda and greet the teacher at the gate |
+| 019 | `hero-beranda-santri-dark.webp` | 1536×1024 | 258.65 | Transparent | Gentle tonal lift and a faint rim |
+| 019 | `install/img/hero/hero-beranda-santri-dark.webp` | 898×916 | 175.10 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 019 | `hero-beranda-santri-hijau.webp` | 1536×1024 | 250.35 | Transparent | Phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-hijau.webp` | 898×916 | 170.41 | Transparent | Shared crop, phone display in leaf green |
+| 019 | `hero-beranda-santri-dark-hijau.webp` | 1536×1024 | 258.57 | Transparent | Gentle tonal lift and a faint rim; phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-dark-hijau.webp` | 898×916 | 175.04 | Transparent | Shared crop, gentle tonal lift and a faint rim; phone display in leaf green |
 | 020 | `beranda-kebersamaan.webp` | 1254×1254 | 312.88 | Transparent | Five classmates at a low table, readable at 200 px |
 | 020 | `install/img/section/beranda-kebersamaan.webp` | 750×645 | 137.23 | Transparent | Shared crop, five classmates at a low table, readable at 200 px |
 | 020 | `beranda-kebersamaan-dark.webp` | 1254×1254 | 312.53 | Transparent | Gentle tonal lift and a faint rim |
