@@ -29,7 +29,11 @@ AREAS = {
     "guide": (1000, 180),
     "state": (480, 70),
     "share": (1200, 180),
+    "ikon": (512, 60),
+    "langkah": (640, 90),
 }
+# From this brief on, new paintings read on light and dark pages and get no -dark copies (D-083).
+FIRST_WITHOUT_DARK = 36
 SVG_BUDGET_KB = {"pola": 4, "pemisah": 3, "tombol": 6, "memuat": 4}
 SVG_DEFAULT_KB = 6
 SUFFIX = {"light": "", "dark": "-dark", "hijau": "-hijau", "dark-hijau": "-dark-hijau"}
@@ -104,6 +108,12 @@ def check_painting(brief: str, fm: dict[str, str]) -> None:
     sizes: dict[str, tuple[int, int]] = {}
     transparent = fm.get("background", "transparent") == "transparent"
     variants = [v.strip() for v in fm.get("variants", "light").split(",") if v.strip()]
+    if brief.isdigit() and int(brief) >= FIRST_WITHOUT_DARK:
+        if any(v.startswith("dark") for v in variants):
+            fail(brief, "new paintings have no dark variant (D-083); use 'variants: light, hijau'")
+            variants = [v for v in variants if not v.startswith("dark")]
+        if not transparent:
+            fail(brief, "new paintings are delivered on real transparency (D-083)")
     for v in variants:
         if v not in SUFFIX:
             fail(brief, f"unknown variant '{v}'")

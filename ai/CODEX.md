@@ -56,8 +56,9 @@ ai/generated/
 ```
 
 - Existing PNG originals in `ai/generated/` (IDs 001–012) stay where they are; never delete them.
-- File names are lowercase Indonesian kebab-case, exactly as the brief says. Variants use the suffixes
-  `-dark`, `-hijau` and `-dark-hijau` (style guide → Variants).
+- File names are lowercase Indonesian kebab-case, exactly as the brief says. Make only the variants the
+  brief's `variants:` line lists. Briefs 001–035 may list `-dark`, `-hijau` and `-dark-hijau`; briefs from 036
+  on list only `light, hijau` (D-083: no dark copies; style guide → Variants).
 - `ai/output/` is a git-ignored scratch folder: put drafts and your check screenshots there.
 
 ## 5. Paintings (WebP)
@@ -65,17 +66,21 @@ ai/generated/
 1. Generate with your image generation tool (or the OpenAI Images API with a `gpt-image` model, if your
    environment provides a key) in the shape the brief names: square 1024×1024, landscape 1536×1024 or
    portrait 1024×1536, with transparent or white background as stated. Use the brief's **Prompt** exactly;
-   the Composition and Avoid sections are part of the brief.
+   the Composition and Avoid sections are part of the brief. From brief 036 on every painting is transparent
+   and must read on a white **and** a `#111827` page (the prompt carries the style guide §10 block); check
+   each accepted image on both colours before you go on.
 2. **Look at every result** and check it against the brief and the style guide before you accept it.
    Regenerate (at most three times) with a short correction when a check fails. Typical failures: text or
    letter-like marks, Arabic-looking script, a logo-like emblem, a drawn checkerboard instead of alpha,
    a busy empty area, realistic or 3D faces, more than one accent colour.
-3. Make the variants by **editing the accepted light image**, not by generating a new scene: dark
-   (style guide §8), green accent (§9), and dark green accent (apply §9 to the dark image).
+3. Make the variants the brief lists by **editing the accepted light image**, not by generating a new scene:
+   green accent (§9) for every brief; for briefs 001–035 that list them also dark (§8) and dark green accent
+   (apply §9 to the dark image). Never make a `-dark` copy for a brief that does not list it.
 4. Export:
    - master: `ai/generated/<name>[-variant].webp`, native size, untrimmed, quality 92, alpha kept;
    - installed file: `ai/generated/install/img/<area>/<name>[-variant].webp`, trimmed to the subject with
-     **one crop box shared by all variants**, scaled to the longest side in the style guide's size table,
+     **one crop box shared by all variants**, scaled to the longest side in the style guide's size table
+     (areas `hero`, `section`, `guide`, `state`, `share`, `ikon`, `langkah`),
      quality 80–85, within the budget, alpha kept (style guide → Sizes and budgets).
    Pillow sketch: `box = union(img.getchannel('A').point(lambda a: 255 if a > 8 else 0).getbbox() for each variant)`,
    grow it by 2 %, `crop(box)`, then `thumbnail((limit, limit), Image.LANCZOS)` and
