@@ -54,9 +54,15 @@ Usage: spmb <command> [arguments]
   backup <env>                Database dump + uploaded files into <env>/backups/ (kept 14 days).
   restore <env> <file>        Restore a backup made by `spmb backup` (asks first).
   spark <env> <args...>       Run `php spark <args...>` in the app container.
+  domain <env> <domain>       Change the domain of an environment (stack.env, app.baseURL), restart
+                              the app and check it; prints the Cloudflare steps.
 
-Options: -y / --yes answers "yes" to confirmations (production deploy, restore).
+Options: -y / --yes answers "yes" to confirmations (production deploy, restore, production domain).
 USAGE
+}
+
+valid_domain() {
+    [[ "${1:-}" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$ ]]
 }
 
 need_root() { [ "$(id -u)" -eq 0 ] || die "Run as root (sudo spmb ...)."; }
@@ -190,7 +196,7 @@ take_port() {
 cmd_init() {
     local env="${1:-}" domain="${2:-}"
     check_env "$env"
-    [[ "$domain" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$ ]] \
+    valid_domain "$domain" \
         || die "Give the domain of this environment, e.g. spmb init $env staging.example.sch.id"
     need_root
     command -v docker >/dev/null || die "Docker is not installed (run deploy/server/setup.sh first)."
@@ -443,6 +449,58 @@ cmd_deploy() {
     activate "$env" "$tag"
 }
 
+# --- domain --------------------------------------------------------------------------------
+# Change the public domain of an environment. Passwords, key, port, data and image stay as they are.
+cmd_domain() {
+    local env="${1:-}" domain="${2:-}" dir old
+    check_env "$env"
+    valid_domain "$domain" || die "Give the new domain, e.g. spmb domain $env spmb.example.sch.id"
+    need_root
+    require_init "$env"
+    dir="$(env_dir "$env")"
+    old="$(get_var "$dir/stack.env" SPMB_DOMAIN)"
+    if [ "$old" = "$domain" ]; then
+        say "   $env already uses $domain; nothing to change."
+        return 0
+    fi
+    [ "$env" = production ] && confirm "Change the PRODUCTION domain from $old to $domain?"
+    lock
+
+    step "Domain of $env: $old -> $domain"
+    cp -p "$dir/stack.env" "$dir/stack.env.before-domain"
+    cp -p "$dir/app.env" "$dir/app.env.before-domain"
+    set_var "$dir/stack.env" SPMB_DOMAIN "$domain"
+    if grep -q '^app\.baseURL' "$dir/app.env"; then
+        sed -i "s|^app\.baseURL.*|app.baseURL = 'https://$domain/'|" "$dir/app.env"
+    else
+        printf "app.baseURL = 'https://%s/'\n" "$domain" >> "$dir/app.env"
+    fi
+    chown root:33 "$dir/app.env"
+    chmod 0640 "$dir/app.env"
+    chmod 0600 "$dir/stack.env"
+    say "   stack.env and app.env updated (old copies: *.before-domain)."
+
+    if stack_running "$env"; then
+        dc "$env" restart app >/dev/null
+        health_check "$env" || warn "The app did not answer on the new domain; check 'spmb logs $env app'."
+    else
+        say "   $env is not running; the new domain applies at the next 'spmb deploy $env'."
+    fi
+
+    cat <<NEXT
+
+Next, in Cloudflare (docs/deployment.md, "Changing a domain"):
+ - Tunnel route: $domain -> http://127.0.0.1:$(get_var "$dir/stack.env" SPMB_PORT)
+ - Keep $old for a while with a 301 Redirect Rule to https://$domain (links already shared keep working).
+NEXT
+    if [ "$env" = staging ]; then
+        say " - Access application: replace $old with $domain (staging stays behind Access)."
+    else
+        say " - Update the school's website address in Pengaturan → Identitas Sekolah."
+    fi
+    say " - People signed in on $old sign in again on $domain."
+}
+
 cmd_rollback() {
     local env="${1:-}" dir current previous
     check_env "$env"
@@ -608,6 +666,7 @@ case "$cmd" in
     backup)   cmd_backup "$@" ;;
     restore)  cmd_restore "$@" ;;
     spark)    cmd_spark "$@" ;;
+    domain)   cmd_domain "$@" ;;
     ''|help)  usage ;;
     *)        usage >&2; die "Unknown command '$cmd'." ;;
 esac
