@@ -129,6 +129,7 @@ return [
     'waveFilter'         => 'Gelombang',
     'allWaves'           => 'Semua gelombang',
     'filter'             => 'Tampilkan',
+    'filterToggle'       => 'Saring berkas',
     'colApplicant'       => 'Pendaftar',
     'colDocument'        => 'Berkas',
     'colUploaded'        => 'Dikirim',

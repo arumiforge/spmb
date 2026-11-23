@@ -33,7 +33,7 @@ $dd = 'mt-0.5 break-words text-sm font-medium text-gray-900 dark:text-white';
             <p class="p-4 text-sm text-gray-500 dark:text-gray-400"><?= lang('Riwayat.noChanges') ?></p>
         <?php else : ?>
             <!-- Table on md and up -->
-            <div class="hidden overflow-x-auto md:block">
+            <div class="relative hidden overflow-x-auto md:block">
                 <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                     <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                         <tr>

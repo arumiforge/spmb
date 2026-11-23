@@ -82,7 +82,7 @@ $filtered = array_filter($filters) !== [];
         </div>
     <?php else : ?>
         <!-- Table on md and up -->
-        <div class="hidden overflow-x-auto md:block">
+        <div class="relative hidden overflow-x-auto md:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>

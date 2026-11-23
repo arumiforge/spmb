@@ -17,6 +17,8 @@ $waveName = static fn (array $a): string => $a['wave_id'] === null ? lang('Penda
 $badge    = static fn (string $type, string $code): string => view('partials/status_badge', ['badge' => status_badge_for($type, $code)]);
 $dupBadge = view('partials/status_badge', ['badge' => ['label' => lang('Pendaftaran.duplicateBadge'), 'color' => 'yellow']]);
 $filtered = array_filter($filters, static fn (string $v): bool => $v !== '') !== [];
+// The lists stay folded on phones unless one of them is in use.
+$folded = ($filters['gelombang'] ?? '') === '' && ($filters['cara'] ?? '') === '' && ($filters['status'] ?? '') === '' && ($filters['berkas'] ?? '') === '';
 $select   = static function (string $name, string $all, array $options) use ($filters, $input): string {
     $html = '<label for="' . $name . '" class="sr-only">' . esc($all) . '</label><select id="' . $name . '" name="' . $name . '" class="' . $input . '"><option value="">' . esc($all) . '</option>';
 
@@ -39,17 +41,26 @@ $select   = static function (string $name, string $all, array $options) use ($fi
 
 <?= $this->section('content') ?>
 <div class="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-    <form method="get" action="<?= url_to('pendaftar') ?>" class="grid grid-cols-1 gap-3 border-b border-gray-200 p-4 sm:grid-cols-2 lg:grid-cols-4 dark:border-gray-700" role="search">
-        <div class="relative sm:col-span-2 lg:col-span-4">
+    <form method="get" action="<?= url_to('pendaftar') ?>" class="grid grid-cols-1 gap-3 border-b border-gray-200 p-4 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-[minmax(0,2fr)_repeat(4,minmax(0,1fr))] dark:border-gray-700" role="search">
+        <div class="relative sm:col-span-2 lg:col-span-4 2xl:col-span-1">
             <label for="q" class="sr-only"><?= lang('Pendaftaran.searchLabel') ?></label>
             <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-gray-500 dark:text-gray-400"><?= icon('search', 'h-4 w-4') ?></span>
             <input type="search" id="q" name="q" value="<?= esc($filters['q'], 'attr') ?>" placeholder="<?= lang('Pendaftaran.searchLabel') ?>" class="<?= $input ?> ps-9">
         </div>
-        <div><?= $select('gelombang', lang('Pendaftaran.filterWave'), $waves + ['tanpa' => lang('Pendaftaran.filterNoWave')]) ?></div>
-        <div><?= $select('cara', lang('Pendaftaran.filterMethod'), lang('Status.method')) ?></div>
-        <div><?= $select('status', lang('Pendaftaran.filterStatus'), lang('Status.applicant')) ?></div>
-        <div><?= $select('berkas', lang('Pendaftaran.filterDocs'), lang('Status.documents')) ?></div>
-        <div class="flex items-center gap-3 sm:col-span-2 lg:col-span-4">
+        <?php // Phones: the four lists fold behind one button so the results start higher up the screen. ?>
+        <button type="button" data-collapse-toggle="pendaftar-saring" aria-controls="pendaftar-saring" aria-expanded="<?= $folded ? 'false' : 'true' ?>"
+                class="flex w-full items-center justify-between rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 sm:col-span-2 md:hidden dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+            <span><?= lang('Pendaftaran.filterToggle') ?></span><?= icon('chevron-down', 'h-4 w-4') ?>
+        </button>
+        <div id="pendaftar-saring" class="<?= $folded ? 'hidden ' : '' ?>sm:col-span-2 md:contents">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:contents">
+                <div><?= $select('gelombang', lang('Pendaftaran.filterWave'), $waves + ['tanpa' => lang('Pendaftaran.filterNoWave')]) ?></div>
+                <div><?= $select('cara', lang('Pendaftaran.filterMethod'), lang('Status.method')) ?></div>
+                <div><?= $select('status', lang('Pendaftaran.filterStatus'), lang('Status.applicant')) ?></div>
+                <div><?= $select('berkas', lang('Pendaftaran.filterDocs'), lang('Status.documents')) ?></div>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 sm:col-span-2 lg:col-span-4 2xl:col-span-5">
             <label class="inline-flex flex-1 items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                 <input type="checkbox" name="ganda" value="1" <?= $filters['ganda'] === '1' ? 'checked' : '' ?> class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700">
                 <?= lang('Pendaftaran.filterDuplicate') ?>
@@ -69,7 +80,7 @@ $select   = static function (string $name, string $all, array $options) use ($fi
             ]) ?>
         </div>
     <?php else : ?>
-        <div class="hidden overflow-x-auto lg:block">
+        <div class="relative hidden overflow-x-auto lg:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>
@@ -105,9 +116,10 @@ $select   = static function (string $name, string $all, array $options) use ($fi
             </table>
         </div>
 
-        <ul class="divide-y divide-gray-100 lg:hidden dark:divide-gray-700">
+        <?php // Cards in two columns from sm until the table takes over at lg, so tablets have no empty right half. ?>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:hidden">
             <?php foreach ($applicants as $a) : ?>
-                <li>
+                <li class="border-b border-gray-100 last:border-b-0 sm:odd:border-r sm:[&:nth-last-child(2):nth-child(odd)]:border-b-0 dark:border-gray-700">
                     <a href="<?= url_to('pendaftar.detail', $a['id']) ?>" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                         <div class="flex items-start justify-between gap-3">
                             <div class="min-w-0">

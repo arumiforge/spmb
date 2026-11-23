@@ -156,6 +156,7 @@ return [
     'filterDocs'             => 'Semua status berkas',
     'filterDuplicate'        => 'Hanya yang mungkin data ganda',
     'filter'                 => 'Tampilkan',
+    'filterToggle'           => 'Saring pendaftar',
     'cols'                   => ['number' => 'Nomor', 'name' => 'Nama', 'wave' => 'Gelombang', 'method' => 'Cara daftar', 'status' => 'Status', 'docs' => 'Berkas', 'registered' => 'Tanggal daftar'],
     'total'                  => '{0} pendaftar',
     'emptyTitle'             => 'Belum ada pendaftar',
