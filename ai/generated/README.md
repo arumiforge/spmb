@@ -24,6 +24,14 @@ status to `done`. Nothing here is served by the app directly.
 | 019 | `install/img/hero/hero-beranda-santri-hijau.webp` | 898×916 | 170.41 | Transparent | Shared crop, phone display in leaf green |
 | 019 | `hero-beranda-santri-dark-hijau.webp` | 1536×1024 | 258.57 | Transparent | Gentle tonal lift and a faint rim, phone display in leaf green |
 | 019 | `install/img/hero/hero-beranda-santri-dark-hijau.webp` | 898×916 | 175.04 | Transparent | Shared crop, gentle tonal lift and a faint rim, phone display in leaf green |
+| 020 | `beranda-kebersamaan.webp` | 1254×1254 | 226.00 | Transparent | Five classmates share books and a tablet, readable at 200 px |
+| 020 | `install/img/section/beranda-kebersamaan.webp` | 750×645 | 99.34 | Transparent | Shared crop, five classmates share books and a tablet, readable at 200 px |
+| 020 | `beranda-kebersamaan-dark.webp` | 1254×1254 | 226.32 | Transparent | Gentle tonal lift and a faint rim |
+| 020 | `install/img/section/beranda-kebersamaan-dark.webp` | 750×645 | 96.91 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 020 | `beranda-kebersamaan-hijau.webp` | 1254×1254 | 225.92 | Transparent | Tablet screen and book cover in leaf green |
+| 020 | `install/img/section/beranda-kebersamaan-hijau.webp` | 750×645 | 99.25 | Transparent | Shared crop, tablet screen and book cover in leaf green |
+| 020 | `beranda-kebersamaan-dark-hijau.webp` | 1254×1254 | 226.25 | Transparent | Gentle tonal lift and a faint rim, tablet screen and book cover in leaf green |
+| 020 | `install/img/section/beranda-kebersamaan-dark-hijau.webp` | 750×645 | 96.57 | Transparent | Shared crop, gentle tonal lift and a faint rim, tablet screen and book cover in leaf green |
 
 ### paintings-pages (2026-11-24)
 
