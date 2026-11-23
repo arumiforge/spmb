@@ -92,14 +92,15 @@ when the container idles).
 - School still to confirm (phase 3 works with any answer): test days, sessions per day, rooms and capacity; tests per wave or after all waves.
 - Each Claude account needs its cloud environment set up once from `docs/cloud-environment.md` (old inline scripts fail on PHP 8.5.13).
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
-- Go-live (D-056): staging and production run on `spmb-prod`; staging, `konsol.` and `ssh.` behind Access. Left: `spmb offsite setup`
-  (R2 bucket and token ready), save both `encryption.key` lines and the off-site password in the password manager, create the
-  Admin Sekolah account, the school fills in waves, contacts and the 4 hidden Tanya Jawab answers.
+- Go-live (D-056): staging and production run `main` on `spmb-prod`; staging, `konsol.` and `ssh.` behind Access; off-site
+  backups to R2 set up. Left: Admin Sekolah account (handed over in person), the school fills in contacts, waves, documents
+  and the 4 hidden Tanya Jawab answers; external uptime monitor; 2FA on Cloudflare/GitHub/email; Cloudflare rate limiting on
+  `/masuk` and `/daftar`.
 - Codex batches (briefs 013–035) are queued in `ai/README.md`; waiting for the user to start Codex.
 
 ## Session log (newest first, keep the last 10)
 
-- 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — staging and production live on `spmb-prod` (04b2ccc), staging behind Access, Laragon exposure removed; `spmb domain` (#40); off-site backups to Cloudflare R2 with restic (D-079). Next: `spmb offsite setup` on the server, Admin Sekolah account, school data.
+- 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — staging and production live on `spmb-prod` (04b2ccc), staging behind Access, Laragon exposure removed; `spmb domain` (#40); off-site backups to Cloudflare R2 with restic (D-079). Off-site setup done on the server. Next: Admin Sekolah account, school data, uptime monitor.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — `setup.sh` waits for first-boot updates (#36, #37), per-repo deploy key docs (#38), light theme by default (D-078), Codex `svg-kit` installed; server: setup, tunnel, key-only SSH, clone done. Next: staging check, production, Admin Sekolah.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — new account's cloud environment checked (442 tests green); domain on Cloudflare confirmed; full server flow rehearsed in the container (all steps passed). Next: user runs `setup.sh` on `spmb-prod`, then tunnel.
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — PR #32 (example env files) merged; docs refreshed to the current state: README, roadmap (phase 1 done, platform round row, phase 6 partly done), architecture (stack, tables, visual rules), requirements (FR-WEB-03, NFR-02/03/08), module index, third-party server images, CLAUDE.md roles and commands, coordination notes. Next: go-live, Codex `svg-kit`.
