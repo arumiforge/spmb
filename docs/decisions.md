@@ -433,3 +433,31 @@ Decision: Long blocks (table of contents, long guide sections, long answers) are
 ## D-089 — No disability or assistive devices in illustrations (2026-11-24)
 Status: accepted (user, 2026-11-24; narrows the Bhinneka row of D-073)
 Decision: Illustrations do not show disability or assistive devices: no wheelchairs, hearing aids, walking canes, crutches, white canes, prosthetics, sign-language poses or ramps as a subject. Diversity is shown through regions, skin tones, ages, builds, kerudung styles and everyday clothing; glasses are fine. The cast in `ai/style-guide.md` was changed accordingly (Pak Rahmat is a Minang father, Fajar has no hearing aid, Mak Ijah has no cane) and briefs 019, 020, 027 and 051 were edited before Codex made them; none of the installed paintings shows such a device.
+
+## D-090 — "Cara mendaftar" gets its own art (2026-11-24)
+Status: accepted (user, 2026-11-24; changes briefs 046–048 from D-082)
+Context: The user asked for special art on the home page's "Cara mendaftar": a background for each card and illustrations instead of icons.
+Decision: Steps 1–3 show small painted scenes with people (briefs 046–048 rewritten: landscape 4:3, ≤ 800 px, ≤ 110 KB) instead of still-life icons. Each card gets an art background (`.kartu-langkah`, new SVG brief 072: a top band and one botanical corner per card, `#000` masks painted with the brand colour). Until Codex delivers, the cards use an interim background built from the existing batik patterns and the old icon fallback. The section heading shows painting 021.
+Consequences: The `langkah` batch is 046–048 + 072 and ships together. The alt texts in `Situs.homeStepAlts` already describe the new scenes.
+
+## D-091 — The address always comes with a map preview (2026-11-24)
+Status: accepted (user, 2026-11-24)
+Context: When no Google Maps embed is pasted in Identitas Sekolah, visitors only saw a "Buka petunjuk arah" link.
+Decision: Without an embed, the home page shows Google's keyless search map for "school name, address" (`map_search_embed_url()`). Below `lg` the preview sits inside the address card; from `lg` the large map stays beside the contacts. A pasted embed still wins.
+Consequences: The fallback map depends on how well Google finds the address; schools get a better pin by pasting the embed.
+
+## D-092 — Public footer and top bar (2026-11-24)
+Status: accepted (user, 2026-11-24)
+Decision: The footer's "Tautan" lists only Cek Status, Tanya Jawab and Panduan (each when its module or content is on). The parent organisation (logo + "Di bawah naungan", LP Ma'arif NU for the first client) is the right-hand column on desktop and the last block above the copyright bar on phones. The green top bar shows from `md` only; on phones the drawer carries the same links (staff sign-in, phone, email, social media).
+
+## D-093 — The official name is "Sistem Penerimaan Murid Baru (SPMB)" (2026-11-24)
+Status: accepted (user, 2026-11-24)
+Decision: The default tagline (page title, link previews, hero line) is "Sistem Penerimaan Murid Baru (SPMB)", not "Penerimaan Murid Baru". A migration updates installations that still carry the old default; a tagline the school wrote itself is kept. The first client's branding pack and share image use the new name.
+
+## D-094 — Minified HTML, CSS and JavaScript; sources stay readable (2026-11-24)
+Status: accepted (user, 2026-11-24)
+Decision: Every HTML response goes through a global after-filter (`minifyhtml`, `App\Libraries\HtmlMinifier`) that removes indentation and comments but keeps `pre`, `textarea`, `script`, `style` and `whitespace-pre*` blocks. CSS and JS were already built minified from `resources/` (Tailwind `--minify`, esbuild), and SVGs since D-086. Views and sources are never minified in the repository. Nginx still gzips on top.
+
+## D-095 — Dashboard bottom bar ends with Pengaturan; link to the website (2026-11-24)
+Status: accepted (user, 2026-11-24; changes the last slot of D-081)
+Decision: The fifth item of the dashboard's mobile bottom bar is "Pengaturan": the first settings page the user may open, highlighted on any settings page. Users without settings access keep the "Menu" button there; for everyone the menu also opens from the button in the top bar. The dashboard has "Lihat halaman depan" (opens the public website in a new tab) in the top bar from `sm` and at the bottom of the side menu. Form fields side by side share their row tracks (CSS subgrid), so a long label no longer pushes its input lower than the one next to it.

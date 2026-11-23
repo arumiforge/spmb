@@ -44,7 +44,7 @@ if (! empty($field['placeholder'])) {
     $attrs .= ' placeholder="' . esc($field['placeholder'], 'attr') . '"';
 }
 ?>
-<div>
+<div class="bidang">
     <?php if ($type === 'checkbox') : ?>
         <div class="flex items-start gap-3">
             <input type="hidden" name="<?= esc($name, 'attr') ?>" value="0">

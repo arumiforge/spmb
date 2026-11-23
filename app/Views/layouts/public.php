@@ -29,7 +29,8 @@ $social   = school_social_links();
 <body class="flex min-h-screen flex-col bg-white pb-24 text-gray-900 antialiased md:pb-0 dark:bg-gray-900 dark:text-gray-100">
 <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-primary-700 focus:shadow"><?= lang('App.skipToContent') ?></a>
 
-<div class="bar-atas bg-primary-800 text-white dark:bg-gray-950" data-no-print>
+<?php // Desktop only: on phones the drawer holds the same links (D-092). ?>
+<div class="bar-atas hidden bg-primary-800 text-white md:block dark:bg-gray-950" data-no-print>
     <div class="mx-auto flex h-10 max-w-screen-xl items-center justify-between gap-3 px-4 text-sm">
         <?php if ($social !== []) : ?>
             <ul class="flex items-center gap-1" aria-label="<?= lang('App.socialLabel') ?>">
@@ -105,6 +106,17 @@ $social   = school_social_links();
         <?php if ($phone !== '') : ?><a class="flex items-center gap-2 py-1.5 hover:underline" href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>"><?= icon('phone', 'h-4 w-4') ?><?= esc($phone) ?></a><?php endif ?>
         <?php if ($email !== '') : ?><a class="flex items-center gap-2 py-1.5 hover:underline" href="mailto:<?= esc($email, 'attr') ?>"><?= icon('mail', 'h-4 w-4') ?><?= esc($email) ?></a><?php endif ?>
         <a href="<?= url_to('login') ?>" class="flex items-center gap-2 py-1.5 font-medium text-primary-700 hover:underline dark:text-primary-400"><?= icon('log-in', 'h-4 w-4') ?><?= lang('App.staffLogin') ?></a>
+        <?php if ($social !== []) : ?>
+            <ul class="flex flex-wrap items-center gap-1 pt-2" aria-label="<?= lang('App.socialLabel') ?>">
+                <?php foreach ($social as $link) : ?>
+                    <li>
+                        <a href="<?= esc($link['url'], 'attr') ?>" target="_blank" rel="noopener" class="inline-flex h-11 w-11 items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <?= social_icon($link['network'], 'h-5 w-5') ?><span class="sr-only"><?= esc($link['label']) ?></span>
+                        </a>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+        <?php endif ?>
     </div>
 </div>
 
@@ -117,8 +129,15 @@ $social   = school_social_links();
     <?= $this->renderSection('content') ?>
 </main>
 
+<?php
+// Footer links: only Cek Status, Tanya Jawab and Panduan, when their module is on (D-092).
+$footerLinks = array_values(array_filter(array_map(static fn (string $url) => array_column($nav, null, 'url')[$url] ?? null, ['cek-status', 'tanya-jawab', 'panduan'])));
+$partnerName = (string) setting('School.partnerName');
+$partnerLogo = brand_asset_url('partnerLogo');
+$hasContact  = $address !== '' || $phone !== '' || $whatsapp !== '' || $email !== '';
+?>
 <footer class="border-t border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
-    <div class="mx-auto grid max-w-screen-xl gap-8 px-4 py-10 text-sm md:grid-cols-3">
+    <div class="mx-auto grid max-w-screen-xl gap-8 px-4 py-10 text-sm md:grid-cols-2 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1.2fr)_minmax(0,0.8fr)_auto] lg:gap-10">
         <div>
             <div class="mb-3 flex items-center gap-3">
                 <?php if (($footerLogo = school_logo_url()) !== null) : ?>
@@ -126,18 +145,9 @@ $social   = school_social_links();
                 <?php endif ?>
                 <p class="font-semibold text-gray-900 dark:text-white"><?= esc(setting('School.name')) ?></p>
             </div>
-            <?php if ($motto !== '') : ?><p class="mb-3 text-gray-600 italic dark:text-gray-400"><?= esc($motto) ?></p><?php endif ?>
-            <?php $partnerName = (string) setting('School.partnerName'); $partnerLogo = brand_asset_url('partnerLogo'); ?>
-            <?php if ($partnerName !== '' || $partnerLogo !== null) : ?>
-                <div class="mt-4 flex items-center gap-3">
-                    <?php if ($partnerLogo !== null) : ?>
-                        <img src="<?= esc($partnerLogo, 'attr') ?>"<?= App\Libraries\BrandingAssets::sizeAttributes('partnerLogo') ?> loading="lazy" alt="<?= esc('Logo ' . $partnerName, 'attr') ?>" class="h-12 w-auto max-w-[8rem] shrink-0 object-contain">
-                    <?php endif ?>
-                    <p class="text-gray-600 dark:text-gray-400"><?= lang('App.partnerLabel') ?><?php if ($partnerName !== '') : ?><br><span class="font-medium text-gray-900 dark:text-white"><?= esc($partnerName) ?></span><?php endif ?></p>
-                </div>
-            <?php endif ?>
+            <?php if ($motto !== '') : ?><p class="text-gray-600 italic dark:text-gray-400"><?= esc($motto) ?></p><?php endif ?>
         </div>
-        <?php if ($address !== '' || $phone !== '' || $whatsapp !== '' || $email !== '') : ?>
+        <?php if ($hasContact) : ?>
         <div>
             <h2 class="mb-3 font-semibold text-gray-900 dark:text-white"><?= lang('App.contactTitle') ?></h2>
             <ul class="space-y-2 text-gray-600 dark:text-gray-400">
@@ -148,14 +158,25 @@ $social   = school_social_links();
             </ul>
         </div>
         <?php endif ?>
+        <?php if ($footerLinks !== []) : ?>
         <div>
             <h2 class="mb-3 font-semibold text-gray-900 dark:text-white"><?= lang('App.footerLinks') ?></h2>
-            <ul class="grid grid-cols-2 gap-2 text-gray-600 md:grid-cols-1 dark:text-gray-400">
-                <?php foreach ($nav as $item) : ?>
-                    <li><a class="hover:underline" href="<?= esc(site_url($item['url']), 'attr') ?>"><?= esc($item['label']) ?></a></li>
+            <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+                <?php foreach ($footerLinks as $item) : ?>
+                    <li><a class="inline-flex min-h-6 items-center hover:underline" href="<?= esc(site_url($item['url']), 'attr') ?>"><?= esc($item['label']) ?></a></li>
                 <?php endforeach ?>
             </ul>
         </div>
+        <?php endif ?>
+        <?php if ($partnerName !== '' || $partnerLogo !== null) : ?>
+            <?php // Parent organisation: on the right from lg, the last block above the bottom bar on phones (D-092). ?>
+            <div class="flex items-center gap-3 border-t border-gray-200 pt-6 md:col-span-2 lg:col-span-1 lg:flex-col lg:items-end lg:border-0 lg:pt-0 lg:text-end dark:border-gray-700">
+                <?php if ($partnerLogo !== null) : ?>
+                    <img src="<?= esc($partnerLogo, 'attr') ?>"<?= App\Libraries\BrandingAssets::sizeAttributes('partnerLogo') ?> loading="lazy" alt="<?= esc('Logo ' . $partnerName, 'attr') ?>" class="h-14 w-auto max-w-[9rem] shrink-0 object-contain">
+                <?php endif ?>
+                <p class="text-gray-600 dark:text-gray-400"><?= lang('App.partnerLabel') ?><?php if ($partnerName !== '') : ?><br><span class="font-medium text-gray-900 dark:text-white"><?= esc($partnerName) ?></span><?php endif ?></p>
+            </div>
+        <?php endif ?>
     </div>
     <div class="border-t border-gray-200 dark:border-gray-700">
         <div class="mx-auto flex max-w-screen-xl flex-col items-center justify-between gap-1 px-4 py-4 text-center text-xs text-gray-500 sm:flex-row sm:text-start dark:text-gray-400">

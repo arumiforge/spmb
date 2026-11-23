@@ -30,16 +30,20 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
 
 <?= $this->section('content') ?>
 <div class="mx-auto max-w-screen-lg px-4 py-6 sm:py-10">
-    <header class="mb-8">
-        <h1 class="mb-1 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.requirementsTitle') ?></h1>
-        <p class="mb-3 text-lg font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.academicYear', [$page['academicYear']]) ?></p>
-        <p class="max-w-2xl text-lg text-gray-600 dark:text-gray-300"><?= lang('Situs.requirementsIntro') ?></p>
+    <?php $art = illustration('section/persyaratan', lang('App.altSections')['section/persyaratan'], 'mx-auto h-44 w-auto sm:h-52 lg:h-auto lg:w-full', false); ?>
+    <header class="mb-8 <?= $art !== '' ? 'grid items-center gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10' : '' ?>">
+        <?php if ($art !== '') : ?><div class="lg:order-2"><?= $art ?></div><?php endif ?>
+        <div class="lg:order-1">
+            <h1 class="mb-1 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white"><?= lang('Situs.requirementsTitle') ?></h1>
+            <p class="mb-3 text-lg font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.academicYear', [$page['academicYear']]) ?></p>
+            <p class="max-w-2xl text-lg text-gray-600 dark:text-gray-300"><?= lang('Situs.requirementsIntro') ?></p>
+        </div>
     </header>
 
     <section class="mb-10" aria-labelledby="berkas">
         <h2 id="berkas" class="mb-1 text-xl font-bold text-gray-900 dark:text-white"><?= lang('Situs.documentsTitle') ?></h2>
         <?php if ($page['documents'] === []) : ?>
-            <div class="mt-4"><?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noDocumentsTitle'), 'text' => lang('Situs.noDocumentsText'), 'image' => 'state/kosong-persyaratan', 'fallback' => 'state/kosong-data', 'imageAlt' => '']]) ?></div>
+            <div class="mt-4"><?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noDocumentsTitle'), 'text' => lang('Situs.noDocumentsText'), 'image' => 'state/kosong-persyaratan', 'fallback' => null, 'icon' => 'file-text', 'imageAlt' => '']]) ?></div>
         <?php else : ?>
             <p class="mb-4 text-gray-600 dark:text-gray-400"><?= lang('Situs.documentsIntro') ?></p>
             <ul class="grid gap-4 md:grid-cols-2">

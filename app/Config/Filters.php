@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\MinifyHtml;
 use App\Filters\StaffArea;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
@@ -36,6 +37,7 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'staff'         => StaffArea::class,
+        'minifyhtml'    => MinifyHtml::class,
     ];
 
     /**
@@ -81,6 +83,7 @@ class Filters extends BaseFilters
         'after' => [
             // 'honeypot',
             'secureheaders',
+            'minifyhtml', // smaller pages, view files untouched (D-094)
         ],
     ];
 

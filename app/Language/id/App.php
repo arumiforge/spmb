@@ -40,6 +40,9 @@ return [
     'partnerLabel'           => 'Di bawah naungan',
     'developedBy'            => 'Developed by : Mr. F',
     'menu'                   => 'Menu',
+    'navSettings'            => 'Pengaturan',
+    'viewSite'               => 'Lihat halaman depan',
+    'opensNewTab'            => '(terbuka di tab baru)',
     'closeMenu'              => 'Tutup menu',
     'socialLabel'            => 'Media sosial sekolah',
     'contactTitle'           => 'Kontak sekolah',
@@ -80,6 +83,15 @@ return [
         'hero/hero-slide-belajar'  => 'Murid belajar bersama dengan gembira di serambi sekolah.',
         'hero/hero-slide-keluarga' => 'Orang tua mengantar anaknya bertemu guru di halaman sekolah.',
         'hero/hero-beranda'        => 'Orang tua dan calon murid tersenyum di depan sekolah, siap mendaftar.',
+    ],
+    // Alt text of the page paintings beside public headings (briefs 021–026).
+    'altSections' => [
+        'section/beranda-langkah' => 'Tiga langkah mendaftar: menyiapkan berkas, mengisi formulir, lalu menerima kartu.',
+        'section/persyaratan'     => 'Ibu dan anak menyiapkan berkas pendaftaran bersama di rumah.',
+        'section/jadwal'          => 'Guru menunjukkan jadwal pendaftaran kepada ayah dan anak.',
+        'section/tanya-jawab'     => 'Petugas sekolah menjawab pertanyaan orang tua dengan ramah.',
+        'section/cek-status'      => 'Ibu dan anak memeriksa status pendaftaran di ponsel dengan tenang.',
+        'section/kartu'           => 'Calon murid menunjukkan kartu pendaftaran dengan bangga bersama ayahnya.',
     ],
     // Alt text of each empty-state painting (briefs 030, 052–071), used once the painting is installed.
     'altStates' => [

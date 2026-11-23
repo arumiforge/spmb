@@ -18,7 +18,7 @@ class School extends BaseConfig
 {
     public string $name      = 'Nama Sekolah';
     public string $shortName = 'Sekolah';
-    public string $tagline   = 'Penerimaan Murid Baru';
+    public string $tagline   = 'Sistem Penerimaan Murid Baru (SPMB)';
 
     /**
      * School slogan (motto), shown under the school name on the home page and in the footer (D-087).

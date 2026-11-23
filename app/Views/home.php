@@ -23,6 +23,8 @@ $phone      = (string) setting('School.phone');
 $whatsapp   = (string) setting('School.whatsapp');
 $email      = (string) setting('School.email');
 $mapUrl     = map_embed_url((string) setting('School.mapEmbed'));
+// No embed pasted yet: a preview map of the address instead of only a directions link (D-091).
+$mapUrl = $mapUrl !== '' || $address === '' ? $mapUrl : map_search_embed_url($schoolName . ', ' . str_replace(["\r", "\n"], ' ', $address));
 
 // Slides: the school's own pictures replace the default Codex paintings (D-084).
 $uploaded = BrandingAssets::heroSlides();
@@ -60,7 +62,7 @@ $cardIcons = ['persyaratan' => 'clipboard-list', 'jadwal' => 'calendar-days', 'c
 <?= $this->section('content') ?>
 <section class="relative overflow-hidden bg-white dark:bg-gray-900" data-ikon-3d-src="<?= esc(asset_url('ikon3d.js'), 'attr') ?>">
     <div class="pola pola-kawung pola-pudar" aria-hidden="true"></div>
-    <div class="relative mx-auto grid max-w-screen-xl items-center gap-6 px-4 pb-6 pt-8 sm:pt-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-0 md:pb-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
+    <div class="relative mx-auto grid max-w-screen-xl items-center gap-4 px-4 pb-6 pt-4 sm:pt-12 md:gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-0 md:pb-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
         <div class="motion-rise relative z-10 text-center md:pe-6 md:text-start">
             <?php if ($tagline !== '') : ?>
                 <p class="mb-2 text-base font-semibold text-primary-700 sm:text-lg dark:text-primary-400"><?= esc($tagline) ?></p>
@@ -103,7 +105,7 @@ $cardIcons = ['persyaratan' => 'clipboard-list', 'jadwal' => 'calendar-days', 'c
             </div>
         </div>
         <?php if ($slides !== []) : ?>
-            <div class="motion-rise relative mx-auto w-full max-w-md md:-ms-16 md:max-w-none lg:-ms-24" style="--rise-delay: 120ms">
+            <div class="motion-rise relative order-first mx-auto w-full max-w-md md:order-none md:-ms-16 md:max-w-none lg:-ms-24" style="--rise-delay: 120ms">
                 <div class="slide-hero" data-slide-hero data-jeda="6000" <?= count($slides) > 1 ? 'aria-roledescription="carousel"' : '' ?>>
                     <?php foreach ($slides as $i => $slide) : ?>
                         <div class="slide-hero-item<?= $i === 0 ? ' is-tampil' : '' ?>" <?= $i === 0 ? '' : 'aria-hidden="true"' ?>><?= $slide ?></div>
@@ -116,13 +118,29 @@ $cardIcons = ['persyaratan' => 'clipboard-list', 'jadwal' => 'calendar-days', 'c
 </section>
 
 <?php if ($home['registration']) : ?>
+    <?php $stepsArt = illustration('section/beranda-langkah', lang('App.altSections')['section/beranda-langkah'], 'mx-auto h-40 w-auto sm:h-48 md:h-56'); ?>
     <section class="bg-gray-50 dark:bg-gray-800" aria-labelledby="cara-daftar">
         <div class="mx-auto max-w-screen-xl px-4 py-10 sm:py-14">
-            <h2 id="cara-daftar" class="mb-8 text-center text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white"><?= lang('Situs.homeStepsTitle') ?></h2>
+            <div class="mb-8 flex flex-col items-center gap-4 md:flex-row md:justify-between md:gap-10">
+                <div class="text-center md:text-start">
+                    <h2 id="cara-daftar" class="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white"><?= lang('Situs.homeStepsTitle') ?></h2>
+                    <p class="max-w-xl text-gray-600 dark:text-gray-400"><?= lang('Situs.homeStepsIntro') ?></p>
+                </div>
+                <?php if ($stepsArt !== '') : ?><div class="order-first shrink-0 md:order-none"><?= $stepsArt ?></div><?php endif ?>
+            </div>
             <ol class="grid gap-5 md:grid-cols-3">
                 <?php foreach (['homeStep1', 'homeStep2', 'homeStep3'] as $i => $key) : ?>
-                    <li class="motion-rise flex flex-col items-center rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900" style="--rise-delay: <?= $i * 80 ?>ms" data-ikon-3d-area>
-                        <?= art_icon('langkah/langkah-' . ($i + 1), ['clipboard-list', 'pencil', 'id-card'][$i], 'mb-4 h-32 w-32 sm:h-36 sm:w-36', lang('Situs.homeStepAlts')[$i]) ?>
+                    <?php
+                    // Step scene (briefs 046–048, D-090); a painted icon or Lucide icon until it arrives.
+                    $alt   = lang('Situs.homeStepAlts')[$i];
+                    $scene = illustration('langkah/langkah-' . ($i + 1), $alt, 'mx-auto aspect-[4/3] w-full max-w-xs object-contain');
+                    ?>
+                    <li class="kartu-langkah kartu-langkah-<?= $i + 1 ?> motion-rise flex flex-col items-center rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm sm:p-6 dark:border-gray-700 dark:bg-gray-900" style="--rise-delay: <?= $i * 80 ?>ms" data-ikon-3d-area>
+                        <?php if ($scene !== '') : ?>
+                            <div class="mb-4 w-full"><?= $scene ?></div>
+                        <?php else : ?>
+                            <?= art_icon('langkah/langkah-' . ($i + 1), ['clipboard-list', 'pencil', 'id-card'][$i], 'mb-4 mt-2 h-28 w-28 sm:h-32 sm:w-32', $alt) ?>
+                        <?php endif ?>
                         <p class="mb-1 text-sm font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.step', [$i + 1]) ?></p>
                         <h3 class="mb-2 text-lg font-bold text-gray-900 dark:text-white"><?= esc(lang('Situs.homeStepTitles')[$i]) ?></h3>
                         <p class="text-gray-600 dark:text-gray-300"><?= lang('Situs.' . $key) ?></p>
@@ -159,22 +177,26 @@ $cardIcons = ['persyaratan' => 'clipboard-list', 'jadwal' => 'calendar-days', 'c
     <section class="bg-gray-50 dark:bg-gray-800" aria-labelledby="lokasi-kontak">
         <div class="mx-auto grid max-w-screen-xl gap-8 px-4 py-10 sm:py-14 <?= $mapUrl !== '' ? 'lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]' : '' ?>">
             <?php if ($mapUrl !== '') : ?>
-                <div class="order-2 lg:order-1">
+                <div class="hidden lg:block">
                     <iframe src="<?= esc($mapUrl, 'attr') ?>" title="<?= esc(lang('App.mapTitle', [$schoolName]), 'attr') ?>" class="peta-sekolah shadow-sm" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
             <?php endif ?>
-            <div class="order-1 lg:order-2">
+            <div>
                 <h2 id="lokasi-kontak" class="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white"><?= lang('Situs.homeContactTitle') ?></h2>
                 <p class="mb-6 text-gray-600 dark:text-gray-400"><?= lang('Situs.homeContactIntro') ?></p>
                 <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                     <?php if ($address !== '') : ?>
-                        <li class="flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900" data-ikon-3d-area>
+                        <li class="flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-4 sm:col-span-2 lg:col-span-1 dark:border-gray-700 dark:bg-gray-900" data-ikon-3d-area>
                             <?= art_icon('ikon/ikon-alamat', 'map-pin', 'h-14 w-14 shrink-0') ?>
-                            <div class="min-w-0">
+                            <div class="min-w-0 flex-1">
                                 <p class="font-semibold text-gray-900 dark:text-white"><?= lang('Situs.homeAddress') ?></p>
                                 <p class="text-gray-600 dark:text-gray-300"><?= nl2br(esc($address)) ?></p>
                                 <a class="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-primary-700 hover:underline dark:text-primary-400" target="_blank" rel="noopener"
                                    href="https://www.google.com/maps/search/?api=1&amp;query=<?= rawurlencode($schoolName . ' ' . $address) ?>"><?= lang('Situs.homeDirections') ?><?= icon('external-link', 'h-4 w-4') ?></a>
+                                <?php if ($mapUrl !== '') : ?>
+                                    <?php // Phones and tablets: the map preview right under the address (D-091); the large map shows from lg. ?>
+                                    <iframe src="<?= esc($mapUrl, 'attr') ?>" title="<?= esc(lang('App.mapTitle', [$schoolName]), 'attr') ?>" class="peta-sekolah peta-sekolah-kecil mt-3 lg:hidden" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                <?php endif ?>
                             </div>
                         </li>
                     <?php endif ?>

@@ -42,7 +42,7 @@ final class HomeTest extends CIUnitTestCase
             setting()->forget('School.' . BrandingAssets::ASSETS[$key]['setting']);
         }
 
-        foreach (['motto', 'mapEmbed', 'socialInstagram', 'socialFacebook', 'socialYoutube', 'socialTiktok', 'whatsapp'] as $key) {
+        foreach (['motto', 'mapEmbed', 'address', 'socialInstagram', 'socialFacebook', 'socialYoutube', 'socialTiktok', 'whatsapp'] as $key) {
             setting()->forget('School.' . $key);
         }
 
@@ -154,5 +154,41 @@ final class HomeTest extends CIUnitTestCase
         $this->assertStringContainsString(site_url('aset/slide-2'), $body);
         $this->assertStringNotContainsString('/hero/hero-', $body);
         $this->assertSame(1, substr_count($body, 'class="slide-hero-item'));
+    }
+
+    public function testAddressWithoutEmbedStillShowsAMapPreview(): void
+    {
+        setting('School.mapEmbed', '');
+        setting('School.address', "Jl. Contoh No. 1\nKudus");
+
+        $body = $this->get('/')->getBody();
+
+        // D-091: a preview map of the address, not only the directions link.
+        $this->assertStringContainsString('<iframe src="https://maps.google.com/maps?q=', $body);
+        $this->assertStringContainsString('Jl.%20Contoh%20No.%201%20Kudus', $body);
+        $this->assertStringContainsString('output=embed', $body);
+        $this->assertStringContainsString(lang('Situs.homeDirections'), $body);
+    }
+
+    public function testFooterLinksAreOnlyStatusQuestionsAndGuide(): void
+    {
+        $body = $this->get('/')->getBody();
+
+        $this->assertSame(1, preg_match('#<h2[^>]*>' . preg_quote(lang('App.footerLinks'), '#') . '</h2>\s*<ul[^>]*>(.*?)</ul>#s', $body, $list));
+        preg_match_all('#<a [^>]*>([^<]+)</a>#', $list[1], $labels);
+        // Tanya Jawab joins only when the school has published questions (none in this test).
+        $this->assertSame(['Cek Status', 'Panduan'], array_map('trim', $labels[1]));
+    }
+
+    public function testPublicPagesUseTheOfficialNameAndCompactLayout(): void
+    {
+        $body = $this->get('/')->getBody();
+
+        // D-093: the default tagline is the official name.
+        $this->assertStringContainsString('Sistem Penerimaan Murid Baru (SPMB)', $body);
+        // D-092: the green top bar is for larger screens only.
+        $this->assertStringContainsString('class="bar-atas hidden', $body);
+        // D-094: the HTML is sent without indentation.
+        $this->assertDoesNotMatchRegularExpression('/\n[ \t]+</', $body);
     }
 }

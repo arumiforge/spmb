@@ -61,8 +61,12 @@ final class AdminLayoutTest extends CIUnitTestCase
         $result = $this->actingAs($this->makeUser('admin'))->get('admin');
 
         $result->assertOK();
-        $this->assertSame(['Dasbor', 'Pendaftar', 'Cari', 'Berkas', 'Menu'], $this->bottomBar($result));
+        // The last slot is Pengaturan (D-095), pointing at the first settings page this role may open.
+        $this->assertSame(['Dasbor', 'Pendaftar', 'Cari', 'Berkas', 'Pengaturan'], $this->bottomBar($result));
+        $this->assertMatchesRegularExpression('#<nav class="nav-bawah.*?href="[^"]*admin/pengaturan/sekolah"#s', $result->getBody());
         $result->assertSee('data-dialog-open="cari-cepat"');
+        // A link back to the public website (D-095).
+        $result->assertSee('Lihat halaman depan');
     }
 
     public function testPanitiaBottomBar(): void

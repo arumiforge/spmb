@@ -7,7 +7,11 @@
 $schoolName = (string) setting('School.name');
 $pageTitle  = isset($title) && $title !== '' ? $title . ' · ' . $schoolName : $schoolName;
 $tagline    = (string) setting('School.tagline');
-$shareImage = brand_asset_url('shareImage') ?? brand_asset_url('icon') ?? school_logo_url();
+// The school's own share image first, then the generic Codex painting (brief 035) in the school's accent.
+$accent       = (string) setting('School.illustrationAccent');
+$genericShare = 'assets/img/share/bagikan-umum' . (preg_match('/\A[a-z]+\z/', $accent) === 1 && is_file(FCPATH . 'assets/img/share/bagikan-umum-' . $accent . '.jpg') ? '-' . $accent : '') . '.jpg';
+$largeShare   = brand_asset_url('shareImage') !== null || is_file(FCPATH . $genericShare);
+$shareImage   = brand_asset_url('shareImage') ?? (is_file(FCPATH . $genericShare) ? base_url($genericShare) : null) ?? brand_asset_url('icon') ?? school_logo_url();
 $appIcon    = brand_asset_url('icon');
 ?>
 <meta charset="utf-8">
@@ -29,7 +33,7 @@ $appIcon    = brand_asset_url('icon');
 <meta property="og:locale" content="id_ID">
 <?php if ($shareImage !== null) : ?>
 <meta property="og:image" content="<?= esc($shareImage, 'attr') ?>">
-<meta name="twitter:card" content="<?= brand_asset_url('shareImage') !== null ? 'summary_large_image' : 'summary' ?>">
+<meta name="twitter:card" content="<?= $largeShare ? 'summary_large_image' : 'summary' ?>">
 <?php endif ?>
 <link rel="stylesheet" href="<?= esc(asset_url('app.css'), 'attr') ?>">
 <style>:root{--brand:<?= brand_color() ?>}</style>

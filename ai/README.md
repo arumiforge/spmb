@@ -57,16 +57,16 @@ generator needed) → `tombol-seni` (no image generator needed) → `ikon-berand
 | 016 | [pemisah](prompts/016-pemisah.md) | svg-kit | SVG + CSS | Full-width section dividers: lengkung, tumpal, mega, bukit | done |
 | 017 | [tombol-daftar](prompts/017-tombol-daftar.md) | svg-kit | SVG + CSS | Special "Daftar sekarang" button, all states | done |
 | 018 | [memuat](prompts/018-memuat.md) | svg-kit | SVG + CSS | Loading animation, large and in-button | done |
-| 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | requested |
-| 020 | [beranda-kebersamaan](prompts/020-beranda-kebersamaan.md) | paintings-pages | painting | Home: learning together (Bhinneka) | requested |
-| 021 | [beranda-langkah](prompts/021-beranda-langkah.md) | paintings-pages | painting | Home: three steps to register | requested |
-| 022 | [persyaratan](prompts/022-persyaratan.md) | paintings-pages | painting | `/persyaratan` | requested |
-| 023 | [jadwal](prompts/023-jadwal.md) | paintings-pages | painting | `/jadwal` | requested |
-| 024 | [tanya-jawab](prompts/024-tanya-jawab.md) | paintings-pages | painting | `/tanya-jawab` | requested |
-| 025 | [cek-status](prompts/025-cek-status.md) | paintings-pages | painting | `/cek-status` | requested |
-| 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | requested |
-| 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | requested |
-| 035 | [bagikan-umum](prompts/035-bagikan-umum.md) | paintings-pages | painting | Default link-preview image | requested |
+| 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | requested (redo: D-089) |
+| 020 | [beranda-kebersamaan](prompts/020-beranda-kebersamaan.md) | paintings-pages | painting | Home: learning together (Bhinneka) | requested (redo: D-089) |
+| 021 | [beranda-langkah](prompts/021-beranda-langkah.md) | paintings-pages | painting | Home: three steps to register | done |
+| 022 | [persyaratan](prompts/022-persyaratan.md) | paintings-pages | painting | `/persyaratan` | done |
+| 023 | [jadwal](prompts/023-jadwal.md) | paintings-pages | painting | `/jadwal` | done |
+| 024 | [tanya-jawab](prompts/024-tanya-jawab.md) | paintings-pages | painting | `/tanya-jawab` | done |
+| 025 | [cek-status](prompts/025-cek-status.md) | paintings-pages | painting | `/cek-status` | done |
+| 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | done |
+| 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | requested (redo: D-089) |
+| 035 | [bagikan-umum](prompts/035-bagikan-umum.md) | paintings-pages | painting | Default link-preview image | done |
 | 028 | [akses-ditolak](prompts/028-akses-ditolak.md) | paintings-states | painting | 403 / no permission | requested |
 | 029 | [sesi-berakhir](prompts/029-sesi-berakhir.md) | paintings-states | painting | Session expired | requested |
 | 030 | [pendaftaran-ditutup](prompts/030-pendaftaran-ditutup.md) | paintings-states | painting | Registration not open | requested |
@@ -84,9 +84,10 @@ generator needed) → `tombol-seni` (no image generator needed) → `ikon-berand
 | 043 | [ikon-telepon](prompts/043-ikon-telepon.md) | ikon-beranda | painting | Home contact card "Telepon" | requested |
 | 044 | [ikon-pesan](prompts/044-ikon-pesan.md) | ikon-beranda | painting | Home contact card "WhatsApp" | requested |
 | 045 | [ikon-email](prompts/045-ikon-email.md) | ikon-beranda | painting | Home contact card "Email" | requested |
-| 046 | [langkah-1](prompts/046-langkah-1.md) | langkah | painting | Home "Cara mendaftar" step 1 | requested |
-| 047 | [langkah-2](prompts/047-langkah-2.md) | langkah | painting | Home "Cara mendaftar" step 2 | requested |
-| 048 | [langkah-3](prompts/048-langkah-3.md) | langkah | painting | Home "Cara mendaftar" step 3 | requested |
+| 046 | [langkah-1](prompts/046-langkah-1.md) | langkah | painting | Home "Cara mendaftar" step 1 (scene, D-090) | requested |
+| 047 | [langkah-2](prompts/047-langkah-2.md) | langkah | painting | Home "Cara mendaftar" step 2 (scene, D-090) | requested |
+| 048 | [langkah-3](prompts/048-langkah-3.md) | langkah | painting | Home "Cara mendaftar" step 3 (scene, D-090) | requested |
+| 072 | [latar-langkah](prompts/072-latar-langkah.md) | langkah | SVG + CSS | Art backgrounds of the three "Cara mendaftar" cards | requested |
 | 049 | [tombol-seni](prompts/049-tombol-seni.md) | tombol-seni | SVG + CSS | Art buttons `.tombol-seni` and the bottom-bar badge | requested |
 | 050 | [hero-slide-belajar](prompts/050-hero-slide-belajar.md) | slide-beranda | painting | Home hero slideshow (default slide) | requested |
 | 051 | [hero-slide-keluarga](prompts/051-hero-slide-keluarga.md) | slide-beranda | painting | Home hero slideshow (default slide) | requested |
@@ -121,9 +122,12 @@ Notes
 - 017 uses the kawung tile from 015 and the small loader from 018, so the `svg-kit` batch ships together.
 - **From 036 on (D-083)** every painting is transparent, reads on light and dark pages and comes with a
   green-accent variant only — no `-dark` copies. New areas: `ikon` (≤ 512 px, ≤ 60 KB) and `langkah`
-  (≤ 640 px, ≤ 90 KB). File names of 036–071 are fixed: the views already load them (`art_icon()`, empty
+  (≤ 640 px, ≤ 90 KB; the step scenes 046–048 ≤ 800 px, ≤ 110 KB since D-090). File names of 036–071 are fixed: the views already load them (`art_icon()`, empty
   states with `'fallback'`) and show a Lucide icon or a generic painting until they arrive.
 - 049 replaces the interim `.tombol-seni` and `.nav-bawah-tengah-bulat` CSS in `resources/css/komponen.css`
   and holds the painted `ikon-daftar` (041), so deliver it after `ikon-beranda`.
+- 019, 020 and 027 were delivered (#49) before D-089 and show a wheelchair or hearing aids: paint them again
+  from the updated briefs; until then the home hero keeps `hero-beranda`.
+- The `langkah` batch is 046–048 (scenes with people, D-090) plus 072 (card backgrounds); deliver them together.
 - Every empty state (052–071) shows its own scene; no two empty states may look alike, also not like 004,
   005, 009, 010 or 028–034.

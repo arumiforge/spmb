@@ -4,13 +4,15 @@
  *
  * image: painted illustration path for illustration(), e.g. 'state/kosong-ruang' (preferred over icon).
  * Every different empty condition has its own painting (D-082); until Codex delivers it, the
- * picture named in 'fallback' (default 'state/kosong-data') is shown.
+ * picture named in 'fallback' (default 'state/kosong-data') is shown. Pass 'fallback' => null with a
+ * matching 'icon' so a page shows an icon that fits its context instead of the shared painting.
  *
- * @var array{title: string, text?: string, icon?: string, image?: string, fallback?: string, imageAlt?: string, action?: array{label: string, url: string}} $empty
+ * @var array{title: string, text?: string, icon?: string, image?: string, fallback?: string|null, imageAlt?: string, action?: array{label: string, url: string}} $empty
  */
 $picture = '';
 $alts    = lang('App.altStates');
-foreach (array_filter([$empty['image'] ?? null, $empty['fallback'] ?? 'state/kosong-data']) as $candidate) {
+$backup  = array_key_exists('fallback', $empty) ? $empty['fallback'] : 'state/kosong-data';
+foreach (array_filter([$empty['image'] ?? null, $backup]) as $candidate) {
     $picture = illustration($candidate, $alts[$candidate] ?? $empty['imageAlt'] ?? '', 'mx-auto h-32 w-auto sm:h-40');
     if ($picture !== '') {
         break;
@@ -24,7 +26,7 @@ if (empty($empty['image'])) {
     <?php if ($picture !== '') : ?>
         <div class="mb-4"><?= $picture ?></div>
     <?php else : ?>
-        <?= icon($empty['icon'] ?? 'inbox', 'mb-4 h-12 w-12 text-primary-600 dark:text-primary-400') ?>
+        <?= icon($empty['icon'] ?? 'inbox', 'mb-4 h-14 w-14 text-primary-600 dark:text-primary-400') ?>
     <?php endif ?>
     <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white"><?= esc($empty['title']) ?></h3>
     <?php if (! empty($empty['text'])) : ?>

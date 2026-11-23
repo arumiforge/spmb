@@ -12,6 +12,89 @@ status to `done`. Nothing here is served by the app directly.
 
 ## Codex deliveries
 
+### paintings-pages (2026-11-24)
+
+| ID | File | Size (px) | KB | Background | Review notes |
+| --- | --- | --- | --- | --- | --- |
+| 019 | `hero-beranda-santri.webp` | 1536×1024 | 343.66 | Transparent | School arrival, accessible ramp and a clear handshake at the gate |
+| 019 | `install/img/hero/hero-beranda-santri.webp` | 814×835 | 215.22 | Transparent | Shared crop, school arrival, accessible ramp and a clear handshake at the gate |
+| 019 | `hero-beranda-santri-dark.webp` | 1536×1024 | 345.72 | Transparent | Gentle tonal lift and a faint rim |
+| 019 | `install/img/hero/hero-beranda-santri-dark.webp` | 814×835 | 215.10 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 019 | `hero-beranda-santri-hijau.webp` | 1536×1024 | 343.63 | Transparent | Phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-hijau.webp` | 814×835 | 215.21 | Transparent | Shared crop, phone display in leaf green |
+| 019 | `hero-beranda-santri-dark-hijau.webp` | 1536×1024 | 345.68 | Transparent | Gentle tonal lift and a faint rim; phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-dark-hijau.webp` | 814×835 | 215.11 | Transparent | Shared crop, gentle tonal lift and a faint rim; phone display in leaf green |
+| 020 | `beranda-kebersamaan.webp` | 1254×1254 | 312.88 | Transparent | Five classmates at a low table, readable at 200 px |
+| 020 | `install/img/section/beranda-kebersamaan.webp` | 750×645 | 137.23 | Transparent | Shared crop, five classmates at a low table, readable at 200 px |
+| 020 | `beranda-kebersamaan-dark.webp` | 1254×1254 | 312.53 | Transparent | Gentle tonal lift and a faint rim |
+| 020 | `install/img/section/beranda-kebersamaan-dark.webp` | 750×645 | 134.41 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 020 | `beranda-kebersamaan-hijau.webp` | 1254×1254 | 312.87 | Transparent | Tablet and one book cover in leaf green |
+| 020 | `install/img/section/beranda-kebersamaan-hijau.webp` | 750×645 | 137.25 | Transparent | Shared crop, tablet and one book cover in leaf green |
+| 020 | `beranda-kebersamaan-dark-hijau.webp` | 1254×1254 | 312.93 | Transparent | Gentle tonal lift and a faint rim; tablet and one book cover in leaf green |
+| 020 | `install/img/section/beranda-kebersamaan-dark-hijau.webp` | 750×645 | 134.48 | Transparent | Shared crop, gentle tonal lift and a faint rim; tablet and one book cover in leaf green |
+| 021 | `beranda-langkah.webp` | 1254×1254 | 569.74 | Transparent | Three registration stops linked by a winding path |
+| 021 | `install/img/section/beranda-langkah.webp` | 614×605 | 136.51 | Transparent | Shared crop, three registration stops linked by a winding path |
+| 021 | `beranda-langkah-dark.webp` | 1254×1254 | 575.10 | Transparent | Gentle tonal lift and a faint rim |
+| 021 | `install/img/section/beranda-langkah-dark.webp` | 614×605 | 134.03 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 021 | `beranda-langkah-hijau.webp` | 1254×1254 | 569.53 | Transparent | Folder and phone display in leaf green |
+| 021 | `install/img/section/beranda-langkah-hijau.webp` | 614×605 | 136.48 | Transparent | Shared crop, folder and phone display in leaf green |
+| 021 | `beranda-langkah-dark-hijau.webp` | 1254×1254 | 574.90 | Transparent | Gentle tonal lift and a faint rim; folder and phone display in leaf green |
+| 021 | `install/img/section/beranda-langkah-dark-hijau.webp` | 614×605 | 133.95 | Transparent | Shared crop, gentle tonal lift and a faint rim; folder and phone display in leaf green |
+| 022 | `persyaratan.webp` | 1254×1254 | 467.27 | Transparent | Neat papers with abstract lines, no seals |
+| 022 | `install/img/section/persyaratan.webp` | 690×663 | 138.73 | Transparent | Shared crop, neat papers with abstract lines, no seals |
+| 022 | `persyaratan-dark.webp` | 1254×1254 | 451.55 | Transparent | Gentle tonal lift and a faint rim |
+| 022 | `install/img/section/persyaratan-dark.webp` | 690×663 | 136.11 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 022 | `persyaratan-hijau.webp` | 1254×1254 | 466.84 | Transparent | Folder and phone case in leaf green |
+| 022 | `install/img/section/persyaratan-hijau.webp` | 690×663 | 138.63 | Transparent | Shared crop, folder and phone case in leaf green |
+| 022 | `persyaratan-dark-hijau.webp` | 1254×1254 | 451.10 | Transparent | Gentle tonal lift and a faint rim; folder and phone case in leaf green |
+| 022 | `install/img/section/persyaratan-dark-hijau.webp` | 690×663 | 135.97 | Transparent | Shared crop, gentle tonal lift and a faint rim; folder and phone case in leaf green |
+| 023 | `jadwal.webp` | 1254×1254 | 424.01 | Transparent | Blank calendar blocks, with one highlighted cell and two sage dots |
+| 023 | `install/img/section/jadwal.webp` | 710×689 | 129.83 | Transparent | Shared crop, blank calendar blocks, with one highlighted cell and two sage dots |
+| 023 | `jadwal-dark.webp` | 1254×1254 | 397.89 | Transparent | Gentle tonal lift and a faint rim |
+| 023 | `install/img/section/jadwal-dark.webp` | 710×689 | 127.12 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 023 | `jadwal-hijau.webp` | 1254×1254 | 423.92 | Transparent | Calendar cell in leaf green |
+| 023 | `install/img/section/jadwal-hijau.webp` | 710×689 | 129.83 | Transparent | Shared crop, calendar cell in leaf green |
+| 023 | `jadwal-dark-hijau.webp` | 1254×1254 | 397.82 | Transparent | Gentle tonal lift and a faint rim; calendar cell in leaf green |
+| 023 | `install/img/section/jadwal-dark-hijau.webp` | 710×689 | 127.13 | Transparent | Shared crop, gentle tonal lift and a faint rim; calendar cell in leaf green |
+| 024 | `tanya-jawab.webp` | 1254×1254 | 459.38 | Transparent | Three empty speech bubbles above the help desk |
+| 024 | `install/img/section/tanya-jawab.webp` | 700×676 | 132.11 | Transparent | Shared crop, three empty speech bubbles above the help desk |
+| 024 | `tanya-jawab-dark.webp` | 1254×1254 | 439.19 | Transparent | Gentle tonal lift and a faint rim |
+| 024 | `install/img/section/tanya-jawab-dark.webp` | 700×676 | 128.92 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 024 | `tanya-jawab-hijau.webp` | 1254×1254 | 457.96 | Transparent | One speech bubble in leaf green |
+| 024 | `install/img/section/tanya-jawab-hijau.webp` | 700×676 | 131.89 | Transparent | Shared crop, one speech bubble in leaf green |
+| 024 | `tanya-jawab-dark-hijau.webp` | 1254×1254 | 438.54 | Transparent | Gentle tonal lift and a faint rim; one speech bubble in leaf green |
+| 024 | `install/img/section/tanya-jawab-dark-hijau.webp` | 700×676 | 130.14 | Transparent | Shared crop, gentle tonal lift and a faint rim; one speech bubble in leaf green |
+| 025 | `cek-status.webp` | 1254×1254 | 444.98 | Transparent | Abstract phone display with a sage check mark |
+| 025 | `install/img/section/cek-status.webp` | 710×689 | 125.64 | Transparent | Shared crop, abstract phone display with a sage check mark |
+| 025 | `cek-status-dark.webp` | 1254×1254 | 433.20 | Transparent | Gentle tonal lift and a faint rim |
+| 025 | `install/img/section/cek-status-dark.webp` | 710×689 | 129.08 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 025 | `cek-status-hijau.webp` | 1254×1254 | 445.04 | Transparent | Blue blocks on phone display in leaf green |
+| 025 | `install/img/section/cek-status-hijau.webp` | 710×689 | 125.65 | Transparent | Shared crop, blue blocks on phone display in leaf green |
+| 025 | `cek-status-dark-hijau.webp` | 1254×1254 | 433.14 | Transparent | Gentle tonal lift and a faint rim; blue blocks on phone display in leaf green |
+| 025 | `install/img/section/cek-status-dark-hijau.webp` | 710×689 | 129.12 | Transparent | Shared crop, gentle tonal lift and a faint rim; blue blocks on phone display in leaf green |
+| 026 | `kartu.webp` | 1254×1254 | 358.46 | Transparent | Abstract portrait, lines and a few separate squares on the card |
+| 026 | `install/img/section/kartu.webp` | 710×623 | 107.28 | Transparent | Shared crop, abstract portrait, lines and a few separate squares on the card |
+| 026 | `kartu-dark.webp` | 1254×1254 | 362.94 | Transparent | Gentle tonal lift and a faint rim |
+| 026 | `install/img/section/kartu-dark.webp` | 710×623 | 112.08 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 026 | `kartu-hijau.webp` | 1254×1254 | 358.34 | Transparent | Card header band in leaf green |
+| 026 | `install/img/section/kartu-hijau.webp` | 710×623 | 107.23 | Transparent | Shared crop, card header band in leaf green |
+| 026 | `kartu-dark-hijau.webp` | 1254×1254 | 362.88 | Transparent | Gentle tonal lift and a faint rim; card header band in leaf green |
+| 026 | `install/img/section/kartu-dark-hijau.webp` | 710×623 | 111.97 | Transparent | Shared crop, gentle tonal lift and a faint rim; card header band in leaf green |
+| 027 | `tes.webp` | 1254×1254 | 396.96 | Transparent | Quiet classroom with blank sheets and a numeral-free clock |
+| 027 | `install/img/section/tes.webp` | 700×652 | 115.25 | Transparent | Shared crop, quiet classroom with blank sheets and a numeral-free clock |
+| 027 | `tes-dark.webp` | 1254×1254 | 396.08 | Transparent | Gentle tonal lift and a faint rim |
+| 027 | `install/img/section/tes-dark.webp` | 700×652 | 115.12 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 027 | `tes-hijau.webp` | 1254×1254 | 396.92 | Transparent | Pencil case in leaf green |
+| 027 | `install/img/section/tes-hijau.webp` | 700×652 | 115.09 | Transparent | Shared crop, pencil case in leaf green |
+| 027 | `tes-dark-hijau.webp` | 1254×1254 | 396.00 | Transparent | Gentle tonal lift and a faint rim; pencil case in leaf green |
+| 027 | `install/img/section/tes-dark-hijau.webp` | 700×652 | 115.05 | Transparent | Shared crop, gentle tonal lift and a faint rim; pencil case in leaf green |
+| 035 | `bagikan-umum.webp` | 1536×1024 | 577.51 | Full bleed | All four students visible in the centre square |
+| 035 | `install/img/share/bagikan-umum.webp` | 1200×630 | 173.13 | Full bleed | Centre crop, all four students visible in the centre square |
+| 035 | `install/img/share/bagikan-umum.jpg` | 1200×630 | 177.12 | Full bleed | Centre crop, all four students visible in the centre square |
+| 035 | `bagikan-umum-hijau.webp` | 1536×1024 | 578.40 | Full bleed | Sage backpack strap in leaf green |
+| 035 | `install/img/share/bagikan-umum-hijau.webp` | 1200×630 | 173.09 | Full bleed | Centre crop, sage backpack strap in leaf green |
+| 035 | `install/img/share/bagikan-umum-hijau.jpg` | 1200×630 | 177.10 | Full bleed | Centre crop, sage backpack strap in leaf green |
+
 ### svg-kit (2026-11-23)
 
 | ID | File | Size (px) | KB | Background | Review notes |

@@ -9,6 +9,17 @@
         position: relative;
     }
 
+    /* ---------- Fields side by side line up (D-095): label, control, help and error share the row
+       tracks of their grid, so a label that wraps to two lines no longer pushes its input lower
+       than the input next to it. ---------- */
+    .grid > .bidang {
+        display: grid;
+        grid-row: span 4;
+        grid-template-rows: subgrid;
+        row-gap: 0;
+        align-content: start;
+    }
+
     /* ---------- Admin forms use the full width (D-081 follow-up): two columns of cards from xl ---------- */
     .form-lebar {
         display: grid;
@@ -696,6 +707,17 @@
         }
     }
 
+    /* The small preview inside the address card on phones and tablets (D-091). */
+    .peta-sekolah-kecil {
+        aspect-ratio: 16 / 10;
+        border-radius: .75rem;
+        background-color: var(--color-gray-100);
+    }
+
+    .dark .peta-sekolah-kecil {
+        background-color: var(--color-gray-700);
+    }
+
     /* ---------- three.js icon (D-082): the canvas sits exactly over its image ---------- */
     .ikon-3d {
         position: relative;
@@ -712,5 +734,59 @@
 
     .ikon-3d.is-3d > img {
         visibility: hidden;
+    }
+
+    /* ---------- "Cara mendaftar" cards (D-090): interim art background until Codex brief 072 lands ----------
+       A kawung band across the top that fades out, plus a soft wash; one pattern per card. 072's
+       css/latar-langkah.css replaces this block (same class names). */
+    .kartu-langkah {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        --kartu-langkah-warna: var(--color-primary-600);
+        --kartu-langkah-opasitas: .12;
+        --kartu-langkah-gambar: url("/assets/img/pola/pola-kawung.svg");
+        --kartu-langkah-ukuran: 56px;
+        background-image: radial-gradient(120% 60% at 50% 0%, var(--color-primary-50), transparent 70%);
+    }
+
+    .kartu-langkah::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 62%;
+        z-index: -1;
+        pointer-events: none;
+        background-color: var(--kartu-langkah-warna);
+        opacity: var(--kartu-langkah-opasitas);
+        -webkit-mask-image: var(--kartu-langkah-gambar), linear-gradient(#000, transparent);
+        mask-image: var(--kartu-langkah-gambar), linear-gradient(#000, transparent);
+        -webkit-mask-size: var(--kartu-langkah-ukuran), 100% 100%;
+        mask-size: var(--kartu-langkah-ukuran), 100% 100%;
+        -webkit-mask-repeat: repeat, no-repeat;
+        mask-repeat: repeat, no-repeat;
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
+    }
+
+    .kartu-langkah-2 {
+        --kartu-langkah-gambar: url("/assets/img/pola/pola-ceplok-daun.svg");
+    }
+
+    .kartu-langkah-3 {
+        --kartu-langkah-gambar: url("/assets/img/pola/pola-anyaman.svg");
+        --kartu-langkah-ukuran: 44px;
+    }
+
+    .dark .kartu-langkah {
+        --kartu-langkah-warna: var(--color-primary-400);
+        --kartu-langkah-opasitas: .14;
+        background-image: radial-gradient(120% 60% at 50% 0%, color-mix(in oklab, var(--color-primary-700) 30%, transparent), transparent 70%);
+    }
+
+    @media print {
+        .kartu-langkah::before {
+            display: none;
+        }
     }
 }

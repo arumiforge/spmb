@@ -155,7 +155,9 @@ final class BrandingTest extends CIUnitTestCase
     {
         $page = $this->get('panduan');
 
-        $page->assertDontSee('og:image');
+        // No share image uploaded: the generic painting (brief 035) is the link preview.
+        $page->assertSee('assets/img/share/bagikan-umum');
+        $page->assertDontSee('aset/gambar-bagikan');
         $page->assertDontSee('Di bawah naungan');
         $page->assertDontSee('aset/logo-lebar');
     }
