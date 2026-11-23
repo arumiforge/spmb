@@ -12,6 +12,19 @@ status to `done`. Nothing here is served by the app directly.
 
 ## Codex deliveries
 
+### paintings-pages (2026-11-24)
+
+| ID | File | Size (px) | KB | Background | Review notes |
+| --- | --- | --- | --- | --- | --- |
+| 019 | `hero-beranda-santri.webp` | 1536×1024 | 343.66 | Transparent | School arrival, accessible ramp and a clear handshake at the gate |
+| 019 | `install/img/hero/hero-beranda-santri.webp` | 814×835 | 215.22 | Transparent | Shared crop, school arrival, accessible ramp and a clear handshake at the gate |
+| 019 | `hero-beranda-santri-dark.webp` | 1536×1024 | 345.72 | Transparent | Gentle tonal lift and a faint rim |
+| 019 | `install/img/hero/hero-beranda-santri-dark.webp` | 814×835 | 215.10 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 019 | `hero-beranda-santri-hijau.webp` | 1536×1024 | 343.63 | Transparent | Phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-hijau.webp` | 814×835 | 215.21 | Transparent | Shared crop, phone display in leaf green |
+| 019 | `hero-beranda-santri-dark-hijau.webp` | 1536×1024 | 345.68 | Transparent | Gentle tonal lift and a faint rim; phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-dark-hijau.webp` | 814×835 | 215.11 | Transparent | Shared crop, gentle tonal lift and a faint rim; phone display in leaf green |
+
 ### svg-kit (2026-11-23)
 
 | ID | File | Size (px) | KB | Background | Review notes |

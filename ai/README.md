@@ -55,7 +55,7 @@ Batches are delivered in this order: `svg-kit` (no image generator needed) → `
 | 016 | [pemisah](prompts/016-pemisah.md) | svg-kit | SVG + CSS | Full-width section dividers: lengkung, tumpal, mega, bukit | done |
 | 017 | [tombol-daftar](prompts/017-tombol-daftar.md) | svg-kit | SVG + CSS | Special "Daftar sekarang" button, all states | done |
 | 018 | [memuat](prompts/018-memuat.md) | svg-kit | SVG + CSS | Loading animation, large and in-button | done |
-| 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | requested |
+| 019 | [hero-beranda-santri](prompts/019-hero-beranda-santri.md) | paintings-pages | painting | Home hero, identity version | generated |
 | 020 | [beranda-kebersamaan](prompts/020-beranda-kebersamaan.md) | paintings-pages | painting | Home: learning together (Bhinneka) | requested |
 | 021 | [beranda-langkah](prompts/021-beranda-langkah.md) | paintings-pages | painting | Home: three steps to register | requested |
 | 022 | [persyaratan](prompts/022-persyaratan.md) | paintings-pages | painting | `/persyaratan` | requested |
