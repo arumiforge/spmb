@@ -41,7 +41,7 @@ create your own branch from `main` instead.
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
 | `feat/ui-codex` | worker A (ui-round) | Codex briefs 036–071 (`docs/ui-round-plan.md` A) | merged into the integration branch (#42) |
-| `feat/ui-minify` | worker B (ui-round) | Minified assets, SVG originals in `resources/img/` (B) | in progress |
+| `feat/ui-minify` | worker B (ui-round) | Minified assets, SVG originals in `resources/img/` (B) | merged into the integration branch (#44) |
 | `feat/ui-admin` | worker C (ui-round) | Dashboard full-width pass, AdminLayoutTest (C) | in progress |
 | `feat/ui-publik` | worker D (ui-round) | Public pages pass, home/settings tests (D) | in progress |
 | `nty/vigilant-wozniak-lvnhku` | coordinator (session ui-round) | Integration branch of the UI round. Foundation: email-or-username login, mobile bottom bar, right drawer, top bar, hero slideshow, three.js icons, date picker, folds/TOC, map + contact, full-width admin, Codex briefs 036+ (D-080…D-088) | in progress |

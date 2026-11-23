@@ -21,7 +21,8 @@ the app. Codex reads everything here directly in the repository.
    [CODEX.md](CODEX.md), makes one batch, runs the checker and opens **one pull request** from
    `art/codex-<date>-<batch>` into `main` that only touches `ai/generated/` and the status lines. It never merges.
 3. **Claude installs it** — Claude reviews every file, asks for fixes in the pull request, copies the
-   approved files from `ai/generated/install/` into `public/assets/img/` and `resources/css/visual/`,
+   approved files from `ai/generated/install/` into `public/assets/img/` (WebP), `resources/img/` (SVG originals;
+   the build minifies them into `public/assets/img/`, D-086) and `resources/css/visual/`,
    wires them into the views with the Indonesian alt text, and sets the status to `done`.
 
 Statuses: `requested` → `generated` (delivered by Codex) → `done` (installed in the app).

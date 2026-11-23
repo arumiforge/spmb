@@ -1,6 +1,6 @@
 ---
 name: spmb-ai-image
-description: Request visual assets for SPMB (paintings, heroes, empty/error states, SVG patterns, dividers, special buttons, loading animation) by writing Codex briefs in ai/, then review and install what Codex delivers (WebP/SVG/CSS into public/assets/img and resources/css). Use whenever a page needs an illustration, pattern, decorative visual, special button or animation.
+description: Request visual assets for SPMB (paintings, heroes, empty/error states, SVG patterns, dividers, special buttons, loading animation) by writing Codex briefs in ai/, then review and install what Codex delivers (WebP into public/assets/img, SVG originals into resources/img, CSS into resources/css). Use whenever a page needs an illustration, pattern, decorative visual, special button or animation.
 ---
 
 # Visual asset workflow (Codex, D-073)
@@ -57,7 +57,9 @@ merging. Its commits must be authored by Arumi Studios with no AI attribution (c
 
 ## 4. Install (Claude, own branch and pull request)
 
-- Copy `ai/generated/install/img/<area>/*` → `public/assets/img/<area>/` and
+- Copy the WebP files `ai/generated/install/img/<area>/*.webp` → `public/assets/img/<area>/`, the SVG files
+  `ai/generated/install/img/<area>/*.svg` → `resources/img/<area>/` (originals; `npm run build:img` writes the
+  minified public copies, D-086 — never put an SVG straight into `public/assets/img/`), and
   `ai/generated/install/css/*.css` → `resources/css/visual/` (import them in `resources/css/app.css`),
   then `npm run build`.
 - Paintings: `illustration('<area>/<name>', $alt, $classes)` in `app/Helpers/ui_helper.php` already picks
