@@ -40,6 +40,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
+| `pw/eager-archimedes-s119yf` | session go-live 2 | Go-live support: environment check, server rehearsal, docs | in progress |
 | `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`) | merged into `main` (PR #26) |
 | `feat/plat-tanya-jawab` | worker C | Tanya Jawab page | merged into the integration branch (#30) |
 | `feat/plat-docker` | worker A | Docker and server | merged into the integration branch (#29) |
@@ -53,7 +54,11 @@ create your own branch from `main` instead.
 
 ## Next steps
 
-0. PR #26 is merged: go-live is next (step 1).
+0. PR #26 is merged; the domain is active on Cloudflare (go-live checklist step 1 done). Go-live continues at
+   checklist step 2 (`setup.sh` on `spmb-prod`). Server flow rehearsed in a cloud container on 2026-11-23 with
+   `SPMB_ROOT` (clean image build, `init`/`deploy` staging, `spmb:install`, branding, `--demo` refused, production
+   promote, backup, restore, production-backup-on-staging refused, ports on 127.0.0.1 only): all passed. In cloud
+   containers the image build needs the sandbox proxy CA in the build (`/root/.ccr/README.md`); the VPS does not.
    The school fills in the 4 hidden Tanya Jawab answers (`[ISI SEKOLAH: …]`: costs, contacts) in Website → Tanya jawab.
 
 Start a new session from `origin/main` (`spmb-session`; `composer install`, `npm ci && npm run build`,
@@ -83,11 +88,12 @@ when the container idles).
 - School still to confirm (phase 3 works with any answer): test days, sessions per day, rooms and capacity; tests per wave or after all waves.
 - Each Claude account needs its cloud environment set up once from `docs/cloud-environment.md` (old inline scripts fail on PHP 8.5.13).
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
-- Go-live (D-056): VPS ready; `spmbsmpnualmarufkudus.web.id` still has to be added to the developer's Cloudflare account; then `docs/deployment.md` → "First server".
+- Go-live (D-056): VPS ready, domain active on Cloudflare; the user runs `docs/deployment.md` → "First server" on the VPS (not reachable from cloud sessions).
 - Codex batches (briefs 013–035) are queued in `ai/README.md`; waiting for the user to start Codex.
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — new account's cloud environment checked (442 tests green); domain on Cloudflare confirmed; full server flow rehearsed in the container (all steps passed). Next: user runs `setup.sh` on `spmb-prod`, then tunnel.
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — PR #32 (example env files) merged; docs refreshed to the current state: README, roadmap (phase 1 done, platform round row, phase 6 partly done), architecture (stack, tables, visual rules), requirements (FR-WEB-03, NFR-02/03/08), module index, third-party server images, CLAUDE.md roles and commands, coordination notes. Next: go-live, Codex `svg-kit`.
 - 2026-11-23 · coordinator (session docker) · `main` — CI green on all checks; PR #26 merged into `main` on the user's request. Next: go-live on `spmb-prod` (`docs/deployment.md` → First server), Codex `svg-kit` batch.
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user decided: direct SSH port stays open, key-only (D-077); `setup.sh`, deployment guide (Bitvise key steps, no fail2ban on the NAT VPS), deploy skill and CLAUDE.md updated. Next: user merges #26, go-live.
@@ -97,4 +103,3 @@ when the container idles).
 - 2026-11-19 · session go-live · `nty/exciting-mendel-ukwgth` — domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image re-rendered); `provision.sh` keeps the SSH port (custom too) open until the tunnel runs and turns password login off only when an admin key exists; deployment doc: 127.0.0.1 ingress, real SSH port, known_hosts from the server, Bitvise via `cloudflared access tcp` (D-065). Next: user merges, go-live.
 - 2026-11-18 · coordinator · `main` — PR #23 (phase 3) merged into `main` on the user's request; workers A–C done. Next: go-live, phase 4.
 - 2026-11-18 · coordinator · `phase-3` — merged B (#20), A (#22), C (#21) after combined local runs (424 tests, demo install seats all applicants, pages checked at 360 px); docs: D-064, requirements FR-TEST-01…04 built, changelog, roadmap; PR `phase-3` → `main` opened. Next: user merges, go-live, phase 4.
-- 2026-11-18 · coordinator · `nty/nifty-mendel-u2jf9s` → `phase-3` — only three roles (Admin Sekolah, Panitia, Siswa; D-063): removed Kepala Sekolah and Petugas roles, accounts migrated to Panitia, guide `/panduan/panitia`, tests use per-user permissions for read-only staff; workers told. Next: worker PRs.

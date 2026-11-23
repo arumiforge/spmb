@@ -248,7 +248,7 @@ The stack must be running (deploy first on a new server).
 | Installation | One installation and database per school (D-050) |
 | Cloudflare | Arumi Studios' account (developer); the domain's nameservers point there |
 | Branding pack | `clients/smp-nu-al-maruf-kudus/branding` (logos, favicon, app icon, share image, green `#005c2f`, LP Ma'arif NU footer logo) |
-| VPS | `spmb-prod`, Ubuntu 24.04.5, NAT VPS, sshd on a provider-set custom port, root with a password from Bitvise, **no provider console**; IP and port are in the provider panel, not in the repository |
+| VPS | `spmb-prod`, Ubuntu 24.04.5, NAT VPS with no public IP of its own (the provider forwards only the SSH port; the site, staging and Cockpit are reached only through the Cloudflare Tunnel), sshd on a provider-set custom port, root with a password from Bitvise, **no provider console**; IP and port are in the provider panel, not in the repository |
 
 ### Go-live checklist
 
