@@ -44,6 +44,10 @@ status to `done`. Nothing here is served by the app directly.
 | 046 | `install/img/langkah/langkah-1.webp` | 613×445 | 89.96 | Transparent | Shared crop, pak Rahmat and Nurul prepare documents on a veranda bench |
 | 046 | `langkah-1-hijau.webp` | 1448×1086 | 498.60 | Transparent | Folder index tab in leaf green |
 | 046 | `install/img/langkah/langkah-1-hijau.webp` | 613×445 | 85.91 | Transparent | Shared crop, folder index tab in leaf green |
+| 047 | `langkah-2.webp` | 1448×1086 | 351.60 | Transparent | Mak Ijah watches Daeng Arif fill in the form on his phone |
+| 047 | `install/img/langkah/langkah-2.webp` | 640×470 | 73.32 | Transparent | Shared crop, mak Ijah watches Daeng Arif fill in the form on his phone |
+| 047 | `langkah-2-hijau.webp` | 1448×1086 | 351.55 | Transparent | Round button on the phone display in leaf green |
+| 047 | `install/img/langkah/langkah-2-hijau.webp` | 640×470 | 73.28 | Transparent | Shared crop, round button on the phone display in leaf green |
 
 ### paintings-pages (2026-11-24)
 
