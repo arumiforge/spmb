@@ -19,9 +19,9 @@ class LoginController extends ShieldLoginController
 {
     public function loginAction(): RedirectResponse
     {
-        $post  = (array) $this->request->getPost();
+        $post = (array) $this->request->getPost();
         // `login` is the form field; `email`/`username` are still accepted from older forms and clients.
-        $login = trim((string) ($post['login'] ?? $post['email'] ?? $post['username'] ?? ''));
+        $login         = trim((string) ($post['login'] ?? $post['email'] ?? $post['username'] ?? ''));
         $post['login'] = $login;
 
         unset($post['email'], $post['username']);
