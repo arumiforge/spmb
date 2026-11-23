@@ -84,7 +84,7 @@ generator needed) → `tombol-seni` (no image generator needed) → `ikon-berand
 | 043 | [ikon-telepon](prompts/043-ikon-telepon.md) | ikon-beranda | painting | Home contact card "Telepon" | requested |
 | 044 | [ikon-pesan](prompts/044-ikon-pesan.md) | ikon-beranda | painting | Home contact card "WhatsApp" | requested |
 | 045 | [ikon-email](prompts/045-ikon-email.md) | ikon-beranda | painting | Home contact card "Email" | requested |
-| 046 | [langkah-1](prompts/046-langkah-1.md) | langkah | painting | Home "Cara mendaftar" step 1 (scene, D-090) | requested |
+| 046 | [langkah-1](prompts/046-langkah-1.md) | langkah | painting | Home "Cara mendaftar" step 1 (scene, D-090) | generated |
 | 047 | [langkah-2](prompts/047-langkah-2.md) | langkah | painting | Home "Cara mendaftar" step 2 (scene, D-090) | requested |
 | 048 | [langkah-3](prompts/048-langkah-3.md) | langkah | painting | Home "Cara mendaftar" step 3 (scene, D-090) | requested |
 | 072 | [latar-langkah](prompts/072-latar-langkah.md) | langkah | SVG + CSS | Art backgrounds of the three "Cara mendaftar" cards | requested |

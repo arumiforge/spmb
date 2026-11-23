@@ -12,6 +12,15 @@ status to `done`. Nothing here is served by the app directly.
 
 ## Codex deliveries
 
+### langkah (2026-11-24)
+
+| ID | File | Size (px) | KB | Background | Review notes |
+| --- | --- | --- | --- | --- | --- |
+| 046 | `langkah-1.webp` | 1448×1086 | 498.51 | Transparent | Pak Rahmat and Nurul prepare documents on a veranda bench |
+| 046 | `install/img/langkah/langkah-1.webp` | 613×445 | 89.96 | Transparent | Shared crop, pak Rahmat and Nurul prepare documents on a veranda bench |
+| 046 | `langkah-1-hijau.webp` | 1448×1086 | 498.60 | Transparent | Folder index tab in leaf green |
+| 046 | `install/img/langkah/langkah-1-hijau.webp` | 613×445 | 85.91 | Transparent | Shared crop, folder index tab in leaf green |
+
 ### paintings-pages (2026-11-24)
 
 | ID | File | Size (px) | KB | Background | Review notes |
