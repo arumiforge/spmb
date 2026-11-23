@@ -5,6 +5,12 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Public polish round (D-090…D-095): Codex paintings 021–026 installed beside the headings of Persyaratan, Jadwal,
+  Tanya Jawab, Cek Status, the card page and "Cara mendaftar"; generic link-preview painting (035) used when a school
+  has no share image; "Cara mendaftar" cards with an art background and slots for step scenes (briefs 046–048
+  rewritten, new brief 072); a map preview next to the address even without a pasted Google Maps embed; HTML
+  responses minified on the way out (`minifyhtml` filter); "Lihat halaman depan" in the dashboard; the dashboard
+  bottom bar ends with Pengaturan.
 - UI round (D-080…D-088, `docs/ui-round-plan.md`): staff sign in with email **or username**; mobile bottom bar
   with five items on every page (public: Daftar raised in the middle; dashboard: raised "Cari pendaftar" quick
   search); menu drawer from the right; small top bar with the school's social media and the staff sign-in link;
@@ -125,6 +131,12 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `THIRD_PARTY_NOTICES.md` listing third-party licences.
 
 ### Changed
+- Default tagline "Sistem Penerimaan Murid Baru (SPMB)" (migration updates the old default); the first client's
+  branding pack and share image follow. Footer links: only Cek Status, Tanya Jawab and Panduan; the parent
+  organisation sits on the right (desktop) or last above the copyright bar (phones). The green top bar is hidden on
+  phones (its links are in the drawer). Phones show the hero picture before the title. Public empty states show an
+  icon that fits the page instead of the same painting. Side-by-side form fields line up when a label wraps.
+- Codex paintings 019, 020 and 027 (#49) go back for a redo: they show a wheelchair or hearing aids (D-089).
 - Dashboard pages use the full width (forms in two card columns from `xl`); breadcrumbs without the home icon;
   no white plate behind pictures in dark mode (D-083); brand images are cached for a year with an ETag, so the
   logo no longer blinks on reload; the cloud setup script installs PHP from packages.sury.org (the ondrej PPA
