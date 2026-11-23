@@ -80,14 +80,14 @@ status to `done`. Nothing here is served by the app directly.
 | 026 | `install/img/section/kartu-hijau.webp` | 710×623 | 107.23 | Transparent | Shared crop, card header band in leaf green |
 | 026 | `kartu-dark-hijau.webp` | 1254×1254 | 362.88 | Transparent | Gentle tonal lift and a faint rim; card header band in leaf green |
 | 026 | `install/img/section/kartu-dark-hijau.webp` | 710×623 | 111.97 | Transparent | Shared crop, gentle tonal lift and a faint rim; card header band in leaf green |
-| 027 | `tes.webp` | 1254×1254 | 396.96 | Transparent | Quiet classroom with blank sheets and a numeral-free clock |
-| 027 | `install/img/section/tes.webp` | 700×652 | 115.25 | Transparent | Shared crop, quiet classroom with blank sheets and a numeral-free clock |
-| 027 | `tes-dark.webp` | 1254×1254 | 396.08 | Transparent | Gentle tonal lift and a faint rim |
-| 027 | `install/img/section/tes-dark.webp` | 700×652 | 115.12 | Transparent | Shared crop, gentle tonal lift and a faint rim |
-| 027 | `tes-hijau.webp` | 1254×1254 | 396.92 | Transparent | Pencil case in leaf green |
-| 027 | `install/img/section/tes-hijau.webp` | 700×652 | 115.09 | Transparent | Shared crop, pencil case in leaf green |
-| 027 | `tes-dark-hijau.webp` | 1254×1254 | 396.00 | Transparent | Gentle tonal lift and a faint rim; pencil case in leaf green |
-| 027 | `install/img/section/tes-dark-hijau.webp` | 700×652 | 115.05 | Transparent | Shared crop, gentle tonal lift and a faint rim; pencil case in leaf green |
+| 027 | `tes.webp` | 1254×1254 | 280.13 | Transparent | Three relaxed pupils, blank sheets and a numeral-free clock |
+| 027 | `install/img/section/tes.webp` | 700×651 | 84.17 | Transparent | Shared crop, three relaxed pupils, blank sheets and a numeral-free clock |
+| 027 | `tes-dark.webp` | 1254×1254 | 282.17 | Transparent | Gentle tonal lift and a faint rim |
+| 027 | `install/img/section/tes-dark.webp` | 700×651 | 81.49 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 027 | `tes-hijau.webp` | 1254×1254 | 280.03 | Transparent | Pencil case in leaf green |
+| 027 | `install/img/section/tes-hijau.webp` | 700×651 | 84.17 | Transparent | Shared crop, pencil case in leaf green |
+| 027 | `tes-dark-hijau.webp` | 1254×1254 | 282.38 | Transparent | Gentle tonal lift and a faint rim; pencil case in leaf green |
+| 027 | `install/img/section/tes-dark-hijau.webp` | 700×651 | 81.49 | Transparent | Shared crop, gentle tonal lift and a faint rim; pencil case in leaf green |
 | 035 | `bagikan-umum.webp` | 1536×1024 | 577.51 | Full bleed | All four students visible in the centre square |
 | 035 | `install/img/share/bagikan-umum.webp` | 1200×630 | 173.13 | Full bleed | Centre crop, all four students visible in the centre square |
 | 035 | `install/img/share/bagikan-umum.jpg` | 1200×630 | 177.12 | Full bleed | Centre crop, all four students visible in the centre square |
