@@ -24,13 +24,11 @@ $last = count($breadcrumbs) - 1;
                     <?= icon('chevron', 'mx-1 h-4 w-4 shrink-0 text-gray-400 rtl:rotate-180') ?>
                 <?php endif ?>
                 <?php if ($i !== $last && ! empty($crumb['url'])) : ?>
-                    <a href="<?= esc(site_url($crumb['url']), 'attr') ?>" class="inline-flex items-center gap-1.5 truncate text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white">
-                        <?php if ($i === 0) : ?><?= icon('home', 'h-4 w-4 shrink-0') ?><?php endif ?>
+                    <a href="<?= esc(site_url($crumb['url']), 'attr') ?>" class="truncate text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white">
                         <?= esc($crumb['label']) ?>
                     </a>
                 <?php else : ?>
-                    <span class="inline-flex items-center gap-1.5 truncate text-gray-500 dark:text-gray-400">
-                        <?php if ($i === 0) : ?><?= icon('home', 'h-4 w-4 shrink-0') ?><?php endif ?>
+                    <span class="truncate text-gray-500 dark:text-gray-400">
                         <?= esc($crumb['label']) ?>
                     </span>
                 <?php endif ?>

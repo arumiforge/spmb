@@ -51,13 +51,13 @@ $button = 'inline-flex items-center justify-center gap-1.5 rounded-lg border px-
                 'title'    => lang('Pendaftaran.waveEmptyTitle'),
                 'text'     => lang('Pendaftaran.waveEmptyText'),
                 'icon'     => 'calendar',
-                'image'    => 'state/kosong-data',
+                'image'    => 'state/kosong-gelombang', 'fallback' => 'state/kosong-data',
                 'imageAlt' => lang('App.altNoData'),
                 'action'   => $year === $currentYear ? ['label' => lang('Pendaftaran.waveAdd'), 'url' => 'admin/pengaturan/gelombang/tambah'] : null,
             ]]) ?>
         </div>
     <?php else : ?>
-        <div class="hidden overflow-x-auto md:block">
+        <div class="relative hidden overflow-x-auto md:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>

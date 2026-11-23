@@ -57,11 +57,11 @@ $me = (int) auth()->id();
 
     <?php if ($users === []) : ?>
         <div class="p-4">
-            <?= view('partials/empty_state', ['empty' => ['title' => lang('Pengguna.emptyTitle'), 'text' => lang('Pengguna.emptyText'), 'icon' => 'users', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]]) ?>
+            <?= view('partials/empty_state', ['empty' => ['title' => lang('Pengguna.emptyTitle'), 'text' => lang('Pengguna.emptyText'), 'icon' => 'users', 'image' => 'state/kosong-pengguna', 'fallback' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]]) ?>
         </div>
     <?php else : ?>
         <!-- Table on md and up -->
-        <div class="hidden overflow-x-auto md:block">
+        <div class="relative hidden overflow-x-auto md:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>

@@ -93,7 +93,7 @@ $withoutId = array_filter(['pengguna' => $filters['pengguna'], 'kegiatan' => $fi
         </div>
     <?php else : ?>
         <!-- Table on md and up -->
-        <div class="hidden overflow-x-auto md:block">
+        <div class="relative hidden overflow-x-auto md:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>
@@ -127,10 +127,9 @@ $withoutId = array_filter(['pengguna' => $filters['pengguna'], 'kegiatan' => $fi
             <?php foreach ($rows as $r) : ?>
                 <li>
                     <a href="<?= url_to('riwayat.detail', $r['id']) ?>" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                        <div class="flex items-start justify-between gap-3">
-                            <p class="min-w-0 font-medium text-gray-900 dark:text-white"><?= esc($presenter->summary($r)) ?></p>
-                            <?= $badge($r) ?>
-                        </div>
+                        <?php // Badge above the summary: side by side it squeezed long summaries into half the width of a phone. ?>
+                        <div><?= $badge($r) ?></div>
+                        <p class="mt-1.5 font-medium text-gray-900 dark:text-white"><?= esc($presenter->summary($r)) ?></p>
                         <p class="mt-1 text-sm text-gray-600 dark:text-gray-300"><?= esc($subject($r)) ?></p>
                         <p class="mt-2 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
                             <?= icon('clock', 'h-3.5 w-3.5') ?><?= esc(tanggal_indo($r['created_at'], true)) ?> · <?= esc($who($r)) ?>

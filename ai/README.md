@@ -21,7 +21,8 @@ the app. Codex reads everything here directly in the repository.
    [CODEX.md](CODEX.md), makes one batch, runs the checker and opens **one pull request** from
    `art/codex-<date>-<batch>` into `main` that only touches `ai/generated/` and the status lines. It never merges.
 3. **Claude installs it** — Claude reviews every file, asks for fixes in the pull request, copies the
-   approved files from `ai/generated/install/` into `public/assets/img/` and `resources/css/visual/`,
+   approved files from `ai/generated/install/` into `public/assets/img/` (WebP), `resources/img/` (SVG originals;
+   the build minifies them into `public/assets/img/`, D-086) and `resources/css/visual/`,
    wires them into the views with the Indonesian alt text, and sets the status to `done`.
 
 Statuses: `requested` → `generated` (delivered by Codex) → `done` (installed in the app).
@@ -29,13 +30,14 @@ Statuses: `requested` → `generated` (delivered by Codex) → `done` (installed
 ## Codex starter prompt
 
 ```
-Work in the GitHub repository arumiforge/spmb, starting from the latest main. Read ai/CODEX.md and follow it exactly; it points you to ai/style-guide.md and the briefs in ai/prompts/. Your only job is to make the visual assets of ONE batch from the queue in ai/README.md (rows with status "requested"; take the first batch in the table that is not done yet), check them with python3 ai/tools/check_assets.py, and deliver them only in ai/generated/ (plus the status lines) on a new branch art/codex-<YYYYMMDD>-<batch>, with one pull request into main. Commit as Arumi Studios <arumiforge@gmail.com>. Do not change anything else, do not merge, and add no AI attribution anywhere. Respect the rules for religious elements in section 2 of the style guide above everything else.
+Work in the GitHub repository arumiforge/spmb, starting from the latest main. Read ai/CODEX.md and follow it exactly; it points you to ai/style-guide.md and the briefs in ai/prompts/. Your only job is to make the visual assets of ONE batch from the queue in ai/README.md (rows with status "requested"; take the first batch, in the delivery order written under "Queue", that is not done yet), check them with python3 ai/tools/check_assets.py, and deliver them only in ai/generated/ (plus the status lines) on a new branch art/codex-<YYYYMMDD>-<batch>, with one pull request into main. Commit as Arumi Studios <arumiforge@gmail.com>. Do not change anything else, do not merge, and add no AI attribution anywhere. Respect the rules for religious elements in section 2 of the style guide above everything else.
 ```
 
 ## Queue
 
-Batches are delivered in this order: `svg-kit` (no image generator needed) → `paintings-pages` →
-`paintings-states` → `variants-001-012`.
+Batches are delivered in this order (home page first, user's request of 2026-11-23): `svg-kit` (no image
+generator needed) → `tombol-seni` (no image generator needed) → `ikon-beranda` → `langkah` → `slide-beranda` →
+`paintings-pages` → `kosong-states` → `paintings-states` → `variants-001-012`.
 
 | ID | Brief | Batch | Kind | Used on | Status |
 | --- | --- | --- | --- | --- | --- |
@@ -72,6 +74,42 @@ Batches are delivered in this order: `svg-kit` (no image generator needed) → `
 | 032 | [kosong-jadwal](prompts/032-kosong-jadwal.md) | paintings-states | painting | No test schedule yet | requested |
 | 033 | [kosong-berkas](prompts/033-kosong-berkas.md) | paintings-states | painting | No documents uploaded | requested |
 | 034 | [tanpa-koneksi](prompts/034-tanpa-koneksi.md) | paintings-states | painting | Offline / connection lost | requested |
+| 036 | [ikon-persyaratan](prompts/036-ikon-persyaratan.md) | ikon-beranda | painting | Home info card + art button "Lihat Persyaratan" | requested |
+| 037 | [ikon-jadwal](prompts/037-ikon-jadwal.md) | ikon-beranda | painting | Home info card "Jadwal" | requested |
+| 038 | [ikon-cek-status](prompts/038-ikon-cek-status.md) | ikon-beranda | painting | Home info card + art button "Cek Status" | requested |
+| 039 | [ikon-tanya-jawab](prompts/039-ikon-tanya-jawab.md) | ikon-beranda | painting | Home info card "Tanya jawab" | requested |
+| 040 | [ikon-panduan](prompts/040-ikon-panduan.md) | ikon-beranda | painting | Home info card + art button "Baca Panduan Pendaftaran" | requested |
+| 041 | [ikon-daftar](prompts/041-ikon-daftar.md) | ikon-beranda | painting | Raised "Daftar" in the public bottom bar | requested |
+| 042 | [ikon-alamat](prompts/042-ikon-alamat.md) | ikon-beranda | painting | Home contact card "Alamat" | requested |
+| 043 | [ikon-telepon](prompts/043-ikon-telepon.md) | ikon-beranda | painting | Home contact card "Telepon" | requested |
+| 044 | [ikon-pesan](prompts/044-ikon-pesan.md) | ikon-beranda | painting | Home contact card "WhatsApp" | requested |
+| 045 | [ikon-email](prompts/045-ikon-email.md) | ikon-beranda | painting | Home contact card "Email" | requested |
+| 046 | [langkah-1](prompts/046-langkah-1.md) | langkah | painting | Home "Cara mendaftar" step 1 | requested |
+| 047 | [langkah-2](prompts/047-langkah-2.md) | langkah | painting | Home "Cara mendaftar" step 2 | requested |
+| 048 | [langkah-3](prompts/048-langkah-3.md) | langkah | painting | Home "Cara mendaftar" step 3 | requested |
+| 049 | [tombol-seni](prompts/049-tombol-seni.md) | tombol-seni | SVG + CSS | Art buttons `.tombol-seni` and the bottom-bar badge | requested |
+| 050 | [hero-slide-belajar](prompts/050-hero-slide-belajar.md) | slide-beranda | painting | Home hero slideshow (default slide) | requested |
+| 051 | [hero-slide-keluarga](prompts/051-hero-slide-keluarga.md) | slide-beranda | painting | Home hero slideshow (default slide) | requested |
+| 052 | [kosong-jenis-berkas](prompts/052-kosong-jenis-berkas.md) | kosong-states | painting | Empty: no document types | requested |
+| 053 | [kosong-antrean-berkas](prompts/053-kosong-antrean-berkas.md) | kosong-states | painting | Empty: document queue all checked | requested |
+| 054 | [kosong-sekolah-asal](prompts/054-kosong-sekolah-asal.md) | kosong-states | painting | Empty: no origin schools | requested |
+| 055 | [kosong-sekolah-lain](prompts/055-kosong-sekolah-lain.md) | kosong-states | painting | Empty: every school matched | requested |
+| 056 | [kosong-penjadwalan](prompts/056-kosong-penjadwalan.md) | kosong-states | painting | Empty: nobody left to schedule | requested |
+| 057 | [kosong-riwayat-jadwal](prompts/057-kosong-riwayat-jadwal.md) | kosong-states | painting | Empty: no schedule changes | requested |
+| 058 | [kosong-sesi](prompts/058-kosong-sesi.md) | kosong-states | painting | Empty: no test sessions | requested |
+| 059 | [kosong-ruang](prompts/059-kosong-ruang.md) | kosong-states | painting | Empty: no test rooms | requested |
+| 060 | [kosong-peserta](prompts/060-kosong-peserta.md) | kosong-states | painting | Empty: no test participants | requested |
+| 061 | [kosong-peserta-sesi](prompts/061-kosong-peserta-sesi.md) | kosong-states | painting | Empty: session without participants | requested |
+| 062 | [kosong-sesi-hari-ini](prompts/062-kosong-sesi-hari-ini.md) | kosong-states | painting | Empty: no session on the chosen day | requested |
+| 063 | [kosong-gelombang](prompts/063-kosong-gelombang.md) | kosong-states | painting | Empty: no registration waves | requested |
+| 064 | [kosong-pendaftar](prompts/064-kosong-pendaftar.md) | kosong-states | painting | Empty: no applicants | requested |
+| 065 | [kosong-tanya-jawab](prompts/065-kosong-tanya-jawab.md) | kosong-states | painting | Empty: no Q&A (public and dashboard) | requested |
+| 066 | [kosong-jadwal-pendaftaran](prompts/066-kosong-jadwal-pendaftaran.md) | kosong-states | painting | Empty: `/jadwal` not announced | requested |
+| 067 | [kosong-persyaratan](prompts/067-kosong-persyaratan.md) | kosong-states | painting | Empty: `/persyaratan` not announced | requested |
+| 068 | [kartu-cari](prompts/068-kartu-cari.md) | kosong-states | painting | Empty: card lookup, nothing checked yet | requested |
+| 069 | [kartu-tidak-ditemukan](prompts/069-kartu-tidak-ditemukan.md) | kosong-states | painting | Card lookup: not found | requested |
+| 070 | [kosong-pengguna](prompts/070-kosong-pengguna.md) | kosong-states | painting | Empty: no matching users | requested |
+| 071 | [kosong-dasbor](prompts/071-kosong-dasbor.md) | kosong-states | painting | Empty: dashboard summary | requested |
 | 013 | [aksen-hijau](prompts/013-aksen-hijau.md) | variants-001-012 | image edit | Green-accent copies of 001–012 | requested |
 | 014 | [varian-gelap](prompts/014-varian-gelap.md) | variants-001-012 | image edit | Dark copies of 001, 002, 006, 011, 012 | requested |
 
@@ -81,3 +119,11 @@ Notes
 - Every new painting (019–034) comes with dark, green-accent and dark green-accent variants; 035 with a
   green-accent variant only.
 - 017 uses the kawung tile from 015 and the small loader from 018, so the `svg-kit` batch ships together.
+- **From 036 on (D-083)** every painting is transparent, reads on light and dark pages and comes with a
+  green-accent variant only — no `-dark` copies. New areas: `ikon` (≤ 512 px, ≤ 60 KB) and `langkah`
+  (≤ 640 px, ≤ 90 KB). File names of 036–071 are fixed: the views already load them (`art_icon()`, empty
+  states with `'fallback'`) and show a Lucide icon or a generic painting until they arrive.
+- 049 replaces the interim `.tombol-seni` and `.nav-bawah-tengah-bulat` CSS in `resources/css/komponen.css`
+  and holds the painted `ikon-daftar` (041), so deliver it after `ikon-beranda`.
+- Every empty state (052–071) shows its own scene; no two empty states may look alike, also not like 004,
+  005, 009, 010 or 028–034.

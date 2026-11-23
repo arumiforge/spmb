@@ -287,7 +287,7 @@ class Auth extends ShieldAuth
      */
     public array $validFields = [
         'email',
-        // 'username',
+        'username', // staff may sign in with either (D-080)
     ];
 
     /**

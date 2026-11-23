@@ -22,7 +22,7 @@ $btnSec   = 'rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font
 
 <?= $this->section('content') ?>
 <?php if (session('temp_password') !== null) : ?>
-    <div class="mb-6 max-w-3xl rounded-lg border border-yellow-300 bg-yellow-50 p-5 dark:border-yellow-800 dark:bg-gray-800" role="status">
+    <div class="mb-6 rounded-lg border border-yellow-300 bg-yellow-50 p-5 dark:border-yellow-800 dark:bg-gray-800" role="status">
         <h2 class="flex items-center gap-2 font-semibold text-yellow-800 dark:text-yellow-300"><?= icon('key', 'h-5 w-5') ?><?= lang('Pengguna.tempTitle') ?></h2>
         <p class="mt-1 text-sm text-yellow-800 dark:text-yellow-200"><?= lang('Pengguna.tempText', [esc($name)]) ?></p>
         <div class="mt-3 flex flex-wrap items-center gap-3">
@@ -35,7 +35,7 @@ $btnSec   = 'rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font
 <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
     <form method="post" action="<?= $action ?>" class="space-y-6 xl:col-span-2">
         <?= csrf_field() ?>
-        <section class="<?= $card ?> max-w-3xl">
+        <section class="<?= $card ?>">
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div class="sm:col-span-2"><?= view('partials/form_field', ['field' => ['name' => 'full_name', 'label' => lang('Pengguna.fullName'), 'required' => true, 'value' => $target?->full_name, 'attrs' => ['autocomplete' => 'off']]]) ?></div>
                 <?= view('partials/form_field', ['field' => ['name' => 'username', 'label' => lang('Pengguna.username'), 'required' => true, 'value' => $target?->username, 'help' => lang('Pengguna.usernameHelp'), 'attrs' => ['autocomplete' => 'off', 'autocapitalize' => 'none']]]) ?>
@@ -43,7 +43,7 @@ $btnSec   = 'rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font
             </div>
         </section>
 
-        <fieldset class="<?= $card ?> max-w-3xl">
+        <fieldset class="<?= $card ?>">
             <legend class="sr-only"><?= lang('Pengguna.roles') ?></legend>
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Pengguna.roles') ?></h2>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?= $isSelf ? lang('Pengguna.ownRolesLocked') : lang('Pengguna.rolesHelp') ?></p>
@@ -67,12 +67,12 @@ $btnSec   = 'rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font
             </ul>
         </fieldset>
 
-        <div class="flex max-w-3xl flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <a href="<?= url_to('pengguna') ?>" class="<?= $btnSec ?> text-center"><?= lang('App.back') ?></a>
             <button type="submit" class="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800"><?= lang('Pengguna.save') ?></button>
         </div>
         <?php if (! $editing) : ?>
-            <p class="max-w-3xl text-sm text-gray-500 dark:text-gray-400"><?= lang('Pengguna.createHelp') ?></p>
+            <p class="text-sm text-gray-500 dark:text-gray-400"><?= lang('Pengguna.createHelp') ?></p>
         <?php endif ?>
     </form>
 

@@ -18,13 +18,13 @@ $owners = ['' => lang('Referensi.chooseOwnership'), 'negeri' => lang('Referensi.
 <?= $this->section('content') ?>
 <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
     <div class="space-y-6 xl:col-span-2">
-        <section class="<?= $card ?> max-w-3xl">
+        <section class="<?= $card ?>">
             <p class="text-sm text-gray-500 dark:text-gray-400"><?= lang('Referensi.mapTyped') ?></p>
             <p class="mt-1 break-words text-lg font-semibold text-gray-900 dark:text-white"><?= esc($map['name']) ?></p>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?= lang('Referensi.othersCount', [$map['count']]) ?></p>
         </section>
 
-        <section class="<?= $card ?> max-w-3xl space-y-4" aria-labelledby="choose-title">
+        <section class="<?= $card ?> space-y-4" aria-labelledby="choose-title">
             <h2 id="choose-title" class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Referensi.mapChooseTitle') ?></h2>
             <form method="get" action="<?= url_to('referensi.lain.petakan') ?>" role="search" class="flex flex-col gap-2 sm:flex-row">
                 <input type="hidden" name="nama" value="<?= esc($map['name'], 'attr') ?>">

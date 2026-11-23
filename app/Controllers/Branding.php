@@ -51,10 +51,24 @@ class Branding extends BaseController
             throw PageNotFoundException::forPageNotFound();
         }
 
+        // URLs carry a version (?v=<hash of the stored name>), so a new upload gets a new URL.
+        // Long caching plus a validator stops the logo from being fetched again (and blinking) on every reload.
+        $etag     = '"' . substr(md5($name . filemtime($file)), 0, 16) . '"';
+        $modified = gmdate('D, d M Y H:i:s', (int) filemtime($file)) . ' GMT';
+        $this->response
+            ->setHeader('X-Content-Type-Options', 'nosniff')
+            ->setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+            ->setHeader('ETag', $etag)
+            ->setHeader('Last-Modified', $modified)
+            ->removeHeader('Pragma')
+            ->removeHeader('Expires');
+
+        if (trim($this->request->getHeaderLine('If-None-Match')) === $etag) {
+            return $this->response->setStatusCode(304)->setBody('');
+        }
+
         return $this->response
             ->setHeader('Content-Type', $mime)
-            ->setHeader('X-Content-Type-Options', 'nosniff')
-            ->setHeader('Cache-Control', 'public, max-age=604800')
             ->setBody((string) file_get_contents($file));
     }
 }

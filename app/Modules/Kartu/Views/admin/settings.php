@@ -11,7 +11,7 @@ $h2     = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('kartu.pengaturan') ?>" class="max-w-3xl space-y-6">
+<form method="post" action="<?= url_to('kartu.pengaturan') ?>" class="form-lebar">
     <?= csrf_field() ?>
 
     <section class="<?= $card ?>">

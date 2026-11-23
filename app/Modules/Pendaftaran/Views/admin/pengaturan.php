@@ -25,7 +25,7 @@ $labels  = lang('Pendaftaran.fieldModes');
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('pengaturan.pendaftaran') ?>" class="max-w-3xl space-y-6">
+<form method="post" action="<?= url_to('pengaturan.pendaftaran') ?>" class="form-lebar">
     <?= csrf_field() ?>
 
     <section class="<?= $card ?>">

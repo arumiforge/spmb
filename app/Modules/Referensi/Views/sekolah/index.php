@@ -78,11 +78,11 @@ $filtered = array_filter($filters) !== [];
         <div class="p-4">
             <?= view('partials/empty_state', ['empty' => $filtered
                 ? ['title' => lang('Referensi.noResultTitle'), 'text' => lang('Referensi.noResultText'), 'icon' => 'school', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]
-                : ['title' => lang('Referensi.emptyTitle'), 'text' => lang('Referensi.emptyText'), 'icon' => 'school', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
+                : ['title' => lang('Referensi.emptyTitle'), 'text' => lang('Referensi.emptyText'), 'icon' => 'school', 'image' => 'state/kosong-sekolah-asal', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
         </div>
     <?php else : ?>
         <!-- Table on md and up -->
-        <div class="hidden overflow-x-auto md:block">
+        <div class="relative hidden overflow-x-auto md:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>

@@ -2,10 +2,10 @@
 id: NNN
 name: <kebab-name>                      # file base name, Indonesian kebab-case
 kind: painting
-area: hero | section | guide | state | share
+area: hero | section | guide | state | share | ikon | langkah
 generate: landscape 1536x1024 | portrait 1024x1536 | square 1024x1024
-background: transparent | white
-variants: light, dark, hijau, dark-hijau
+background: transparent                 # new paintings are always transparent (D-083)
+variants: light, hijau                  # no dark copies from brief 036 on (D-083)
 batch: <batch-slug>                     # pull request group, e.g. paintings-pages
 status: requested                       # requested → generated (Codex) → done (Claude)
 ---
@@ -46,19 +46,19 @@ status: requested                       # requested → generated (Codex) → do
 ```
 <base style block, style guide §7, unchanged>
 
+<light-and-dark block, style guide §10, unchanged>
+
 <one self-contained paragraph: shape, background, composition, characters, setting, mood>
 ```
 
-Variants: dark (§8), green accent (§9), dark green accent (§9 on the dark image).
+Variant: green accent (§9) only. No dark variant (D-083).
 
 ## Files
 
 | Variant | Master | Installed (`ai/generated/install/img/…`) |
 | --- | --- | --- |
 | light | `ai/generated/<name>.webp` | `<area>/<name>.webp` |
-| dark | `ai/generated/<name>-dark.webp` | `<area>/<name>-dark.webp` |
 | hijau | `ai/generated/<name>-hijau.webp` | `<area>/<name>-hijau.webp` |
-| dark-hijau | `ai/generated/<name>-dark-hijau.webp` | `<area>/<name>-dark-hijau.webp` |
 
 ## Alt text (Indonesian, used in the view)
 
@@ -68,4 +68,5 @@ Variants: dark (§8), green accent (§9), dark green accent (§9 on the dark ima
 
 - [ ] `python3 ai/tools/check_assets.py NNN` passes
 - [ ] Empty area really empty; no text, letters, Arabic-like marks or emblems anywhere
+- [ ] Reads on `#FFFFFF` and on `#111827`; no glow, halo or light rim
 - [ ] <brief-specific checks>

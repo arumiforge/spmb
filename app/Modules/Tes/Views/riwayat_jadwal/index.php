@@ -21,8 +21,8 @@ $change   = static fn (array $r): string => view('Modules\Tes\Views\riwayat_jadw
 
 <?= $this->section('content') ?>
 <div class="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-    <form method="get" action="<?= url_to('tes.riwayat-jadwal') ?>" class="grid grid-cols-1 gap-3 border-b border-gray-200 p-4 sm:grid-cols-2 lg:grid-cols-4 dark:border-gray-700" role="search">
-        <div class="relative sm:col-span-2 lg:col-span-4">
+    <form method="get" action="<?= url_to('tes.riwayat-jadwal') ?>" class="grid grid-cols-1 gap-3 border-b border-gray-200 p-4 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))_auto] dark:border-gray-700" role="search">
+        <div class="relative sm:col-span-2 lg:col-span-4 2xl:col-span-1 2xl:self-end">
             <label for="q" class="sr-only"><?= lang('TesPenjadwalan.searchLabel') ?></label>
             <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-gray-500 dark:text-gray-400"><?= icon('search', 'h-4 w-4') ?></span>
             <input type="search" id="q" name="q" value="<?= esc($filters['q'], 'attr') ?>" placeholder="<?= lang('TesPenjadwalan.searchLabel') ?>" class="<?= $input ?> ps-9">
@@ -56,11 +56,11 @@ $change   = static fn (array $r): string => view('Modules\Tes\Views\riwayat_jadw
         <div class="p-4">
             <?= view('partials/empty_state', ['empty' => $filtered
                 ? ['title' => lang('TesPenjadwalan.emptySearchTitle'), 'text' => lang('TesPenjadwalan.emptySearchText'), 'icon' => 'search', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]
-                : ['title' => lang('TesPenjadwalan.logEmptyTitle'), 'text' => lang('TesPenjadwalan.logEmptyText'), 'icon' => 'clock', 'image' => 'state/kosong-riwayat', 'imageAlt' => lang('App.altNoData')],
+                : ['title' => lang('TesPenjadwalan.logEmptyTitle'), 'text' => lang('TesPenjadwalan.logEmptyText'), 'icon' => 'clock', 'image' => 'state/kosong-riwayat-jadwal', 'fallback' => 'state/kosong-riwayat', 'imageAlt' => lang('App.altNoData')],
             ]) ?>
         </div>
     <?php else : ?>
-        <div class="hidden overflow-x-auto lg:block">
+        <div class="relative hidden overflow-x-auto lg:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>

@@ -37,13 +37,13 @@ $actions = static function (array $r, bool $wide) use ($button, $plain, $danger)
     <?= view('partials/empty_state', ['empty' => [
         'title'    => lang('TesJadwal.roomEmptyTitle'),
         'text'     => lang('TesJadwal.roomEmptyText'),
-        'image'    => 'state/kosong-data',
+        'image'    => 'state/kosong-ruang', 'fallback' => 'state/kosong-data',
         'imageAlt' => lang('App.altNoData'),
         'action'   => ['label' => lang('TesJadwal.roomAdd'), 'url' => 'admin/tes/ruang/tambah'],
     ]]) ?>
 <?php else : ?>
     <div class="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-        <div class="hidden overflow-x-auto md:block">
+        <div class="relative hidden overflow-x-auto md:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>

@@ -18,7 +18,8 @@ class Sekolah extends BaseController
      *
      * @var list<string>
      */
-    public const FIELDS = ['name', 'shortName', 'tagline', 'address', 'phone', 'whatsapp', 'email', 'website', 'primaryColor', 'timezoneLabel', 'footerText', 'partnerName', 'illustrationAccent'];
+    public const FIELDS = ['name', 'shortName', 'tagline', 'motto', 'address', 'phone', 'whatsapp', 'email', 'website', 'mapEmbed',
+        'socialInstagram', 'socialFacebook', 'socialYoutube', 'socialTiktok', 'primaryColor', 'timezoneLabel', 'footerText', 'partnerName', 'illustrationAccent'];
 
     public function index(): string
     {
@@ -43,6 +44,8 @@ class Sekolah extends BaseController
             'name'          => ['label' => lang('Pengaturan.name'), 'rules' => 'required|max_length[150]'],
             'shortName'     => ['label' => lang('Pengaturan.shortName'), 'rules' => 'required|max_length[40]'],
             'tagline'       => ['label' => lang('Pengaturan.tagline'), 'rules' => 'permit_empty|max_length[150]'],
+            'motto'         => ['label' => lang('Pengaturan.motto'), 'rules' => 'permit_empty|max_length[200]'],
+            'mapEmbed'      => ['label' => lang('Pengaturan.mapEmbed'), 'rules' => 'permit_empty|max_length[3000]|map_embed', 'errors' => ['map_embed' => lang('Pengaturan.mapEmbedInvalid')]],
             'address'       => ['label' => lang('Pengaturan.address'), 'rules' => 'permit_empty|max_length[500]'],
             'phone'         => ['label' => lang('Pengaturan.phone'), 'rules' => 'permit_empty|max_length[30]|regex_match[/\A[0-9+() .-]+\z/]'],
             'whatsapp'      => ['label' => lang('Pengaturan.whatsapp'), 'rules' => 'permit_empty|max_length[30]|regex_match[/\A[0-9+() .-]+\z/]'],
@@ -52,6 +55,10 @@ class Sekolah extends BaseController
             'timezoneLabel' => ['label' => lang('Pengaturan.timezoneLabel'), 'rules' => 'required|in_list[WIB,WITA,WIT]'],
             'footerText'    => ['label' => lang('Pengaturan.footerText'), 'rules' => 'permit_empty|max_length[255]'],
         ];
+
+        foreach (['socialInstagram', 'socialFacebook', 'socialYoutube', 'socialTiktok'] as $social) {
+            $rules[$social] = ['label' => lang('Pengaturan.' . $social), 'rules' => 'permit_empty|valid_url_strict[https,http]|max_length[255]'];
+        }
 
         $uploads = [];
 
@@ -87,6 +94,11 @@ class Sekolah extends BaseController
                 $value = (string) valid_hex_color($value);
             }
 
+            if ($field === 'mapEmbed') {
+                // Only the embed URL is stored, never the pasted HTML (D-085).
+                $value = map_embed_url($value);
+            }
+
             $current = (string) setting('School.' . $field);
 
             if ($value !== $current) {
@@ -101,7 +113,8 @@ class Sekolah extends BaseController
             $current = (string) setting('School.' . $setting);
             $file    = $uploads[$key] ?? null;
 
-            if ($file !== null && $file->isValid()) {
+            // Same guard as Berkas UploadInput: the test suite's fake uploads are not is_uploaded_file().
+            if ($file !== null && $file->getError() === UPLOAD_ERR_OK && (ENVIRONMENT === 'testing' || $file->isValid())) {
                 $stored = BrandingAssets::storeUpload($file, $key);
 
                 if ($stored === null) {

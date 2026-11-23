@@ -130,6 +130,8 @@ _modules/*
 #-------------------------
 /node_modules/
 /public/build/
+# Minified SVGs are build output of `npm run build:img`; the originals live in resources/img/ (D-086)
+/public/assets/img/**/*.svg
 /.php-cs-fixer.cache
 /ai/output/*
 !/ai/output/.gitkeep

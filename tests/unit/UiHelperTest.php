@@ -140,7 +140,7 @@ final class UiHelperTest extends CIUnitTestCase
             }
 
             $code = (string) file_get_contents($file->getPathname());
-            preg_match_all("/icon\\(\\s*'([a-z0-9-]+)'/", $code, $direct);
+            preg_match_all("/(?<![a-z_])icon\\(\\s*'([a-z0-9-]+)'/", $code, $direct);
             preg_match_all("/'icon'\\s*=>\\s*'([a-z0-9-]+)'/", $code, $listed);
 
             foreach ([...$direct[1], ...$listed[1]] as $name) {

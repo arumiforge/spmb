@@ -15,6 +15,8 @@ use Modules\Tes\Libraries\TestSchedule;
 
 $input    = 'block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400';
 $filtered = array_filter($filters, static fn (string $v): bool => $v !== '') !== [];
+// The date and lists stay folded on phones unless one of them is in use.
+$folded = array_filter(array_diff_key($filters, ['q' => true]), static fn (string $v): bool => $v !== '') === [];
 $waveName = static fn (array $r): string => $r['wave_id'] === null ? lang('TesPenjadwalan.noWaveApplicants') : ($waves[$r['wave_id']] ?? lang('TesPenjadwalan.noWaveApplicants'));
 $status   = static fn (array $r): string => $r['test_status'] ?? 'unscheduled';
 $badge    = static fn (array $r): string => view('partials/status_badge', ['badge' => status_badge_for('test', $status($r))]);
@@ -37,20 +39,29 @@ $select = static function (string $name, string $all, array $options) use ($filt
 
 <?= $this->section('content') ?>
 <div class="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-    <form method="get" action="<?= url_to('tes.peserta') ?>" class="grid grid-cols-1 gap-3 border-b border-gray-200 p-4 sm:grid-cols-2 lg:grid-cols-4 dark:border-gray-700" role="search">
-        <div class="relative sm:col-span-2 lg:col-span-4">
+    <form method="get" action="<?= url_to('tes.peserta') ?>" class="grid grid-cols-1 gap-3 border-b border-gray-200 p-4 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-[minmax(0,2fr)_repeat(4,minmax(0,1fr))_auto] dark:border-gray-700" role="search">
+        <div class="relative sm:col-span-2 lg:col-span-4 2xl:col-span-1">
             <label for="q" class="sr-only"><?= lang('TesPenjadwalan.searchLabel') ?></label>
             <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-gray-500 dark:text-gray-400"><?= icon('search', 'h-4 w-4') ?></span>
             <input type="search" id="q" name="q" value="<?= esc($filters['q'], 'attr') ?>" placeholder="<?= lang('TesPenjadwalan.searchLabel') ?>" class="<?= $input ?> ps-9">
         </div>
-        <div>
-            <label for="tanggal" class="sr-only"><?= lang('TesPenjadwalan.filterDate') ?></label>
-            <input type="date" id="tanggal" name="tanggal" value="<?= esc($filters['tanggal'], 'attr') ?>" title="<?= lang('TesPenjadwalan.filterDate') ?>" class="<?= $input ?>">
+        <?php // Phones: the date and lists fold behind one button so the results start higher up the screen. ?>
+        <button type="button" data-collapse-toggle="peserta-saring" aria-controls="peserta-saring" aria-expanded="<?= $folded ? 'false' : 'true' ?>"
+                class="flex w-full items-center justify-between rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 sm:col-span-2 md:hidden dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+            <span><?= lang('TesPenjadwalan.filterToggle') ?></span><?= icon('chevron-down', 'h-4 w-4') ?>
+        </button>
+        <div id="peserta-saring" class="<?= $folded ? 'hidden ' : '' ?>sm:col-span-2 md:contents">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:contents">
+                <div>
+                    <label for="tanggal" class="sr-only"><?= lang('TesPenjadwalan.filterDate') ?></label>
+                    <input type="date" id="tanggal" name="tanggal" value="<?= esc($filters['tanggal'], 'attr') ?>" title="<?= lang('TesPenjadwalan.filterDate') ?>" placeholder="<?= lang('TesPenjadwalan.filterDate') ?>" class="<?= $input ?>">
+                </div>
+                <div><?= $select('sesi', lang('TesPenjadwalan.filterSession'), $sessions) ?></div>
+                <div><?= $select('status', lang('TesPenjadwalan.filterStatus'), lang('Status.test')) ?></div>
+                <div><?= $select('gelombang', lang('TesPenjadwalan.filterWave'), $waves + ['tanpa' => lang('TesPenjadwalan.noWaveApplicants')]) ?></div>
+            </div>
         </div>
-        <div><?= $select('sesi', lang('TesPenjadwalan.filterSession'), $sessions) ?></div>
-        <div><?= $select('status', lang('TesPenjadwalan.filterStatus'), lang('Status.test')) ?></div>
-        <div><?= $select('gelombang', lang('TesPenjadwalan.filterWave'), $waves + ['tanpa' => lang('TesPenjadwalan.noWaveApplicants')]) ?></div>
-        <div class="flex items-center justify-end gap-3 sm:col-span-2 lg:col-span-4">
+        <div class="flex items-center justify-end gap-3 sm:col-span-2 lg:col-span-4 2xl:col-span-1">
             <?php if ($filtered) : ?>
                 <a href="<?= url_to('tes.peserta') ?>" class="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"><?= lang('App.reset') ?></a>
             <?php endif ?>
@@ -62,11 +73,11 @@ $select = static function (string $name, string $all, array $options) use ($filt
         <div class="p-4">
             <?= view('partials/empty_state', ['empty' => $filtered
                 ? ['title' => lang('TesPenjadwalan.emptySearchTitle'), 'text' => lang('TesPenjadwalan.emptySearchText'), 'icon' => 'search', 'image' => 'state/kosong-pencarian', 'imageAlt' => lang('App.altNoResults')]
-                : ['title' => lang('TesPenjadwalan.emptyTitle'), 'text' => lang('TesPenjadwalan.emptyText'), 'icon' => 'users', 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => $canAtur ? ['label' => lang('TesPenjadwalan.toAllocation'), 'url' => 'admin/tes/penjadwalan'] : null],
+                : ['title' => lang('TesPenjadwalan.emptyTitle'), 'text' => lang('TesPenjadwalan.emptyText'), 'icon' => 'users', 'image' => 'state/kosong-peserta', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData'), 'action' => $canAtur ? ['label' => lang('TesPenjadwalan.toAllocation'), 'url' => 'admin/tes/penjadwalan'] : null],
             ]) ?>
         </div>
     <?php else : ?>
-        <div class="hidden overflow-x-auto lg:block">
+        <div class="relative hidden overflow-x-auto lg:block">
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     <tr>
@@ -104,10 +115,11 @@ $select = static function (string $name, string $all, array $options) use ($filt
             </table>
         </div>
 
-        <ul class="divide-y divide-gray-100 lg:hidden dark:divide-gray-700">
+        <?php // Cards in two columns from sm until the table takes over at lg, so tablets have no empty right half. ?>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:hidden">
             <?php foreach ($rows as $r) : ?>
                 <?php $s = $schedule($r); ?>
-                <li class="p-4">
+                <li class="border-b border-gray-100 p-4 last:border-b-0 sm:odd:border-r sm:[&:nth-last-child(2):nth-child(odd)]:border-b-0 dark:border-gray-700">
                     <div class="flex items-start justify-between gap-3">
                         <div class="min-w-0">
                             <a href="<?= url_to('pendaftar.detail', $r['id']) ?>" class="block truncate font-medium text-gray-900 hover:underline dark:text-white"><?= esc($r['full_name']) ?></a>

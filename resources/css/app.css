@@ -13,6 +13,9 @@
 @import "./visual/tombol-daftar.css";
 @import "./visual/memuat.css";
 
+/* Own components: bottom bar, slideshow, folds, table of contents, date picker, map (D-081…D-088). */
+@import "./komponen.css";
+
 @plugin "flowbite/plugin";
 
 @source "../../app/Views";

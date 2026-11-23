@@ -28,7 +28,7 @@ $banner = $page['banner'];
     </header>
 
     <?php if ($page['waves'] === []) : ?>
-        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noWavesTitle'), 'text' => lang('Situs.noWavesText'), 'image' => 'state/kosong-data', 'imageAlt' => '']]) ?>
+        <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.noWavesTitle'), 'text' => lang('Situs.noWavesText'), 'image' => 'state/kosong-jadwal-pendaftaran', 'fallback' => 'state/kosong-data', 'imageAlt' => '']]) ?>
     <?php else : ?>
         <div class="mb-6 flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between <?= $banners[$banner['state']]['box'] ?>" role="status">
             <p class="flex items-start gap-3 font-medium"><?= icon($banners[$banner['state']]['icon'], 'h-6 w-6 shrink-0') ?><span><?= esc($banner['text']) ?></span></p>
@@ -53,7 +53,9 @@ $banner = $page['banner'];
                         <p class="mt-2 flex items-start gap-2 text-gray-700 dark:text-gray-300"><?= icon('users', 'mt-0.5 h-5 w-5 shrink-0 text-gray-400') ?><span><?= esc(lang('Situs.quota', [number_format((int) $wave['quota'], 0, ',', '.')])) ?></span></p>
                     <?php endif ?>
                     <?php if (! empty($wave['description'])) : ?>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><?= nl2br(esc($wave['description'])) ?></p>
+                        <div class="lipat mt-3 [--lipat-latar-gelap:var(--color-gray-800)]" data-lipat data-lipat-tinggi="6rem">
+                            <p class="lipat-isi text-sm text-gray-600 dark:text-gray-400"><?= nl2br(esc($wave['description'])) ?></p>
+                        </div>
                     <?php endif ?>
                 </li>
             <?php endforeach ?>

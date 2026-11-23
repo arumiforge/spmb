@@ -7,6 +7,9 @@ personal data.
 
 ## Current phase
 
+**UI round (D-080…D-088, `docs/ui-round-plan.md`)**: done on `nty/vigilant-wozniak-lvnhku` with workers A–D merged; PR into `main` open
+(465 tests green on PHP 8.5.13). Paintings for the new art slots wait for Codex (briefs 036–071).
+
 **Platform round**: done and merged into `main` (PR #26, 2026-11-23; supersedes #25, which can be closed). Docker
 on the VPS (staging + production, server pulls and builds, Cockpit + cloudflared on the host), PHP 8.5.13 / Node 24 /
 MySQL 8.4, Lucide icons and visual rules, public Tanya Jawab page, Codex briefs, cloud environment setup in the repo
@@ -40,6 +43,11 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
+| `feat/ui-codex` | worker A (ui-round) | Codex briefs 036–071 (`docs/ui-round-plan.md` A) | merged into the integration branch (#42) |
+| `feat/ui-minify` | worker B (ui-round) | Minified assets, SVG originals in `resources/img/` (B) | merged into the integration branch (#44) |
+| `feat/ui-admin` | worker C (ui-round) | Dashboard full-width pass, AdminLayoutTest (C) | merged into the integration branch (#45) |
+| `feat/ui-publik` | worker D (ui-round) | Public pages pass, home/settings tests (D) | merged into the integration branch |
+| `nty/vigilant-wozniak-lvnhku` | coordinator (session ui-round) | Integration branch of the UI round. Foundation: email-or-username login, mobile bottom bar, right drawer, top bar, hero slideshow, three.js icons, date picker, folds/TOC, map + contact, full-width admin, Codex briefs 036+ (D-080…D-088) | PR into `main` open |
 | `pw/eager-archimedes-s119yf` | session go-live 2 | Go-live support: environment check, server rehearsal, docs | in progress |
 | `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`) | merged into `main` (PR #26) |
 | `feat/plat-tanya-jawab` | worker C | Tanya Jawab page | merged into the integration branch (#30) |
@@ -54,6 +62,12 @@ create your own branch from `main` instead.
 
 ## Next steps
 
+00. **UI round**: the user merges the UI round PR into `main`. Then: start Codex with the starter prompt in
+   `ai/README.md` (home art first: `tombol-seni`, `ikon-beranda`, `langkah`, `slide-beranda`, then `kosong-states`) and install
+   each batch per `spmb-ai-image` (WebP → `public/assets/img/`, SVG → `resources/img/`); when 049 lands, remove the interim
+   `.tombol-seni` / `.nav-bawah-tengah-bulat` blocks in `resources/css/komponen.css`. On the server: `spmb deploy staging`,
+   check, promote; load the school's map/slogan with `spmb spark production spmb:branding clients/smp-nu-al-maruf-kudus/branding`
+   (or fill Identitas Sekolah by hand) and add the social media links there.
 0. PR #26 is merged; the domain is active on Cloudflare (go-live checklist step 1 done). Go-live continues at
    checklist step 2 (`setup.sh` on `spmb-prod`). Server flow rehearsed in a cloud container on 2026-11-23 with
    `SPMB_ROOT` (clean image build, `init`/`deploy` staging, `spmb:install`, branding, `--demo` refused, production
@@ -99,6 +113,7 @@ when the container idles).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-24 · coordinator (session ui-round) · `nty/vigilant-wozniak-lvnhku` — UI round: email-or-username sign-in, mobile bottom bar (raised middle button without text), right drawer, top bar, slogan/map/social settings, hero slideshow with uploads, art buttons and painted-icon slots with three.js, date picker, folds and contents highlight, full-width admin; workers A (Codex briefs 036–071, #42), B (minified SVGs, #44), C (dashboard pass, #45), D (public pages, tests) merged; cloud setup script moved to packages.sury.org; 465 tests green. Next: user merges the PR, Codex batches.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — staging and production live on `spmb-prod` (04b2ccc), staging behind Access, Laragon exposure removed; `spmb domain` (#40); off-site backups to Cloudflare R2 with restic (D-079). Next: `spmb offsite setup` on the server, Admin Sekolah account, school data.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — `setup.sh` waits for first-boot updates (#36, #37), per-repo deploy key docs (#38), light theme by default (D-078), Codex `svg-kit` installed; server: setup, tunnel, key-only SSH, clone done. Next: staging check, production, Admin Sekolah.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — new account's cloud environment checked (442 tests green); domain on Cloudflare confirmed; full server flow rehearsed in the container (all steps passed). Next: user runs `setup.sh` on `spmb-prod`, then tunnel.
@@ -108,4 +123,3 @@ when the container idles).
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — merged D (#27 Codex briefs, AGENTS.md, D-075), B (#28 Lucide, visual rules, motion, charts), A (#29 Docker, setup.sh, `spmb` CLI, D-076), C (#30 Tanya Jawab, menu fix); combined run 442 tests green, lint clean, build OK, pages checked at 360/1280 px; Docker web image and PHP base build here (Composer download blocked only by this container's proxy). Next: user merges #26, SSH port decision, go-live.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — first workers failed at environment setup (old inline script on PHP 8.3); cloud setup moved into the repo (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`, D-074), the SPMB environment now runs it, Composer platform set to 8.5.13 (CI green); workers A–D restarted. Next: review worker PRs.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user's answers: Docker on the VPS with Cockpit + host cloudflared (no Proxmox), staging + production stacks on one VPS from `main`, server pulls and builds (no deploy key), public Tanya Jawab page; foundation landed (PHP ^8.5.13 / Node 24 / MySQL 8.4 in CI, 424 tests green on 8.5.13, lucide-static, `bahasa-indonesia-plain` skill, visual and chart rules, D-066…D-073, `docs/platform-plan.md`); PR #25 merged in; workers A–D started. Next: review worker PRs, integrate, PR to `main`.
-- 2026-11-19 · session go-live · `nty/exciting-mendel-ukwgth` — domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image re-rendered); `provision.sh` keeps the SSH port (custom too) open until the tunnel runs and turns password login off only when an admin key exists; deployment doc: 127.0.0.1 ingress, real SSH port, known_hosts from the server, Bitvise via `cloudflared access tcp` (D-065). Next: user merges, go-live.

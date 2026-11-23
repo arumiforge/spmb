@@ -19,11 +19,31 @@ class School extends BaseConfig
     public string $name      = 'Nama Sekolah';
     public string $shortName = 'Sekolah';
     public string $tagline   = 'Penerimaan Murid Baru';
-    public string $address   = '';
-    public string $phone     = '';
-    public string $whatsapp  = '';
-    public string $email     = '';
-    public string $website   = '';
+
+    /**
+     * School slogan (motto), shown under the school name on the home page and in the footer (D-087).
+     */
+    public string $motto = '';
+
+    public string $address  = '';
+    public string $phone    = '';
+    public string $whatsapp = '';
+    public string $email    = '';
+    public string $website  = '';
+
+    /**
+     * Google Maps embed URL (https://www.google.com/maps/embed?...), '' = no map (D-085).
+     */
+    public string $mapEmbed = '';
+
+    /**
+     * Social media links in the small bar above the public header ('' = hidden, D-081).
+     */
+    public string $socialInstagram = '';
+
+    public string $socialFacebook = '';
+    public string $socialYoutube  = '';
+    public string $socialTiktok   = '';
 
     /**
      * Paths relative to the public uploads area; empty means the default asset.
@@ -57,6 +77,18 @@ class School extends BaseConfig
     public string $partnerName = '';
 
     public string $partnerLogoPath = '';
+
+    /**
+     * Own pictures for the home hero slideshow (D-084); when all are empty the
+     * default Codex paintings are shown.
+     */
+    public string $heroSlide1Path = '';
+
+    public string $heroSlide2Path = '';
+    public string $heroSlide3Path = '';
+    public string $heroSlide4Path = '';
+    public string $heroSlide5Path = '';
+    public string $heroSlide6Path = '';
 
     /**
      * Accent set of the painted illustrations: '' = default (blue accent) or

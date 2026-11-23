@@ -127,10 +127,18 @@ appear naturally.
 - Leave the empty area described in the brief really empty (the app puts text next to the image, never on it).
 - **Transparent** means real alpha with the painting as an isolated vignette with soft painted edges —
   no paper texture or colour wash outside the subject, no drawn checkerboard. **White** means `#FFFFFF`.
+- **Reads on light and dark pages (D-083).** The app shows every image as delivered: no white plate, card or
+  tinted frame behind it in dark mode. So every new painting (briefs 036 onwards) is transparent and works on
+  `#FFFFFF` and on `#111827` alike: a soft painted outline in soft charcoal around every shape, outer edges
+  mid-toned (neither near-white nor near-black), no glow, halo or light rim. The prompt adds the block in §10.
 
 ### Variants
 
-For every painting, unless the brief says otherwise:
+**From brief 036 on (D-083): `light` and `hijau` only.** New paintings read on both page colours (see "Rules
+for every painting"), so they get **no `-dark` and no `-dark-hijau` copy**; the brief's `variants:` line says
+`light, hijau`. The `-hijau` copy stays, because green schools need the green accent.
+
+Briefs 001–035 keep the variants they list. For those, unless the brief says otherwise:
 
 | Variant | File suffix | How |
 | --- | --- | --- |
@@ -140,7 +148,20 @@ For every painting, unless the brief says otherwise:
 | Green accent, dark | `<name>-dark-hijau` | the dark variant with the same green edit |
 
 The app picks the variant itself (`illustration()` in `app/Helpers/ui_helper.php`): it looks for
-`<name>-<accent>.webp` and `<name>-dark(-<accent>).webp` next to `<name>.webp`.
+`<name>-<accent>.webp` and `<name>-dark(-<accent>).webp` next to `<name>.webp`; when no `-dark` file exists it
+shows the light (or `-hijau`) file on dark pages too, which is what D-083 relies on.
+
+### Painted icons and step pictures (areas `ikon` and `langkah`)
+
+Small paintings used like icons (D-082): home information cards, contact cards, the art buttons (049) and the
+"Cara mendaftar" steps. The app floats them with a small three.js tilt (`resources/js/ikon3d.js`).
+
+- One subject (an object, or an object with one small companion the brief names); **no people, hands or
+  faces**; no text; no brand or app logos.
+- Gentle three-quarter view from slightly above, light from the upper left, the same across a set.
+- **No ground, table or cast shadow** (the icon floats); at most a very faint contact shadow in step pictures.
+- Simple, bold shapes: icons must read at 48 px, step pictures at 128 px.
+- No circle, tile or shape behind the object (D-070: icons without backgrounds).
 
 ### Sizes and budgets
 
@@ -160,6 +181,8 @@ Generate at the generator's native shape. The **installed** file is trimmed and 
 | Section illustration (beside a page heading) | square 1024×1024 | `section/<name>.webp` | ≤ 800 px | ≤ 140 KB |
 | Guide cover | landscape 1536×1024 | `guide/<name>.webp` | ≤ 1000 px | ≤ 180 KB |
 | Empty / success / error state | square 1024×1024 | `state/<name>.webp` | ≤ 480 px | ≤ 70 KB |
+| Painted icon | square 1024×1024 | `ikon/<name>.webp` | ≤ 512 px | ≤ 60 KB |
+| Step picture ("Cara mendaftar") | square 1024×1024 | `langkah/<name>.webp` | ≤ 640 px | ≤ 90 KB |
 | Share image (link previews) | landscape 1536×1024 | `share/<name>.webp` and `.jpg` | exactly 1200×630, centre crop, no trim | ≤ 180 KB |
 
 ## 5. Vector assets (SVG)
@@ -212,6 +235,8 @@ text, letters, numbers, Arabic script, calligraphy, logos, emblems, flags, signa
 
 ## 8. Dark variant block
 
+Only for briefs 001–035 that list a `dark` variant. New briefs use §10 instead (D-083).
+
 ```
 Make the dark-mode version of exactly this illustration: same painting, composition, characters and
 colours, on a real transparent background (remove any white or paper background). Lift the outlines and
@@ -227,4 +252,16 @@ texture, colours and the background (keep real transparency if it is transparent
 medium-blue (#2563EB) accent elements into a deep leaf green (#1F7A45) with the same painted gouache
 texture and shading; at most one tiny highlight may become soft yellow (#F2C94C). Do not recolour the navy
 uniforms, plants, skin, kerudung or sarung. Do not add anything. No text, letters, logos or symbols.
+```
+
+## 10. Light-and-dark block (briefs 036 onwards)
+
+Every new painting prompt has this block right after the base style block (§7), unchanged. It replaces the
+separate dark variant (D-083).
+
+```
+Real transparent background (true alpha): no white, paper or colour background, no glow, no halo, no
+drawn checkerboard. The painting must read on a white page and on a very dark navy page (#111827) alike:
+give every shape a soft painted outline in soft charcoal, keep the outer edges mid-toned (neither
+near-white nor near-black) and do not add a light rim.
 ```

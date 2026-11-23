@@ -87,7 +87,7 @@ $tiles     = [
 
         <?php if ($roster['rows'] === [] && $roster['query'] === '') : ?>
             <div class="p-4" data-roster-empty>
-                <?= view('partials/empty_state', ['empty' => ['title' => lang('TesKehadiran.noParticipants'), 'text' => lang('TesKehadiran.noParticipantsText'), 'image' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
+                <?= view('partials/empty_state', ['empty' => ['title' => lang('TesKehadiran.noParticipants'), 'text' => lang('TesKehadiran.noParticipantsText'), 'image' => 'state/kosong-peserta-sesi', 'fallback' => 'state/kosong-data', 'imageAlt' => lang('App.altNoData')]]) ?>
             </div>
         <?php endif ?>
         <div class="<?= $roster['rows'] === [] && $roster['query'] !== '' ? '' : 'hidden ' ?>p-4" data-roster-nomatch>

@@ -71,4 +71,47 @@ final class AuthFlowTest extends CIUnitTestCase
 
         $result->assertRedirect();
     }
+
+    public function testStaffSignInWithUsername(): void
+    {
+        $this->user('panitia');
+
+        $result = $this->post('masuk', ['login' => 'ani', 'password' => 'Rahasia-Kuat-2027']);
+
+        $result->assertRedirect();
+        $this->assertTrue(auth()->loggedIn());
+        $this->assertSame('ani', auth()->user()->username);
+    }
+
+    public function testStaffSignInWithEmail(): void
+    {
+        $this->user('panitia');
+
+        $result = $this->post('masuk', ['login' => 'ani@example.test', 'password' => 'Rahasia-Kuat-2027']);
+
+        $result->assertRedirect();
+        $this->assertTrue(auth()->loggedIn());
+    }
+
+    public function testWrongPasswordIsRefusedForUsername(): void
+    {
+        $this->user('panitia');
+        auth()->logout();
+
+        $result = $this->post('masuk', ['login' => 'ani', 'password' => 'salah-sekali-2027']);
+
+        $result->assertRedirect();
+        $this->assertFalse(auth()->loggedIn());
+    }
+
+    public function testEmptyLoginFieldShowsFriendlyMessage(): void
+    {
+        auth()->logout();
+
+        $result = $this->post('masuk', ['login' => '', 'password' => 'Rahasia-Kuat-2027']);
+
+        $result->assertRedirect();
+        $this->assertFalse(auth()->loggedIn());
+        $this->assertContains(lang('Akun.loginFieldRequired'), (array) session('errors'));
+    }
 }

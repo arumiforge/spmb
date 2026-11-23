@@ -4,21 +4,25 @@
   "description": "SPMB frontend assets (Tailwind CSS v4 + Flowbite). Built into public/build/.",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "npm run build:css && npm run build:js",
+    "build": "npm run build:img && npm run build:css && npm run build:js",
+    "build:img": "node scripts/minify-assets.mjs",
     "build:css": "tailwindcss -i resources/css/app.css -o public/build/app.css --minify",
-    "build:js": "esbuild resources/js/app.js resources/js/charts.js resources/js/scanner.js --bundle --minify --format=iife --target=es2020 --outdir=public/build",
+    "build:js": "esbuild resources/js/app.js resources/js/charts.js resources/js/scanner.js resources/js/ikon3d.js --bundle --minify --format=iife --target=es2020 --outdir=public/build",
     "icons": "node scripts/icons.mjs",
     "dev": "npm run build:css -- --watch & npm run build:js -- --watch"
   },
   "dependencies": {
     "apexcharts": "^4.7.0",
     "flowbite": "^3.1.2",
-    "qr-scanner": "^1.4.2"
+    "qr-scanner": "^1.4.2",
+    "three": "^0.170.0"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.11",
     "esbuild": "^0.25.5",
     "lucide-static": "^1.77.0",
+    "simple-icons": "^16.38.1",
+    "svgo": "^4.1.0",
     "tailwindcss": "^4.1.11"
   },
   "engines": {

@@ -11,7 +11,7 @@
 <head>
     <?= view('partials/head', ['title' => $title ?? '']) ?>
 </head>
-<body class="bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100">
+<body class="bg-gray-50 pb-24 md:pb-0 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100">
 <main class="flex min-h-screen items-center justify-center gap-12 px-4 py-8">
     <div class="hidden max-w-sm flex-1 lg:block">
         <?= illustration('auth/masuk-dasbor', lang('App.altSignIn'), 'mx-auto max-h-[32rem] w-auto', false) ?>
@@ -25,10 +25,11 @@
             <?= $this->renderSection('main') ?>
         </div>
         <p class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-            &copy; <?= date('Y') ?> <?= esc(setting('School.name')) ?>
+            &copy; <?= date('Y') ?> <?= esc(setting('School.name')) ?> · <?= lang('App.developedBy') ?>
         </p>
     </div>
 </main>
+<?= view('partials/bottom_nav', ['bottomNav' => ['label' => lang('App.bottomNavLabel'), 'items' => public_bottom_nav(public_nav())]]) ?>
 <?= view('partials/flash', ['formErrorsInline' => true]) ?>
 <script src="<?= esc(asset_url('app.js'), 'attr') ?>"></script>
 </body>

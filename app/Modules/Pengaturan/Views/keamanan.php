@@ -8,7 +8,7 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('pengaturan.keamanan') ?>" class="max-w-3xl rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
+<form method="post" action="<?= url_to('pengaturan.keamanan') ?>" class="rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800">
     <?= csrf_field() ?>
     <fieldset>
         <legend class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Pengaturan.requiredRoles') ?></legend>
@@ -18,11 +18,14 @@
                 <li class="flex items-start gap-3 py-3">
                     <input id="role-<?= esc($key, 'attr') ?>" type="checkbox" name="roles[]" value="<?= esc($key, 'attr') ?>" <?= in_array($key, $required, true) ? 'checked' : '' ?>
                            class="mt-1 h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700">
-                    <label for="role-<?= esc($key, 'attr') ?>" class="min-w-0 flex-1">
-                        <span class="block text-sm font-medium text-gray-900 dark:text-white"><?= esc($group['title']) ?></span>
-                        <span class="block text-sm text-gray-500 dark:text-gray-400"><?= esc($group['description']) ?></span>
-                    </label>
-                    <span class="shrink-0 text-xs text-gray-500 dark:text-gray-400"><?= lang('Pengaturan.enabledCount', $counts[$key] ?? [0, 0]) ?></span>
+                    <?php // Count under the description on phones, beside it from sm, so the description keeps the full width. ?>
+                    <div class="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+                        <label for="role-<?= esc($key, 'attr') ?>" class="min-w-0">
+                            <span class="block text-sm font-medium text-gray-900 dark:text-white"><?= esc($group['title']) ?></span>
+                            <span class="block text-sm text-gray-500 dark:text-gray-400"><?= esc($group['description']) ?></span>
+                        </label>
+                        <span class="shrink-0 text-xs text-gray-500 dark:text-gray-400"><?= lang('Pengaturan.enabledCount', $counts[$key] ?? [0, 0]) ?></span>
+                    </div>
                 </li>
             <?php endforeach ?>
         </ul>

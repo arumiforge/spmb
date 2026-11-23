@@ -23,7 +23,7 @@ $checked = is_array($checked) ? $checked : [];
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('tes.pengaturan') ?>" class="max-w-3xl space-y-6">
+<form method="post" action="<?= url_to('tes.pengaturan') ?>" class="form-lebar">
     <?= csrf_field() ?>
 
     <section class="<?= $card ?>">

@@ -10,8 +10,13 @@ description: Build views for SPMB with Tailwind v4 + Flowbite — full-width res
 - `app/Views/layouts/admin.php` — **full width** (no max-width container on the
   content area), collapsible sidebar (drawer on mobile), top navbar with user
   menu, breadcrumb bar under the navbar, content slot, toast area.
-- `app/Views/layouts/public.php` — public site for parents/students: header,
-  footer, large tap targets, mobile first.
+- `app/Views/layouts/public.php` — public site for parents/students: small top bar (social links from
+  `school_social_links()`, staff sign-in), sticky header (menu inline from `md`, drawer from the right
+  below `md`), footer with contact and "Developed by : Mr. F", large tap targets, mobile first.
+- **Mobile bottom bar on every layout (D-081)**: `partials/bottom_nav` with five items, the middle one raised
+  (public: Beranda · Persyaratan · **Daftar** · Jadwal · Cek Status from `public_bottom_nav()`; dashboard:
+  Dasbor · Data Pendaftar · **Cari** · Periksa Berkas · Menu, filtered by permission). Layouts add
+  `pb-24 md:pb-0` to `<body>`; never put fixed content at the bottom of the screen on phones.
 - `app/Views/layouts/auth.php` — login, 2FA, password reset.
 - Shared partials in `app/Views/partials/`: `breadcrumbs`, `flash`, `empty_state`,
   `form_field`, `status_badge`, `pagination`, `school_brand`, `head`. Each takes **one array**
@@ -20,8 +25,19 @@ description: Build views for SPMB with Tailwind v4 + Flowbite — full-width res
 - Admin pages pass `title`, optional `subtitle`, `breadcrumbs`; buttons next to the title go in
   section `actions`. Destructive forms use `data-confirm="..."`; copy buttons `data-copy="..."`.
 - Illustrations: `illustration('state/kosong-data', lang('App.altNoData'), 'h-32 w-auto')` prints the painted
-  WebP and its dark variant; empty states pass `'image' => 'state/...'` to `partials/empty_state`. New images
-  are requested through `spmb-ai-image`.
+  WebP (and an older `-dark` variant if one exists). **No plate behind images** (no `bg-white` box, D-083).
+  Empty states pass `'image' => 'state/<unique>'` plus `'fallback'` to `partials/empty_state`: every
+  different empty condition has its own painting (D-082). New images are requested through `spmb-ai-image`.
+- Painted icons: `art_icon('ikon/ikon-jadwal', 'calendar-days', 'h-20 w-20')` shows the Codex icon inside a
+  three.js holder (`[data-ikon-3d]`, floats and tilts towards the pointer within `[data-ikon-3d-area]`) or the
+  Lucide fallback until the painting exists. A page that uses them sets `data-ikon-3d-src` (see `home.php`).
+  Buttons with a unique function on the home page use `.tombol-seni` with an art icon, not a plain box.
+- Long text: wrap in `<div class="lipat" data-lipat data-lipat-tinggi="12rem"><div class="lipat-isi">…</div></div>`
+  ("Lihat selengkapnya"); `data-lipat-bagian` on rendered Markdown folds each `h2` section. A contents list
+  with `data-daftar-isi` highlights the section in view (D-088).
+- Dates: every `input[type=date]` becomes the Indonesian date picker (`resources/js/tanggal.js`); the name
+  carries the ISO value. Birth dates (`name` contains `birth`/`lahir` or `data-tanggal="lahir"`) open years back.
+  Opt out with `data-tanggal="asli"`.
 - Icons: `icon('users', 'h-5 w-5')` from `ui_helper` — Lucide icons (ISC, D-070). Pass a Lucide name
   (`circle-check`) or an alias (`check`). Only the icons listed in `resources/icons.json` exist: add the name
   there, run `npm run icons` (writes `app/Helpers/lucide_icons.php`, never edit it by hand) and commit both.
@@ -65,13 +81,14 @@ Text must never overlap, especially at 360 px:
 Controllers pass `$breadcrumbs = [['label' => 'Beranda', 'url' => '/admin'], ['label' => 'Data Pendaftar', 'url' => '/admin/pendaftar'], ['label' => 'Detail']]`.
 Rules: first item is always the home of the area (`Beranda`/`Dasbor`); last item
 is the current page and not a link; labels are plain Indonesian nouns, max ~3 words;
-on mobile collapse middle items into "…". Use Flowbite breadcrumb markup with `aria-label="Breadcrumb"`.
+on mobile collapse middle items into "…". No home icon on the first item. Use Flowbite breadcrumb markup with `aria-label="Breadcrumb"`.
 
 ## Responsive
 
 Mobile first. Test at 360, 768, 1280, 1920 px. Tables become stacked cards
 under `md` or scroll horizontally inside their own container — never the page.
-Admin content uses the full width on large screens; forms cap at a readable width (`max-w-3xl`).
+Admin content uses the full width on large screens (no `max-w-*` on admin pages). Forms with several cards
+use `.form-lebar` (one column, two columns from `xl`; the last child, alerts and a single card span both).
 
 ## White label / theming
 
