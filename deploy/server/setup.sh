@@ -59,10 +59,24 @@ case "$virt" in
         warn "This server is a '$virt' container: Docker, swap and the firewall may not work here." ;;
 esac
 
+# A fresh server runs unattended-upgrades soon after boot and holds the dpkg lock; wait for it
+# instead of failing (never kill it: an interrupted dpkg leaves packages half-installed).
+wait_for_apt() {
+    local waited=0
+    while pgrep -x unattended-upgr >/dev/null || pgrep -x apt-get >/dev/null \
+        || pgrep -x apt >/dev/null || pgrep -x dpkg >/dev/null; do
+        [ "$waited" -eq 0 ] && say "Another package job is running (automatic updates?); waiting for it to finish..."
+        waited=$((waited + 10))
+        [ "$waited" -ge 1800 ] && { echo "Package manager still busy after 30 minutes; try again later." >&2; exit 1; }
+        sleep 10
+    done
+}
+apt_get() { wait_for_apt; apt-get -o DPkg::Lock::Timeout=600 "$@"; }
+
 # ---------------------------------------------------------------------------------------
 step "Base packages"
-apt-get update -q
-apt-get install -y -q --no-install-recommends \
+apt_get update -q
+apt_get install -y -q --no-install-recommends \
     ca-certificates curl gnupg git openssl ufw unattended-upgrades apt-transport-https \
     rsync less nano htop jq cron
 timedatectl set-timezone Asia/Jakarta 2>/dev/null || true
@@ -117,8 +131,8 @@ if ! dpkg -s docker-ce >/dev/null 2>&1; then
         chmod a+r /etc/apt/keyrings/docker.asc
         echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $CODENAME stable" \
             > /etc/apt/sources.list.d/docker.list
-        apt-get update -q
-        apt-get install -y -q docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        apt_get update -q
+        apt_get install -y -q docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     fi
 fi
 DAEMON_JSON='{
@@ -141,8 +155,8 @@ if ! command -v cloudflared >/dev/null; then
     curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg -o /usr/share/keyrings/cloudflare-public-v2.gpg
     echo "deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.cloudflare.com/cloudflared any main" \
         > /etc/apt/sources.list.d/cloudflared.list
-    apt-get update -q
-    apt-get install -y -q cloudflared
+    apt_get update -q
+    apt_get install -y -q cloudflared
 fi
 if systemctl is-active --quiet cloudflared 2>/dev/null; then
     say "cloudflared is running."
@@ -151,7 +165,7 @@ else
 fi
 
 step "Cockpit (browser console on 127.0.0.1:9090, reached through the tunnel)"
-apt-get install -y -q --no-install-recommends cockpit-ws cockpit-system cockpit-bridge
+apt_get install -y -q --no-install-recommends cockpit-ws cockpit-system cockpit-bridge
 mkdir -p /etc/systemd/system/cockpit.socket.d /etc/cockpit
 cat > /etc/systemd/system/cockpit.socket.d/listen.conf <<'UNIT'
 [Socket]

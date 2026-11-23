@@ -126,6 +126,8 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   building, D-068).
 
 ### Fixed
+- `deploy/server/setup.sh` waits for the automatic updates a fresh Ubuntu server runs after its first boot instead
+  of failing on the dpkg lock.
 - Public menu links were duplicated because `Situs/Config/PublicMenu.php` overwrote the registry's items.
 - First client's domain corrected to `spmbsmpnualmarufkudus.web.id` (docs, branding pack, share image) (D-065).
 - `deploy/provision.sh` no longer locks the admin out: the SSH port (also a custom one) stays open until the tunnel
