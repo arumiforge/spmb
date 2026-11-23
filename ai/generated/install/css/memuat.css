@@ -1,0 +1,55 @@
+@layer components {
+    .memuat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: .75rem;
+        color: var(--color-primary-600);
+        text-align: center;
+    }
+
+    .memuat-gambar {
+        display: block;
+        width: var(--memuat-ukuran, 72px);
+        height: var(--memuat-ukuran, 72px);
+    }
+
+    .memuat-teks {
+        color: #4b5563;
+        font-size: .875rem;
+    }
+
+    .dark .memuat {
+        color: var(--color-primary-300);
+    }
+
+    .dark .memuat-teks {
+        color: #d1d5db;
+    }
+
+    .memuat-kecil {
+        display: inline-block;
+        width: 1.1em;
+        height: 1.1em;
+        background-color: currentColor;
+        -webkit-mask: var(--memuat-topeng, url("/assets/img/memuat/memuat-kecil.svg")) center / contain no-repeat;
+        mask: var(--memuat-topeng, url("/assets/img/memuat/memuat-kecil.svg")) center / contain no-repeat;
+        vertical-align: -.15em;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .memuat-kecil {
+            /* Select the static SVG view from the document's motion preference. */
+            -webkit-mask-image: var(--memuat-topeng-diam, url("/assets/img/memuat/memuat-kecil.svg#diam"));
+            mask-image: var(--memuat-topeng-diam, url("/assets/img/memuat/memuat-kecil.svg#diam"));
+        }
+    }
+
+    @media (forced-colors: active) {
+        .memuat-kecil {
+            forced-color-adjust: none;
+            color: ButtonText;
+        }
+    }
+}

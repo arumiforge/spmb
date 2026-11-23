@@ -62,6 +62,7 @@
 
     .pemisah-balik {
         --pemisah-arah-y: -1;
+        translate: 0 -1px;
     }
 
     .pemisah-cermin {
