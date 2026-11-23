@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../install/css/pemisah.css">
     <link rel="stylesheet" href="../install/css/tombol-daftar.css">
     <link rel="stylesheet" href="../install/css/memuat.css">
+    <link rel="stylesheet" href="../install/css/latar-langkah.css">
     <style>
         :root {
             color-scheme: light;
@@ -195,6 +196,48 @@
         }
 
         .contoh-tombol-memuat .memuat-kecil { margin-inline-end: .25em; }
+
+        .contoh-langkah {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 1.25rem;
+            margin-block: 1rem 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        @media (min-width: 48rem) {
+            .contoh-langkah { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        .contoh-langkah > li {
+            padding: clamp(.875rem, 2vw, 1.5rem);
+            border: 1px solid var(--batas);
+            border-radius: 1rem;
+            background: var(--halaman);
+            text-align: center;
+        }
+
+        .kartu-langkah-1 { --kartu-langkah-gambar: url("../img/langkah/latar-langkah-1.svg"); }
+        .kartu-langkah-2 { --kartu-langkah-gambar: url("../img/langkah/latar-langkah-2.svg"); }
+        .kartu-langkah-3 { --kartu-langkah-gambar: url("../img/langkah/latar-langkah-3.svg"); }
+
+        .gambar-langkah {
+            display: block;
+            width: min(100%, 21.25rem);
+            height: auto;
+            aspect-ratio: 4 / 3;
+            object-fit: contain;
+            margin: 0 auto 1rem;
+        }
+
+        .nomor-langkah {
+            color: var(--color-primary-700);
+            font-weight: 600;
+        }
+
+        .dark .nomor-langkah { color: var(--color-primary-300); }
+        .contoh-langkah h3 { margin-block: .25rem .375rem; }
     </style>
 </head>
 <body>
@@ -216,6 +259,29 @@
         </div>
     </header>
     <main>
+        <section class="isi" aria-labelledby="judul-langkah">
+            <h2 id="judul-langkah">Cara mendaftar</h2>
+            <ol class="contoh-langkah">
+                <li class="kartu-langkah kartu-langkah-1">
+                    <img class="gambar-langkah" src="../install/img/langkah/langkah-1.webp" width="400" height="300" alt="Ayah dan anak menyiapkan berkas pendaftaran di bangku teras.">
+                    <p class="nomor-langkah">Langkah 1</p>
+                    <h3>Siapkan berkas</h3>
+                    <p>Baca persyaratan dan siapkan berkas.</p>
+                </li>
+                <li class="kartu-langkah kartu-langkah-2">
+                    <img class="gambar-langkah" src="../install/img/langkah/langkah-2.webp" width="400" height="300" alt="Nenek menemani cucunya mengisi formulir pendaftaran lewat HP.">
+                    <p class="nomor-langkah">Langkah 2</p>
+                    <h3>Isi formulir</h3>
+                    <p>Isi formulir dan simpan nomor pendaftaran.</p>
+                </li>
+                <li class="kartu-langkah kartu-langkah-3">
+                    <img class="gambar-langkah" src="../install/img/langkah/langkah-3.webp" width="400" height="300" alt="Calon murid menunjukkan kartu pendaftaran di depan gerbang sekolah bersama ibunya.">
+                    <p class="nomor-langkah">Langkah 3</p>
+                    <h3>Simpan kartu</h3>
+                    <p>Pantau status dan unduh kartu di Cek Status.</p>
+                </li>
+            </ol>
+        </section>
         <section class="isi" aria-labelledby="judul-pola">
             <h2 id="judul-pola">Pola latar</h2>
             <div class="contoh-pudar">
@@ -381,10 +447,15 @@
     <script>
         const warna = document.querySelector('#warna');
         const tampilan = document.querySelector('#tampilan');
+        const gambarLangkah = document.querySelectorAll('.gambar-langkah');
 
         function terapkanPengaturan() {
             document.documentElement.dataset.warna = warna.value;
             document.documentElement.classList.toggle('dark', tampilan.value === 'gelap');
+            const akhiran = warna.value === 'hijau' ? '-hijau' : '';
+            gambarLangkah.forEach((gambar, indeks) => {
+                gambar.src = `../install/img/langkah/langkah-${indeks + 1}${akhiran}.webp`;
+            });
         }
 
         warna.addEventListener('change', terapkanPengaturan);

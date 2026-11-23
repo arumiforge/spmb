@@ -48,13 +48,13 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `pw/sleepy-hopper-d0a7h5` | session polish | Public polish round (D-090…D-095) and Codex #49 | merged into `main` (PR #50, follow-up PR for 019/020/027) |
+| `pw/sleepy-hopper-d0a7h5` | session polish | Public polish round (D-090…D-095), Codex #49 and `langkah`, PR #43 notes | #50, #51 merged; follow-up PR open |
 | `feat/ui-codex` | worker A (ui-round) | Codex briefs 036–071 (`docs/ui-round-plan.md` A) | merged into the integration branch (#42) |
 | `feat/ui-minify` | worker B (ui-round) | Minified assets, SVG originals in `resources/img/` (B) | merged into the integration branch (#44) |
 | `feat/ui-admin` | worker C (ui-round) | Dashboard full-width pass, AdminLayoutTest (C) | merged into the integration branch (#45) |
 | `feat/ui-publik` | worker D (ui-round) | Public pages pass, home/settings tests (D) | merged into the integration branch |
 | `nty/vigilant-wozniak-lvnhku` | coordinator (session ui-round) | Integration branch of the UI round. Foundation: email-or-username login, mobile bottom bar, right drawer, top bar, hero slideshow, three.js icons, date picker, folds/TOC, map + contact, full-width admin, Codex briefs 036+ (D-080…D-088) | merged into `main` (PR #47) |
-| `pw/eager-archimedes-s119yf` | session go-live 2 | Go-live support: environment check, server rehearsal, docs | in progress |
+| `pw/eager-archimedes-s119yf` | session go-live 2 | Go-live support: environment check, server rehearsal, docs | notes carried into `main`; PR #43 can be closed |
 | `pw/zealous-albattani-2rz2z1` | coordinator (session docker) | Integration branch for the platform round (`docs/platform-plan.md`) | merged into `main` (PR #26) |
 | `feat/plat-tanya-jawab` | worker C | Tanya Jawab page | merged into the integration branch (#30) |
 | `feat/plat-docker` | worker A | Docker and server | merged into the integration branch (#29) |
@@ -72,8 +72,7 @@ create your own branch from `main` instead.
    `spmb deploy production`. Load the updated branding pack on production
    (`spmb spark production spmb:branding clients/smp-nu-al-maruf-kudus/branding`: new tagline and share image; production
    still shows no address or map) and fill in the address, WhatsApp and email in Identitas Sekolah. PR #49 (Codex) is merged
-   through this branch. Next Codex batch: `langkah` (046–048 + 072); give 020 (school character) and 027 (test pages) a
-   slot in the views; when 072 lands, remove the interim `.kartu-langkah` block in `resources/css/komponen.css`.
+   through this branch. Codex `langkah` (046–048 + 072) is installed. Give 020 (school character) and 027 (test pages) a slot in the views.
 00. **UI round** (merged, PR #47): start Codex with the starter prompt in
    `ai/README.md` (home art first: `tombol-seni`, `ikon-beranda`, `langkah`, `slide-beranda`, then `kosong-states`) and install
    each batch per `spmb-ai-image` (WebP → `public/assets/img/`, SVG → `resources/img/`); when 049 lands, remove the interim
@@ -118,13 +117,15 @@ when the container idles).
 - School still to confirm (phase 3 works with any answer): test days, sessions per day, rooms and capacity; tests per wave or after all waves.
 - Each Claude account needs its cloud environment set up once from `docs/cloud-environment.md` (old inline scripts fail on PHP 8.5.13).
 - Check the ApexCharts v4 licence terms (revenue threshold) before launch; buy a licence or switch library if needed (D-017).
-- Go-live (D-056): staging and production run on `spmb-prod`; staging, `konsol.` and `ssh.` behind Access. Left: `spmb offsite setup`
-  (R2 bucket and token ready), save both `encryption.key` lines and the off-site password in the password manager, create the
-  Admin Sekolah account, the school fills in waves, contacts and the 4 hidden Tanya Jawab answers.
-- Codex: `langkah` (046–048, 072), `ikon-beranda`, `tombol-seni`, `slide-beranda`, `kosong-states`, `paintings-states` and 013/014 are queued in `ai/README.md`; waiting for the user to start Codex.
+- Go-live (D-056): staging and production run `main` on `spmb-prod`; staging, `konsol.` and `ssh.` behind Access; off-site
+  backups to R2 set up. Left: Admin Sekolah account (handed over in person), the school fills in contacts, waves, documents
+  and the 4 hidden Tanya Jawab answers; external uptime monitor; 2FA on Cloudflare/GitHub/email; Cloudflare rate limiting on
+  `/masuk` and `/daftar`.
+- Codex: `ikon-beranda`, `tombol-seni`, `slide-beranda`, `kosong-states`, `paintings-states` and 013/014 are queued in `ai/README.md`; waiting for the user to start Codex.
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-24 · session polish · `pw/sleepy-hopper-d0a7h5` — PR #51 merged (019/020/027 repainted); Codex `langkah` batch reviewed and installed (046–048 scenes, 072 card backgrounds); PR #43's go-live notes carried into this file. Next: deploy, load branding on production, school data, uptime monitor.
 - 2026-11-24 · session polish · `pw/sleepy-hopper-d0a7h5` — checked production (was on 04b2ccc, then on #47 after the user's deploy); reviewed Codex #49 (019–027 and 035 installed after Codex repainted 019, 020, 027 for D-089); D-090…D-095: step-card art and briefs, map preview, footer/top bar, SPMB name + migration, HTML minifier, dashboard bottom bar Pengaturan and site link, subgrid form alignment; 471 tests green. PR #50 merged. Next: deploy, load branding on production, Codex `langkah` batch.
 - 2026-11-24 · coordinator (session ui-round) · `nty/vigilant-wozniak-lvnhku` — UI round: email-or-username sign-in, mobile bottom bar (raised middle button without text), right drawer, top bar, slogan/map/social settings, hero slideshow with uploads, art buttons and painted-icon slots with three.js, date picker, folds and contents highlight, full-width admin; workers A (Codex briefs 036–071, #42), B (minified SVGs, #44), C (dashboard pass, #45), D (public pages, tests) merged; cloud setup script moved to packages.sury.org; 465 tests green. Next: Codex batches. User merged PR #47; CI additions (Docker build check, dependency audit, server-side staging auto-deploy) offered and declined for now.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — staging and production live on `spmb-prod` (04b2ccc), staging behind Access, Laragon exposure removed; `spmb domain` (#40); off-site backups to Cloudflare R2 with restic (D-079). Next: `spmb offsite setup` on the server, Admin Sekolah account, school data.
@@ -134,4 +135,3 @@ when the container idles).
 - 2026-11-23 · coordinator (session docker) · `main` — CI green on all checks; PR #26 merged into `main` on the user's request. Next: go-live on `spmb-prod` (`docs/deployment.md` → First server), Codex `svg-kit` batch.
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user decided: direct SSH port stays open, key-only (D-077); `setup.sh`, deployment guide (Bitvise key steps, no fail2ban on the NAT VPS), deploy skill and CLAUDE.md updated. Next: user merges #26, go-live.
 - 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — merged D (#27 Codex briefs, AGENTS.md, D-075), B (#28 Lucide, visual rules, motion, charts), A (#29 Docker, setup.sh, `spmb` CLI, D-076), C (#30 Tanya Jawab, menu fix); combined run 442 tests green, lint clean, build OK, pages checked at 360/1280 px; Docker web image and PHP base build here (Composer download blocked only by this container's proxy). Next: user merges #26, SSH port decision, go-live.
-- 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — first workers failed at environment setup (old inline script on PHP 8.3); cloud setup moved into the repo (`.claude/cloud/setup.sh`, `docs/cloud-environment.md`, D-074), the SPMB environment now runs it, Composer platform set to 8.5.13 (CI green); workers A–D restarted. Next: review worker PRs.

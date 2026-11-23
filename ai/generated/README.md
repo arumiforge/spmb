@@ -12,6 +12,52 @@ status to `done`. Nothing here is served by the app directly.
 
 ## Codex deliveries
 
+### langkah and D-089 revisions (2026-11-24)
+
+| ID | File | Size (px) | KB | Background | Review notes |
+| --- | --- | --- | --- | --- | --- |
+| 019 | `hero-beranda-santri.webp` | 1536×1024 | 250.44 | Transparent | Pak Rahmat and Nurul walk together, with a salim greeting at the gate |
+| 019 | `install/img/hero/hero-beranda-santri.webp` | 898×916 | 170.37 | Transparent | Shared crop, pak Rahmat and Nurul walk together, with a salim greeting at the gate |
+| 019 | `hero-beranda-santri-dark.webp` | 1536×1024 | 258.65 | Transparent | Gentle tonal lift and a faint rim |
+| 019 | `install/img/hero/hero-beranda-santri-dark.webp` | 898×916 | 175.10 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 019 | `hero-beranda-santri-hijau.webp` | 1536×1024 | 250.35 | Transparent | Phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-hijau.webp` | 898×916 | 170.41 | Transparent | Shared crop, phone display in leaf green |
+| 019 | `hero-beranda-santri-dark-hijau.webp` | 1536×1024 | 258.57 | Transparent | Gentle tonal lift and a faint rim, phone display in leaf green |
+| 019 | `install/img/hero/hero-beranda-santri-dark-hijau.webp` | 898×916 | 175.04 | Transparent | Shared crop, gentle tonal lift and a faint rim, phone display in leaf green |
+| 020 | `beranda-kebersamaan.webp` | 1254×1254 | 226.00 | Transparent | Five classmates share books and a tablet, readable at 200 px |
+| 020 | `install/img/section/beranda-kebersamaan.webp` | 750×645 | 99.34 | Transparent | Shared crop, five classmates share books and a tablet, readable at 200 px |
+| 020 | `beranda-kebersamaan-dark.webp` | 1254×1254 | 226.32 | Transparent | Gentle tonal lift and a faint rim |
+| 020 | `install/img/section/beranda-kebersamaan-dark.webp` | 750×645 | 96.91 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 020 | `beranda-kebersamaan-hijau.webp` | 1254×1254 | 225.92 | Transparent | Tablet screen and book cover in leaf green |
+| 020 | `install/img/section/beranda-kebersamaan-hijau.webp` | 750×645 | 99.25 | Transparent | Shared crop, tablet screen and book cover in leaf green |
+| 020 | `beranda-kebersamaan-dark-hijau.webp` | 1254×1254 | 226.25 | Transparent | Gentle tonal lift and a faint rim, tablet screen and book cover in leaf green |
+| 020 | `install/img/section/beranda-kebersamaan-dark-hijau.webp` | 750×645 | 96.57 | Transparent | Shared crop, gentle tonal lift and a faint rim, tablet screen and book cover in leaf green |
+| 027 | `tes.webp` | 1254×1254 | 280.13 | Transparent | Three relaxed pupils, abstract papers and a numeral-free clock |
+| 027 | `install/img/section/tes.webp` | 700×651 | 84.17 | Transparent | Shared crop, three relaxed pupils, abstract papers and a numeral-free clock |
+| 027 | `tes-dark.webp` | 1254×1254 | 282.17 | Transparent | Gentle tonal lift and a faint rim |
+| 027 | `install/img/section/tes-dark.webp` | 700×651 | 81.49 | Transparent | Shared crop, gentle tonal lift and a faint rim |
+| 027 | `tes-hijau.webp` | 1254×1254 | 280.03 | Transparent | Pencil case in leaf green |
+| 027 | `install/img/section/tes-hijau.webp` | 700×651 | 84.17 | Transparent | Shared crop, pencil case in leaf green |
+| 027 | `tes-dark-hijau.webp` | 1254×1254 | 282.38 | Transparent | Gentle tonal lift and a faint rim, pencil case in leaf green |
+| 027 | `install/img/section/tes-dark-hijau.webp` | 700×651 | 81.49 | Transparent | Shared crop, gentle tonal lift and a faint rim, pencil case in leaf green |
+| 046 | `langkah-1.webp` | 1448×1086 | 498.51 | Transparent | Pak Rahmat and Nurul prepare documents on a veranda bench |
+| 046 | `install/img/langkah/langkah-1.webp` | 613×445 | 89.96 | Transparent | Shared crop, pak Rahmat and Nurul prepare documents on a veranda bench |
+| 046 | `langkah-1-hijau.webp` | 1448×1086 | 498.60 | Transparent | Folder index tab in leaf green |
+| 046 | `install/img/langkah/langkah-1-hijau.webp` | 613×445 | 85.91 | Transparent | Shared crop, folder index tab in leaf green |
+| 047 | `langkah-2.webp` | 1448×1086 | 351.60 | Transparent | Mak Ijah watches Daeng Arif fill in the form on his phone |
+| 047 | `install/img/langkah/langkah-2.webp` | 640×470 | 73.32 | Transparent | Shared crop, mak Ijah watches Daeng Arif fill in the form on his phone |
+| 047 | `langkah-2-hijau.webp` | 1448×1086 | 351.55 | Transparent | Round button on the phone display in leaf green |
+| 047 | `install/img/langkah/langkah-2-hijau.webp` | 640×470 | 73.28 | Transparent | Shared crop, round button on the phone display in leaf green |
+| 048 | `langkah-3.webp` | 1448×1086 | 249.53 | Transparent | Aisyah shows her registration card at the school gate |
+| 048 | `install/img/langkah/langkah-3.webp` | 640×480 | 64.77 | Transparent | Shared crop, aisyah shows her registration card at the school gate |
+| 048 | `langkah-3-hijau.webp` | 1448×1086 | 249.13 | Transparent | Registration card header band in leaf green |
+| 048 | `install/img/langkah/langkah-3-hijau.webp` | 640×480 | 64.54 | Transparent | Shared crop, registration card header band in leaf green |
+| 072 | `install/img/langkah/latar-langkah-1.svg` | 400×480 | 0.95 | Transparent mask | Frangipani flowers and two leaves |
+| 072 | `install/img/langkah/latar-langkah-2.svg` | 400×480 | 0.75 | Transparent mask | Mango branch with leaves and one fruit |
+| 072 | `install/img/langkah/latar-langkah-3.svg` | 400×480 | 1.04 | Transparent mask | Jasmine sprig with flowers and a bud |
+| 072 | `install/css/latar-langkah.css` | 420 px minimum card height | 1.30 | School colour through masks | School colour, theme, top-aligned mask and print rules |
+| 072 | `demo/index.html` | 360×800 and 1280×800 | 20.24 | White or gray-900 | Three step cards checked in both themes and school colours |
+
 ### paintings-pages (2026-11-24)
 
 | ID | File | Size (px) | KB | Background | Review notes |

@@ -84,10 +84,10 @@ generator needed) → `tombol-seni` (no image generator needed) → `ikon-berand
 | 043 | [ikon-telepon](prompts/043-ikon-telepon.md) | ikon-beranda | painting | Home contact card "Telepon" | requested |
 | 044 | [ikon-pesan](prompts/044-ikon-pesan.md) | ikon-beranda | painting | Home contact card "WhatsApp" | requested |
 | 045 | [ikon-email](prompts/045-ikon-email.md) | ikon-beranda | painting | Home contact card "Email" | requested |
-| 046 | [langkah-1](prompts/046-langkah-1.md) | langkah | painting | Home "Cara mendaftar" step 1 (scene, D-090) | requested |
-| 047 | [langkah-2](prompts/047-langkah-2.md) | langkah | painting | Home "Cara mendaftar" step 2 (scene, D-090) | requested |
-| 048 | [langkah-3](prompts/048-langkah-3.md) | langkah | painting | Home "Cara mendaftar" step 3 (scene, D-090) | requested |
-| 072 | [latar-langkah](prompts/072-latar-langkah.md) | langkah | SVG + CSS | Art backgrounds of the three "Cara mendaftar" cards | requested |
+| 046 | [langkah-1](prompts/046-langkah-1.md) | langkah | painting | Home "Cara mendaftar" step 1 (scene, D-090) | done |
+| 047 | [langkah-2](prompts/047-langkah-2.md) | langkah | painting | Home "Cara mendaftar" step 2 (scene, D-090) | done |
+| 048 | [langkah-3](prompts/048-langkah-3.md) | langkah | painting | Home "Cara mendaftar" step 3 (scene, D-090) | done |
+| 072 | [latar-langkah](prompts/072-latar-langkah.md) | langkah | SVG + CSS | Art backgrounds of the three "Cara mendaftar" cards | done |
 | 049 | [tombol-seni](prompts/049-tombol-seni.md) | tombol-seni | SVG + CSS | Art buttons `.tombol-seni` and the bottom-bar badge | requested |
 | 050 | [hero-slide-belajar](prompts/050-hero-slide-belajar.md) | slide-beranda | painting | Home hero slideshow (default slide) | requested |
 | 051 | [hero-slide-keluarga](prompts/051-hero-slide-keluarga.md) | slide-beranda | painting | Home hero slideshow (default slide) | requested |
@@ -128,6 +128,7 @@ Notes
   and holds the painted `ikon-daftar` (041), so deliver it after `ikon-beranda`.
 - 019, 020 and 027 were repainted for D-089 in #49 and are installed. 019 is the first home hero slide; 020
   (school character section) and 027 (test pages) have no slot in the views yet.
-- The `langkah` batch is 046–048 (scenes with people, D-090) plus 072 (card backgrounds); deliver them together.
+- The `langkah` batch (046–048 scenes, 072 card backgrounds, D-090) is installed; 072's CSS replaced the interim
+  `.kartu-langkah` block.
 - Every empty state (052–071) shows its own scene; no two empty states may look alike, also not like 004,
   005, 009, 010 or 028–034.
