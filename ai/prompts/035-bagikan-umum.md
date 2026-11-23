@@ -7,7 +7,7 @@ generate: landscape 1536x1024
 background: painted
 variants: light, hijau
 batch: paintings-pages
-status: requested
+status: generated
 ---
 
 # 035 — bagikan-umum

@@ -88,6 +88,12 @@ status to `done`. Nothing here is served by the app directly.
 | 027 | `install/img/section/tes-hijau.webp` | 700×652 | 115.09 | Transparent | Shared crop, pencil case in leaf green |
 | 027 | `tes-dark-hijau.webp` | 1254×1254 | 396.00 | Transparent | Gentle tonal lift and a faint rim; pencil case in leaf green |
 | 027 | `install/img/section/tes-dark-hijau.webp` | 700×652 | 115.05 | Transparent | Shared crop, gentle tonal lift and a faint rim; pencil case in leaf green |
+| 035 | `bagikan-umum.webp` | 1536×1024 | 577.51 | Full bleed | All four students visible in the centre square |
+| 035 | `install/img/share/bagikan-umum.webp` | 1200×630 | 173.13 | Full bleed | Centre crop, all four students visible in the centre square |
+| 035 | `install/img/share/bagikan-umum.jpg` | 1200×630 | 177.12 | Full bleed | Centre crop, all four students visible in the centre square |
+| 035 | `bagikan-umum-hijau.webp` | 1536×1024 | 578.40 | Full bleed | Sage backpack strap in leaf green |
+| 035 | `install/img/share/bagikan-umum-hijau.webp` | 1200×630 | 173.09 | Full bleed | Centre crop, sage backpack strap in leaf green |
+| 035 | `install/img/share/bagikan-umum-hijau.jpg` | 1200×630 | 177.10 | Full bleed | Centre crop, sage backpack strap in leaf green |
 
 ### svg-kit (2026-11-23)
 

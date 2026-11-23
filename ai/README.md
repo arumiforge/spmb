@@ -64,7 +64,7 @@ Batches are delivered in this order: `svg-kit` (no image generator needed) → `
 | 025 | [cek-status](prompts/025-cek-status.md) | paintings-pages | painting | `/cek-status` | generated |
 | 026 | [kartu](prompts/026-kartu.md) | paintings-pages | painting | `/cek-status/kartu`, card settings | generated |
 | 027 | [tes](prompts/027-tes.md) | paintings-pages | painting | Test schedule and test pages | generated |
-| 035 | [bagikan-umum](prompts/035-bagikan-umum.md) | paintings-pages | painting | Default link-preview image | requested |
+| 035 | [bagikan-umum](prompts/035-bagikan-umum.md) | paintings-pages | painting | Default link-preview image | generated |
 | 028 | [akses-ditolak](prompts/028-akses-ditolak.md) | paintings-states | painting | 403 / no permission | requested |
 | 029 | [sesi-berakhir](prompts/029-sesi-berakhir.md) | paintings-states | painting | Session expired | requested |
 | 030 | [pendaftaran-ditutup](prompts/030-pendaftaran-ditutup.md) | paintings-states | painting | Registration not open | requested |
