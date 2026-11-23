@@ -7,7 +7,7 @@ generate: landscape 1536x1024
 background: transparent
 variants: light, dark, hijau, dark-hijau
 batch: paintings-pages
-status: requested
+status: done
 ---
 
 # 019 — hero-beranda-santri
