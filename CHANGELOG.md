@@ -20,6 +20,9 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
   - **Registration:** five-step form with a numbered stepper and a summary step; "Ada wali?" question before the
     guardian fields (`applicants.has_guardian`); explicit consent checkbox. Home "Cara mendaftar" as a timeline.
     Demo data has a complete example applicant.
+  - **Languages (D-109):** the whole public site in Indonesian, English (`/en/…`) and Arabic (`/ar/…`, right to left,
+    Noto Sans Arabic), switcher in the top bar, drawer and footer, `hreflang` links; optional English/Arabic fields
+    for school-entered text with Indonesian fallback; each language can be switched off in Identitas Sekolah.
 
 ### Changed
 - Settings and form pages show one column of full-width folding cards, with an "Isi halaman" rail and a second save

@@ -10,8 +10,8 @@ personal data.
 **Admin round (D-098…D-109)** on `igi/gifted-davinci-j917i9`: document examples + SK Aktif, setup checklist, server page,
 folding cards, one-column settings with "Isi halaman" rail, wider sidebar, news ticker, home popup, editable footer
 links + social icons, visitor statistics (module Analitik), step-by-step registration with the guardian question and
-consent, home timeline, complete demo applicant, logo-redirect fix. Workers A–D merged; worker E (public site in
-Indonesian/English/Arabic, D-109) in progress.
+consent, home timeline, complete demo applicant, logo-redirect fix. Workers A–E merged (E: public site in
+Indonesian/English/Arabic, D-109).
 
 **Public polish round (D-090…D-095)**: merged into `main` (PR #50). Codex paintings 019–027 and 035 installed (019, 020, 027
 repainted for D-089; 020 and 027 still need a slot in the views), "Cara mendaftar" art slots (briefs 046–048 rewritten, 072 new), map preview without an
@@ -54,7 +54,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `igi/gifted-davinci-j917i9` | session admin-site | Admin round (D-098…D-109), integration branch; workers A (Berkas examples), B (Analitik), C (Situs ticker/popup/footer), D (registration stepper) merged; worker E (three languages) running | in progress |
+| `igi/gifted-davinci-j917i9` | session admin-site | Admin round (D-098…D-109), integration branch; workers A (Berkas examples), B (Analitik), C (Situs ticker/popup/footer), D (registration stepper), E (three languages) merged | PR open |
 | `nty/intelligent-curie-pb1lv6` | session guides | Home map/contact layout (D-096), staff guides in the dashboard + in-page search on Panduan and Tanya Jawab (D-097) | PR open |
 | `pw/sleepy-hopper-d0a7h5` | session polish | Public polish round (D-090…D-095), Codex #49 and `langkah`, PR #43 notes | #50, #51 merged; follow-up PR open |
 | `feat/ui-codex` | worker A (ui-round) | Codex briefs 036–071 (`docs/ui-round-plan.md` A) | merged into the integration branch (#42) |
@@ -76,14 +76,17 @@ create your own branch from `main` instead.
 
 ## Next steps
 
-00000. **Admin round** (`igi/gifted-davinci-j917i9`): merge worker E (D-109, translate the Analitik footer line too),
-   run the full suite, open the PR. After merge: `spmb deploy staging` (migrations: has_guardian, document examples,
+00000. **Admin round** (`igi/gifted-davinci-j917i9`): PR open; all workers merged. After merge: `spmb deploy staging` (migrations: has_guardian, document examples,
    SK Aktif, site_news, analytics tables), check `/`, `/daftar`, `/admin`, Website pages, then production; run
    `spmb spark production spmb:branding clients/smp-nu-al-maruf-kudus/branding` once more to install the SK Aktif
    example. User to confirm two D-107 details (guardian name always required with "Ada wali"; explicit consent box).
    Follow-ups: per-parent "masih hidup / sudah meninggal"; referrer/device totals in Analitik (D-053); Codex
    empty-state paintings `kosong-berita`, `kosong-tautan`, `kosong-pengunjung`; module commands vs Composer `App\`
-   mapping (command discovery can include a module command twice in one test run).
+   mapping (command discovery can include a module command twice in one test run). Languages: translations for
+   occupation/income lists and `Tes.instructions`; the client pack's starter Q&A in English/Arabic.
+   Discussed with the user, waiting for answers: "Statistik" module (region list for applicant addresses, charts of
+   parent occupation/income etc., later test-score analysis) and an AI chatbot limited to SPMB (OpenAI-compatible
+   providers, rotation/failover; questions: primary provider + paid key, where shown, WhatsApp handover, daily limit).
 
 0000. **Guides and contacts (D-096, D-097)**: after the PR is merged, `spmb deploy staging`, check `/` (map on the right,
    below the contacts on phones), `/tanya-jawab` and `/panduan/calon-murid` (search box), `/admin/panduan` as Panitia and
