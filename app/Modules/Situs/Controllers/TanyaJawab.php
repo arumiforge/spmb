@@ -160,7 +160,8 @@ class TanyaJawab extends BaseController
                 ['label' => lang('Situs.qaAdminTitle'), 'url' => 'admin/tanya-jawab'],
                 ['label' => lang($isNew ? 'Situs.qaCrumbAdd' : 'Situs.qaCrumbEdit')],
             ],
-            'question' => $question ?? ['topic' => (string) $this->request->getGet('topik'), 'question' => '', 'answer' => '', 'is_published' => 1],
+            // ?topik= and ?pertanyaan= prefill a new question ("Jadikan tanya jawab" from Tanya Asisten, D-110).
+            'question' => $question ?? ['topic' => (string) $this->request->getGet('topik'), 'question' => mb_substr(trim((string) $this->request->getGet('pertanyaan')), 0, 200), 'answer' => '', 'is_published' => 1],
             'topics'   => $this->questions->topics(),
             'isNew'    => $isNew,
         ]);
