@@ -16,15 +16,16 @@ $intro  = match (true) {
     default                                            => lang('Situs.homeClosedText'),
 };
 $schoolName = (string) setting('School.name');
-$motto      = (string) setting('School.motto');
-$tagline    = (string) setting('School.tagline');
-$address    = (string) setting('School.address');
+$motto      = setting_localized('School.motto');
+$tagline    = setting_localized('School.tagline');
+$address    = setting_localized('School.address');
+$mapAddress = (string) setting('School.address'); // maps search the address as written in Indonesia
 $phone      = (string) setting('School.phone');
 $whatsapp   = (string) setting('School.whatsapp');
 $email      = (string) setting('School.email');
 $mapUrl     = map_embed_url((string) setting('School.mapEmbed'));
 // No embed pasted yet: a preview map of the address instead of only a directions link (D-091).
-$mapUrl = $mapUrl !== '' || $address === '' ? $mapUrl : map_search_embed_url($schoolName . ', ' . str_replace(["\r", "\n"], ' ', $address));
+$mapUrl = $mapUrl !== '' || $address === '' ? $mapUrl : map_search_embed_url($schoolName . ', ' . str_replace(["\r", "\n"], ' ', $mapAddress));
 
 // Slides: the school's own pictures replace the default Codex paintings (D-084).
 $uploaded = BrandingAssets::heroSlides();
@@ -168,7 +169,7 @@ $cardIcons = ['persyaratan' => 'clipboard-list', 'jadwal' => 'calendar-days', 'c
                             <?= art_icon('ikon/ikon-' . $slug, $cardIcons[$slug] ?? 'info', 'mb-3 h-20 w-20 sm:h-24 sm:w-24') ?>
                             <span class="mb-1 text-base font-bold text-gray-900 sm:text-lg dark:text-white"><?= esc($card['title']) ?></span>
                             <span class="text-sm text-gray-600 dark:text-gray-400"><?= esc($card['text']) ?></span>
-                            <span class="mt-auto inline-flex items-center gap-1 pt-3 text-sm font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.homeCardOpen') ?><?= icon('arrow-right', 'h-4 w-4 transition-transform group-hover:translate-x-0.5') ?></span>
+                            <span class="mt-auto inline-flex items-center gap-1 pt-3 text-sm font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.homeCardOpen') ?><?= icon('arrow-right', 'h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5') ?></span>
                         </a>
                     </li>
                 <?php endforeach ?>
@@ -180,11 +181,11 @@ $cardIcons = ['persyaratan' => 'clipboard-list', 'jadwal' => 'calendar-days', 'c
 <?php if ($mapUrl !== '' || $address !== '' || $phone !== '' || $whatsapp !== '' || $email !== '') : ?>
     <?php
     // Contacts on the left, the map on the right from lg; on phones the map follows the contacts at full width (D-096).
-    $directions = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode(trim($schoolName . ' ' . str_replace(["\r", "\n"], ' ', $address)));
+    $directions = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode(trim($schoolName . ' ' . str_replace(["\r", "\n"], ' ', $mapAddress)));
     $contacts   = array_values(array_filter([
         $address !== '' ? ['art' => 'ikon/ikon-alamat', 'icon' => 'map-pin', 'label' => lang('Situs.homeAddress'), 'html' => nl2br(esc($address)), 'href' => null] : null,
-        $phone !== '' ? ['art' => 'ikon/ikon-telepon', 'icon' => 'phone', 'label' => lang('Situs.homePhone'), 'html' => esc($phone), 'href' => 'tel:' . preg_replace('/[^0-9+]/', '', $phone)] : null,
-        $whatsapp !== '' ? ['art' => 'ikon/ikon-pesan', 'brand' => 'whatsapp', 'label' => lang('Situs.homeWhatsapp'), 'html' => esc($whatsapp), 'href' => whatsapp_url($whatsapp), 'external' => true] : null,
+        $phone !== '' ? ['art' => 'ikon/ikon-telepon', 'icon' => 'phone', 'label' => lang('Situs.homePhone'), 'html' => '<span dir="ltr">' . esc($phone) . '</span>', 'href' => 'tel:' . preg_replace('/[^0-9+]/', '', $phone)] : null,
+        $whatsapp !== '' ? ['art' => 'ikon/ikon-pesan', 'brand' => 'whatsapp', 'label' => lang('Situs.homeWhatsapp'), 'html' => '<span dir="ltr">' . esc($whatsapp) . '</span>', 'href' => whatsapp_url($whatsapp), 'external' => true] : null,
         $email !== '' ? ['art' => 'ikon/ikon-email', 'icon' => 'mail', 'label' => lang('Situs.homeEmail'), 'html' => esc($email), 'href' => 'mailto:' . $email, 'breakAll' => true] : null,
     ]));
     ?>

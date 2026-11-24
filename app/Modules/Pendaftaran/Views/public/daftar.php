@@ -48,7 +48,7 @@ $button = 'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 te
             <p class="mt-2 text-base text-gray-600 dark:text-gray-300"><?= lang('Pendaftaran.publicFormIntro') ?></p>
             <?php if ($wave !== null) : ?>
                 <p class="mt-3 inline-flex items-center gap-2 rounded-lg bg-primary-50 px-3 py-2 text-sm font-medium text-primary-800 dark:bg-gray-800 dark:text-primary-300">
-                    <?= icon('calendar', 'h-4 w-4') ?><?= esc(lang('Pendaftaran.publicWave', [$wave['name'], tanggal_indo($wave['ends_on'])])) ?>
+                    <?= icon('calendar', 'h-4 w-4') ?><?= esc(lang('Pendaftaran.publicWave', [localized($wave, 'name'), tanggal_indo($wave['ends_on'])])) ?>
                 </p>
             <?php endif ?>
             <p class="mt-3 text-sm text-gray-500 dark:text-gray-400"><?= lang('Pendaftaran.publicRequiredNote') ?></p>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Situs\Controllers;
 
 use App\Controllers\BaseController;
+use App\Libraries\TranslationInput;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\Files\UploadedFile;
 use CodeIgniter\HTTP\RedirectResponse;
@@ -25,7 +26,7 @@ class Popup extends BaseController
      *
      * @var list<string>
      */
-    private const TEXT_FIELDS = ['title', 'text', 'buttonLabel', 'buttonUrl', 'startsOn', 'endsOn', 'frequency'];
+    private const TEXT_FIELDS = ['title', 'text', 'buttonLabel', 'buttonUrl', 'startsOn', 'endsOn', 'frequency', 'title_en', 'title_ar', 'text_en', 'text_ar', 'buttonLabel_en', 'buttonLabel_ar'];
 
     private const IMAGE_MIMES      = 'image/jpeg,image/png,image/webp';
     private const ATTACHMENT_MIMES = 'application/pdf,application/msword,application/vnd.ms-office,application/vnd.ms-excel,application/CDFV2,application/x-ole-storage,'
@@ -69,7 +70,15 @@ class Popup extends BaseController
             'frequency'   => ['label' => lang('Situs.popupFieldFrequency'), 'rules' => 'required|in_list[' . implode(',', array_keys(HomePopup::FREQUENCIES)) . ']'],
         ];
 
-        if (! $this->validateData($post, $rules)) {
+        // Optional English/Arabic versions (D-109), saved as Situs.popupTitle_en and so on.
+        [$translations, $translationRules] = TranslationInput::read($this->request, [
+            'title'       => ['max' => 120],
+            'text'        => ['max' => 3000, 'multiline' => true],
+            'buttonLabel' => ['max' => 40],
+        ], false);
+        $post += $translations;
+
+        if (! $this->validateData($post, $rules + $translationRules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 

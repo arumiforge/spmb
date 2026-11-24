@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Situs\Controllers;
 
 use App\Controllers\BaseController;
+use App\Libraries\TranslationInput;
 use CodeIgniter\HTTP\RedirectResponse;
 use Modules\Situs\Libraries\SiteLink;
 use Modules\Situs\Models\SiteNewsModel;
@@ -212,7 +213,11 @@ class BeritaSingkat extends BaseController
             'ends_on'   => ['label' => lang('Situs.fieldEndsOn'), 'rules' => 'permit_empty|valid_date[Y-m-d]', 'errors' => ['valid_date' => lang('Situs.dateInvalid')]],
         ];
 
-        if (! $this->validateData($post, $rules)) {
+        // Optional English/Arabic versions (D-109).
+        [$translations, $translationRules] = TranslationInput::read($this->request, ['text' => ['max' => 160]]);
+        $post += $translations;
+
+        if (! $this->validateData($post, $rules + $translationRules)) {
             return null;
         }
 

@@ -16,5 +16,5 @@ if (! DocumentTypeModel::templateShown($type)) {
 }
 ?>
 <a href="<?= url_to('berkas.contoh', $type['code']) ?>" download class="<?= esc($link['class'] ?? 'inline-flex items-center gap-1.5 text-sm font-medium text-primary-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-primary-400', 'attr') ?>">
-    <?= icon('download', 'h-4 w-4 shrink-0') ?><span><?= esc(DocumentTypeModel::templateLabel($type)) ?><span class="sr-only"> <?= esc(lang('Berkas.templateFor', [$type['name']])) ?></span></span>
+    <?= icon('download', 'h-4 w-4 shrink-0') ?><span><?= esc(DocumentTypeModel::templateLabel($type)) ?><span class="sr-only"> <?= esc(lang('Berkas.templateFor', [localized($type, 'name')])) ?></span></span>
 </a>

@@ -34,11 +34,11 @@ $hint      = lang('Berkas.formatsHint', [DocumentTypeModel::formatLabel($type), 
     <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
         <div class="min-w-0">
             <p class="font-medium text-gray-900 dark:text-white">
-                <?= esc($type['name']) ?>
+                <?= esc(localized($type, 'name')) ?>
                 <span class="ms-1 text-xs font-normal <?= (bool) $type['is_required'] ? 'text-red-700 dark:text-red-400' : 'text-gray-500 dark:text-gray-400' ?>">(<?= lang((bool) $type['is_required'] ? 'Berkas.required' : 'Berkas.optional') ?><?= (bool) $type['may_follow'] ? ', ' . lang('Berkas.mayFollowHint') : '' ?>)</span>
             </p>
-            <?php if (! empty($type['description'])) : ?>
-                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-300"><?= esc($type['description']) ?></p>
+            <?php if (localized($type, 'description') !== '') : ?>
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-300"><?= esc(localized($type, 'description')) ?></p>
             <?php endif ?>
             <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400"><?= esc($hint) ?></p>
             <?php $templateLink = view('Modules\Berkas\Views\partials\template_link', ['link' => ['type' => $type]], ['saveData' => false]); ?>
@@ -78,7 +78,7 @@ $hint      = lang('Berkas.formatsHint', [DocumentTypeModel::formatLabel($type), 
 
     <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start">
         <?php if ($fileUrl !== null) : ?>
-            <a href="<?= $fileUrl ?>" target="_blank" rel="noopener" class="<?= $secondary ?>"><?= icon('eye', 'h-4 w-4') ?><?= lang('Berkas.view') ?><span class="sr-only">: <?= esc($type['name']) ?></span></a>
+            <a href="<?= $fileUrl ?>" target="_blank" rel="noopener" class="<?= $secondary ?>"><?= icon('eye', 'h-4 w-4') ?><?= lang('Berkas.view') ?><span class="sr-only">: <?= esc(localized($type, 'name')) ?></span></a>
         <?php endif ?>
 
         <?php if ($isAdmin && ! empty($item['canVerify']) && $hasFile) : ?>
@@ -102,13 +102,13 @@ $hint      = lang('Berkas.formatsHint', [DocumentTypeModel::formatLabel($type), 
             <?php if ($isAdmin) : ?><details class="w-full rounded-lg border border-gray-200 sm:w-auto dark:border-gray-600"><summary class="<?= $secondary ?> cursor-pointer list-none border-0"><?= icon('plus', 'h-4 w-4') ?><?= lang('Berkas.staffUploadFor') ?></summary><div class="p-3"><?php endif ?>
             <form method="post" action="<?= $postUrl ?>" enctype="multipart/form-data" class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
                 <?= csrf_field() ?>
-                <label for="<?= $inputId ?>" class="sr-only"><?= esc(lang('Berkas.chooseFile', [$type['name']])) ?></label>
+                <label for="<?= $inputId ?>" class="sr-only"><?= esc(lang('Berkas.chooseFile', [localized($type, 'name')])) ?></label>
                 <input id="<?= $inputId ?>" type="file" name="<?= UploadInput::FIELD ?>" accept="<?= esc(DocumentTypeModel::acceptOf($type), 'attr') ?>" required
                        class="block w-full min-w-0 cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 file:me-3 file:cursor-pointer file:border-0 file:bg-gray-800 file:px-4 file:py-2.5 file:text-white focus:outline-none sm:w-72 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:file:bg-gray-600">
                 <button type="submit" class="<?= $primary ?> shrink-0"><?= lang($hasFile ? ($status === 'invalid' ? 'Berkas.uploadAgain' : 'Berkas.replace') : 'Berkas.upload') ?></button>
             </form>
             <?php if ($canFollow) : ?>
-                <form method="post" action="<?= $postUrl ?>" data-confirm="<?= esc(lang('Berkas.toFollowConfirm', [$type['name']]), 'attr') ?>" class="<?= $isAdmin ? 'mt-2' : '' ?>">
+                <form method="post" action="<?= $postUrl ?>" data-confirm="<?= esc(lang('Berkas.toFollowConfirm', [localized($type, 'name')]), 'attr') ?>" class="<?= $isAdmin ? 'mt-2' : '' ?>">
                     <?= csrf_field() ?>
                     <input type="hidden" name="aksi" value="menyusul">
                     <button type="submit" class="<?= $secondary ?> w-full sm:w-auto"><?= icon('clock', 'h-4 w-4') ?><?= lang('Berkas.toFollowButton') ?></button>

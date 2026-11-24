@@ -40,6 +40,7 @@ class DocumentTypeModel extends Model
     protected $allowedFields  = [
         'code', 'name', 'description', 'is_required', 'may_follow', 'max_size_kb', 'extensions', 'sort_order', 'is_active',
         'template_path', 'template_name', 'template_enabled', 'template_label',
+        'name_en', 'name_ar', 'description_en', 'description_ar', 'template_label_en', 'template_label_ar',
     ];
 
     protected function initialize(): void
@@ -182,13 +183,14 @@ class DocumentTypeModel extends Model
     }
 
     /**
-     * Link text for the example file ("Unduh contoh" unless the school wrote its own).
+     * Link text for the example file ("Unduh contoh" unless the school wrote its own), in the page's
+     * language when the school filled in a translation (D-109).
      *
      * @param array<string, mixed> $type
      */
     public static function templateLabel(array $type): string
     {
-        $label = trim((string) ($type['template_label'] ?? ''));
+        $label = trim(localized($type, 'template_label'));
 
         return $label !== '' ? $label : lang('Berkas.templateDefaultLabel');
     }

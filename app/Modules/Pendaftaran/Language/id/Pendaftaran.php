@@ -2,6 +2,10 @@
 
 /** UI strings of the Pendaftaran module. English keys, friendly Indonesian values (spmb-copy). */
 return [
+    // Public menu (Config/PublicMenu.php).
+    'navRegister' => 'Daftar',
+    'navCheck'    => 'Cek Status',
+
     'title' => 'Pendaftaran',
 
     // Waves (admin)

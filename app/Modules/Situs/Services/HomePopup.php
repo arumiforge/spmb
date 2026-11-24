@@ -34,9 +34,15 @@ final class HomePopup
         return [
             'enabled'        => (bool) setting('Situs.popupEnabled'),
             'title'          => (string) setting('Situs.popupTitle'),
+            'title_en'       => (string) setting('Situs.popupTitle_en'),
+            'title_ar'       => (string) setting('Situs.popupTitle_ar'),
             'text'           => (string) setting('Situs.popupText'),
+            'text_en'        => (string) setting('Situs.popupText_en'),
+            'text_ar'        => (string) setting('Situs.popupText_ar'),
             'image'          => (string) setting('Situs.popupImage'),
             'buttonLabel'    => (string) setting('Situs.popupButtonLabel'),
+            'buttonLabel_en' => (string) setting('Situs.popupButtonLabel_en'),
+            'buttonLabel_ar' => (string) setting('Situs.popupButtonLabel_ar'),
             'buttonUrl'      => (string) setting('Situs.popupButtonUrl'),
             'attachment'     => (string) setting('Situs.popupAttachment'),
             'attachmentName' => (string) setting('Situs.popupAttachmentName'),
@@ -94,10 +100,13 @@ final class HomePopup
         $image      = PopupFiles::path($s['image']) !== null;
         $attachment = PopupFiles::path($s['attachment']) !== null;
         $buttonUrl  = SiteLink::normalise($s['buttonUrl']) ?? '';
+        // Texts in the page's language when the school filled in a translation (D-109).
+        $text            = localized($s, 'text');
+        $s['buttonLabel'] = localized($s, 'buttonLabel');
 
         return [
-            'title'      => $s['title'],
-            'html'       => trim($s['text']) === '' ? '' : (new AnswerRenderer(true))->render($s['text']),
+            'title'      => localized($s, 'title'),
+            'html'       => trim($text) === '' ? '' : (new AnswerRenderer(true))->render($text),
             'image'      => $image ? self::fileUrl('gambar', $s) : null,
             'attachment' => $attachment ? ['url' => self::fileUrl('lampiran', $s), 'name' => PopupFiles::downloadName($s['attachmentName'], $s['attachment'])] : null,
             'button'     => $s['buttonLabel'] !== '' && $buttonUrl !== '' ? ['label' => $s['buttonLabel'], 'url' => SiteLink::href($buttonUrl), 'external' => SiteLink::isExternal($buttonUrl)] : null,

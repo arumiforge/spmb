@@ -15,8 +15,6 @@ use Modules\Tes\Models\TestAssignmentModel;
  */
 class TestSchedule
 {
-    private const DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-
     /**
      * The applicant's schedule, or null when not scheduled:
      * ['assignment_id', 'session_id', 'status', 'status_label', 'date' (Y-m-d),
@@ -88,13 +86,14 @@ class TestSchedule
     }
 
     /**
-     * "Sabtu, 12 Juni 2027".
+     * "Sabtu, 12 Juni 2027" (in the page's language on the public site, D-109).
      */
     public static function dayLabel(string $date): string
     {
-        $day = new DateTimeImmutable($date);
+        $day   = new DateTimeImmutable($date);
+        $names = locale_day_names();
 
-        return self::DAYS[(int) $day->format('w')] . ', ' . tanggal_indo($day);
+        return $names[(int) $day->format('w')] . (locale_is_rtl() ? '، ' : ', ') . tanggal_indo($day);
     }
 
     /**
@@ -102,7 +101,8 @@ class TestSchedule
      */
     public static function timeLabel(string $start, string $end): string
     {
-        $format = static fn (string $time): string => str_replace(':', '.', substr($time, 0, 5));
+        $separator = locale_current() === 'id' ? '.' : ':';
+        $format    = static fn (string $time): string => str_replace(':', $separator, substr($time, 0, 5));
 
         return $format($start) . '–' . $format($end) . ' ' . setting('School.timezoneLabel');
     }

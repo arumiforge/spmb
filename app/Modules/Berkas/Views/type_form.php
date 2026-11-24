@@ -27,6 +27,13 @@ $hasTpl  = ! $isNew && DocumentTypeModel::hasTemplate($type);
             <?= view('partials/form_field', ['field' => ['name' => 'code', 'label' => lang('Berkas.fieldCode'), 'value' => $type['code'], 'required' => true, 'help' => lang('Berkas.fieldCodeHelp'), 'attrs' => ['maxlength' => '30', 'pattern' => '[a-z0-9_-]+', 'autocapitalize' => 'none']]]) ?>
             <?= view('partials/form_field', ['field' => ['name' => 'max_size_kb', 'type' => 'number', 'label' => lang('Berkas.fieldMaxSize'), 'value' => (string) $type['max_size_kb'], 'required' => true, 'help' => lang('Berkas.fieldMaxSizeHelp'), 'attrs' => ['min' => '100', 'max' => '10240', 'step' => '1', 'inputmode' => 'numeric']]]) ?>
             <div class="sm:col-span-2"><?= view('partials/form_field', ['field' => ['name' => 'description', 'label' => lang('Berkas.fieldDescription'), 'value' => (string) ($type['description'] ?? ''), 'help' => lang('Berkas.fieldDescriptionHelp'), 'attrs' => ['maxlength' => '255']]]) ?></div>
+            <div class="sm:col-span-2">
+                <?= view('partials/terjemahan', ['translation' => ['fields' => [
+                    ['name' => 'name', 'label' => lang('Berkas.fieldName'), 'values' => ['en' => (string) ($type['name_en'] ?? ''), 'ar' => (string) ($type['name_ar'] ?? '')], 'maxlength' => 100],
+                    ['name' => 'description', 'label' => lang('Berkas.fieldDescription'), 'values' => ['en' => (string) ($type['description_en'] ?? ''), 'ar' => (string) ($type['description_ar'] ?? '')], 'maxlength' => 255],
+                    ['name' => 'template_label', 'label' => lang('Berkas.templateLabelField'), 'values' => ['en' => (string) ($type['template_label_en'] ?? ''), 'ar' => (string) ($type['template_label_ar'] ?? '')], 'maxlength' => 60],
+                ]]]) ?>
+            </div>
 
             <fieldset class="sm:col-span-2" <?= $fmtErr !== null ? 'aria-describedby="formats-error"' : '' ?>>
                 <legend class="mb-2 block text-sm font-medium <?= $fmtErr !== null ? 'text-red-700 dark:text-red-500' : 'text-gray-900 dark:text-white' ?>"><?= lang('Berkas.fieldFormats') ?></legend>

@@ -19,6 +19,11 @@ $card   = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gra
                 <?= view('partials/form_field', ['field' => ['name' => 'text', 'type' => 'textarea', 'rows' => 2, 'label' => lang('Situs.newsFieldText'), 'value' => (string) $item['text'], 'required' => true, 'help' => lang('Situs.newsFieldTextHelp'), 'attrs' => ['maxlength' => '160']]]) ?>
             </div>
             <div class="md:col-span-2">
+                <?= view('partials/terjemahan', ['translation' => ['fields' => [
+                    ['name' => 'text', 'label' => lang('Situs.newsFieldText'), 'type' => 'textarea', 'rows' => 2, 'values' => ['en' => (string) ($item['text_en'] ?? ''), 'ar' => (string) ($item['text_ar'] ?? '')], 'maxlength' => 160],
+                ]]]) ?>
+            </div>
+            <div class="md:col-span-2">
                 <?= view('partials/form_field', ['field' => ['name' => 'url', 'label' => lang('Situs.newsFieldUrl'), 'value' => (string) $item['url'], 'help' => lang('Situs.linkHelp'), 'placeholder' => '/jadwal', 'attrs' => ['maxlength' => '255', 'autocomplete' => 'off', 'inputmode' => 'url']]]) ?>
             </div>
             <?= view('partials/form_field', ['field' => ['name' => 'starts_on', 'type' => 'date', 'label' => lang('Situs.fieldStartsOn'), 'value' => (string) ($item['starts_on'] ?? ''), 'help' => lang('Situs.dateHelp')]]) ?>

@@ -131,6 +131,19 @@ return [
     'pageContents'      => 'Isi halaman',
     'pageSectionError'  => 'ada isian yang perlu diperbaiki',
 
+    // Website languages (D-109): switcher and the offer to return to the language chosen before.
+    'languageLabel'       => 'Pilih bahasa',
+    'languageSuggest'     => 'Terakhir kali Anda membuka website ini dalam Bahasa Indonesia.',
+    'languageSuggestGo'   => 'Lanjut dalam Bahasa Indonesia',
+    'languageSuggestStay' => 'Tetap dalam Bahasa Indonesia',
+    'defaultTagline'      => 'Sistem Penerimaan Murid Baru (SPMB)',
+    // Admin forms: optional translations of texts the school types (partials/terjemahan).
+    'translationTitle'   => 'Terjemahan (tidak wajib)',
+    'translationIntro'   => 'Isi jika teks ini perlu tampil dalam bahasa Inggris atau Arab di website. Jika dibiarkan kosong, pengunjung melihat teks bahasa Indonesia.',
+    'translationEnglish' => '{0} (English)',
+    'translationArabic'  => '{0} (العربية, Arab)',
+    'translationTooLong' => 'Terjemahan paling panjang {0} huruf.',
+
     // Step indicator (partials/stepper)
     'stepper' => [
         'counter'  => 'Langkah {0} dari {1}',

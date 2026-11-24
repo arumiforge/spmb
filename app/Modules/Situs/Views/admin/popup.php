@@ -48,6 +48,11 @@ $frequencies = array_map(static fn (string $key): string => lang('Situs.' . $key
             </div>
             <?= view('partials/form_field', ['field' => ['name' => 'title', 'label' => lang('Situs.popupFieldTitle'), 'value' => $popup['title'], 'help' => lang('Situs.popupFieldTitleHelp'), 'attrs' => ['maxlength' => '120']]]) ?>
             <?= view('partials/form_field', ['field' => ['name' => 'text', 'type' => 'textarea', 'rows' => 7, 'label' => lang('Situs.popupFieldText'), 'value' => $popup['text'], 'help' => lang('Situs.popupFieldTextHelp'), 'attrs' => ['maxlength' => '3000']]]) ?>
+            <?= view('partials/terjemahan', ['translation' => ['fields' => [
+                ['name' => 'title', 'label' => lang('Situs.popupFieldTitle'), 'values' => ['en' => $popup['title_en'], 'ar' => $popup['title_ar']], 'maxlength' => 120],
+                ['name' => 'text', 'label' => lang('Situs.popupFieldText'), 'type' => 'textarea', 'rows' => 5, 'values' => ['en' => $popup['text_en'], 'ar' => $popup['text_ar']], 'maxlength' => 3000],
+                ['name' => 'buttonLabel', 'label' => lang('Situs.popupFieldButtonLabel'), 'values' => ['en' => $popup['buttonLabel_en'], 'ar' => $popup['buttonLabel_ar']], 'maxlength' => 40],
+            ]]]) ?>
         </div>
     <?= lipatan_tutup() ?>
 

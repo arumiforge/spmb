@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Situs\Controllers;
 
 use App\Controllers\BaseController;
+use App\Libraries\TranslationInput;
 use CodeIgniter\HTTP\RedirectResponse;
 use Modules\Situs\Libraries\FooterLinks;
 use Modules\Situs\Libraries\SiteLink;
@@ -81,7 +82,8 @@ class TautanFooter extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $links[$position - 1] = $link;
+        // Keeps the translation of a language that is switched off (its field is not on the form).
+        $links[$position - 1] = array_merge($links[$position - 1], $link);
         FooterLinks::save($links, 'Tautan bawah website diubah');
 
         return redirect()->route('situs.tautan.admin')->with('message', lang('Situs.linkSaved'));
@@ -193,7 +195,11 @@ class TautanFooter extends BaseController
             'url'   => ['label' => lang('Situs.linkFieldUrl'), 'rules' => 'required|max_length[255]', 'errors' => ['required' => lang('Situs.linkUrlRequired'), 'max_length' => lang('Situs.linkInvalid')]],
         ];
 
-        if (! $this->validateData($post, $rules)) {
+        // Optional English/Arabic versions of the link text (D-109).
+        [$translations, $translationRules] = TranslationInput::read($this->request, ['label' => ['max' => 40]], false);
+        $post += $translations;
+
+        if (! $this->validateData($post, $rules + $translationRules)) {
             return null;
         }
 

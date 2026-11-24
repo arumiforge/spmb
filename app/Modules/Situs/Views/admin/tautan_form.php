@@ -18,6 +18,11 @@ $card   = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gra
             <?= view('partials/form_field', ['field' => ['name' => 'label', 'label' => lang('Situs.linkFieldLabel'), 'value' => $link['label'], 'required' => true, 'help' => lang('Situs.linkFieldLabelHelp'), 'attrs' => ['maxlength' => '40']]]) ?>
             <?= view('partials/form_field', ['field' => ['name' => 'url', 'label' => lang('Situs.linkFieldUrl'), 'value' => $link['url'], 'required' => true, 'help' => lang('Situs.linkHelp'), 'placeholder' => '/jadwal', 'attrs' => ['maxlength' => '255', 'autocomplete' => 'off', 'inputmode' => 'url']]]) ?>
             <div class="md:col-span-2">
+                <?= view('partials/terjemahan', ['translation' => ['fields' => [
+                    ['name' => 'label', 'label' => lang('Situs.linkFieldLabel'), 'values' => ['en' => (string) ($link['label_en'] ?? ''), 'ar' => (string) ($link['label_ar'] ?? '')], 'maxlength' => 40],
+                ]]]) ?>
+            </div>
+            <div class="md:col-span-2">
                 <?= view('partials/form_field', ['field' => ['name' => 'active', 'type' => 'checkbox', 'label' => lang('Situs.linkFieldActive'), 'value' => $link['active'] ? '1' : '0']]) ?>
             </div>
         </div>

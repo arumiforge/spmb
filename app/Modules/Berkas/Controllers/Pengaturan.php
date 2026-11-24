@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Berkas\Controllers;
 
 use App\Controllers\BaseController;
+use App\Libraries\TranslationInput;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -275,7 +276,14 @@ class Pengaturan extends BaseController
             'template_label' => ['label' => lang('Berkas.templateLabelField'), 'rules' => 'permit_empty|max_length[60]'],
         ];
 
-        if (! $this->validateData($post, $rules)) {
+        // Optional English/Arabic versions shown on the public pages (D-109).
+        [$translations, $translationRules] = TranslationInput::read($this->request, [
+            'name'           => ['max' => 100],
+            'description'    => ['max' => 255],
+            'template_label' => ['max' => 60],
+        ]);
+
+        if (! $this->validateData($post + $translations, $rules + $translationRules)) {
             // The form shows the formats error under the checkboxes (field "formats").
             $errors = $this->validator->getErrors();
 
@@ -304,7 +312,7 @@ class Pengaturan extends BaseController
             // Example file: switch and link text; the file itself comes from postedTemplate().
             'template_enabled' => (int) (($post['template_enabled'] ?? '0') === '1'),
             'template_label'   => trim((string) ($post['template_label'] ?? '')) ?: null,
-        ];
+        ] + $translations;
     }
 
     /**

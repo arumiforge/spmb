@@ -75,4 +75,14 @@ class Situs extends BaseConfig
      * (Cek Status, Tanya Jawab, Panduan, D-092).
      */
     public string $footerLinks = '';
+
+    /**
+     * Optional translations of the popup (empty = the Indonesian text shows).
+     */
+    public string $popupTitle_en       = '';
+    public string $popupTitle_ar       = '';
+    public string $popupText_en        = '';
+    public string $popupText_ar        = '';
+    public string $popupButtonLabel_en = '';
+    public string $popupButtonLabel_ar = '';
 }

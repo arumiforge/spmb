@@ -2,6 +2,11 @@
 
 /** UI strings of the Situs module. English keys, friendly Indonesian values (spmb-copy). */
 return [
+    // Public menu (Config/PublicMenu.php).
+    'navRequirements' => 'Persyaratan',
+    'navSchedule'     => 'Jadwal',
+    'navQa'           => 'Tanya Jawab',
+
     'title' => 'Halaman Informasi',
 
     // Shared.

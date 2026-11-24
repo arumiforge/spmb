@@ -75,7 +75,7 @@ class CekStatus extends BaseController
             'title'       => lang('Pendaftaran.myTitle'),
             'breadcrumbs' => [['label' => lang('App.home'), 'url' => '/'], ['label' => lang('Pendaftaran.checkCrumb'), 'url' => 'cek-status'], ['label' => lang('Pendaftaran.myTitle')]],
             'applicant'   => $row,
-            'waveName'    => $wave['name'] ?? '-',
+            'waveName'    => $wave !== null ? localized($wave, 'name') : '-',
             'schoolName'  => self::schoolName($row),
             'form'        => new ApplicantForm(),
         ]);

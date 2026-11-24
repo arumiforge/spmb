@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Situs\Controllers;
 
 use App\Controllers\BaseController;
+use App\Libraries\TranslationInput;
 use CodeIgniter\HTTP\RedirectResponse;
 use Modules\Situs\Models\SiteQuestionModel;
 
@@ -185,7 +186,15 @@ class TanyaJawab extends BaseController
             'answer'   => ['label' => lang('Situs.qaFieldAnswer'), 'rules' => 'required|max_length[5000]', 'errors' => ['required' => lang('Situs.qaAnswerRequired'), 'max_length' => lang('Situs.qaAnswerTooLong')]],
         ];
 
-        if (! $this->validateData($post, $rules)) {
+        // Optional English/Arabic versions (D-109).
+        [$translations, $translationRules] = TranslationInput::read($this->request, [
+            'topic'    => ['max' => 80],
+            'question' => ['max' => 200],
+            'answer'   => ['max' => 5000, 'multiline' => true],
+        ]);
+        $post += $translations;
+
+        if (! $this->validateData($post, $rules + $translationRules)) {
             return null;
         }
 

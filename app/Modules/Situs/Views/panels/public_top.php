@@ -39,12 +39,12 @@ $btn      = 'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-fu
                     <?php if ($url !== '') : ?>
                         <?php $external = SiteLink::isExternal($url); ?>
                         <a href="<?= esc(SiteLink::href($url), 'attr') ?>"<?= $external ? ' target="_blank" rel="noopener"' : '' ?> class="inline-flex max-w-full items-center gap-1 underline decoration-primary-300 underline-offset-2 hover:decoration-current focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-sm dark:decoration-gray-500">
-                            <span class="berita-teks line-clamp-3 sm:line-clamp-none"><?= esc($item['text']) ?></span>
+                            <span class="berita-teks line-clamp-3 sm:line-clamp-none"><?= esc(localized($item, 'text')) ?></span>
                             <?= icon($external ? 'external-link' : 'chevron-right', 'h-3.5 w-3.5 shrink-0') ?>
                             <?php if ($external) : ?><span class="sr-only"><?= lang('Situs.opensNewTab') ?></span><?php endif ?>
                         </a>
                     <?php else : ?>
-                        <span class="berita-teks line-clamp-3 sm:line-clamp-none"><?= esc($item['text']) ?></span>
+                        <span class="berita-teks line-clamp-3 sm:line-clamp-none"><?= esc(localized($item, 'text')) ?></span>
                     <?php endif ?>
                 </li>
             <?php endforeach ?>

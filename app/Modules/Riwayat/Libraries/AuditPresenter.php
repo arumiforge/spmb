@@ -39,7 +39,7 @@ class AuditPresenter
     /**
      * Fields stored as 0/1 (shown as Ya/Tidak).
      */
-    private const BOOL_FIELDS = ['active'];
+    private const BOOL_FIELDS = ['active', 'languageEn', 'languageAr'];
 
     /**
      * @param array<string, string>                $roleTitles   Role key => title (Config\AuthGroups)
@@ -106,6 +106,12 @@ class AuditPresenter
 
     public function fieldLabel(string $field): string
     {
+        // Translations of school texts (D-109): "motto_en" → "Slogan sekolah (English)".
+        if (preg_match('/\A(.+)_(en|ar)\z/', $field, $m) === 1 && $this->lookup('Riwayat.fields.' . $field, '') === ''
+            && $this->lookup('Riwayat.fields.' . $m[1], '') !== '') {
+            return lang('Riwayat.translationField.' . $m[2], [$this->fieldLabel($m[1])]);
+        }
+
         return $this->lookup('Riwayat.fields.' . $field, $field);
     }
 

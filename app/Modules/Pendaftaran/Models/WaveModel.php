@@ -30,6 +30,7 @@ class WaveModel extends Model
     protected $useTimestamps  = true;
     protected $allowedFields  = [
         'academic_year', 'name', 'starts_on', 'ends_on', 'quota', 'quota_mode', 'online_quota', 'description', 'is_active',
+        'name_en', 'name_ar', 'description_en', 'description_ar',
     ];
 
     protected function initialize(): void

@@ -25,6 +25,13 @@ $h2   = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
             <?= $f('tagline') ?>
             <div class="sm:col-span-2"><?= $f('motto', ['help' => lang('Pengaturan.mottoHelp')]) ?></div>
             <div class="sm:col-span-2"><?= $f('address', ['type' => 'textarea']) ?></div>
+            <div class="sm:col-span-2">
+                <?= view('partials/terjemahan', ['translation' => ['fields' => [
+                    ['name' => 'tagline', 'label' => lang('Pengaturan.tagline'), 'values' => ['en' => $values['tagline_en'], 'ar' => $values['tagline_ar']], 'maxlength' => 150],
+                    ['name' => 'motto', 'label' => lang('Pengaturan.motto'), 'values' => ['en' => $values['motto_en'], 'ar' => $values['motto_ar']], 'maxlength' => 200],
+                    ['name' => 'address', 'label' => lang('Pengaturan.address'), 'type' => 'textarea', 'values' => ['en' => $values['address_en'], 'ar' => $values['address_ar']], 'maxlength' => 500],
+                ]]]) ?>
+            </div>
         </div>
     <?= lipatan_tutup() ?>
 
@@ -54,7 +61,19 @@ $h2   = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
             <?= $f('primaryColor', ['type' => 'color', 'required' => true, 'help' => lang('Pengaturan.primaryColorHelp')]) ?>
             <?= $f('timezoneLabel', ['type' => 'select', 'required' => true, 'options' => ['WIB' => 'WIB (Waktu Indonesia Barat)', 'WITA' => 'WITA (Waktu Indonesia Tengah)', 'WIT' => 'WIT (Waktu Indonesia Timur)']]) ?>
             <div class="sm:col-span-2"><?= $f('footerText') ?></div>
+            <div class="sm:col-span-2">
+                <?= view('partials/terjemahan', ['translation' => ['fields' => [
+                    ['name' => 'footerText', 'label' => lang('Pengaturan.footerText'), 'values' => ['en' => $values['footerText_en'], 'ar' => $values['footerText_ar']], 'maxlength' => 255],
+                ]]]) ?>
+            </div>
             <?= $f('illustrationAccent', ['type' => 'select', 'options' => lang('Pengaturan.illustrationAccentOptions'), 'help' => lang('Pengaturan.illustrationAccentHelp')]) ?>
+        </div>
+    <?= lipatan_tutup() ?>
+
+    <?= lipatan_buka(['id' => 'sekolah-bahasa', 'icon' => 'globe', 'title' => lang('Pengaturan.sectionLanguages'), 'intro' => lang('Pengaturan.sectionLanguagesIntro')]) ?>
+        <div class="space-y-4">
+            <?= $f('languageEn', ['type' => 'checkbox', 'help' => lang('Pengaturan.languageEnHelp')]) ?>
+            <?= $f('languageAr', ['type' => 'checkbox', 'help' => lang('Pengaturan.languageArHelp')]) ?>
         </div>
     <?= lipatan_tutup() ?>
 

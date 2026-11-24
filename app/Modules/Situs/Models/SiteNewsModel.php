@@ -22,7 +22,7 @@ class SiteNewsModel extends Model
     protected $returnType     = 'array';
     protected $useSoftDeletes = true;
     protected $useTimestamps  = true;
-    protected $allowedFields  = ['text', 'url', 'starts_on', 'ends_on', 'is_active', 'sort_order'];
+    protected $allowedFields  = ['text', 'text_en', 'text_ar', 'url', 'starts_on', 'ends_on', 'is_active', 'sort_order'];
 
     protected function initialize(): void
     {

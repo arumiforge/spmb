@@ -59,7 +59,8 @@ final class FooterLinks
     public static function save(array $links, string $description): bool
     {
         $old = self::all();
-        $new = array_values(array_map(static fn (array $l): array => ['label' => (string) $l['label'], 'url' => (string) $l['url'], 'active' => (bool) $l['active']], $links));
+        $new = array_values(array_map(static fn (array $l): array => ['label' => (string) $l['label'], 'url' => (string) $l['url'], 'active' => (bool) $l['active']]
+            + array_filter(['label_en' => trim((string) ($l['label_en'] ?? '')), 'label_ar' => trim((string) ($l['label_ar'] ?? ''))], static fn (string $v): bool => $v !== ''), $links));
 
         if ($old === $new && self::isCustom()) {
             return false;
@@ -100,7 +101,7 @@ final class FooterLinks
 
         foreach (self::all() as $link) {
             if ($link['active'] && $link['label'] !== '' && self::available($link['url'], $nav)) {
-                $links[] = ['label' => $link['label'], 'href' => SiteLink::href($link['url']), 'external' => SiteLink::isExternal($link['url'])];
+                $links[] = ['label' => self::label($link), 'href' => SiteLink::href($link['url']), 'external' => SiteLink::isExternal($link['url'])];
             }
         }
 
@@ -226,7 +227,8 @@ final class FooterLinks
 
         foreach ($data as $row) {
             if (is_array($row) && isset($row['label'], $row['url'])) {
-                $links[] = ['label' => (string) $row['label'], 'url' => (string) $row['url'], 'active' => (bool) ($row['active'] ?? true)];
+                $links[] = ['label' => (string) $row['label'], 'url' => (string) $row['url'], 'active' => (bool) ($row['active'] ?? true)]
+                    + array_filter(['label_en' => (string) ($row['label_en'] ?? ''), 'label_ar' => (string) ($row['label_ar'] ?? '')], static fn (string $v): bool => $v !== '');
             }
         }
 
@@ -240,6 +242,32 @@ final class FooterLinks
      */
     private static function describe(array $links): string
     {
-        return implode('; ', array_map(static fn (array $l): string => $l['label'] . ' → ' . $l['url'] . ($l['active'] ? '' : ' (disembunyikan)'), $links));
+        return implode('; ', array_map(static fn (array $l): string => $l['label']
+            . (! empty($l['label_en']) ? ' / EN: ' . $l['label_en'] : '') . (! empty($l['label_ar']) ? ' / AR: ' . $l['label_ar'] : '')
+            . ' → ' . $l['url'] . ($l['active'] ? '' : ' (disembunyikan)'), $links));
+    }
+
+    /**
+     * The link text in the page's language (D-109): the school's translation when filled in; for a default
+     * link whose Indonesian text was kept, the built-in translation; otherwise the Indonesian text.
+     *
+     * @param array{label: string, url: string, active: bool, label_en?: string, label_ar?: string} $link
+     */
+    public static function label(array $link): string
+    {
+        $locale = locale_current();
+        $label  = localized($link, 'label');
+
+        if ($locale === 'id' || $label !== $link['label']) {
+            return $label;
+        }
+
+        foreach (['/cek-status' => 'Situs.checkStatus', '/tanya-jawab' => 'Situs.qaTitle', '/panduan' => 'App.guide'] as $url => $key) {
+            if ($link['url'] === $url && $link['label'] === lang($key, [], 'id')) {
+                return lang($key);
+            }
+        }
+
+        return $label;
     }
 }

@@ -1548,3 +1548,122 @@
         }
     }
 }
+
+/*
+ * Website languages (D-109). Arabic uses the self-hosted Noto Sans Arabic (SIL OFL 1.1, copied into
+ * public/build/fonts/ by scripts/fonts.mjs); browsers download it only on Arabic pages. Right-to-left
+ * pages (dir="rtl") mirror the few components that are positioned or shaded from one side; views use
+ * logical utilities (ms-, pe-, start-) and icons that point a way flip with rtl:-scale-x-100 (icon()).
+ */
+@font-face {
+    font-family: "Noto Sans Arabic";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("fonts/noto-sans-arabic-400.woff2") format("woff2");
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+    font-family: "Noto Sans Arabic";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("fonts/noto-sans-arabic-500.woff2") format("woff2");
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+    font-family: "Noto Sans Arabic";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("fonts/noto-sans-arabic-600.woff2") format("woff2");
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+    font-family: "Noto Sans Arabic";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("fonts/noto-sans-arabic-700.woff2") format("woff2");
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+    font-family: "Noto Sans Arabic";
+    font-style: normal;
+    font-weight: 800 900;
+    font-display: swap;
+    src: url("fonts/noto-sans-arabic-800.woff2") format("woff2");
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@layer components {
+    /* Arabic text first; Latin text (names, numbers) keeps the system font. */
+    html[lang="ar"] {
+        --font-sans: "Noto Sans Arabic", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    }
+
+    html[lang="ar"] body {
+        line-height: 1.65;
+    }
+
+    /* Arabic script has no italic; the slogan stays upright. */
+    html[lang="ar"] .italic {
+        font-style: normal;
+    }
+
+    /* Centred with inset-inline-start: 50% plus a shift: the shift changes side on rtl pages. */
+    [dir="rtl"] .nav-bawah-tengah-bulat {
+        translate: 50% 0;
+    }
+
+    [dir="rtl"] .stepper-item.is-selesai .langkah-bulat::after {
+        transform: translate(50%, -62%) rotate(45deg);
+    }
+
+    [dir="rtl"] .pemisah-tumpal::before {
+        transform: translateX(50%);
+    }
+
+    /* Shading that fades towards the text side. */
+    [dir="rtl"] .pola-pudar {
+        --pola-gradasi: linear-gradient(to right, #000 0%, transparent 70%);
+    }
+
+    [dir="rtl"] .tombol-daftar::before {
+        --tombol-pola-pudar: linear-gradient(to right, #000, transparent 52%);
+    }
+
+    [dir="rtl"] .slide-hero {
+        -webkit-mask-image: radial-gradient(ellipse 72% 70% at 45% 50%, #000 58%, transparent 100%);
+        mask-image: radial-gradient(ellipse 72% 70% at 45% 50%, #000 58%, transparent 100%);
+    }
+
+    @media (width >= 48rem) {
+        [dir="rtl"] .slide-hero {
+            -webkit-mask-image:
+                linear-gradient(to left, transparent 0, #000 30%, #000 88%, transparent 100%),
+                linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
+            mask-image:
+                linear-gradient(to left, transparent 0, #000 30%, #000 88%, transparent 100%),
+                linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
+        }
+
+        [dir="rtl"] .garis-waktu-mendatar .garis-waktu-item:not(:last-child)::before {
+            background: linear-gradient(270deg, var(--color-primary-500), var(--color-primary-300));
+        }
+
+        .dark[dir="rtl"] .garis-waktu-mendatar .garis-waktu-item:not(:last-child)::before {
+            background: linear-gradient(270deg, var(--color-primary-500), var(--color-primary-700));
+        }
+    }
+
+    /* Registration numbers, phone numbers and other Latin data stay left to right inside Arabic text. */
+    [dir="rtl"] .ltr-isi {
+        direction: ltr;
+        unicode-bidi: isolate;
+    }
+}

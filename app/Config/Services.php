@@ -4,12 +4,17 @@ namespace Config;
 
 use App\Libraries\ApplicantAccess;
 use App\Libraries\AuditLogger;
+use App\Libraries\Language;
+use App\Libraries\Locales;
 use App\Libraries\Menu;
 use App\Libraries\ModuleRegistry;
 use App\Libraries\TwoFactor;
 use App\Models\AuditLogModel;
 use App\Models\UserTwoFactorModel;
 use CodeIgniter\Config\BaseService;
+use CodeIgniter\HTTP\IncomingRequest;
+use CodeIgniter\HTTP\SiteURI;
+use CodeIgniter\HTTP\UserAgent;
 use PragmaRX\Google2FA\Google2FA;
 use Throwable;
 
@@ -28,6 +33,64 @@ use Throwable;
  */
 class Services extends BaseService
 {
+    /**
+     * The incoming request, with the website language taken from the address (D-109): "/en/jadwal" is
+     * routed as "jadwal" with the locale "en". The request URI keeps the prefix in its path (so
+     * current_url() and redirect()->back() stay in the language) through the index-page slot of SiteURI.
+     *
+     * @return IncomingRequest
+     */
+    public static function incomingrequest(?App $config = null, bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('request', $config);
+        }
+
+        $config ??= config(App::class);
+        $uri = static::get('uri');
+
+        $locale = null;
+
+        if ($uri instanceof SiteURI && $config->indexPage === '') {
+            [$locale, $rest] = Locales::splitPrefix($uri->getRoutePath());
+
+            if ($locale !== null) {
+                $prefixed            = clone $config;
+                $prefixed->indexPage = $locale;
+                $query               = $uri->getQuery();
+                $uri                 = new SiteURI($prefixed, $rest . ($query !== '' ? '?' . $query : ''), $uri->getHost(), $uri->getScheme());
+            }
+        }
+
+        $request = new IncomingRequest($config, $uri, 'php://input', new UserAgent());
+
+        $request->setLocale($locale ?? Locales::DEFAULT);
+
+        return $request;
+    }
+
+    /**
+     * The request if one exists already (a test mock first), without creating one.
+     */
+    public static function existingRequest(): ?object
+    {
+        return static::$mocks['request'] ?? static::$instances['request'] ?? null;
+    }
+
+    /**
+     * Language lines that follow the request's locale and fall back to Indonesian (App\Libraries\Language).
+     *
+     * @return Language
+     */
+    public static function language(?string $locale = null, bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('language', $locale)->setLocale($locale ?? Locales::current());
+        }
+
+        return new Language($locale ?? Locales::current());
+    }
+
     /**
      * Audit trail writer.
      */
