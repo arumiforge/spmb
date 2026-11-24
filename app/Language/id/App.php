@@ -126,4 +126,6 @@ return [
     'altFeatures'       => 'Susunan balok yang menggambarkan fitur yang bisa ditambahkan.',
     'altGuideStaff'     => 'Dua petugas sekolah membaca panduan bersama.',
     'altGuideApplicant' => 'Orang tua dan calon murid membaca panduan pendaftaran di ponsel.',
+    'foldOpenAll'       => 'Buka semua',
+    'foldCloseAll'      => 'Tutup semua',
 ];

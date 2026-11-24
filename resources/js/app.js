@@ -5,6 +5,7 @@
 import 'flowbite';
 import { initDialogs, initFolds, initTableOfContents, initSlideshow, initIcons3d, initPageSearch } from './ui.js';
 import { initTanggal } from './tanggal.js';
+import { initLipatan } from './lipatan.js';
 
 const storage = {
     get(key) {
@@ -133,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDialogs();
     initTanggal();
     initFolds();
+    initLipatan();
     initTableOfContents();
     initPageSearch();
     initSlideshow();
