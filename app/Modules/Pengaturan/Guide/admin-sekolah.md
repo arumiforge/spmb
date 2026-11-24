@@ -1,3 +1,15 @@
+## Melihat persiapan sistem di dasbor
+
+Kotak **Persiapan sistem** di dasbor menunjukkan apa yang masih perlu diisi sampai sistem berjalan penuh.
+
+1. Buka **Dasbor**.
+2. Lihat baris **Berikutnya**: itu langkah wajib yang perlu dikerjakan lebih dulu. Tekan **Kerjakan** untuk membuka halamannya.
+3. Lingkaran kuning berarti langkah wajib yang belum selesai. Tanda **Saran** berarti langkah yang dianjurkan, tetapi sistem tetap bisa berjalan tanpanya.
+
+Langkah yang sudah selesai dicoret dan diberi tanda centang hijau. Setelah semua selesai, kotak ini menutup sendiri.
+
+> **Tips:** Bagian di dasbor dan di halaman pengaturan bisa dibuka dan ditutup dengan menekan judulnya. Pilihan Anda diingat di perangkat ini.
+
 ## Mengatur identitas sekolah
 
 Identitas sekolah tampil di website, halaman masuk, kartu pendaftaran, dan dokumen.
