@@ -52,7 +52,7 @@ class CardPdf
         return [
             'number'       => (string) $applicant['registration_number'],
             'name'         => (string) $applicant['full_name'],
-            'wave'         => $wave === null ? '-' : (string) $wave['name'],
+            'wave'         => $wave === null ? '-' : localized($wave, 'name'),
             'school'       => $school === '' ? '-' : $school,
             'method'       => lang($method) === $method ? '-' : lang($method),
             'academicYear' => (string) $applicant['academic_year'],

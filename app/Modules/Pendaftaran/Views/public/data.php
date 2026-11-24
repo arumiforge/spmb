@@ -9,6 +9,7 @@
  * @var Modules\Pendaftaran\Libraries\ApplicantForm $form
  */
 
+use Modules\Pendaftaran\Libraries\ApplicantForm;
 use Modules\Pendaftaran\Models\ApplicantModel;
 
 $a      = $applicant;
@@ -22,7 +23,7 @@ $shown  = [
     'nisn'                 => $a['nisn'],
     'nik'                  => ApplicantModel::maskNik($a['nik']),
     'kk_number'            => ApplicantModel::maskNik($a['kk_number']),
-    'religion'             => $a['religion'],
+    'religion'             => lang('Pendaftaran.religionOptions')[(string) $a['religion']] ?? $a['religion'],
     'phone'                => $a['phone'],
     'address'              => $a['address'],
     'village'              => $a['village'],
@@ -35,6 +36,7 @@ $shown  = [
     'mother_name'          => $a['mother_name'],
     'mother_occupation'    => $a['mother_occupation'],
     'mother_income'        => $a['mother_income'] ?? null,
+    'has_guardian'         => lang('Pendaftaran.guardianOptions')[(string) ($a['has_guardian'] ?? '')] ?? null,
     'guardian_name'        => $a['guardian_name'],
     'guardian_relation'    => $a['guardian_relation'],
     'guardian_occupation'  => $a['guardian_occupation'] ?? null,
@@ -45,7 +47,11 @@ $shown  = [
     'graduation_year'      => $a['graduation_year'],
 ];
 // Show the fields the form asks, plus any hidden field that holds a value.
-$shown = array_filter($shown, static fn ($v, string $f): bool => $form->shows($f) || ($a[$f] ?? null) !== null, ARRAY_FILTER_USE_BOTH);
+// The guardian answer shows when it was asked; with "Tidak ada wali" the (empty) guardian fields are left out.
+$noGuardian = (string) ($a['has_guardian'] ?? '') === '0';
+$shown      = array_filter($shown, static fn ($v, string $f): bool => $f === 'has_guardian'
+    ? ($a['has_guardian'] ?? null) !== null
+    : ($form->shows($f) || ($a[$f] ?? null) !== null) && ! ($noGuardian && in_array($f, ApplicantForm::GUARDIAN, true)), ARRAY_FILTER_USE_BOTH);
 $button = 'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-base font-medium';
 ?>
 <?= $this->extend('layouts/public') ?>
@@ -100,7 +106,8 @@ $button = 'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 te
                 <?php foreach ($shown as $field => $v) : ?>
                     <div class="min-w-0">
                         <dt class="text-gray-500 dark:text-gray-400"><?= lang('Pendaftaran.fields.' . $field) ?></dt>
-                        <dd class="mt-0.5 break-words font-medium text-gray-900 dark:text-white"><?= esc($v === null || $v === '' ? '-' : (string) $v) ?></dd>
+                        <?php // Numbers and contacts stay left to right on Arabic pages; typed text is isolated (D-109). ?>
+                        <dd class="mt-0.5 break-words font-medium text-gray-900 dark:text-white"><?php if (in_array($field, ['nik', 'kk_number', 'nisn', 'phone', 'parent_phone', 'parent_email', 'graduation_year'], true)) : ?><span dir="ltr"><?= esc($v === null || $v === '' ? '-' : (string) $v) ?></span><?php else : ?><bdi><?= esc($v === null || $v === '' ? '-' : (string) $v) ?></bdi><?php endif ?></dd>
                     </div>
                 <?php endforeach ?>
             </dl>

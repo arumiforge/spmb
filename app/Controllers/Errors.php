@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Libraries\Locales;
 use Config\Services;
 use Throwable;
 
 /**
- * Friendly Indonesian error pages (404 and 500).
+ * Friendly error pages (404 and 500) in the page's language (D-109).
  *
  * Signed-in staff see the page inside the admin layout; everyone else sees the
  * public layout. If the layout itself cannot be rendered (for example the
@@ -57,7 +58,8 @@ class Errors extends BaseController
         $staff = false;
 
         try {
-            $staff = auth()->loggedIn();
+            // On an English or Arabic address the visitor sees the public layout in that language (D-109).
+            $staff = auth()->loggedIn() && Locales::isDefault();
         } catch (Throwable) {
             $staff = false;
         }
@@ -95,14 +97,26 @@ class Errors extends BaseController
      */
     public static function fallback(int $code): string
     {
-        $title = $code === 404 ? 'Halaman tidak ditemukan' : 'Maaf, ada gangguan di sistem';
-        $text  = $code === 404
-            ? 'Alamat yang Anda buka mungkin salah ketik, sudah dipindahkan, atau tidak tersedia lagi.'
-            : 'Halaman ini belum bisa ditampilkan. Coba muat ulang beberapa saat lagi. Jika masih terjadi, hubungi panitia sekolah.';
+        // No language files either: the three website languages are written here (D-109).
+        $texts = [
+            'id' => ['Halaman tidak ditemukan', 'Alamat yang Anda buka mungkin salah ketik, sudah dipindahkan, atau tidak tersedia lagi.',
+                'Maaf, ada gangguan di sistem', 'Halaman ini belum bisa ditampilkan. Coba muat ulang beberapa saat lagi. Jika masih terjadi, hubungi panitia sekolah.', 'Kembali ke Beranda'],
+            'en' => ['Page not found', 'The address you opened may have a typo, may have moved, or is no longer available.',
+                'Sorry, something went wrong', 'This page cannot be shown right now. Please reload it in a few moments. If it keeps happening, contact the school’s admission team.', 'Back to Home'],
+            'ar' => ['الصفحة غير موجودة', 'ربما يحتوي العنوان على خطأ في الكتابة، أو نُقلت الصفحة، أو لم تعد متاحة.',
+                'عذرًا، حدث خلل في النظام', 'لا يمكن عرض هذه الصفحة الآن. أعد تحميلها بعد قليل، وإذا تكرّر الأمر فتواصل مع لجنة القبول في المدرسة.', 'العودة إلى الرئيسية'],
+        ];
+        $locale = Locales::current();
+        $t      = $texts[$locale] ?? $texts['id'];
+        $title  = $code === 404 ? $t[0] : $t[2];
+        $text   = $code === 404 ? $t[1] : $t[3];
+        $home   = $t[4];
+        $dir    = Locales::direction($locale);
+        $href   = $locale === 'id' ? '/' : '/' . $locale . '/';
 
         return <<<HTML
             <!doctype html>
-            <html lang="id">
+            <html lang="{$locale}" dir="{$dir}">
             <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -122,7 +136,7 @@ class Errors extends BaseController
             <p class="code">{$code}</p>
             <h1>{$title}</h1>
             <p>{$text}</p>
-            <a href="/">Kembali ke Beranda</a>
+            <a href="{$href}">{$home}</a>
             </main>
             </body>
             </html>

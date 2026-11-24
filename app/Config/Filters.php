@@ -4,6 +4,7 @@ namespace Config;
 
 use App\Filters\MinifyHtml;
 use App\Filters\StaffArea;
+use App\Filters\WebsiteLanguage;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -14,6 +15,7 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
+use Modules\Analitik\Filters\CountVisit;
 
 class Filters extends BaseFilters
 {
@@ -38,6 +40,8 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'staff'         => StaffArea::class,
         'minifyhtml'    => MinifyHtml::class,
+        'bahasa'        => WebsiteLanguage::class,
+        'analitik'      => CountVisit::class,
     ];
 
     /**
@@ -57,8 +61,10 @@ class Filters extends BaseFilters
         'before' => [
             'forcehttps', // Force Global Secure Requests
             'pagecache',  // Web Page Caching
+            'bahasa',     // Website language prefix: staff/file paths and switched-off languages (D-109)
         ],
         'after' => [
+            'bahasa',      // Remember the visitor's website language (D-109)
             'pagecache',   // Web Page Caching
             'performance', // Performance Metrics
             'toolbar',     // Debug Toolbar
@@ -84,6 +90,7 @@ class Filters extends BaseFilters
             // 'honeypot',
             'secureheaders',
             'minifyhtml', // smaller pages, view files untouched (D-094)
+            'analitik',   // visitor statistics, public pages only (module Analitik)
         ],
     ];
 

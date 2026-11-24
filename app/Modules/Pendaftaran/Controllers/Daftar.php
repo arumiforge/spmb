@@ -67,6 +67,11 @@ class Daftar extends BaseController
         $form            = new ApplicantForm();
         [$data, $errors] = $this->validateApplicant($form, $form->visible());
 
+        // Consent checkbox of the last step ("Periksa dan kirim").
+        if ((string) $this->request->getPost('agree') !== '1') {
+            $errors['agree'] = lang('Pendaftaran.agreeRequired');
+        }
+
         if ($errors !== []) {
             return redirect()->back()->withInput()->with('errors', $errors);
         }

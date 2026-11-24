@@ -37,7 +37,7 @@ Work in the GitHub repository arumiforge/spmb, starting from the latest main. Re
 
 Batches are delivered in this order (home page first, user's request of 2026-11-23): `svg-kit` (no image
 generator needed) → `tombol-seni` (no image generator needed) → `ikon-beranda` → `langkah` → `slide-beranda` →
-`paintings-pages` → `kosong-states` → `paintings-states` → `variants-001-012`.
+`paintings-pages` → `kosong-states` → `asisten-chat` → `kosong-states-2` → `paintings-states` → `variants-001-012`.
 
 | ID | Brief | Batch | Kind | Used on | Status |
 | --- | --- | --- | --- | --- | --- |
@@ -111,6 +111,13 @@ generator needed) → `tombol-seni` (no image generator needed) → `ikon-berand
 | 069 | [kartu-tidak-ditemukan](prompts/069-kartu-tidak-ditemukan.md) | kosong-states | painting | Card lookup: not found | requested |
 | 070 | [kosong-pengguna](prompts/070-kosong-pengguna.md) | kosong-states | painting | Empty: no matching users | requested |
 | 071 | [kosong-dasbor](prompts/071-kosong-dasbor.md) | kosong-states | painting | Empty: dashboard summary | requested |
+| 073 | [asisten-pelita](prompts/073-asisten-pelita.md) | asisten-chat | painting (icon) | Chat assistant avatar (generic) | requested |
+| 074 | [asisten-pelita-kudus](prompts/074-asisten-pelita-kudus.md) | asisten-chat | painting (icon) | Chat assistant avatar, SMP NU Al Ma'ruf Kudus (client pack) | requested |
+| 075 | [chat-batas](prompts/075-chat-batas.md) | asisten-chat | painting | Chat: question limit reached → WhatsApp | requested |
+| 076 | [kosong-berita](prompts/076-kosong-berita.md) | kosong-states-2 | painting | Empty: no news items | requested |
+| 077 | [kosong-tautan](prompts/077-kosong-tautan.md) | kosong-states-2 | painting | Empty: no footer links | requested |
+| 078 | [kosong-pengunjung](prompts/078-kosong-pengunjung.md) | kosong-states-2 | painting | Empty: no visitors yet | requested |
+| 079 | [kosong-statistik](prompts/079-kosong-statistik.md) | kosong-states-2 | painting | Empty: no data for Statistik | requested |
 | 013 | [aksen-hijau](prompts/013-aksen-hijau.md) | variants-001-012 | image edit | Green-accent copies of 001–012 | requested |
 | 014 | [varian-gelap](prompts/014-varian-gelap.md) | variants-001-012 | image edit | Dark copies of 001, 002, 006, 011, 012 | requested |
 

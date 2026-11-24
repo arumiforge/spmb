@@ -98,6 +98,8 @@ trait PendaftaranFixtures
             'parent_email'         => 'orangtua@example.test',
             'previous_school_name' => 'SD Negeri 1 Contoh',
             'graduation_year'      => date('Y', strtotime('+1 year')),
+            // Consent checkbox of the public form's last step (ignored by the staff forms).
+            'agree' => '1',
         ];
     }
 }

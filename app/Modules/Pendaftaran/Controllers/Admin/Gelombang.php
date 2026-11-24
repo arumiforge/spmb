@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Pendaftaran\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\TranslationInput;
 use CodeIgniter\HTTP\RedirectResponse;
 use Modules\Pendaftaran\Models\WaveModel;
 
@@ -157,7 +158,13 @@ class Gelombang extends BaseController
             'description'  => ['label' => lang('Pendaftaran.waveDescription'), 'rules' => 'permit_empty|max_length[1000]'],
         ];
 
-        if (! $this->validate($rules)) {
+        // Optional English/Arabic versions shown on the public pages (D-109).
+        [$translations, $translationRules] = TranslationInput::read($this->request, [
+            'name'        => ['max' => 60],
+            'description' => ['max' => 1000, 'multiline' => true],
+        ]);
+
+        if (! $this->validate($rules + $translationRules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -172,7 +179,7 @@ class Gelombang extends BaseController
             'online_quota'  => ($o = trim((string) $this->request->getPost('online_quota'))) === '' ? null : (int) $o,
             'description'   => trim((string) $this->request->getPost('description')) ?: null,
             'is_active'     => $this->request->getPost('is_active') === '1' ? 1 : 0,
-        ];
+        ] + $translations;
 
         if ($data['quota_mode'] === 'close' && $data['quota'] === null) {
             return redirect()->back()->withInput()->with('errors', ['quota' => lang('Pendaftaran.waveQuotaNeeded')]);

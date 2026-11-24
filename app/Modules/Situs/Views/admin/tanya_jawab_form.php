@@ -24,6 +24,11 @@ $card   = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gra
             </datalist>
             <?= view('partials/form_field', ['field' => ['name' => 'question', 'label' => lang('Situs.qaFieldQuestion'), 'value' => (string) $question['question'], 'required' => true, 'help' => lang('Situs.qaFieldQuestionHelp'), 'attrs' => ['maxlength' => '200']]]) ?>
             <?= view('partials/form_field', ['field' => ['name' => 'answer', 'type' => 'textarea', 'label' => lang('Situs.qaFieldAnswer'), 'value' => (string) $question['answer'], 'required' => true, 'help' => lang('Situs.qaFieldAnswerHelp'), 'attrs' => ['maxlength' => '5000', 'rows' => '8']]]) ?>
+            <?= view('partials/terjemahan', ['translation' => ['fields' => [
+                ['name' => 'topic', 'label' => lang('Situs.qaFieldTopic'), 'values' => ['en' => (string) ($question['topic_en'] ?? ''), 'ar' => (string) ($question['topic_ar'] ?? '')], 'maxlength' => 80],
+                ['name' => 'question', 'label' => lang('Situs.qaFieldQuestion'), 'values' => ['en' => (string) ($question['question_en'] ?? ''), 'ar' => (string) ($question['question_ar'] ?? '')], 'maxlength' => 200],
+                ['name' => 'answer', 'label' => lang('Situs.qaFieldAnswer'), 'type' => 'textarea', 'rows' => 6, 'values' => ['en' => (string) ($question['answer_en'] ?? ''), 'ar' => (string) ($question['answer_ar'] ?? '')], 'maxlength' => 5000],
+            ]]]) ?>
             <?= view('partials/form_field', ['field' => ['name' => 'is_published', 'type' => 'checkbox', 'label' => lang('Situs.qaFieldPublished'), 'value' => (string) (int) $question['is_published']]]) ?>
         </div>
     </section>

@@ -117,7 +117,7 @@ $bottom[] = $settings !== []
 </nav>
 
 <aside id="sidebar" aria-label="<?= lang('App.mainMenu') ?>"
-       class="fixed left-0 top-0 z-50 h-screen w-64 -translate-x-full transition-transform lg:z-30 lg:w-64 lg:translate-x-0 lg:pt-16">
+       class="fixed left-0 top-0 z-50 h-screen w-72 max-w-[85vw] -translate-x-full transition-transform lg:z-30 lg:w-72 lg:translate-x-0 lg:pt-16">
     <div class="flex h-full flex-col overflow-y-auto border-r border-gray-200 bg-white px-3 py-4 dark:border-gray-700 dark:bg-gray-800">
         <div class="mb-4 px-2 lg:hidden">
             <?= view('partials/school_brand', ['brand' => ['href' => site_url('admin')]]) ?>
@@ -153,7 +153,7 @@ $bottom[] = $settings !== []
     </div>
 </aside>
 
-<div id="main-content" class="relative min-h-screen pt-16 lg:ms-64">
+<div id="main-content" class="relative min-h-screen pt-16 lg:ms-72">
     <div class="border-b border-gray-200 bg-white px-4 py-3 sm:px-6 dark:border-gray-700 dark:bg-gray-800">
         <?= view('partials/breadcrumbs', ['breadcrumbs' => $breadcrumbs ?? []]) ?>
     </div>

@@ -118,9 +118,13 @@ class App extends BaseConfig
      *
      * IncomingRequest::setLocale() also uses this list.
      *
+     * SPMB (D-109): the public website comes in Indonesian (default, no prefix), English (/en/…) and
+     * Arabic (/ar/…). The language comes from the address prefix, not from the browser
+     * ($negotiateLocale stays false); see App\Libraries\Locales and docs/i18n.md.
+     *
      * @var list<string>
      */
-    public array $supportedLocales = ['id'];
+    public array $supportedLocales = ['id', 'en', 'ar'];
 
     /**
      * --------------------------------------------------------------------------

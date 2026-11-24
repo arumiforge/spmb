@@ -213,6 +213,8 @@ final class BerkasAdminTest extends CIUnitTestCase
         }
 
         $service->markToFollow($applicant, $this->type('rapor-skl'), null);
+        $this->assertSame('incomplete', $this->documentStatus($id));
+        $service->markToFollow($applicant, $this->type('sk-aktif'), null);
         $this->assertSame('pending', $this->documentStatus($id));
 
         foreach ($docs as $doc) {
@@ -225,6 +227,9 @@ final class BerkasAdminTest extends CIUnitTestCase
         $this->assertSame('pending', $this->documentStatus($id));
 
         $service->verify($rapor, 'valid', '', $staff);
+        $this->assertSame('to_follow', $this->documentStatus($id));
+
+        $service->verify($this->uploaded($applicant, 'sk-aktif', 'sample.pdf'), 'valid', '', $staff);
         $this->assertSame('complete', $this->documentStatus($id));
 
         $service->verify(model(ApplicantDocumentModel::class)->find($docs['kk']['id']), 'invalid', 'Terpotong', $staff);

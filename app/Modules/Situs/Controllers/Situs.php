@@ -57,18 +57,25 @@ class Situs extends BaseController
         $used     = [];
 
         foreach (model(SiteQuestionModel::class)->publishedByTopic() as $group) {
+            // Anchors follow the Indonesian topic, so links to a topic work in every language.
             $slug  = self::slug($group['topic'], 'topik', $used);
             $items = [];
+            $topic = (string) $group['topic'];
 
             foreach ($group['items'] as $item) {
                 $items[] = [
                     'id'       => 'pertanyaan-' . (int) $item['id'],
-                    'question' => (string) $item['question'],
-                    'html'     => $renderer->render((string) $item['answer']),
+                    'question' => localized($item, 'question'),
+                    'html'     => $renderer->render(localized($item, 'answer')),
                 ];
+
+                // The topic's translation is typed per question; the first one filled in counts.
+                if ($topic === (string) $group['topic'] && localized($item, 'topic') !== (string) $item['topic']) {
+                    $topic = localized($item, 'topic');
+                }
             }
 
-            $topics[] = ['slug' => $slug, 'topic' => $group['topic'], 'items' => $items];
+            $topics[] = ['slug' => $slug, 'topic' => $topic, 'items' => $items];
         }
 
         $modules = service('modules');

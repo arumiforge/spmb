@@ -10,7 +10,8 @@ use League\CommonMark\CommonMarkConverter;
 /**
  * Assembles a role's guide from the Markdown files in each enabled module's
  * Guide/ folder. The Panduan module's own file comes first, then the other
- * modules in name order.
+ * modules in name order. On English and Arabic pages a translated file next to the
+ * Indonesian one (<audience>.en.md, <audience>.ar.md) is used when it exists (D-109).
  */
 class GuideBuilder
 {
@@ -36,8 +37,10 @@ class GuideBuilder
      *
      * @return list<string> Absolute paths
      */
-    public function files(string $slug): array
+    public function files(string $slug, ?string $locale = null): array
     {
+        $locale ??= function_exists('locale_current') ? locale_current() : 'id';
+
         if (! isset($this->roles[$slug])) {
             return [];
         }
@@ -62,7 +65,7 @@ class GuideBuilder
                 $file = $this->modules->file($module, 'Guide/' . $audience . '.md');
 
                 if ($file !== null) {
-                    $files[] = $file;
+                    $files[] = self::translated($file, $locale);
                 }
 
                 // Optional sections in Guide/<audience>/*.md, in file name order, so
@@ -70,14 +73,29 @@ class GuideBuilder
                 $folder = $this->modules->directory($module, 'Guide/' . $audience);
 
                 if ($folder !== null) {
-                    $parts = glob($folder . '/*.md') ?: [];
+                    $parts = array_filter(glob($folder . '/*.md') ?: [], static fn (string $part): bool => preg_match('/\.[a-z]{2}\.md\z/', $part) !== 1);
                     sort($parts);
-                    array_push($files, ...$parts);
+                    array_push($files, ...array_map(static fn (string $part): string => self::translated($part, $locale), $parts));
                 }
             }
         }
 
         return $files;
+    }
+
+    /**
+     * The translation of a guide file next to it (calon-murid.en.md for calon-murid.md, D-109), or the
+     * Indonesian file when there is none.
+     */
+    public static function translated(string $file, string $locale): string
+    {
+        if ($locale === 'id') {
+            return $file;
+        }
+
+        $candidate = substr($file, 0, -3) . '.' . $locale . '.md';
+
+        return is_file($candidate) ? $candidate : $file;
     }
 
     /**
@@ -99,8 +117,10 @@ class GuideBuilder
 
         $converter = new CommonMarkConverter(['html_input' => 'strip', 'allow_unsafe_links' => false]);
         $html      = (string) $converter->convert($markdown);
-        $toc       = [];
-        $used      = [];
+        // Links to pages of this website ("/daftar") keep the page's language and a sub-folder install.
+        $html = (string) preg_replace_callback('#href="/(?!/)([^"]*)"#', static fn (array $m): string => 'href="' . esc(site_url(html_entity_decode($m[1], ENT_QUOTES)), 'attr') . '"', $html);
+        $toc  = [];
+        $used = [];
 
         $html = (string) preg_replace_callback('#<h2>(.*?)</h2>#s', static function (array $m) use (&$toc, &$used): string {
             $label = trim(strip_tags($m[1]));

@@ -56,21 +56,22 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
                         <?= icon('clipboard', 'h-7 w-7 shrink-0 text-primary-700 dark:text-primary-400') ?>
                         <div class="min-w-0 flex-1">
                             <div class="mb-1 flex flex-wrap items-center gap-2">
-                                <h3 class="text-base font-semibold text-gray-900 dark:text-white"><?= esc($doc['name']) ?></h3>
+                                <h3 class="text-base font-semibold text-gray-900 dark:text-white"><bdi><?= esc(localized($doc, 'name')) ?></bdi></h3>
                                 <?= view('partials/status_badge', ['badge' => (int) $doc['is_required'] === 1 ? ['label' => lang('Situs.required'), 'color' => 'primary'] : ['label' => lang('Situs.optional'), 'color' => 'gray']]) ?>
                                 <?php if ((int) $doc['may_follow'] === 1) : ?>
                                     <?= view('partials/status_badge', ['badge' => ['label' => lang('Situs.mayFollow'), 'color' => 'yellow']]) ?>
                                 <?php endif ?>
                             </div>
-                            <?php if (! empty($doc['description'])) : ?>
+                            <?php if (localized($doc, 'description') !== '') : ?>
                                 <div class="lipat mb-1 [--lipat-latar-gelap:var(--color-gray-800)]" data-lipat data-lipat-tinggi="5rem">
-                                    <p class="lipat-isi text-sm text-gray-600 dark:text-gray-300"><?= nl2br(esc($doc['description'])) ?></p>
+                                    <p class="lipat-isi text-sm text-gray-600 dark:text-gray-300"><bdi><?= nl2br(esc(localized($doc, 'description'))) ?></bdi></p>
                                 </div>
                             <?php endif ?>
                             <?php if ((int) $doc['may_follow'] === 1) : ?>
                                 <p class="mb-1 text-sm text-gray-600 dark:text-gray-300"><?= lang('Situs.mayFollowHelp') ?></p>
                             <?php endif ?>
                             <p class="text-sm text-gray-500 dark:text-gray-400"><?= esc(lang('Situs.fileRule', [implode(', ', $extensions), $size((int) $doc['max_size_kb'])])) ?></p>
+                            <?= view('Modules\Berkas\Views\partials\template_link', ['link' => ['type' => $doc, 'class' => 'mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-primary-400']], ['saveData' => false]) ?>
                         </div>
                     </li>
                 <?php endforeach ?>

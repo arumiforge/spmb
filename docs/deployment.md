@@ -223,14 +223,16 @@ Server IPs, ports and passwords stay out of the repository.
 ### What `spmb deploy` does
 
 1. `git fetch` in `/opt/apps/spmb/src`, resolve the ref (staging default `origin/main`).
-2. Build `spmb-app:<tag>` and `spmb-web:<tag>` from `git archive <commit>` (skipped when they exist).
+2. Build `spmb-app:<tag>` and `spmb-web:<tag>` from `git archive <commit>` (skipped when they exist). The build
+   runs `npm ci && npm run build` (minified CSS/JS, svgo SVGs) and `composer install --no-dev` with an optimised
+   autoloader; HTML is minified at request time by the `minifyhtml` filter. Nothing to run by hand.
    Production without a ref reuses staging's image — **same image, no rebuild**.
 3. Staging only: the checkout moves to that commit (detached), so the CLI matches what runs.
 4. Copy `deploy/compose.yaml` of that commit into the environment folder.
 5. Back up the database and uploads (when the stack already runs).
 6. `docker compose up -d --wait` (healthchecks: MySQL ping, PHP-FPM port, Nginx `/healthz`).
 7. `php spark migrate --all`, then `php spark referensi:import --bawaan` (a no-op unless the bundled
-   SD/MI list changed, D-058).
+   SD/MI list changed, D-058), then `php spark cache:clear` (cached values from the old code are dropped).
 8. Health check: HTTP 200 on `/` through the published port.
 9. Keep the newest 5 image tags plus every tag in use or recorded as previous; remove older ones.
 

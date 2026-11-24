@@ -13,7 +13,6 @@ $f = static fn (string $name, array $extra = []): string => view('partials/form_
     'label' => lang('Pendaftaran.' . $name),
     'value' => $values[$name] ?? '',
 ]]);
-$card    = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800';
 $h2      = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
 $oldYear = (string) old('academicYear', $values['academicYear']);
 $example = RegistrationNumber::isValidFormat((string) old('numberFormat', $values['numberFormat']))
@@ -25,11 +24,12 @@ $labels  = lang('Pendaftaran.fieldModes');
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('pengaturan.pendaftaran') ?>" class="form-lebar">
+<div class="tata-isi" data-lipatan-lingkup>
+<form id="form-pengaturan-pendaftaran" method="post" action="<?= url_to('pengaturan.pendaftaran') ?>" class="form-lebar">
     <?= csrf_field() ?>
+    <?= view('partials/lipatan_semua', [], ['saveData' => false]) ?>
 
-    <section class="<?= $card ?>">
-        <h2 class="<?= $h2 ?>"><?= lang('Pendaftaran.sectionYear') ?></h2>
+    <?= lipatan_buka(['id' => 'pendaftaran-year', 'icon' => 'calendar', 'title' => lang('Pendaftaran.sectionYear')]) ?>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <?= $f('academicYear', ['required' => true, 'help' => lang('Pendaftaran.academicYearHelp'), 'placeholder' => '2027/2028', 'attrs' => ['inputmode' => 'numeric', 'maxlength' => '9']]) ?>
             <div class="sm:col-span-2">
@@ -37,10 +37,9 @@ $labels  = lang('Pendaftaran.fieldModes');
                 <p class="ms-7 mt-1 text-sm text-gray-500 dark:text-gray-400"><?= lang('Pendaftaran.onlineOpenHelp') ?></p>
             </div>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
-    <section class="<?= $card ?>">
-        <h2 class="<?= $h2 ?>"><?= lang('Pendaftaran.sectionNumber') ?></h2>
+    <?= lipatan_buka(['id' => 'pendaftaran-number', 'icon' => 'list', 'title' => lang('Pendaftaran.sectionNumber')]) ?>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div class="sm:col-span-2">
                 <?= $f('numberFormat', ['required' => true, 'help' => lang('Pendaftaran.numberFormatHelp'), 'attrs' => ['maxlength' => '40', 'autocomplete' => 'off', 'spellcheck' => 'false', 'data-number-format' => '']]) ?>
@@ -51,11 +50,9 @@ $labels  = lang('Pendaftaran.fieldModes');
             <?= $f('numberScope', ['type' => 'select', 'required' => true, 'options' => lang('Pendaftaran.numberScopeOptions')]) ?>
             <p class="text-sm text-gray-500 sm:col-span-2 dark:text-gray-400"><?= lang('Pendaftaran.numberNote') ?></p>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
-    <section class="<?= $card ?>">
-        <h2 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Pendaftaran.sectionFields') ?></h2>
-        <p class="mb-4 text-sm text-gray-500 dark:text-gray-400"><?= lang('Pendaftaran.sectionFieldsIntro') ?></p>
+    <?= lipatan_buka(['id' => 'pendaftaran-fields', 'icon' => 'clipboard-list', 'title' => lang('Pendaftaran.sectionFields'), 'intro' => lang('Pendaftaran.sectionFieldsIntro')]) ?>
         <div class="divide-y divide-gray-100 rounded-lg border border-gray-200 dark:divide-gray-700 dark:border-gray-700">
             <?php foreach ($modes as $field => $mode) : ?>
                 <?php $mode = is_array($posted) ? ($posted[$field] ?? $mode) : $mode; ?>
@@ -73,21 +70,21 @@ $labels  = lang('Pendaftaran.fieldModes');
                 </fieldset>
             <?php endforeach ?>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
-    <section class="<?= $card ?>">
-        <h2 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Pendaftaran.sectionLists') ?></h2>
-        <p class="mb-4 text-sm text-gray-500 dark:text-gray-400"><?= lang('Pendaftaran.sectionListsIntro') ?></p>
+    <?= lipatan_buka(['id' => 'pendaftaran-lists', 'icon' => 'list-checks', 'title' => lang('Pendaftaran.sectionLists'), 'intro' => lang('Pendaftaran.sectionListsIntro')]) ?>
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
             <?= $f('occupationOptions', ['type' => 'textarea', 'rows' => 10, 'required' => true]) ?>
             <?= $f('incomeOptions', ['type' => 'textarea', 'rows' => 10, 'required' => true]) ?>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
     <div class="flex justify-end">
         <button type="submit" class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 sm:w-auto dark:focus:ring-primary-800"><?= lang('Pendaftaran.save') ?></button>
     </div>
 </form>
+<?= view('partials/tata_isi_rail', ['form' => 'form-pengaturan-pendaftaran', 'save' => lang('Pendaftaran.save')], ['saveData' => false]) ?>
+</div>
 
 <script<?= csp_script_nonce() !== '' ? ' ' . csp_script_nonce() : '' ?>>
 /* Live example of the registration number (same rules as RegistrationNumber::format). */

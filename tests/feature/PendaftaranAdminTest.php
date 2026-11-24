@@ -169,4 +169,41 @@ final class PendaftaranAdminTest extends CIUnitTestCase
 
         $this->actingAs($admin)->get('admin/pendaftar/999999')->assertRedirectTo(site_url('admin/pendaftar'));
     }
+
+    public function testOfflineFormAsksAboutTheGuardianAndTheDetailShowsIt(): void
+    {
+        $this->makeWave();
+        $panitia = $this->makeUser('panitia');
+        setting('Pendaftaran.requiredFields', ['nisn', 'guardian_relation']);
+
+        $form = $this->actingAs($panitia)->get('admin/pendaftar/tambah');
+        $form->assertSee('Apakah calon murid tinggal bersama atau diasuh oleh wali?');
+        $form->assertSee('Kontak orang tua atau wali');
+
+        // "Ada wali" without the required guardian fields is refused.
+        $this->actingAs($panitia)->post('admin/pendaftar/tambah', $this->applicantInput(['has_guardian' => '1']))->assertSessionHas('errors');
+        $this->assertArrayHasKey('guardian_relation', session('errors'));
+        $this->assertSame(0, model(ApplicantModel::class)->countAllResults());
+
+        // "Tidak ada wali": the required guardian fields are not asked and stray values are dropped.
+        $this->actingAs($panitia)->post('admin/pendaftar/tambah', $this->applicantInput(['has_guardian' => '0', 'guardian_name' => 'Salah isi']))->assertSessionHas('message');
+        $row = model(ApplicantModel::class)->first();
+        $this->assertSame('0', (string) $row['has_guardian']);
+        $this->assertNull($row['guardian_name']);
+
+        $detail = $this->actingAs($panitia)->get('admin/pendaftar/' . $row['id']);
+        $detail->assertSee('Tidak ada wali');
+        $detail->assertDontSee('Hubungan wali dengan calon murid');
+
+        // Staff switch to "Ada wali" on the edit page.
+        $admin = $this->makeUser('admin');
+        $this->actingAs($admin)->post('admin/pendaftar/' . $row['id'] . '/ubah', $this->applicantInput([
+            'has_guardian' => '1', 'guardian_name' => 'Khadijah Umar', 'guardian_relation' => 'Nenek',
+        ]))->assertRedirectTo(site_url('admin/pendaftar/' . $row['id']));
+
+        $detail = $this->actingAs($admin)->get('admin/pendaftar/' . $row['id']);
+        $detail->assertSee('Ada wali');
+        $detail->assertSee('Khadijah Umar');
+        $this->seeInDatabase('audit_logs', ['event' => 'updated', 'subject_type' => 'applicants', 'subject_id' => (string) $row['id']]);
+    }
 }

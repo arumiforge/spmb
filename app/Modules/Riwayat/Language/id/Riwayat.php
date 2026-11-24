@@ -114,5 +114,13 @@ return [
         'updated_at'         => 'Waktu diubah',
         'deleted_at'         => 'Waktu dihapus',
         'last_active'        => 'Terakhir aktif',
+        'motto'              => 'Slogan sekolah',
+        'languageEn'         => 'Website bahasa Inggris',
+        'languageAr'         => 'Website bahasa Arab',
+    ],
+    // Translations of school texts (D-109): "<field>_en" / "<field>_ar".
+    'translationField' => [
+        'en' => '{0} (English)',
+        'ar' => '{0} (Arab)',
     ],
 ];

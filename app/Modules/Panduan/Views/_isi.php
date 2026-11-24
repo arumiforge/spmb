@@ -41,7 +41,7 @@ $whatsapp = (string) setting('School.whatsapp');
 
     <article class="guide min-w-0 max-w-3xl">
         <?php if ($heading) : ?>
-            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">Panduan <?= esc($role['title']) ?></h1>
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white"><?= esc(lang('Panduan.pageTitle', [$role['title']])) ?></h1>
             <p class="mt-2 text-lg text-gray-500 dark:text-gray-400"><?= esc($role['description']) ?></p>
         <?php endif ?>
         <div class="<?= $heading ? 'mt-6' : '' ?>">

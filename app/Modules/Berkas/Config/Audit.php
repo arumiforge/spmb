@@ -21,7 +21,7 @@ return [
     'settingGroups' => [
         'Berkas' => 'Pengaturan Berkas',
     ],
-    'boolFields' => ['is_required', 'may_follow'],
+    'boolFields' => ['is_required', 'may_follow', 'template_enabled'],
     'fields'     => [
         'code'               => 'Kode',
         'is_required'        => 'Wajib',
@@ -29,6 +29,10 @@ return [
         'max_size_kb'        => 'Ukuran maksimal (KB)',
         'extensions'         => 'Jenis file',
         'sort_order'         => 'Urutan',
+        'template_path'      => 'File contoh',
+        'template_name'      => 'Nama file contoh',
+        'template_enabled'   => 'Contoh ditampilkan',
+        'template_label'     => 'Tulisan tautan contoh',
         'file_path'          => 'File',
         'original_name'      => 'Nama file asli',
         'mime'               => 'Jenis file',

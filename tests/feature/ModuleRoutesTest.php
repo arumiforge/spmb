@@ -14,7 +14,7 @@ use Config\Services;
 
 /**
  * A module switched off on Pengaturan → Fitur loses its pages (404), not only
- * its menu entries; switching it on brings them back (D-110).
+ * its menu entries; switching it on brings them back (D-112).
  *
  * @internal
  */

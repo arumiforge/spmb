@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Kartu\Controllers;
 
 use App\Controllers\BaseController;
+use App\Libraries\Locales;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Kartu\Services\CardAvailability;
 use Modules\Kartu\Services\CardPdf;
@@ -31,7 +32,7 @@ class Unduh extends BaseController
 
             return view('Modules\Kartu\Views\unavailable', [
                 'title'       => lang('Kartu.title'),
-                'breadcrumbs' => [['label' => lang('App.home'), 'url' => '/'], ['label' => 'Cek Status', 'url' => 'cek-status/data'], ['label' => lang('Kartu.title')]],
+                'breadcrumbs' => [['label' => lang('App.home'), 'url' => '/'], ['label' => lang('Pendaftaran.checkCrumb'), 'url' => 'cek-status/data'], ['label' => lang('Kartu.title')]],
                 'notice'      => [
                     'title' => lang($cancelled ? 'Kartu.cancelledTitle' : 'Kartu.notYetTitle'),
                     'text'  => lang($cancelled ? 'Kartu.cancelledApplicant' : 'Kartu.notYetText'),
@@ -41,12 +42,15 @@ class Unduh extends BaseController
 
         $token = (new CardTokenService())->tokenFor((int) $applicant['id']);
 
+        // The card itself is always Indonesian, also when downloaded from an English or Arabic page (D-109).
+        [$fileName, $pdf] = Locales::withLocale(Locales::DEFAULT, static fn (): array => [self::fileName($applicant), (new CardPdf())->render($applicant, $token)]);
+
         return $this->response
             ->setHeader('Content-Type', 'application/pdf')
-            ->setHeader('Content-Disposition', 'attachment; filename="' . self::fileName($applicant) . '"')
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"')
             ->setHeader('Cache-Control', 'private, no-store')
             ->setHeader('X-Content-Type-Options', 'nosniff')
-            ->setBody((new CardPdf())->render($applicant, $token));
+            ->setBody($pdf);
     }
 
     /**

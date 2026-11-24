@@ -109,8 +109,8 @@ class WaveSchedule
             return [
                 'state' => $online ? 'open' : 'offline',
                 'text'  => $online
-                    ? lang('Situs.openBanner', [$current['name'], tanggal_indo($current['ends_on'])])
-                    : lang('Situs.offlineOnly', [$current['name']]),
+                    ? lang('Situs.openBanner', [localized($current, 'name'), tanggal_indo($current['ends_on'])])
+                    : lang('Situs.offlineOnly', [localized($current, 'name')]),
                 'wave' => $current,
             ];
         }
@@ -118,7 +118,7 @@ class WaveSchedule
         $next = self::next($today);
 
         if ($next !== null) {
-            return ['state' => 'upcoming', 'text' => lang('Situs.nextBanner', [$next['name'], tanggal_indo($next['starts_on'])]), 'wave' => $next];
+            return ['state' => 'upcoming', 'text' => lang('Situs.nextBanner', [localized($next, 'name'), tanggal_indo($next['starts_on'])]), 'wave' => $next];
         }
 
         return ['state' => 'closed', 'text' => lang('Situs.closedBanner'), 'wave' => null];

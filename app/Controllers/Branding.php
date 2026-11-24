@@ -55,7 +55,11 @@ class Branding extends BaseController
         // Long caching plus a validator stops the logo from being fetched again (and blinking) on every reload.
         $etag     = '"' . substr(md5($name . filemtime($file)), 0, 16) . '"';
         $modified = gmdate('D, d M Y H:i:s', (int) filemtime($file)) . ' GMT';
+        // The Content-Type is set before the 304 branch on purpose: without it the empty 304 reply
+        // keeps the default text/html type, CodeIgniter records the logo URL as the "previous page"
+        // and every redirect()->back() (e.g. a form with a validation error) lands on the logo.
         $this->response
+            ->setHeader('Content-Type', $mime)
             ->setHeader('X-Content-Type-Options', 'nosniff')
             ->setHeader('Cache-Control', 'public, max-age=31536000, immutable')
             ->setHeader('ETag', $etag)
@@ -67,8 +71,6 @@ class Branding extends BaseController
             return $this->response->setStatusCode(304)->setBody('');
         }
 
-        return $this->response
-            ->setHeader('Content-Type', $mime)
-            ->setBody((string) file_get_contents($file));
+        return $this->response->setBody((string) file_get_contents($file));
     }
 }

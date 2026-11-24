@@ -138,7 +138,8 @@ function smallScreen(options) {
             rotateAlways: false,
             hideOverlappingLabels: true,
             style: { fontSize: '12px' },
-            ...(horizontal ? {} : { formatter: shortLabel }),
+            // Date axes format their own labels; shortening would print the raw timestamp.
+            ...(horizontal || options.xaxis?.type === 'datetime' ? {} : { formatter: shortLabel }),
         },
         tickAmount: options.xaxis?.type === 'datetime' ? 4 : undefined,
     };

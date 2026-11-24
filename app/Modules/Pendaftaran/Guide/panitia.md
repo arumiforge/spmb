@@ -1,13 +1,14 @@
 ## Mendaftarkan calon murid yang datang ke sekolah
 
 1. Di menu kiri, pilih **Tambah Pendaftar**.
-2. Isi data calon murid sesuai dokumen yang dibawa orang tua.
+2. Isi data calon murid sesuai dokumen yang dibawa orang tua. Di bagian **Wali**, tanyakan dulu apakah calon murid diasuh wali. Pilih **Tidak ada wali** atau **Ada wali**; kotak data wali hanya diisi jika memilih **Ada wali**.
 3. Gelombang otomatis terisi gelombang yang sedang dibuka. Ubah hanya jika perlu.
 4. Tekan **Simpan Data**.
 5. Jika muncul kotak kuning **Ada data yang mirip**, periksa daftar pendaftar di dalamnya. Jika memang anak yang berbeda, centang konfirmasi lalu tekan **Simpan Data** lagi.
 6. Setelah tersimpan, nomor pendaftaran dan **tautan pribadi** tampil di halaman detail. Tekan **Kirim lewat WhatsApp** agar orang tua menerima tautannya.
 
 > **Tips:** Tautan pribadi hanya tampil sekali. Jika orang tua kehilangan tautan, buka detail pendaftar lalu tekan **Buat Tautan Baru**.
+
 
 ## Mencari dan memeriksa pendaftar
 

@@ -68,6 +68,7 @@ class AuthGroups extends ShieldAuthGroups
         'sistem.cadangan' => 'Membuat dan memulihkan cadangan data',
         'sistem.log'      => 'Melihat log sistem',
         'sistem.keamanan' => 'Mengatur kebijakan keamanan (verifikasi dua langkah per peran)',
+        'sistem.server'   => 'Melihat kondisi server (batas unggah, versi PHP, ruang disk)',
 
         'pengaturan.sekolah'     => 'Mengubah identitas dan tampilan sekolah',
         'pengaturan.pendaftaran' => 'Mengatur tahun ajaran, gelombang, dan berkas wajib',

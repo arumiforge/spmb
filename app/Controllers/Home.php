@@ -20,7 +20,7 @@ class Home extends BaseController
         $banner      = $pendaftaran ? WaveSchedule::banner() : null;
 
         return view('home', [
-            'title' => (string) setting('School.tagline'),
+            'title' => setting_localized('School.tagline'),
             'home'  => [
                 'registration' => $pendaftaran,
                 'banner'       => $banner,

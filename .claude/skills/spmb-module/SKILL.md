@@ -30,7 +30,7 @@ app/Modules/<Name>/
 Register the namespace `Modules\<Name>` in `app/Config/Autoload.php` (PSR-4 `Modules` → `APPPATH . 'Modules'`).
 Modules can be disabled in settings; a disabled module's routes return 404 and its menu is hidden.
 Only `app/Config/Routes.php` loads module routes, for enabled modules; never add `'routes'` back to
-`Config\Modules::$aliases` (D-110). A disabled module's named routes do not exist, so a link into another
+`Config\Modules::$aliases` (D-112). A disabled module's named routes do not exist, so a link into another
 module (`url_to('<name>')`) must check `service('modules')->isEnabled('<Module>')` first, unless that module
 is core or in this module's `requires`.
 

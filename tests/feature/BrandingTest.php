@@ -11,6 +11,7 @@ use CodeIgniter\Test\DatabaseTestTrait;
 use CodeIgniter\Test\FeatureTestTrait;
 use CodeIgniter\Test\StreamFilterTrait;
 use Config\School;
+use Config\Services;
 
 /**
  * School brand images (D-054): branding pack command, public asset routes,
@@ -130,6 +131,20 @@ final class BrandingTest extends CIUnitTestCase
         $other = $this->withHeaders(['If-None-Match' => '"0000000000000000"'])->get('aset/logo');
         $other->assertOK();
         $this->assertNotSame('', (string) $other->getBody());
+    }
+
+    public function testNotModifiedLogoIsNeverRememberedAsThePreviousPage(): void
+    {
+        $this->loadPack();
+        $etag = $this->get('aset/logo')->response()->getHeaderLine('ETag');
+        Services::resetSingle('response');
+
+        // Without an image type the empty 304 kept text/html, CodeIgniter stored the logo as the
+        // "previous page" and redirect()->back() after a form error opened the logo (user report).
+        $again = $this->withHeaders(['If-None-Match' => $etag])->get('aset/logo');
+        $again->assertStatus(304);
+        $again->assertHeader('Content-Type', 'image/png');
+        $this->assertStringNotContainsString('aset/logo', (string) session('_ci_previous_url'));
     }
 
     public function testLayoutsShowBrandImagesAndPreviewTags(): void

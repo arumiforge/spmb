@@ -28,7 +28,7 @@ $styles = [
     'error'   => ['icon' => 'warning', 'box' => 'text-red-600 dark:text-red-400'],
 ];
 ?>
-<div class="pointer-events-none fixed inset-x-4 top-20 z-50 flex flex-col items-end gap-3 sm:left-auto sm:right-5" aria-live="polite">
+<div class="pointer-events-none fixed inset-x-4 top-20 z-50 flex flex-col items-end gap-3 sm:start-auto sm:end-5" aria-live="polite">
     <?php foreach ($toasts as $i => $toast) : ?>
         <div id="toast-<?= $i ?>" role="<?= $toast['type'] === 'success' ? 'status' : 'alert' ?>"
              class="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-lg border border-gray-100 bg-white p-4 text-gray-700 shadow-lg transition-opacity duration-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"

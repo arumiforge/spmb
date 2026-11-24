@@ -4,10 +4,37 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 
 ## [Unreleased]
 
+### Added
+- Admin round (D-098…D-109):
+  - **Documents:** new default "Surat Keterangan Aktif dari SD/MI" (required, may follow; a migration adds it to
+    existing installations). Each document type can carry an example file (on/off, "Unduh contoh"); the first client's
+    letter installs from its client pack via `spmb:branding`.
+  - **Dashboard:** "Persiapan sistem" checklist of what is missing before the system runs fully. Cards fold and
+    remember it.
+  - **Super Admin:** "Kondisi server" page (upload limit against the document limits, PHP, extensions, disk,
+    database).
+  - **Website menu:** "Berita singkat" (several items rotating under the top menu, off by default), "Popup beranda"
+    (home page only; image, text, button, attachment, dates; once / daily / every visit), "Tautan bawah website"
+    (editable footer links), "Pengunjung" (visitor statistics without personal data, chart, top pages, dashboard
+    card, visitor line in the footer, `analitik:prune`). The footer shows social media and WhatsApp icons.
+  - **Registration:** five-step form with a numbered stepper and a summary step; "Ada wali?" question before the
+    guardian fields (`applicants.has_guardian`); explicit consent checkbox. Home "Cara mendaftar" as a timeline.
+    Demo data has a complete example applicant.
+  - **Languages (D-109):** the whole public site in Indonesian, English (`/en/…`) and Arabic (`/ar/…`, right to left,
+    Noto Sans Arabic), switcher in the top bar, drawer and footer, `hreflang` links; optional English/Arabic fields
+    for school-entered text with Indonesian fallback; each language can be switched off in Identitas Sekolah.
+
+### Changed
+- Settings and form pages show one column of full-width folding cards, with an "Isi halaman" rail and a second save
+  button from 2xl (D-100, D-102). The admin sidebar is wider (18rem).
+- `spmb deploy` clears the app cache after migrations.
+
 ### Fixed
 - A module switched off on Pengaturan → Fitur now loses its pages too (404 on public and admin addresses), not only
-  its menu entries; switching it on brings them back (D-110). Route auto-discovery is off; `app/Config/Routes.php`
+  its menu entries; switching it on brings them back (D-112). Route auto-discovery is off; `app/Config/Routes.php`
   loads the routes of enabled modules only.
+- Saving a form with an error (for example adding a user) no longer opens the logo: the logo's 304 answer now
+  carries its image type, so it is never remembered as the previous page.
 
 ### Changed
 - Home "Lokasi dan kontak" (D-096): contacts in one tidy card on the left, one map card on the right (below the
