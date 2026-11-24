@@ -10,8 +10,6 @@ use Modules\Situs\Services\HomePopup;
  * @var string|null          $imageUrl
  * @var string|null          $attachment Download name of the current attachment
  */
-$card    = 'rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800';
-$heading = 'border-b border-gray-200 px-4 py-3 text-base font-semibold text-gray-900 sm:px-6 dark:border-gray-700 dark:text-white';
 $btn     = 'inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-700';
 $state   = match (true) {
     $live              => ['text' => lang('Situs.popupStateLive'), 'class' => 'bg-green-50 text-green-800 dark:bg-gray-800 dark:text-green-400', 'icon' => 'check'],
@@ -29,7 +27,8 @@ $frequencies = array_map(static fn (string $key): string => lang('Situs.' . $key
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('situs.popup.admin') ?>" enctype="multipart/form-data" class="form-lebar">
+<div class="tata-isi" data-lipatan-lingkup>
+<form id="form-popup" method="post" action="<?= url_to('situs.popup.admin') ?>" enctype="multipart/form-data" class="form-lebar">
     <?= csrf_field() ?>
 
     <div class="flex items-start gap-3 rounded-lg p-4 text-sm <?= $state['class'] ?>" role="status">
@@ -37,9 +36,8 @@ $frequencies = array_map(static fn (string $key): string => lang('Situs.' . $key
         <p><?= $state['text'] ?> <?= lang('Situs.popupPreviewHelp') ?></p>
     </div>
 
-    <section class="<?= $card ?>">
-        <h2 class="<?= $heading ?>"><?= lang('Situs.popupContentTitle') ?></h2>
-        <div class="grid grid-cols-1 gap-5 p-4 sm:p-6">
+    <?= lipatan_buka(['id' => 'popup-isi', 'icon' => 'megaphone', 'title' => lang('Situs.popupContentTitle')]) ?>
+        <div class="grid grid-cols-1 gap-5">
             <div>
                 <input type="hidden" name="enabled" value="0">
                 <label class="inline-flex cursor-pointer items-start gap-3">
@@ -51,11 +49,10 @@ $frequencies = array_map(static fn (string $key): string => lang('Situs.' . $key
             <?= view('partials/form_field', ['field' => ['name' => 'title', 'label' => lang('Situs.popupFieldTitle'), 'value' => $popup['title'], 'help' => lang('Situs.popupFieldTitleHelp'), 'attrs' => ['maxlength' => '120']]]) ?>
             <?= view('partials/form_field', ['field' => ['name' => 'text', 'type' => 'textarea', 'rows' => 7, 'label' => lang('Situs.popupFieldText'), 'value' => $popup['text'], 'help' => lang('Situs.popupFieldTextHelp'), 'attrs' => ['maxlength' => '3000']]]) ?>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
-    <section class="<?= $card ?>">
-        <h2 class="<?= $heading ?>"><?= lang('Situs.popupExtrasTitle') ?></h2>
-        <div class="grid grid-cols-1 gap-5 p-4 sm:p-6">
+    <?= lipatan_buka(['id' => 'popup-tambahan', 'icon' => 'paperclip', 'title' => lang('Situs.popupExtrasTitle')]) ?>
+        <div class="grid grid-cols-1 gap-5">
             <div class="space-y-3">
                 <?php if ($imageUrl !== null) : ?>
                     <div class="flex flex-wrap items-center gap-4">
@@ -79,21 +76,22 @@ $frequencies = array_map(static fn (string $key): string => lang('Situs.' . $key
                 <?= view('partials/form_field', ['field' => ['name' => 'attachment', 'type' => 'file', 'label' => lang('Situs.popupFieldAttachment'), 'help' => lang('Situs.popupFieldAttachmentHelp'), 'attrs' => ['accept' => '.pdf,.doc,.docx,.xls,.xlsx']]]) ?>
             </div>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
-    <section class="<?= $card ?>">
-        <h2 class="<?= $heading ?>"><?= lang('Situs.popupScheduleTitle') ?></h2>
-        <div class="grid grid-cols-1 gap-5 p-4 sm:p-6 md:grid-cols-2">
+    <?= lipatan_buka(['id' => 'popup-jadwal', 'icon' => 'calendar', 'title' => lang('Situs.popupScheduleTitle')]) ?>
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
             <?= view('partials/form_field', ['field' => ['name' => 'startsOn', 'type' => 'date', 'label' => lang('Situs.fieldStartsOn'), 'value' => $popup['startsOn'], 'help' => lang('Situs.dateHelp')]]) ?>
             <?= view('partials/form_field', ['field' => ['name' => 'endsOn', 'type' => 'date', 'label' => lang('Situs.fieldEndsOn'), 'value' => $popup['endsOn'], 'help' => lang('Situs.dateHelp')]]) ?>
             <div class="md:col-span-2">
                 <?= view('partials/form_field', ['field' => ['name' => 'frequency', 'type' => 'select', 'label' => lang('Situs.popupFieldFrequency'), 'value' => $popup['frequency'], 'required' => true, 'options' => $frequencies, 'help' => lang('Situs.popupFrequencyHelp')]]) ?>
             </div>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
     <div class="flex flex-col-reverse gap-3 sm:flex-row">
         <button type="submit" class="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800"><?= lang('Situs.popupSave') ?></button>
     </div>
 </form>
+<?= view('partials/tata_isi_rail', ['form' => 'form-popup', 'save' => lang('Situs.popupSave')], ['saveData' => false]) ?>
+</div>
 <?= $this->endSection() ?>
