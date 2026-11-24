@@ -46,7 +46,7 @@ $banner = $page['banner'];
                 <?php $open = $wave['state'] === 'open'; ?>
                 <li class="motion-rise flex flex-col rounded-lg border bg-white p-5 dark:bg-gray-800 <?= $open ? 'border-primary-500 ring-1 ring-primary-500' : 'border-gray-200 dark:border-gray-700' ?>">
                     <div class="mb-3 flex items-start justify-between gap-3">
-                        <h2 class="text-lg font-bold text-gray-900 dark:text-white"><?= esc(localized($wave, 'name')) ?></h2>
+                        <h2 class="text-lg font-bold text-gray-900 dark:text-white"><bdi><?= esc(localized($wave, 'name')) ?></bdi></h2>
                         <?= view('partials/status_badge', ['badge' => $states[$wave['state']]]) ?>
                     </div>
                     <p class="flex items-start gap-2 text-gray-700 dark:text-gray-300">
@@ -58,7 +58,7 @@ $banner = $page['banner'];
                     <?php endif ?>
                     <?php if (localized($wave, 'description') !== '') : ?>
                         <div class="lipat mt-3 [--lipat-latar-gelap:var(--color-gray-800)]" data-lipat data-lipat-tinggi="6rem">
-                            <p class="lipat-isi text-sm text-gray-600 dark:text-gray-400"><?= nl2br(esc(localized($wave, 'description'))) ?></p>
+                            <p class="lipat-isi text-sm text-gray-600 dark:text-gray-400"><span><bdi><?= nl2br(esc(localized($wave, 'description'))) ?></bdi></span></p>
                         </div>
                     <?php endif ?>
                 </li>

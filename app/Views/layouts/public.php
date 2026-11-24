@@ -162,7 +162,7 @@ $hasContact  = $address !== '' || $phone !== '' || $whatsapp !== '' || $email !=
                 <?php endif ?>
                 <p class="font-semibold text-gray-900 dark:text-white"><?= esc(setting('School.name')) ?></p>
             </div>
-            <?php if ($motto !== '') : ?><p class="text-gray-600 italic dark:text-gray-400"><?= esc($motto) ?></p><?php endif ?>
+            <?php if ($motto !== '') : ?><p class="text-gray-600 italic dark:text-gray-400"><bdi><?= esc($motto) ?></bdi></p><?php endif ?>
             <?php if ($social !== []) : ?>
                 <ul class="mt-4 flex flex-wrap items-center gap-2" aria-label="<?= lang('App.socialLabel') ?>">
                     <?php foreach ($social as $link) : ?>
@@ -180,7 +180,7 @@ $hasContact  = $address !== '' || $phone !== '' || $whatsapp !== '' || $email !=
         <div>
             <h2 class="mb-3 font-semibold text-gray-900 dark:text-white"><?= lang('App.contactTitle') ?></h2>
             <ul class="space-y-2 text-gray-600 dark:text-gray-400">
-                <?php if ($address !== '') : ?><li class="flex gap-2"><?= icon('map-pin', 'mt-0.5 h-4 w-4 shrink-0') ?><span><?= nl2br(esc($address)) ?></span></li><?php endif ?>
+                <?php if ($address !== '') : ?><li class="flex gap-2"><?= icon('map-pin', 'mt-0.5 h-4 w-4 shrink-0') ?><span><bdi><?= nl2br(esc($address)) ?></bdi></span></li><?php endif ?>
                 <?php if ($phone !== '') : ?><li><a class="flex items-center gap-2 hover:underline" href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>"><?= icon('phone', 'h-4 w-4 shrink-0') ?><span dir="ltr"><?= esc($phone) ?></span></a></li><?php endif ?>
                 <?php if ($whatsapp !== '') : ?><li><a class="flex items-center gap-2 hover:underline" href="<?= esc(whatsapp_url($whatsapp), 'attr') ?>" target="_blank" rel="noopener"><?= social_icon('whatsapp', 'h-4 w-4 shrink-0') ?><span dir="ltr"><?= esc($whatsapp) ?></span></a></li><?php endif ?>
                 <?php if ($email !== '') : ?><li><a class="flex items-center gap-2 break-all hover:underline" href="mailto:<?= esc($email, 'attr') ?>"><?= icon('mail', 'h-4 w-4 shrink-0') ?><?= esc($email) ?></a></li><?php endif ?>

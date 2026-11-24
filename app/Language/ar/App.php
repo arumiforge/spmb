@@ -36,6 +36,7 @@ return [
     'footerLinks'     => 'روابط',
     'bottomNavLabel'  => 'قائمة سريعة',
     'navRegister'     => 'التسجيل',
+    'navShort'        => ['cek-status' => 'الحالة', 'tanya-jawab' => 'الأسئلة', 'persyaratan' => 'الشروط'],
     'readMore'        => 'اقرأ المزيد',
     'readLess'        => 'عرض أقل',
     'tocTitle'        => 'المحتويات',

@@ -111,13 +111,23 @@ final class Locales
         }
 
         $previous = $request->getLocale();
-        $request->setLocale($locale);
+        self::apply($request, $locale);
 
         try {
             return $callback();
         } finally {
-            $request->setLocale($previous);
+            self::apply($request, $previous);
         }
+    }
+
+    /**
+     * Sets the request's language and the PHP intl default with Western digits: in plain "ar", ICU writes
+     * Arabic-Indic digits, also in Time::toDateString(), which would break date comparisons (D-109).
+     */
+    public static function apply(IncomingRequest $request, string $locale): void
+    {
+        $request->setLocale($locale);
+        \Locale::setDefault($request->getLocale() === 'ar' ? 'ar@numbers=latn' : $request->getLocale());
     }
 
     public static function isDefault(?string $locale = null): bool

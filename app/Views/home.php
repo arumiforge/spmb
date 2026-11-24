@@ -70,7 +70,7 @@ $cardIcons = ['persyaratan' => 'clipboard-list', 'jadwal' => 'calendar-days', 'c
             <?php endif ?>
             <h1 class="mb-3 text-3xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl dark:text-white"><?= esc($schoolName) ?></h1>
             <?php if ($motto !== '') : ?>
-                <p class="mx-auto mb-4 max-w-xl text-base font-medium italic leading-relaxed text-gray-700 sm:text-lg md:mx-0 dark:text-gray-300"><?= esc($motto) ?></p>
+                <p class="mx-auto mb-4 max-w-xl text-base font-medium italic leading-relaxed text-gray-700 sm:text-lg md:mx-0 dark:text-gray-300"><bdi><?= esc($motto) ?></bdi></p>
             <?php endif ?>
             <p class="mx-auto mb-6 max-w-2xl text-base text-gray-500 sm:text-lg md:mx-0 dark:text-gray-400"><?= esc($intro) ?></p>
 

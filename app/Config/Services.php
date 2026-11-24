@@ -64,7 +64,7 @@ class Services extends BaseService
 
         $request = new IncomingRequest($config, $uri, 'php://input', new UserAgent());
 
-        $request->setLocale($locale ?? Locales::DEFAULT);
+        Locales::apply($request, $locale ?? Locales::DEFAULT);
 
         return $request;
     }

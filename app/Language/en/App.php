@@ -36,6 +36,7 @@ return [
     'footerLinks'     => 'Links',
     'bottomNavLabel'  => 'Quick menu',
     'navRegister'     => 'Register',
+    'navShort'        => ['cek-status' => 'Status', 'tanya-jawab' => 'Q&A', 'persyaratan' => 'Requirements'],
     'readMore'        => 'Read more',
     'readLess'        => 'Show less',
     'tocTitle'        => 'Contents',

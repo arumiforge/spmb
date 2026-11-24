@@ -38,7 +38,7 @@ $hint      = lang('Berkas.formatsHint', [DocumentTypeModel::formatLabel($type), 
                 <span class="ms-1 text-xs font-normal <?= (bool) $type['is_required'] ? 'text-red-700 dark:text-red-400' : 'text-gray-500 dark:text-gray-400' ?>">(<?= lang((bool) $type['is_required'] ? 'Berkas.required' : 'Berkas.optional') ?><?= (bool) $type['may_follow'] ? ', ' . lang('Berkas.mayFollowHint') : '' ?>)</span>
             </p>
             <?php if (localized($type, 'description') !== '') : ?>
-                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-300"><?= esc(localized($type, 'description')) ?></p>
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-300"><span><bdi><?= esc(localized($type, 'description')) ?></bdi></span></p>
             <?php endif ?>
             <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400"><?= esc($hint) ?></p>
             <?php $templateLink = view('Modules\Berkas\Views\partials\template_link', ['link' => ['type' => $type]], ['saveData' => false]); ?>

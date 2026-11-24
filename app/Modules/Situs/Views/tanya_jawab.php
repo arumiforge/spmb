@@ -49,7 +49,7 @@ $contacts  = array_filter([
                 <p class="mb-2 text-sm font-semibold text-gray-900 dark:text-white"><?= lang('Situs.qaTopicsLabel') ?></p>
                 <ul class="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:thin] sm:flex-wrap sm:overflow-visible">
                     <?php foreach ($page['topics'] as $topic) : ?>
-                        <li class="shrink-0"><a href="#<?= esc($topic['slug'], 'attr') ?>" class="rounded-full! border border-gray-300 px-4! py-2! text-sm font-medium whitespace-nowrap focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-300 dark:border-gray-600 dark:focus-visible:ring-primary-800 [&.is-aktif]:border-primary-600 dark:[&.is-aktif]:border-primary-400"><?= esc($topic['topic']) ?></a></li>
+                        <li class="shrink-0"><a href="#<?= esc($topic['slug'], 'attr') ?>" class="rounded-full! border border-gray-300 px-4! py-2! text-sm font-medium whitespace-nowrap focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-300 dark:border-gray-600 dark:focus-visible:ring-primary-800 [&.is-aktif]:border-primary-600 dark:[&.is-aktif]:border-primary-400"><bdi><?= esc($topic['topic']) ?></bdi></a></li>
                     <?php endforeach ?>
                 </ul>
             </nav>
@@ -58,15 +58,15 @@ $contacts  = array_filter([
         <div id="daftar-tanya-jawab" class="space-y-10">
             <?php foreach ($page['topics'] as $topic) : ?>
                 <section aria-labelledby="<?= esc($topic['slug'], 'attr') ?>">
-                    <h2 id="<?= esc($topic['slug'], 'attr') ?>" class="mb-4 scroll-mt-56 text-xl font-bold text-gray-900 sm:text-2xl dark:text-white"><?= esc($topic['topic']) ?></h2>
+                    <h2 id="<?= esc($topic['slug'], 'attr') ?>" class="mb-4 scroll-mt-56 text-xl font-bold text-gray-900 sm:text-2xl dark:text-white"><bdi><?= esc($topic['topic']) ?></bdi></h2>
                     <div class="divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 bg-white dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
                         <?php foreach ($topic['items'] as $item) : ?>
                             <details id="<?= esc($item['id'], 'attr') ?>" class="group scroll-mt-56">
                                 <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-start text-base font-semibold text-gray-900 hover:bg-gray-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-primary-300 dark:text-white dark:hover:bg-gray-700 dark:focus-visible:ring-primary-800 [&::-webkit-details-marker]:hidden">
-                                    <span><?= esc($item['question']) ?></span>
+                                    <span><bdi><?= esc($item['question']) ?></bdi></span>
                                     <?= icon('chevron-down', 'h-5 w-5 shrink-0 text-gray-500 transition-transform group-open:rotate-180 motion-reduce:transition-none dark:text-gray-400') ?>
                                 </summary>
-                                <div class="<?= $answer ?> px-5 pb-5 pt-1"><?= $item['html'] ?></div>
+                                <div class="<?= $answer ?> px-5 pb-5 pt-1" dir="auto"><?= $item['html'] ?></div>
                             </details>
                         <?php endforeach ?>
                     </div>
@@ -87,9 +87,9 @@ $contacts  = array_filter([
                         <dt class="text-sm text-gray-500 dark:text-gray-400"><?= esc($contact['label']) ?></dt>
                         <dd class="break-words font-medium text-gray-900 dark:text-white">
                                 <?php if ($contact['href'] !== null) : ?>
-                                    <a href="<?= esc($contact['href'], 'attr') ?>" class="hover:underline"<?= str_starts_with($contact['href'], 'https://') ? ' target="_blank" rel="noopener"' : '' ?>><?= esc($contact['text']) ?></a>
+                                    <a href="<?= esc($contact['href'], 'attr') ?>" class="hover:underline" dir="ltr"<?= str_starts_with($contact['href'], 'https://') ? ' target="_blank" rel="noopener"' : '' ?>><?= esc($contact['text']) ?></a>
                                 <?php else : ?>
-                                    <?= nl2br(esc($contact['text'])) ?>
+                                    <span><bdi><?= nl2br(esc($contact['text'])) ?></bdi></span>
                                 <?php endif ?>
                         </dd>
                         </div>

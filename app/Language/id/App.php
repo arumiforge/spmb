@@ -50,6 +50,8 @@ return [
     'footerLinks'            => 'Tautan',
     'bottomNavLabel'         => 'Menu cepat',
     'navRegister'            => 'Daftar',
+    // Shorter labels in the mobile bottom bar (other languages have longer menu texts, D-109).
+    'navShort'               => ['cek-status' => 'Cek Status', 'tanya-jawab' => 'Tanya Jawab', 'persyaratan' => 'Persyaratan'],
     'readMore'               => 'Lihat selengkapnya',
     'readLess'               => 'Tutup',
     'tocTitle'               => 'Daftar isi',

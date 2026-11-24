@@ -439,6 +439,13 @@ if (! function_exists('public_bottom_nav')) {
                         $bottom[array_key_last($bottom)]['label'] = lang('App.navRegister');
                     }
 
+                    // A shorter label where the menu text is long in another language (D-109).
+                    $short = lang('App.navShort.' . $url);
+
+                    if (is_string($short) && $short !== 'App.navShort.' . $url) {
+                        $bottom[array_key_last($bottom)]['label'] = $short;
+                    }
+
                     break;
                 }
             }

@@ -21,7 +21,7 @@ if ($popup === null) {
         data-popup-versi="<?= (int) $popup['version'] ?>" data-popup-frekuensi="<?= esc($popup['frequency'], 'attr') ?>"<?= $popup['preview'] ? ' data-popup-pratinjau' : '' ?>>
     <div class="flex max-h-[inherit] flex-col">
         <div class="flex items-start justify-between gap-3 border-b border-gray-200 p-4 sm:px-5 dark:border-gray-700">
-            <h2 id="popup-beranda-judul" class="pt-1.5 text-lg font-semibold text-gray-900 sm:text-xl dark:text-white"><?= esc($popup['title'] !== '' ? $popup['title'] : (string) setting('School.name')) ?></h2>
+            <h2 id="popup-beranda-judul" class="pt-1.5 text-lg font-semibold text-gray-900 sm:text-xl dark:text-white"><bdi><?= esc($popup['title'] !== '' ? $popup['title'] : (string) setting('School.name')) ?></bdi></h2>
             <button type="button" data-popup-tutup class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                 <?= icon('x', 'h-5 w-5') ?><span class="sr-only"><?= lang('Situs.popupCloseLabel') ?></span>
             </button>
@@ -34,7 +34,7 @@ if ($popup === null) {
                 <img src="<?= esc($popup['image'], 'attr') ?>" alt="" class="mx-auto h-auto max-h-[50vh] w-auto max-w-full rounded-lg object-contain">
             <?php endif ?>
             <?php if ($popup['html'] !== '') : ?>
-                <div class="popup-isi space-y-3 text-base leading-relaxed text-gray-700 dark:text-gray-300"><?= $popup['html'] ?></div>
+                <div class="popup-isi space-y-3 text-base leading-relaxed text-gray-700 dark:text-gray-300" dir="auto"><?= $popup['html'] ?></div>
             <?php endif ?>
         </div>
         <div class="flex flex-col-reverse gap-2 border-t border-gray-200 p-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end sm:px-5 dark:border-gray-700">
