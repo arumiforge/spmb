@@ -164,7 +164,7 @@ sign-in (`TwoFactor.maxAttempts`).
 | Profile | `/admin/profil`, `/admin/profil/kata-sandi`, `/admin/profil/verifikasi-dua-langkah` (module Profil) |
 | School settings | `/admin/pengaturan/sekolah` (`pengaturan.sekolah`), `/admin/pengaturan/keamanan` (`sistem.keamanan`) |
 | Users | `/admin/pengguna` (`pengguna.view/create/edit`; Super Admin accounts need `pengguna.kelola-admin`) |
-| Guides | `/panduan`, `/panduan/<peran>` (public) |
+| Guides | `/panduan/calon-murid` (public); staff guides `/admin/panduan/<peran>` (own role, D-097) |
 | Branding files | `writable/uploads/branding/`, served by `/aset/logo`, `/aset/favicon` |
 
 ### Tables

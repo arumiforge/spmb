@@ -113,7 +113,7 @@ $tiles = $stats === null ? [] : [
                 </dd>
             </div>
         </dl>
-        <a href="<?= site_url('panduan') ?>" class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary-700 hover:underline dark:text-primary-400"><?= icon('book', 'h-4 w-4') ?> Buka panduan penggunaan</a>
+        <a href="<?= site_url('admin/panduan') ?>" class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary-700 hover:underline dark:text-primary-400"><?= icon('book', 'h-4 w-4') ?> Buka panduan penggunaan</a>
     </div>
 </div>
 <?= $this->endSection() ?>

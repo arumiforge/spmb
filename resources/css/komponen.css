@@ -707,15 +707,33 @@
         }
     }
 
-    /* The small preview inside the address card on phones and tablets (D-091). */
-    .peta-sekolah-kecil {
-        aspect-ratio: 16 / 10;
-        border-radius: .75rem;
+    /* Home map card (D-096): the frame fills the card; the card has the rounded corners. */
+    .peta-kartu .peta-sekolah {
+        display: block;
+        border-radius: 0;
         background-color: var(--color-gray-100);
     }
 
-    .dark .peta-sekolah-kecil {
-        background-color: var(--color-gray-700);
+    .dark .peta-kartu .peta-sekolah {
+        background-color: var(--color-gray-800);
+    }
+
+    /* Contact list: until Codex delivers the painted icons, the Lucide fallback sits in a soft round badge. */
+    .kontak-daftar .ikon-cadangan {
+        border-radius: 9999px;
+        background-color: var(--color-primary-50);
+    }
+
+    .kontak-daftar .ikon-cadangan > svg {
+        color: var(--color-primary-700);
+    }
+
+    .dark .kontak-daftar .ikon-cadangan {
+        background-color: var(--color-gray-800);
+    }
+
+    .dark .kontak-daftar .ikon-cadangan > svg {
+        color: var(--color-primary-200);
     }
 
     /* ---------- three.js icon (D-082): the canvas sits exactly over its image ---------- */
@@ -734,5 +752,17 @@
 
     .ikon-3d.is-3d > img {
         visibility: hidden;
+    }
+
+    /* ---------- Search inside a page (D-097): the words found ---------- */
+    mark.tanda-cari {
+        border-radius: .2em;
+        padding: 0 .1em;
+        background-color: var(--color-yellow-200);
+        color: var(--color-gray-900);
+    }
+
+    .dark mark.tanda-cari {
+        background-color: var(--color-yellow-300);
     }
 }

@@ -71,7 +71,7 @@ extra per-user permissions; changing a role's permission set is a configuration 
 - FR-PLT-03 Optional TOTP 2FA (Google Authenticator) per dashboard user; Super Admin can require it per role.
 - FR-PLT-04 Audit log of data changes and logins.
 - FR-PLT-05 Breadcrumbs on every page except home; friendly labels.
-- FR-PLT-06 Guide pages per role at `/panduan/<role>` in plain Indonesian.
+- FR-PLT-06 Guide pages per role in plain Indonesian, with a search box inside the page: the applicant/parent guide at `/panduan/calon-murid` (public), staff guides at `/admin/panduan/<role>` inside the dashboard, own role only (D-097).
 - FR-PLT-07 Visitor analytics, compact: page views, unique visitors/day, top pages (referrers and device type only as simple totals). [confirmed: built-in, no third-party script, not detailed — D-053]
 - FR-PLT-08 Messages, not live chat: applicants (through their status page) send messages, criticism and suggestions; the committee reads and replies in an inbox; replies appear on the applicant's page. [confirmed, D-052]
 - FR-PLT-09 Notifications via WhatsApp. [later]

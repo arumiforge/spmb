@@ -48,7 +48,7 @@ if (($second = $pick(['admin/pendaftar', 'admin/tes/kehadiran', 'admin/kartu']))
 if ($canSearch) {
     $bottom[] = ['label' => lang('App.searchApplicant'), 'icon' => 'user-round-search', 'center' => true, 'attrs' => 'data-dialog-open="cari-cepat" aria-haspopup="dialog"'];
 }
-if (($fourth = $pick(['admin/berkas', 'admin/tes/kehadiran', 'admin/kartu', 'admin/tes/peserta', 'panduan'])) !== null) {
+if (($fourth = $pick(['admin/berkas', 'admin/tes/kehadiran', 'admin/kartu', 'admin/tes/peserta', 'admin/panduan'])) !== null) {
     $bottom[] = $toItem($fourth);
 }
 // Last slot: Pengaturan (D-095) — the first settings page this user may open, active on any of them.
@@ -106,7 +106,7 @@ $bottom[] = $settings !== []
                     <li><a href="<?= site_url('admin/profil') ?>" class="flex items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"><?= icon('user', 'h-4 w-4 text-gray-500 dark:text-gray-400') ?><?= lang('App.myProfile') ?></a></li>
                     <li><a href="<?= site_url('admin/profil/verifikasi-dua-langkah') ?>" class="flex items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"><?= icon('shield', 'h-4 w-4 text-gray-500 dark:text-gray-400') ?><?= lang('App.twoFactor') ?></a></li>
                     <li><a href="<?= site_url('admin/profil/kata-sandi') ?>" class="flex items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"><?= icon('key', 'h-4 w-4 text-gray-500 dark:text-gray-400') ?><?= lang('App.changePassword') ?></a></li>
-                    <li><a href="<?= site_url('panduan') ?>" class="flex items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"><?= icon('book', 'h-4 w-4 text-gray-500 dark:text-gray-400') ?><?= lang('App.guide') ?></a></li>
+                    <li><a href="<?= site_url('admin/panduan') ?>" class="flex items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"><?= icon('book', 'h-4 w-4 text-gray-500 dark:text-gray-400') ?><?= lang('App.guide') ?></a></li>
                 </ul>
                 <div class="p-2">
                     <a href="<?= url_to('logout') ?>" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-gray-600"><?= icon('logout', 'h-4 w-4') ?><?= lang('App.logout') ?></a>

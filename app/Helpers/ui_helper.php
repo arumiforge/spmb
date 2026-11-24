@@ -417,7 +417,7 @@ if (! function_exists('art_icon')) {
     /**
      * A Codex painted icon (public/assets/img/<path>.webp, D-082) inside a three.js-ready holder
      * ([data-ikon-3d]: it floats and tilts once ikon3d.js runs). While the painting is not delivered
-     * yet, the Lucide icon $fallback is shown instead, without 3D.
+     * yet, the Lucide icon $fallback (or a brand icon such as "whatsapp") is shown instead, without 3D.
      */
     function art_icon(string $path, string $fallback, string $class = 'h-20 w-20', string $alt = ''): string
     {
@@ -425,7 +425,7 @@ if (! function_exists('art_icon')) {
 
         if ($picture === '') {
             return '<span class="ikon-cadangan inline-flex ' . esc($class) . ' items-center justify-center text-primary-600 dark:text-primary-400" aria-hidden="true">'
-                . icon($fallback, 'h-3/5 w-3/5') . '</span>';
+                . (icon_exists($fallback) ? icon($fallback, 'h-3/5 w-3/5') : social_icon($fallback, 'h-1/2 w-1/2')) . '</span>';
         }
 
         return '<span class="ikon-3d ' . esc($class) . '" data-ikon-3d' . ($alt === '' ? ' aria-hidden="true"' : '') . '>' . $picture . '</span>';

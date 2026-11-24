@@ -2,7 +2,8 @@
 /**
  * Public questions and answers (/tanya-jawab, D-072). Topics as sections,
  * questions as native disclosure widgets (<details>), so the page works
- * without JavaScript and with screen readers.
+ * without JavaScript and with screen readers. A search box filters the
+ * questions while typing (D-097).
  *
  * @var array{
  *     topics: list<array{slug: string, topic: string, items: list<array{id: string, question: string, html: string}>}>,
@@ -37,6 +38,11 @@ $contacts  = array_filter([
     <?php if ($page['topics'] === []) : ?>
         <?= view('partials/empty_state', ['empty' => ['title' => lang('Situs.qaEmptyTitle'), 'text' => lang('Situs.qaEmptyText'), 'image' => 'state/kosong-tanya-jawab', 'fallback' => null, 'icon' => 'message-circle-question-mark', 'imageAlt' => '']]) ?>
     <?php else : ?>
+        <?= view('partials/cari_halaman', ['search' => [
+            'target' => '#daftar-tanya-jawab', 'kind' => 'butir', 'id' => 'cari-tanya-jawab', 'class' => 'mb-8',
+            'label' => lang('Situs.qaSearchLabel'), 'placeholder' => lang('Situs.qaSearchHint'),
+            'found' => lang('Situs.qaSearchFound'), 'none' => lang('Situs.qaSearchNone'),
+        ]]) ?>
         <?php if (count($page['topics']) > 1) : ?>
             <?php // Topic contents (D-088): sticks under the header while reading and highlights the topic in view. ?>
             <nav class="daftar-isi sticky top-16 z-30 -mx-4 mb-8 border-b border-gray-200 bg-white/95 px-4 py-3 backdrop-blur sm:top-[4.5rem] dark:border-gray-700 dark:bg-gray-900/95" aria-label="<?= lang('Situs.qaTopicsLabel') ?>" data-daftar-isi>
@@ -49,7 +55,7 @@ $contacts  = array_filter([
             </nav>
         <?php endif ?>
 
-        <div class="space-y-10">
+        <div id="daftar-tanya-jawab" class="space-y-10">
             <?php foreach ($page['topics'] as $topic) : ?>
                 <section aria-labelledby="<?= esc($topic['slug'], 'attr') ?>">
                     <h2 id="<?= esc($topic['slug'], 'attr') ?>" class="mb-4 scroll-mt-56 text-xl font-bold text-gray-900 sm:text-2xl dark:text-white"><?= esc($topic['topic']) ?></h2>
