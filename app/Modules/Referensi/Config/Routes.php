@@ -27,7 +27,15 @@ $routes->group('admin/referensi', ['namespace' => 'Modules\Referensi\Controllers
     $routes->get('sekolah-lain/petakan', 'SekolahLain::map', ['as' => 'referensi.lain.petakan']);
     $routes->post('sekolah-lain/petakan', 'SekolahLain::assign');
     $routes->post('sekolah-lain/tambah', 'SekolahLain::addAndAssign', ['as' => 'referensi.lain.tambah']);
+
+    // Earlier applicant addresses matched to the national region list (D-111).
+    $routes->get('alamat', 'Alamat::index', ['as' => 'referensi.alamat']);
+    $routes->post('alamat', 'Alamat::run');
 });
 
 // Public school search for the registration form (JSON, throttled per visitor).
 $routes->get('sekolah-asal/cari', '\Modules\Referensi\Controllers\Cari::index', ['as' => 'referensi.cari']);
+
+// Public region lookups for the address on the registration form (JSON, throttled, cached, D-111).
+$routes->get('wilayah/daftar', '\Modules\Referensi\Controllers\Wilayah::children', ['as' => 'referensi.wilayah']);
+$routes->get('wilayah/cari', '\Modules\Referensi\Controllers\Wilayah::search', ['as' => 'referensi.wilayah.cari']);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
 use Modules\Referensi\Database\Seeds\InstallSeeder;
+use Modules\Referensi\Libraries\BundledRegions;
 use Modules\Referensi\Libraries\BundledSchools;
 use Modules\Referensi\Models\SchoolModel;
 
@@ -102,8 +103,11 @@ final class ReferensiBundledSchoolsTest extends CIUnitTestCase
     public function testInstallSeederSkipsWhenThisVersionIsLoaded(): void
     {
         setting('Referensi.bundledVersion', (new BundledSchools())->version());
+        // The region list (D-111) is loaded by the same seeder; skip it here as well.
+        setting('Referensi.regionsVersion', (new BundledRegions())->version());
 
         (new InstallSeeder(config('Database')))->run();
+        setting()->forget('Referensi.regionsVersion');
 
         $this->assertSame(0, model(SchoolModel::class, false)->countAllResults());
     }

@@ -117,6 +117,13 @@ class School extends BaseConfig
     public bool $languageAr = true;
 
     /**
+     * The school's own regency/city code from the national region list (D-111), e.g. "33.19"
+     * for Kab. Kudus. Optional: when set, the address on the registration form starts with this
+     * province and regency, and region searches list it first. Set in Identitas Sekolah.
+     */
+    public string $regionCode = '';
+
+    /**
      * Optional English and Arabic versions of the texts above (D-109); empty = the Indonesian text shows.
      * Read them with setting_localized('School.motto').
      */

@@ -1,0 +1,13 @@
+{
+  "version": "2026-02-13",
+  "description": "Administrative regions of Indonesia: provinces, regencies and cities, districts, villages (public data, no personal data).",
+  "source": "https://github.com/cahyadsn/wilayah (db/wilayah.sql), Kepmendagri No 300.2.2-2138 Tahun 2025",
+  "licence": "MIT, (c) 2025 cahya dsn",
+  "file": "wilayah.json.gz",
+  "sha256": "af015d8d5da70d733a041a20e8e6c332d38fd6a241199513395cabc5cb3b1b1e",
+  "regions": 91599,
+  "provinces": 38,
+  "regencies": 514,
+  "districts": 7285,
+  "villages": 83762
+}

@@ -4,6 +4,10 @@ Previous schools (SD, MI, SDLB, SLB) that applicants choose on the registration
 form (FR-REG-06, D-012), plus the school part of the import requirement (FR-RPT-04).
 Table `ref_sekolah` (foundation migration), model `Modules\Referensi\Models\SchoolModel`.
 
+Since D-111 the module also holds the national list of administrative regions (provinces, regencies and cities,
+districts, villages) used for the applicant's address: table `ref_wilayah`, model
+`Modules\Referensi\Models\RegionModel`. See "Region list (D-111)" below.
+
 ## Routes
 
 | Route | Permission | Purpose |
@@ -18,6 +22,10 @@ Table `ref_sekolah` (foundation migration), model `Modules\Referensi\Models\Scho
 | `GET/POST /admin/referensi/sekolah-lain/petakan` | `referensi.kelola` | Map one typed name to a list entry: all unmapped applicants with that name get `previous_school_id` |
 | `POST /admin/referensi/sekolah-lain/tambah` | `referensi.kelola` | Add the school to the list and map it in one step |
 | `GET /sekolah-asal/cari?q=` | public | JSON search for the registration form (below) |
+| `GET /admin/referensi/alamat` | `referensi.kelola` | Alamat pendaftar: state of the region list, applicants with/without region codes; `?pratinjau=1` previews the matching of typed addresses |
+| `POST /admin/referensi/alamat` | `referensi.kelola` | Saves the matching (AddressBackfill); `mirip=0` = exact names only |
+| `GET /wilayah/daftar?induk=` | public | JSON children of a region (no `induk`: provinces) for the address picker |
+| `GET /wilayah/cari?q=` | public | JSON search of districts and villages with the full path |
 
 Audit: list edits go through `SchoolModel` (`Auditable`). Imports write in bulk and log one
 `schools_imported` event (counts, source, file name). Mapping updates applicants through
@@ -147,6 +155,125 @@ is for Arumi Studios to decide (see the PR). Until then, the file import covers 
 fallback portal `sekolah.data.kemendikdasmen.go.id` was not checked. Tests use recorded fixtures
 in `tests/_support/Referensi/fixtures/` (shapes taken from the bundle's sample data).
 
+## Region list (D-111)
+
+The full list of Indonesian administrative regions ships as default data, like the SD/MI list:
+38 provinces, 514 regencies and cities, 7,285 districts and 83,762 villages (source version `2026-02-13`).
+
+- **Source**: [cahyadsn/wilayah](https://github.com/cahyadsn/wilayah), file `db/wilayah.sql`, codes and names per
+  Kepmendagri No 300.2.2-2138 Tahun 2025. MIT licence (`THIRD_PARTY_NOTICES.md`, `Database/Data/wilayah/LICENSE.txt`).
+  Public data, no personal data. The source has a few more districts and villages than the decree's summary
+  (later corrections); the manifest records what is shipped.
+- **Files**: `app/Modules/Referensi/Database/Data/wilayah/wilayah.json.gz` (one gzipped JSON array of
+  `[code, name]` pairs sorted by code, 640 KB) and `manifest.json` (version, source, licence, SHA-256, counts).
+- **Converter**: `node scripts/wilayah.mjs <path/to/wilayah.sql> [--version=YYYY-MM-DD]`. The SQL file is treated
+  as untrusted input: it is never executed; only `('code','name')` tuples are read with a strict pattern, and every
+  row is checked (code shape `11` / `11.01` / `11.01.01` / `11.01.01.2001`, parent present, letters, digits and a few
+  marks only, at most 100 characters, no duplicates, every data line read, minimum counts). The version defaults to
+  the "last edit" date in the SQL header.
+- **Table** `ref_wilayah`: `code` varchar(13) primary key, `parent_code` varchar(8), `level` (1 provinsi,
+  2 kabupaten/kota, 3 kecamatan, 4 desa/kelurahan), `name` varchar(100) in the official spelling (the source is
+  already in title case: "Kabupaten Kudus", "Kota Semarang", "Getaspejaten"). Indexes `(parent_code, name)` for the
+  selects and `(level, name)` for name searches.
+- **Display rule** (`RegionModel::displayName()`): "Kabupaten X" becomes **"Kab. X"**; cities ("Kota Semarang"),
+  provinces, districts and villages keep their official name. This matches the regency names of the SD/MI list
+  (`Kab. Kudus`), so applicants and schools group alike. Full path: "Ploso, Jati, Kab. Kudus, Jawa Tengah".
+  Region names are proper nouns and are never translated. A village code `…1xxx` is a kelurahan, `…2xxx` a desa
+  (`RegionModel::villageKind()`).
+- **Loading**: `spmb:install` (Referensi `InstallSeeder`) and `php spark referensi:import --bawaan` (every deploy)
+  load it when the version in `manifest.json` differs from the setting `Referensi.regionsVersion`; otherwise only the
+  manifest is read. A load is one transaction: new codes are added, renamed ones updated and codes no longer in the
+  list removed (applicants keep their codes and names); audited as `regions_imported`. `--paksa` reloads,
+  `--dry-run` only counts. About 5 seconds for the whole list.
+- **Updating**: run the converter on a newer `wilayah.sql`, check the counts it prints, commit both files, deploy.
+  Keep `ReferensiRegionsTest` green.
+
+### Lookups (public JSON, no account)
+
+- `GET /wilayah/daftar?induk=<code>` → `[{"code", "name", "label"}]`: children of a province, regency or district
+  (no `induk`: the provinces), sorted by name without the "Kabupaten"/"Kota" word (a regency before the city of the
+  same name). A malformed or village code → 400. `Cache-Control: public, max-age=86400` and an `ETag` built from the
+  list version (`If-None-Match` → 304). Throttled per IP: `Referensi.regionListPerMinute` (120) → 429 `{"message"}`.
+- `GET /wilayah/cari?q=<text>` → up to 20 districts and villages:
+  `[{"code", "level", "name", "path", "kind", "codes": {province, regency, district, village}, "names": {…}}]`.
+  At least one word of three letters; "desa", "kel.", "kec." and similar words are ignored; every word must start a
+  word of the region's name or of its parents' names, at least one in its own name ("ploso jati"). Ranking: the name
+  typed in full, words matching whole words of the path, the school's own regency and province
+  (`School.regionCode`), districts before villages. Words written together are tried when nothing matches
+  ("getas pejaten" → "Getaspejaten"). Throttled: `Referensi.regionSearchPerMinute` (60); cached for an hour.
+
+### Address picker (`Views/partials/region_picker.php`, `resources/js/wilayah.js`)
+
+Used by Pendaftaran's `applicant_fields` partial in the address section of the public form, the offline add/edit form
+and the applicant's correction page, when `RegionInput::available()` (module on and the list loaded).
+
+- Four selects, province → regency/city → district → village, posted as `province_code`, `regency_code`,
+  `district_code`, `village_code`; each loads its options when the one above changes. Above them a
+  "Cari desa atau kelurahan" combobox (ARIA 1.2: arrow keys, Enter, Escape) fills all four at once.
+- Progressive enhancement: the selects and the search are rendered `disabled` inside a `hidden` block and the old
+  text fields (`province`, `regency`, `district`, `village`) show. The script switches the selects on and the text
+  fields off ("pilih" mode). "Tempat saya tidak ada di daftar, ketik sendiri" switches to the text fields ("ketik"
+  mode; chosen names are copied into empty fields) and back. A disabled control is not posted, so the server gets
+  codes or text, never both. A text round trip opens in "ketik" mode. A saved address typed by hand (text without
+  codes) is matched with exact names first: the matching levels are preselected, and the picker opens in "pilih" mode
+  when every typed level matched, otherwise in "ketik" mode with the text.
+- Options are rendered on the server for the chosen codes (after a validation error, for a saved applicant, or the
+  school's own province and regency on a fresh form when `School.regionCode` is set), so the picker is complete
+  before the script loads anything.
+- A level is required when its field or a field below it is required (Pendaftaran field modes). Levels hidden by the
+  settings but needed as parents of a shown level still show as selects; their codes are saved, their text is not.
+- The wizard summary reads the selects; the search box is skipped (`data-ringkas-lewati`).
+
+### Reading the post (`Libraries/RegionInput.php`)
+
+`(new RegionInput())->resolve($post, $cleanedData, $fields)` → `[$data, $errors]`, called by Pendaftaran's
+`HandlesApplicantForm::validateApplicant()` before the field rules run.
+
+- Codes posted: the deepest code must exist at its level and each posted higher code must be its ancestor; otherwise
+  an error on that level's text field (`regionUnknown`, `regionMismatch`). All four `*_code` keys are set (deeper ones
+  `null`) and the text fields on the form get the display names; a level not chosen becomes empty, so an old village
+  never stays behind a new district.
+- Only text posted (no JavaScript, or "ketik" mode): the text is kept as typed; `RegionMatcher` with **exact** names
+  only adds the codes of the levels it is sure about and replaces those levels' text with the official names.
+
+### Matching typed addresses (`Libraries/RegionMatcher.php`, `Libraries/AddressBackfill.php`)
+
+`RegionMatcher::match(['province' => …, 'regency' => …, 'district' => …, 'village' => …], $similar)`:
+
+1. Each level is cleaned: case, spaces, text after a comma or bracket, and the usual leading words ("Prov.",
+   "Provinsi", "Kab.", "Kabupaten", "Kota", "Kodya", "Kec.", "Kecamatan", "Ds.", "Desa", "Kel.", "Kelurahan"). The
+   text with the leading word is also compared (official names such as the district "Kota Kudus" or the villages
+   "Kampung Baru"). Province short names are known ("Jateng", "DIY", "DKI", "NTB", …). For regencies "Kota X" or
+   "Kab. X" chooses the kind; a bare name that fits both means the regency.
+2. From the province down, each level is searched only under the regions still possible above it (a level without
+   text stays open). Per level: the same name, then the same letters without spaces and marks
+   ("Getas Pejaten" = "Getaspejaten"), then, when `$similar` and only inside at most three known parents, a name one
+   letter off (two for names longer than five letters) with a single best candidate ("Plosso" → "Ploso").
+3. A level whose text matches nothing stops the search there. The result is the deepest level that ended with
+   exactly one region, with all its parents (`level` 0–4, `codes`, `names` = display names, `unmatched` = levels with
+   text that could not be matched).
+
+`AddressBackfill` runs it for applicants without a village code that have some address text (not deleted ones),
+fills the codes and official names of the matched levels through `ApplicantModel` (one audited `updated` per
+applicant, plus one `addresses_matched` summary) and keeps the text of unmatched levels. Report: checked, full
+(every typed level matched), partial, none, changed, and up to 300 rows. Safe to repeat.
+
+```bash
+php spark referensi:cocokkan-alamat --dry-run      # show what would change
+php spark referensi:cocokkan-alamat                # save (names one or two letters off allowed)
+php spark referensi:cocokkan-alamat --tanpa-mirip  # exact names only
+```
+
+The same is available to Admin Sekolah in Sekolah Asal → Alamat pendaftar (preview first, then "Simpan hasil
+pencocokan"). It is **not** run automatically after the import: it rewrites applicant data, so a person looks at the
+preview first (one-time step in `docs/deployment.md`).
+
+### Interface for other modules (Statistik)
+
+`applicants.province_code`, `regency_code`, `district_code`, `village_code` (nullable; indexed except the province)
+hold the codes; the text columns `province`, `regency`, `district`, `village` hold the display names of the chosen
+regions, or the text typed when no region matched. Join `ref_wilayah` on the code for names and parents.
+
 ## Settings (`app/Config/Referensi.php`, `setting('Referensi.*')`)
 
 | Key | Default | Meaning |
@@ -158,3 +285,9 @@ in `tests/_support/Referensi/fixtures/` (shapes taken from the bundle's sample d
 | `importDelayMs` | 500 | Pause between Dapodik requests |
 | `searchPerMinute` | 30 | Public search limit per IP |
 | `bundledVersion` | empty | Version of the bundled list already loaded (written by the importer) |
+| `regionsVersion` | empty | Version of the bundled region list already loaded (written by the importer, D-111) |
+| `regionListPerMinute` | 120 | `/wilayah/daftar` requests per IP per minute |
+| `regionSearchPerMinute` | 60 | `/wilayah/cari` requests per IP per minute |
+
+`School.regionCode` (Identitas Sekolah, optional): the school's own regency/city code, e.g. `33.19`. A fresh address
+on the forms starts with its province and regency, and region searches list it first.

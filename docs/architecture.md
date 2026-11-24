@@ -229,3 +229,15 @@ autocomplete; unknown schools are stored as free text and mapped by admins.
 Network access to `dapo.kemendikdasmen.go.id` and `sekolah.data.kemendikdasmen.go.id` must be allowed on the server (and in
 the dev environment when testing the importer). Exact endpoints are verified when
 the importer is built in phase 2.
+
+## National region list (D-111)
+
+The Referensi module also ships the Indonesian administrative regions (Kepmendagri 300.2.2-2138/2025 via
+`cahyadsn/wilayah`, MIT): table `ref_wilayah` (code, parent code, level 1–4, official name), loaded from
+`Database/Data/wilayah/` like the SD/MI list (version-gated `referensi:import --bawaan`, setting
+`Referensi.regionsVersion`; converter `scripts/wilayah.mjs`). Applicants pick their address province → regency/city →
+district → village from it (public JSON lookups `/wilayah/daftar` and `/wilayah/cari`, throttled and cached);
+`applicants` stores the four codes next to the display names in the old text columns ("Kab. Kudus"). Without
+JavaScript, or for a place not in the list, the text fields still work. Older typed addresses are matched once
+(`RegionMatcher`/`AddressBackfill`, command `referensi:cocokkan-alamat`, or Sekolah Asal → Alamat pendaftar).
+Statistik groups applicants by these codes and names. Details: `docs/modules/referensi.md`.

@@ -18,6 +18,7 @@
 
 use Modules\Pendaftaran\Controllers\Concerns\HandlesApplicantForm;
 use Modules\Pendaftaran\Libraries\ApplicantForm;
+use Modules\Referensi\Libraries\RegionInput;
 
 $form   = $applicantForm['form'];
 $values = $applicantForm['values'] ?? [];
@@ -103,6 +104,35 @@ $grid = static function (array $names) use ($field, $wide): string {
 };
 $h3   = 'mb-4 text-base font-semibold text-gray-900 dark:text-white';
 $step = 0;
+
+// Address: province → village picked from the national region list when it is loaded (D-111);
+// the text fields stay as the fallback without JavaScript.
+$regionFields = array_keys(RegionInput::CODE_FIELDS);
+$regionPicker = HandlesApplicantForm::regionPickerAvailable();
+$addressGrid  = static function (array $names) use ($grid, $regionFields, $regionPicker, $form, $values): string {
+    $region = array_values(array_intersect($names, $regionFields));
+
+    if (! $regionPicker || $region === []) {
+        return $grid($names);
+    }
+
+    $required = [];
+    $labels   = [];
+
+    foreach ($regionFields as $field) {
+        $required[$field] = in_array($field, $region, true) && $form->requires($field);
+        $labels[$field]   = lang('Pendaftaran.fields.' . $field);
+    }
+
+    return $grid(array_values(array_diff($names, $regionFields)))
+        . view('Modules\Referensi\Views\partials\region_picker', ['region' => [
+            'fields'   => $region,
+            'required' => $required,
+            'labels'   => $labels,
+            'values'   => $values,
+            'fallback' => $grid($region),
+        ]], ['saveData' => false]);
+};
 ?>
 <?php foreach (ApplicantForm::sections($only) as $title => $names) : ?>
     <?php
@@ -118,7 +148,9 @@ $step = 0;
             <p class="mb-4 flex items-start gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-800 dark:bg-gray-900 dark:text-red-400" role="alert"><?= icon('circle-alert', 'mt-0.5 h-4 w-4 shrink-0') ?><?= lang('Pendaftaran.wizardStepErrors') ?></p>
         <?php endif ?>
 
-        <?php if ($title !== 'sectionParents') : ?>
+        <?php if ($title === 'sectionAddress') : ?>
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2"><?= $addressGrid($names) ?></div>
+        <?php elseif ($title !== 'sectionParents') : ?>
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2"><?= $grid($names) ?></div>
         <?php else : ?>
             <?php if (array_intersect(ApplicantForm::PARENT_NAMES, $names) !== []) : ?>

@@ -106,6 +106,28 @@ step, the consent checkbox and the submit button.
   staff form (`/admin/pendaftar/tambah`, `/ubah`) stays one long page with the same section headers and the guardian
   question.
 
+## Address from the region list (D-111)
+
+When the Referensi module is on and the national region list is loaded, the address section of the public form,
+the offline add/edit form and the correction page shows the Referensi address picker
+(`Modules\Referensi\Views\partials\region_picker`, rendered by `partials/applicant_fields.php`): a
+"Cari desa atau kelurahan" search plus province → regency/city → district → village selects, with the old text fields
+as the fallback without JavaScript and for places not in the list. Details in [referensi.md](referensi.md).
+
+- Columns `applicants.province_code`, `regency_code`, `district_code`, `village_code` (nullable, migration
+  `AddRegionCodesToApplicants`; indexes on the last three). `ApplicantForm::REGION_CODES` lists them; they are not
+  form fields of their own and follow the modes of `province`, `regency`, `district`, `village`.
+- `HandlesApplicantForm::validateApplicant()` runs `Referensi\Libraries\RegionInput::resolve()` before the field
+  rules: posted codes must exist and belong together (errors on the text field of that level), and the text columns
+  get the official display names ("Kab. Kudus"); with only text posted the text is kept and exact names get their
+  codes. `ApplicantService::register()`/`update()` accept the code columns. Changes are audited like every field.
+- **Contract with Statistik**: the code columns and the text columns keep these names; the text columns hold display
+  names when a region was chosen, otherwise the text as typed.
+- `HandlesApplicantForm::regionPickerAvailable()` = module on + list loaded. Without the list the form is unchanged.
+- Earlier typed addresses are matched once with `php spark referensi:cocokkan-alamat` or Sekolah Asal → Alamat
+  pendaftar (preview, then save).
+- `School.regionCode` (Identitas Sekolah) preselects the school's province and regency on a fresh form.
+
 ## Rules worth knowing
 
 - Online registration closes per the wave's `quota_mode` (D-047); staff can always register offline.
@@ -118,7 +140,9 @@ step, the consent checkbox and the submit button.
   guardian, occupations, incomes, staff note), a school from the SD/MI list (a Kudus school first), status verified and,
   when Berkas is on, every active document type uploaded as a generated sample (a portrait for the photo) and marked
   valid. `spmb:install --demo` prints its registration number, date of birth and private link. Idempotent: the 30 only
-  for a year without applicants, the example only when no applicant has that name.
+  for a year without applicants, the example only when no applicant has that name. Addresses use real villages of
+  Kudus, Pati, Jepara and Demak with their region codes (`DemoSeeder::VILLAGES`, D-111; the example lives in
+  Glantengan, Kota Kudus); three of the 30 have an address typed by hand without codes, to try Alamat pendaftar.
 
 ## Languages (D-109)
 

@@ -2,6 +2,7 @@
 /**
  * @var array<string, string> $values
  * @var array<string, string|null> $images Brand image URLs by key (App\Libraries\BrandingAssets)
+ * @var array<string, array<string, string>>|null       $regions Regencies/cities by province for School.regionCode (D-111), null when the list is not loaded
  */
 $f = static fn (string $name, array $extra = []): string => view('partials/form_field', ['field' => $extra + [
     'name'  => $name,
@@ -25,6 +26,29 @@ $h2   = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
             <?= $f('tagline') ?>
             <div class="sm:col-span-2"><?= $f('motto', ['help' => lang('Pengaturan.mottoHelp')]) ?></div>
             <div class="sm:col-span-2"><?= $f('address', ['type' => 'textarea']) ?></div>
+            <?php if (! empty($regions)) : ?>
+                <?php $regionError = ((array) (session('errors') ?? []))['regionCode'] ?? null; $regionValue = (string) old('regionCode', $values['regionCode'] ?? ''); ?>
+                <div class="bidang sm:col-span-2">
+                    <label for="f-regionCode" class="mb-2 block text-sm font-medium <?= $regionError !== null ? 'text-red-700 dark:text-red-500' : 'text-gray-900 dark:text-white' ?>">
+                        <?= lang('Pengaturan.regionCode') ?> <span class="font-normal text-gray-500 dark:text-gray-400">(<?= lang('App.optional') ?>)</span>
+                    </label>
+                    <select id="f-regionCode" name="regionCode" aria-describedby="f-regionCode-help<?= $regionError !== null ? ' f-regionCode-error' : '' ?>"
+                            class="block w-full rounded-lg border <?= $regionError !== null ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-gray-50' ?> p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                        <option value=""><?= lang('Pengaturan.regionCodeNone') ?></option>
+                        <?php foreach ($regions as $province => $regencies) : ?>
+                            <optgroup label="<?= esc($province, 'attr') ?>">
+                                <?php foreach ($regencies as $code => $label) : ?>
+                                    <option value="<?= esc((string) $code, 'attr') ?>"<?= (string) $code === $regionValue ? ' selected' : '' ?>><?= esc($label) ?></option>
+                                <?php endforeach ?>
+                            </optgroup>
+                        <?php endforeach ?>
+                    </select>
+                    <p id="f-regionCode-help" class="mt-2 text-sm text-gray-500 dark:text-gray-400"><?= lang('Pengaturan.regionCodeHelp') ?></p>
+                    <?php if ($regionError !== null) : ?>
+                        <p id="f-regionCode-error" class="mt-2 text-sm text-red-600 dark:text-red-500"><?= esc($regionError) ?></p>
+                    <?php endif ?>
+                </div>
+            <?php endif ?>
             <div class="sm:col-span-2">
                 <?= view('partials/terjemahan', ['translation' => ['fields' => [
                     ['name' => 'tagline', 'label' => lang('Pengaturan.tagline'), 'values' => ['en' => $values['tagline_en'], 'ar' => $values['tagline_ar']], 'maxlength' => 150],

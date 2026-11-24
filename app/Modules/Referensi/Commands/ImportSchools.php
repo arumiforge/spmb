@@ -6,6 +6,8 @@ namespace Modules\Referensi\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use Modules\Referensi\Libraries\AddressBackfill;
+use Modules\Referensi\Libraries\BundledRegions;
 use Modules\Referensi\Libraries\BundledSchools;
 use Modules\Referensi\Libraries\DapodikClient;
 use Modules\Referensi\Libraries\DapodikImport;
@@ -16,16 +18,18 @@ use Throwable;
 /**
  * php spark referensi:import — fills the previous-school list (ref_sekolah)
  * from the bundled national SD/MI list (--bawaan), the public Dapodik portal
- * or a CSV/XLSX/JSON file. Safe to run again.
+ * or a CSV/XLSX/JSON file. With --bawaan it also loads the bundled national
+ * region list (ref_wilayah, D-111). Safe to run again: each bundled list is
+ * skipped while its version is already loaded.
  */
 class ImportSchools extends BaseCommand
 {
     protected $group       = 'SPMB';
     protected $name        = 'referensi:import';
-    protected $description = 'Imports previous schools: the bundled national SD/MI list (--bawaan), Dapodik for the configured provinces, or a CSV/XLSX/JSON file.';
+    protected $description = 'Imports previous schools: the bundled national SD/MI and region lists (--bawaan), Dapodik for the configured provinces, or a CSV/XLSX/JSON file.';
     protected $usage       = 'referensi:import [options]';
     protected $options     = [
-        '--bawaan'    => 'Load the national SD/MI list that ships with SPMB (skipped when this version is already loaded)',
+        '--bawaan'    => 'Load the national SD/MI list and region list that ship with SPMB (each skipped when its version is already loaded)',
         '--paksa'     => 'With --bawaan: load again even when this version is already loaded',
         '--provinsi'  => 'Province name(s), comma separated (default: setting Referensi.provinces)',
         '--kabupaten' => 'Only regencies whose name contains this text, e.g. "Kudus"',
@@ -43,6 +47,7 @@ class ImportSchools extends BaseCommand
 
         try {
             if (CLI::getOption('bawaan') !== null || array_key_exists('bawaan', $params)) {
+                $this->regionsFromBundle($dryRun);
                 $report = $this->fromBundle($importer, $dryRun);
 
                 if ($report === null) {
@@ -87,6 +92,42 @@ class ImportSchools extends BaseCommand
         }
 
         return EXIT_SUCCESS;
+    }
+
+    /**
+     * Loads the bundled region list (D-111) unless this version is already loaded.
+     */
+    private function regionsFromBundle(bool $dryRun): void
+    {
+        $bundle = new BundledRegions();
+        $force  = CLI::getOption('paksa') !== null;
+
+        if (! $force && ! $dryRun && $bundle->isImported()) {
+            CLI::write('Daftar wilayah versi ' . $bundle->version() . ' sudah dimuat.', 'green');
+
+            return;
+        }
+
+        $manifest = $bundle->manifest();
+        CLI::write(sprintf('Memuat daftar wilayah versi %s (%s desa/kelurahan) ...', $bundle->version(), number_format((int) ($manifest['villages'] ?? 0), 0, ',', '.')));
+        $report = $bundle->import($dryRun);
+
+        CLI::write(sprintf(
+            '%sWilayah: %d baru, %d diperbarui, %d tetap, %d dihapus.',
+            $dryRun ? '[uji coba, tidak ada yang disimpan] ' : '',
+            $report['created'],
+            $report['updated'],
+            $report['unchanged'],
+            $report['removed'],
+        ), 'green');
+
+        if (! $dryRun) {
+            service('audit')->log('regions_imported', 'ref_wilayah', null, null, ['version' => $bundle->version()] + $report, 'Daftar wilayah dimuat lewat perintah');
+
+            if ((new AddressBackfill())->pendingCount() > 0) {
+                CLI::write('Ada alamat pendaftar lama yang belum dicocokkan. Jalankan sekali: php spark referensi:cocokkan-alamat --dry-run, lalu tanpa --dry-run.', 'yellow');
+            }
+        }
     }
 
     /**

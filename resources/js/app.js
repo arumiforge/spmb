@@ -9,6 +9,7 @@ import { initLipatan } from './lipatan.js';
 import { initGuardianChoice, initWizards } from './wizard.js';
 import { initBerita } from './berita.js';
 import { initPopup } from './popup.js';
+import { initWilayah } from './wilayah.js';
 
 const storage = {
     get(key) {
@@ -137,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDialogs();
     initTanggal();
     initGuardianChoice();
+    initWilayah();
     initWizards();
     initFolds();
     initLipatan();

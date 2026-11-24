@@ -5,7 +5,8 @@
  * It stays one form with one POST: the script only shows one step at a time, checks the fields of the
  * current step with the browser's constraint validation before moving on, moves focus to the step heading,
  * keeps the step in the URL (#langkah-2) so the browser's Back button works, and builds the summary of the
- * last step ([data-wizard-ringkasan]). Without JavaScript the whole form shows on one page.
+ * last step ([data-wizard-ringkasan]; controls marked data-ringkas-lewati, such as the address search box, are left
+ * out). Without JavaScript the whole form shows on one page.
  *
  * [data-wali]: the guardian fields ([data-wali-isian]) show only after "Ada wali" (radio value 1).
  */
@@ -248,7 +249,7 @@ function initWizard(form) {
                 } else {
                     const control = document.getElementById(node.htmlFor);
 
-                    if (!control || !usable(control) || ['radio', 'checkbox'].includes(control.type)) {
+                    if (!control || !usable(control) || ['radio', 'checkbox'].includes(control.type) || control.hasAttribute('data-ringkas-lewati')) {
                         return;
                     }
 
