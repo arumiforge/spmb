@@ -13,7 +13,6 @@ $f = static fn (string $name, string $label, array $extra = []): string => view(
     'label' => $label,
     'value' => $values[$name] ?? '',
 ]]);
-$card    = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800';
 $h2      = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
 $help    = 'ms-7 mt-1 text-sm text-gray-500 dark:text-gray-400';
 $errors  = session('errors');
@@ -25,9 +24,9 @@ $checked = is_array($checked) ? $checked : [];
 <?= $this->section('content') ?>
 <form method="post" action="<?= url_to('tes.pengaturan') ?>" class="form-lebar">
     <?= csrf_field() ?>
+    <?= view('partials/lipatan_semua', ['class' => 'xl:col-span-2'], ['saveData' => false]) ?>
 
-    <section class="<?= $card ?>">
-        <h2 class="<?= $h2 ?>"><?= lang('TesJadwal.settingsSectionApplicant') ?></h2>
+    <?= lipatan_buka(['id' => 'tes-applicant', 'icon' => 'users', 'title' => lang('TesJadwal.settingsSectionApplicant')]) ?>
         <div class="space-y-5">
             <div>
                 <?= $f('scheduleVisible', lang('TesJadwal.scheduleVisible'), ['type' => 'checkbox']) ?>
@@ -35,10 +34,9 @@ $checked = is_array($checked) ? $checked : [];
             </div>
             <?= $f('instructions', lang('TesJadwal.instructions'), ['type' => 'textarea', 'rows' => 3, 'help' => lang('TesJadwal.instructionsHelp', [Pengaturan::INSTRUCTIONS_MAX]), 'attrs' => ['maxlength' => (string) Pengaturan::INSTRUCTIONS_MAX]]) ?>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
-    <section class="<?= $card ?>">
-        <h2 class="<?= $h2 ?>"><?= lang('TesJadwal.settingsSectionAllocate') ?></h2>
+    <?= lipatan_buka(['id' => 'tes-allocate', 'icon' => 'layout-grid', 'title' => lang('TesJadwal.settingsSectionAllocate')]) ?>
         <div class="space-y-5">
             <fieldset aria-describedby="eligible-help">
                 <legend class="mb-2 block text-sm font-medium <?= isset($errors['eligibleStatuses']) ? 'text-red-700 dark:text-red-500' : 'text-gray-900 dark:text-white' ?>"><?= lang('TesJadwal.eligibleStatuses') ?></legend>
@@ -62,14 +60,13 @@ $checked = is_array($checked) ? $checked : [];
                 <p class="<?= $help ?>"><?= lang('TesJadwal.requireCompleteHelp') ?></p>
             </div>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
-    <section class="<?= $card ?>">
-        <h2 class="<?= $h2 ?>"><?= lang('TesJadwal.settingsSectionGenerator') ?></h2>
+    <?= lipatan_buka(['id' => 'tes-generator', 'icon' => 'clock', 'title' => lang('TesJadwal.settingsSectionGenerator')]) ?>
         <div class="sm:w-1/2">
             <?= $f('defaultDurationMinutes', lang('TesJadwal.defaultDuration'), ['type' => 'number', 'required' => true, 'help' => lang('TesJadwal.defaultDurationHelp'), 'attrs' => ['min' => '30', 'max' => '480', 'step' => '5', 'inputmode' => 'numeric']]) ?>
         </div>
-    </section>
+    <?= lipatan_tutup() ?>
 
     <div class="flex justify-end">
         <button type="submit" class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 sm:w-auto dark:focus:ring-primary-800"><?= lang('TesJadwal.save') ?></button>

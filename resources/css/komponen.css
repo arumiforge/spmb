@@ -34,12 +34,14 @@
         }
 
         /* The last child spans both columns when it is the button row, not when it is a card. */
-        .form-lebar > :last-child:not(section):not(fieldset),
+        .form-lebar > :last-child:not(section):not(fieldset):not(details),
         .form-lebar > [role="alert"],
         .form-lebar > [role="status"],
         .form-lebar > .span-penuh,
+        .form-lebar > [data-lipatan-tombol],
         .form-lebar > section:only-of-type,
-        .form-lebar > fieldset:only-of-type {
+        .form-lebar > fieldset:only-of-type,
+        .form-lebar > details:only-of-type {
             grid-column: 1 / -1;
         }
     }
