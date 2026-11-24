@@ -10,7 +10,8 @@ $h2     = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('kartu.pengaturan') ?>" class="form-lebar">
+<div class="tata-isi" data-lipatan-lingkup>
+<form id="form-pengaturan-kartu" method="post" action="<?= url_to('kartu.pengaturan') ?>" class="form-lebar">
     <?= csrf_field() ?>
 
     <?= lipatan_buka(['id' => 'kartu-availability', 'icon' => 'id-card', 'title' => lang('Kartu.sectionAvailability')]) ?>
@@ -41,4 +42,6 @@ $h2     = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
         <button type="submit" class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 sm:w-auto dark:focus:ring-primary-800"><?= lang('Kartu.save') ?></button>
     </div>
 </form>
+<?= view('partials/tata_isi_rail', ['form' => 'form-pengaturan-kartu', 'save' => lang('Kartu.save')], ['saveData' => false]) ?>
+</div>
 <?= $this->endSection() ?>

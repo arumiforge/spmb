@@ -13,9 +13,10 @@ $h2   = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('pengaturan.sekolah') ?>" enctype="multipart/form-data" class="grid grid-cols-1 items-start gap-6 xl:grid-cols-2">
+<div class="tata-isi" data-lipatan-lingkup>
+<form id="form-sekolah" method="post" action="<?= url_to('pengaturan.sekolah') ?>" enctype="multipart/form-data" class="form-lebar">
     <?= csrf_field() ?>
-    <?= view('partials/lipatan_semua', ['class' => 'xl:col-span-2'], ['saveData' => false]) ?>
+    <?= view('partials/lipatan_semua', [], ['saveData' => false]) ?>
 
     <?= lipatan_buka(['id' => 'sekolah-identity', 'icon' => 'school', 'title' => lang('Pengaturan.sectionIdentity')]) ?>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -35,7 +36,7 @@ $h2   = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
             <?= $f('website', ['type' => 'url', 'placeholder' => 'https://']) ?>
             <div class="sm:col-span-2"><?= $f('mapEmbed', ['type' => 'textarea', 'help' => lang('Pengaturan.mapEmbedHelp'), 'placeholder' => '<iframe src="https://www.google.com/maps/embed?pb=…"></iframe>']) ?></div>
             <?php if (($mapUrl = map_embed_url($values['mapEmbed'] ?? '')) !== '') : ?>
-                <iframe src="<?= esc($mapUrl, 'attr') ?>" title="<?= esc(lang('App.mapTitle', [setting('School.name')]), 'attr') ?>" class="peta-sekolah sm:col-span-2" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe src="<?= esc($mapUrl, 'attr') ?>" title="<?= esc(lang('App.mapTitle', [setting('School.name')]), 'attr') ?>" class="peta-sekolah max-h-80 sm:col-span-2" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <?php endif ?>
         </div>
     <?= lipatan_tutup() ?>
@@ -76,7 +77,7 @@ $h2   = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
         </div>
     <?= lipatan_tutup() ?>
 
-    <?= lipatan_buka(['id' => 'sekolah-slides', 'icon' => 'layout-grid', 'title' => lang('Pengaturan.sectionSlides'), 'intro' => lang('Pengaturan.sectionSlidesIntro'), 'class' => 'xl:col-span-2']) ?>
+    <?= lipatan_buka(['id' => 'sekolah-slides', 'icon' => 'layout-grid', 'title' => lang('Pengaturan.sectionSlides'), 'intro' => lang('Pengaturan.sectionSlidesIntro')]) ?>
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
             <?php foreach (App\Libraries\BrandingAssets::HERO_SLIDES as $n => $key) : ?>
                 <div>
@@ -92,8 +93,10 @@ $h2   = 'mb-4 text-lg font-semibold text-gray-900 dark:text-white';
         </div>
     <?= lipatan_tutup() ?>
 
-    <div class="flex justify-end xl:col-span-2">
+    <div class="flex justify-end">
         <button type="submit" class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 sm:w-auto dark:focus:ring-primary-800"><?= lang('Pengaturan.save') ?></button>
     </div>
 </form>
+<?= view('partials/tata_isi_rail', ['form' => 'form-sekolah', 'save' => lang('Pengaturan.save')], ['saveData' => false]) ?>
+</div>
 <?= $this->endSection() ?>

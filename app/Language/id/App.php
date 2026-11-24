@@ -128,4 +128,6 @@ return [
     'altGuideApplicant' => 'Orang tua dan calon murid membaca panduan pendaftaran di ponsel.',
     'foldOpenAll'       => 'Buka semua',
     'foldCloseAll'      => 'Tutup semua',
+    'pageContents'      => 'Isi halaman',
+    'pageSectionError'  => 'ada isian yang perlu diperbaiki',
 ];

@@ -474,3 +474,25 @@ Context: The user asked that the guides for Panitia, Admin Sekolah and Super Adm
 Decision: The public site keeps only guides without a Shield group (today: "Calon Murid dan Orang Tua"); `/panduan` opens it straight away while it is the only one. Staff guides live at `/admin/panduan/<peran>` (sign-in required, admin layout, sidebar item "Panduan"). Each staff member reads the guide of their own role; Super Admin (Arumi Studios, who supports every role) may read all staff guides. Another role's guide answers 404. Old public addresses (`/panduan/panitia`, `/panduan/admin-sekolah`, `/panduan/super-admin` and the old merged slugs) redirect with 301 to the dashboard address, which asks for sign-in first. Guide pages and Tanya Jawab get a search box (`partials/cari_halaman`, `initPageSearch` in `ui.js`): while typing, parts that do not contain all the words hide (guide: each `##` section; Q&A: each question, and a topic with no match), matches are marked, folded sections and answers open, contents links to hidden parts hide, and a polite live message says how many parts match. Clearing the box (or Escape) puts the page back. The box is hidden without JavaScript.
 Consequences: Staff guide content is no longer readable by search engines or visitors. Links to the staff guide from the dashboard (user menu, bottom bar, welcome card, error pages for staff) point to `/admin/panduan`.
 
+
+## D-098 — "Surat Keterangan Aktif" and example files per document (2026-11-25)
+Status: accepted (user, 2026-11-25)
+Context: The user asked for two applicant uploads, a photo and a letter from the SD/MI stating the child is still a pupil there, and for an optional template/example per document. The first client sent its letter template (`Surat_Keterangan_Aktif.doc`).
+Decision: A new default document type "Surat Keterangan Aktif dari SD/MI" (code `sk-aktif`) is required and may be handed in later, like Rapor/SKL; a migration adds it to existing installations unless the code already exists. "Pas Foto" already was a default type (images only). Every document type can carry one example file (PDF, Word or image) that the school switches on or off; applicants download it from the document list and the requirements page. The first client's letter ships in its client pack and the branding command installs it; other schools upload their own.
+
+## D-099 — "Persiapan sistem" checklist on the dashboard (2026-11-25)
+Status: accepted (user, 2026-11-25)
+Decision: The dashboard shows what is still missing before the system runs fully: identity (name, logo, address, phone/WhatsApp; email, map and social links as suggestions), registration (academic year, waves, an active wave, online registration, document list), placement test (rooms, sessions), website answers still marked `[ISI SEKOLAH`, staff accounts (Admin Sekolah, Panitia, own 2FA as a suggestion) and the server upload limit. Each step links to the page that fixes it and is shown only to users who may open that page; steps of switched-off modules are left out. The card shows for Admin Sekolah and Super Admin, highlights the next required step, and folds closed once everything is done.
+
+## D-100 — Folding cards in the dashboard and on settings pages (2026-11-25)
+Status: accepted (user, 2026-11-25: "both")
+Decision: Dashboard cards and settings sections are native `<details>` cards (`lipatan_buka()` / `lipatan_tutup()`) that open and close by their title, also without JavaScript. The browser remembers each card's state per page; a card that holds a validation error always opens. Pages with several cards get "Buka semua / Tutup semua".
+
+## D-101 — "Kondisi server" page for Super Admin (2026-11-25)
+Status: accepted (user, 2026-11-25)
+Decision: A read-only page `/admin/pengaturan/kondisi-server` (permission `sistem.server`, Super Admin only) shows the effective upload limit compared with the largest document limit, PHP limits, extensions, writable folders, disk, memory, database and app facts, each with a status (Aman, Perhatian, Masalah, Info) and a hint. Technical terms are allowed there (super-admin screen).
+
+## D-102 — Settings and form pages use one column of full-width cards (2026-11-25)
+Status: accepted (user, 2026-11-25: option C; replaces the two columns of cards from xl in `.form-lebar`)
+Context: Two cards side by side read in a zig-zag, leave holes when one is folded, and squeeze the fields inside.
+Decision: Every admin form and settings page shows its sections one below the other at full width; fields inside a card still sit side by side. From 2xl (1536 px) a sticky rail beside the form ("Isi halaman") lists the sections (highlighting the one in view, a red dot on sections with errors), carries "Buka semua / Tutup semua" and repeats the save button. Summary pages (dashboard, visitor statistics) keep several cards per row; list pages keep full-width tables; phones are unchanged.

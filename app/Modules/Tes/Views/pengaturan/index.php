@@ -22,9 +22,10 @@ $checked = is_array($checked) ? $checked : [];
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('tes.pengaturan') ?>" class="form-lebar">
+<div class="tata-isi" data-lipatan-lingkup>
+<form id="form-pengaturan-tes" method="post" action="<?= url_to('tes.pengaturan') ?>" class="form-lebar">
     <?= csrf_field() ?>
-    <?= view('partials/lipatan_semua', ['class' => 'xl:col-span-2'], ['saveData' => false]) ?>
+    <?= view('partials/lipatan_semua', [], ['saveData' => false]) ?>
 
     <?= lipatan_buka(['id' => 'tes-applicant', 'icon' => 'users', 'title' => lang('TesJadwal.settingsSectionApplicant')]) ?>
         <div class="space-y-5">
@@ -72,4 +73,6 @@ $checked = is_array($checked) ? $checked : [];
         <button type="submit" class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 sm:w-auto dark:focus:ring-primary-800"><?= lang('TesJadwal.save') ?></button>
     </div>
 </form>
+<?= view('partials/tata_isi_rail', ['form' => 'form-pengaturan-tes', 'save' => lang('TesJadwal.save')], ['saveData' => false]) ?>
+</div>
 <?= $this->endSection() ?>

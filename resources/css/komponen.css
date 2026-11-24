@@ -20,7 +20,9 @@
         align-content: start;
     }
 
-    /* ---------- Admin forms use the full width (D-081 follow-up): two columns of cards from xl ---------- */
+    /* ---------- Admin forms: one column of full-width cards (D-102, replaces the two columns from xl) ----------
+       Sections read top to bottom; fields inside a card still sit side by side. From 2xl a sticky rail
+       (partials/tata_isi_rail) beside the form lists the sections and repeats the save button. */
     .form-lebar {
         display: grid;
         grid-template-columns: minmax(0, 1fr);
@@ -28,22 +30,37 @@
         gap: 1.5rem;
     }
 
-    @media (width >= 80rem) {
-        .form-lebar {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+    .tata-isi {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+        gap: 1.5rem;
+    }
+
+    @media (width >= 96rem) {
+        .tata-isi {
+            grid-template-columns: minmax(0, 1fr) 16rem;
         }
 
-        /* The last child spans both columns when it is the button row, not when it is a card. */
-        .form-lebar > :last-child:not(section):not(fieldset):not(details),
-        .form-lebar > [role="alert"],
-        .form-lebar > [role="status"],
-        .form-lebar > .span-penuh,
-        .form-lebar > [data-lipatan-tombol],
-        .form-lebar > section:only-of-type,
-        .form-lebar > fieldset:only-of-type,
-        .form-lebar > details:only-of-type {
-            grid-column: 1 / -1;
+        /* The rail carries "Buka semua / Tutup semua" there. */
+        .tata-isi [data-lipatan-tombol]:not(.tata-isi-rail *) {
+            display: none !important;
         }
+    }
+
+    .tata-isi-rail a[aria-current="true"] {
+        border-color: var(--color-primary-600);
+        color: var(--color-primary-700);
+        font-weight: 600;
+    }
+
+    .dark .tata-isi-rail a[aria-current="true"] {
+        border-color: var(--color-primary-400);
+        color: var(--color-primary-300);
+    }
+
+    .lipatan {
+        scroll-margin-top: 5rem;
     }
 
     /* ---------- Mobile bottom bar ---------- */

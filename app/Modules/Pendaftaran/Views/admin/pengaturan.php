@@ -24,9 +24,10 @@ $labels  = lang('Pendaftaran.fieldModes');
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= url_to('pengaturan.pendaftaran') ?>" class="form-lebar">
+<div class="tata-isi" data-lipatan-lingkup>
+<form id="form-pengaturan-pendaftaran" method="post" action="<?= url_to('pengaturan.pendaftaran') ?>" class="form-lebar">
     <?= csrf_field() ?>
-    <?= view('partials/lipatan_semua', ['class' => 'xl:col-span-2'], ['saveData' => false]) ?>
+    <?= view('partials/lipatan_semua', [], ['saveData' => false]) ?>
 
     <?= lipatan_buka(['id' => 'pendaftaran-year', 'icon' => 'calendar', 'title' => lang('Pendaftaran.sectionYear')]) ?>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -82,6 +83,8 @@ $labels  = lang('Pendaftaran.fieldModes');
         <button type="submit" class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 sm:w-auto dark:focus:ring-primary-800"><?= lang('Pendaftaran.save') ?></button>
     </div>
 </form>
+<?= view('partials/tata_isi_rail', ['form' => 'form-pengaturan-pendaftaran', 'save' => lang('Pendaftaran.save')], ['saveData' => false]) ?>
+</div>
 
 <script<?= csp_script_nonce() !== '' ? ' ' . csp_script_nonce() : '' ?>>
 /* Live example of the registration number (same rules as RegistrationNumber::format). */
