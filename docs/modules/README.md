@@ -15,6 +15,7 @@ exports, and which role guides cover it.
 | Pengguna | [pengguna.md](pengguna.md) |
 | Profil | [profil.md](profil.md) |
 | Referensi | [referensi.md](referensi.md) |
+| Statistik | [statistik.md](statistik.md) (applicant statistics for school planning) |
 | Situs | [situs.md](situs.md) (Persyaratan, Jadwal, Tanya Jawab, berita singkat, popup beranda, tautan bawah website) |
 | Tes | [tes.md](tes.md) · [tes-jadwal.md](tes-jadwal.md) · [tes-penjadwalan.md](tes-penjadwalan.md) · [tes-kehadiran.md](tes-kehadiran.md) |
 

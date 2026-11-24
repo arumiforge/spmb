@@ -7,6 +7,14 @@
  * category labels are shortened (full text stays in the tooltip) and rotated labels
  * hide when they would overlap. Colours follow the brand colour and dark mode, and the
  * chart redraws when the theme changes. Animation is off under prefers-reduced-motion.
+ *
+ * Optional page options under the key "spmb" (removed before ApexCharts sees them):
+ * - mask: n      values 1 … n-1 show as "< n" in tooltips and data labels (Statistik, D-111);
+ * - links: [...] one address per data point: clicking a bar opens it (drill-down);
+ * - sequential   colours run light → dark along the brand colour, one step per series
+ *                (ordered groups such as income ranges); a series with its own "color" keeps it;
+ * - gap          a thin line in the card colour between stacked segments;
+ * - percentAxis  the value axis reads "40%" (100% stacked bars).
  */
 import ApexCharts from 'apexcharts';
 
@@ -43,6 +51,15 @@ function merge(base, override) {
  * ApexCharts cannot read, so each step is painted on a 1 px canvas and read back as hex.
  */
 function palette() {
+    return readColors(['--color-primary-600', '--color-primary-300', '--color-primary-800', '--color-primary-400', '--color-primary-900']);
+}
+
+/** Light → dark steps of the brand colour, for ordered groups. */
+function ramp() {
+    return readColors(['--color-primary-200', '--color-primary-300', '--color-primary-400', '--color-primary-500', '--color-primary-600', '--color-primary-700', '--color-primary-800', '--color-primary-900']);
+}
+
+function readColors(names) {
     const probe = document.createElement('span');
     const canvas = document.createElement('canvas');
     canvas.width = 1;
@@ -50,7 +67,7 @@ function palette() {
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     document.body.appendChild(probe);
 
-    const colors = ['--color-primary-600', '--color-primary-300', '--color-primary-800', '--color-primary-400', '--color-primary-900'].map((name) => {
+    const colors = names.map((name) => {
         probe.style.color = `var(${name}, #2563eb)`;
         ctx.clearRect(0, 0, 1, 1);
         ctx.fillStyle = '#2563eb';
@@ -149,10 +166,68 @@ function smallScreen(options) {
     return small;
 }
 
+/** Applies the "spmb" page options (see the top of this file). */
+function pageOptions(options, spmb, el) {
+    let out = options;
+
+    if (spmb.mask) {
+        const limit = Number(spmb.mask);
+        const format = (value) => {
+            const number = Number(value);
+
+            if (!Number.isFinite(number)) {
+                return value;
+            }
+
+            return number > 0 && number < limit ? `< ${limit}` : number.toLocaleString('id-ID');
+        };
+        out = merge(out, { tooltip: { y: { formatter: format } }, dataLabels: { formatter: format } });
+    }
+
+    if (Array.isArray(spmb.links)) {
+        el.classList.add('chart-tautan');
+        out = merge(out, {
+            chart: {
+                events: {
+                    dataPointSelection: (event, context, { dataPointIndex } = {}) => {
+                        const url = spmb.links[dataPointIndex];
+
+                        if (url) {
+                            window.location.assign(url);
+                        }
+                    },
+                },
+            },
+        });
+    }
+
+    if (spmb.sequential && Array.isArray(out.series)) {
+        const steps = ramp();
+        const count = out.series.filter((series) => !series.color).length;
+        const pick = (i) => steps[count <= 1 ? 4 : Math.round((i * (steps.length - 1)) / (count - 1))];
+        let i = 0;
+        out = { ...out, colors: out.series.map((series) => series.color ?? pick(i++)) };
+    }
+
+    if (spmb.percentAxis) {
+        out = merge(out, { xaxis: { labels: { formatter: (value) => `${Math.round(Number(value))}%` } } });
+    }
+
+    if (spmb.gap) {
+        out = merge(out, { stroke: { width: 2, colors: [isDark() ? '#1f2937' : '#ffffff'] } });
+    }
+
+    return out;
+}
+
 function build(el) {
-    const own = JSON.parse(el.dataset.chart);
+    const { spmb, ...own } = JSON.parse(el.dataset.chart);
     const type = own.chart?.type ?? 'line';
-    const options = merge(defaults(type), own);
+    let options = merge(defaults(type), own);
+
+    if (spmb) {
+        options = pageOptions(options, spmb, el);
+    }
 
     // Keep the full category text in the tooltip even when the axis label is shortened.
     if (options.xaxis?.categories && !options.tooltip?.x?.formatter) {

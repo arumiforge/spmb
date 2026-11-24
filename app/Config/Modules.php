@@ -76,7 +76,9 @@ class Modules extends BaseModules
         'events',
         'filters',
         'registrars',
-        'routes',
+        // No 'routes': discovery would load Config/Routes.php of every module in
+        // app/Modules, also switched-off ones. app/Config/Routes.php loads the
+        // routes of enabled modules only (ModuleRegistry), so a disabled module 404s.
         'services',
     ];
 }
