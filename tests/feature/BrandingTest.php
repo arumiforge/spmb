@@ -11,6 +11,7 @@ use CodeIgniter\Test\DatabaseTestTrait;
 use CodeIgniter\Test\FeatureTestTrait;
 use CodeIgniter\Test\StreamFilterTrait;
 use Config\School;
+use Config\Services;
 
 /**
  * School brand images (D-054): branding pack command, public asset routes,
@@ -136,7 +137,7 @@ final class BrandingTest extends CIUnitTestCase
     {
         $this->loadPack();
         $etag = $this->get('aset/logo')->response()->getHeaderLine('ETag');
-        \Config\Services::resetSingle('response');
+        Services::resetSingle('response');
 
         // Without an image type the empty 304 kept text/html, CodeIgniter stored the logo as the
         // "previous page" and redirect()->back() after a form error opened the logo (user report).
