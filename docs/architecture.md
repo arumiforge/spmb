@@ -51,7 +51,7 @@ deploy/compose.yaml    Docker Compose stack per environment (staging, production
 deploy/env/            example stack.env / app.env per environment (placeholders only)
 docker/                Dockerfile (app: PHP-FPM 8.5, web: Nginx), Nginx and PHP config
 ai/                    Codex briefs, delivered assets and the asset checker (D-073, D-075)
-clients/<school>/      per-school branding pack and starter Tanya Jawab (loaded by spmb:branding)
+clients/<school>/      per-school branding pack, starter Tanya Jawab and example files for document types (loaded by spmb:branding)
 .claude/               agent skills; cloud/setup.sh for Claude Code cloud environments (D-074)
 flowbite/              Flowbite Pro templates — markup reference only (private repo)
 ```
@@ -112,6 +112,16 @@ Permissions stay declared centrally in `Config\AuthGroups` (tested by `AuthGroup
 - Partials receive one array (`field`, `badge`, `empty`, `brand`) because CI view data is shared
   between renders (`saveData`); a partial must not rely on loose variables.
 
+### Website languages (D-109)
+
+The public website is Indonesian (`/`), English (`/en/…`) and Arabic (`/ar/…`, right to left). The prefix is
+taken off the request before routing (`Config\Services::incomingrequest`, `App\Libraries\Locales`), the
+required filter `bahasa` (`App\Filters\WebsiteLanguage`) redirects prefixed staff/file addresses and
+switched-off languages, `site_url()` adds the prefix back (`app/Helpers/url_helper.php`), and
+`App\Libraries\Language` falls back to Indonesian per key. School texts have optional `_en`/`_ar`
+fields read with `localized()` / `setting_localized()`. Dashboard, sign-in and PDFs stay Indonesian.
+Details: [i18n.md](i18n.md).
+
 ### Audit log viewer (Riwayat)
 
 `/admin/riwayat` (permission `audit.view`: Super Admin, Admin Sekolah) lists `audit_logs` newest first,
@@ -129,7 +139,8 @@ there. Role keys are shown as role titles, redacted values as "(disembunyikan)".
 `PageNotFoundException` from controllers render a friendly 404 (status 404): admin layout for signed-in
 staff, public layout otherwise. With `display_errors` off, `app/Views/errors/html/production.php` renders
 the 500 page the same way. If the layout cannot render (e.g. database down, routes not loaded),
-`Errors::fallback()` returns a self-contained Indonesian page with inline CSS (D-026). In development
+`Errors::fallback()` returns a self-contained page with inline CSS (D-026) in the page's language. On an
+English or Arabic address the error page always uses the public layout in that language (D-109). In development
 CodeIgniter's detailed exception page is unchanged.
 
 ### Request pipeline
@@ -181,9 +192,12 @@ sign-in (`TwoFactor.maxAttempts`).
 | `card_tokens` | Kartu | Revocable QR tokens (D-034) |
 | `test_rooms`, `test_holidays`, `test_sessions`, `test_assignments`, `test_schedule_changes` | Tes | Rooms, calendar, sessions, seats and the schedule change log (D-059…D-064) |
 | `site_questions` | Situs | Tanya Jawab questions and answers (Markdown), audited (D-072) |
+| `site_news` | Situs | News ticker items under the public header ("Berita singkat"), audited |
 
 Module extension points (D-033): `Config/Module.php` `requires`, `Config/PublicMenu.php`, `Config/Audit.php`,
 `Views/panels/<slot>.php` rendered with `module_panels()`, and `InstallSeeder`/`DemoSeeder` run by `spmb:install`.
+Public layout slots: `public_top` (under the header, every page), `public_home` (home page only),
+`public_footer` (above the copyright line).
 The public applicant session is `service('applicantAccess')` (D-034).
 
 ## Key design rules

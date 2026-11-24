@@ -31,7 +31,27 @@ class Panduan extends BaseController
 
     public function __construct()
     {
-        $this->guides = new GuideBuilder(service('modules'), require dirname(__DIR__) . '/Config/Roles.php');
+        $this->guides = new GuideBuilder(service('modules'), self::translatedRoles(require dirname(__DIR__) . '/Config/Roles.php'));
+    }
+
+    /**
+     * Titles and descriptions of the public guides in the page's language (Panduan.roles.<slug>, D-109).
+     *
+     * @param array<string, array{title: string, description: string, group: string|null, icon: string}> $roles
+     *
+     * @return array<string, array{title: string, description: string, group: string|null, icon: string}>
+     */
+    private static function translatedRoles(array $roles): array
+    {
+        foreach ($roles as $slug => $role) {
+            $text = lang('Panduan.roles.' . $slug);
+
+            if ($role['group'] === null && is_array($text)) {
+                $roles[$slug] = ['title' => (string) ($text['title'] ?? $role['title']), 'description' => (string) ($text['description'] ?? $role['description'])] + $role;
+            }
+        }
+
+        return $roles;
     }
 
     public function index(): RedirectResponse|string
@@ -45,7 +65,7 @@ class Panduan extends BaseController
 
         return view('Modules\Panduan\Views\index', [
             'title'       => lang('Panduan.title'),
-            'breadcrumbs' => [['label' => 'Beranda', 'url' => '/'], ['label' => 'Panduan']],
+            'breadcrumbs' => [['label' => lang('App.home'), 'url' => '/'], ['label' => lang('App.guide')]],
             'roles'       => $public,
         ]);
     }
@@ -72,8 +92,8 @@ class Panduan extends BaseController
         $public = array_filter($roles, static fn (array $role): bool => $role['group'] === null);
 
         return view('Modules\Panduan\Views\show', [
-            'title'       => 'Panduan ' . $roles[$slug]['title'],
-            'breadcrumbs' => [['label' => 'Beranda', 'url' => '/'], ['label' => 'Panduan ' . $roles[$slug]['title']]],
+            'title'       => lang('Panduan.pageTitle', [$roles[$slug]['title']]),
+            'breadcrumbs' => [['label' => lang('App.home'), 'url' => '/'], ['label' => lang('Panduan.pageTitle', [$roles[$slug]['title']])]],
             'role'        => $roles[$slug],
             'slug'        => $slug,
             'others'      => array_map(static fn (array $role): string => $role['title'], array_diff_key($public, [$slug => true])),

@@ -8,6 +8,9 @@ use App\Libraries\BrandingAssets;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use Config\School;
+use Modules\Berkas\Models\DocumentTypeModel;
+use Modules\Berkas\Services\TemplateStorage;
+use Modules\Berkas\Services\UploadRejected;
 use Modules\Situs\Models\SiteQuestionModel;
 use Throwable;
 
@@ -24,6 +27,12 @@ use Throwable;
  * branding.json or in its parent folder (the client folder). They are loaded only
  * while the installation has no questions, so the school's own edits are kept:
  *   {"questions": [{"topic": "...", "question": "...", "answer": "Markdown", "published": true}, ...]}
+ *
+ * Example files for document types ("Unduh contoh") come from a berkas-contoh/
+ * folder next to branding.json or in its parent folder (the client folder):
+ * berkas-contoh/<code>.<pdf|doc|docx|jpg|jpeg|png>, e.g. sk-aktif.doc. A file is
+ * installed and switched on only for a type that has no example yet; the same
+ * file again changes nothing, and an example the school uploaded itself is kept.
  */
 class Branding extends BaseCommand
 {
@@ -119,7 +128,80 @@ class Branding extends BaseCommand
 
         CLI::write('Branding loaded: ' . count($new) . ' setting(s) changed.', 'green');
 
-        return $this->loadQuestions($dir);
+        $result = $this->loadQuestions($dir);
+
+        return $result === EXIT_SUCCESS ? $this->loadTemplates($dir) : $result;
+    }
+
+    /**
+     * Installs example files from berkas-contoh/ in the pack folder or its parent, if present.
+     */
+    private function loadTemplates(string $dir): int
+    {
+        $folder = null;
+
+        foreach ([$dir, dirname($dir)] as $base) {
+            if (is_dir($base . '/berkas-contoh')) {
+                $folder = $base . '/berkas-contoh';
+
+                break;
+            }
+        }
+
+        if ($folder === null || ! service('modules')->isEnabled('Berkas') || ! db_connect()->fieldExists('template_path', 'document_types')) {
+            return EXIT_SUCCESS;
+        }
+
+        $files = glob($folder . '/*.*') ?: [];
+        sort($files);
+        $model   = model(DocumentTypeModel::class);
+        $storage = new TemplateStorage();
+
+        foreach ($files as $file) {
+            $name = basename($file);
+            $code = strtolower(pathinfo($name, PATHINFO_FILENAME));
+            $ext  = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+            if (! is_file($file) || ! isset(TemplateStorage::FORMATS[$ext])) {
+                CLI::write("  Example {$name} skipped: use PDF, DOC, DOCX, JPG or PNG.", 'yellow');
+
+                continue;
+            }
+
+            $type = $model->where('code', $code)->first();
+
+            if ($type === null) {
+                CLI::write("  Example {$name} skipped: no document type with code {$code}.", 'yellow');
+
+                continue;
+            }
+
+            $current = $storage->path($type['template_path'] ?? null);
+
+            if ($current !== null) {
+                CLI::write(
+                    hash_file('sha256', $current) === hash_file('sha256', $file)
+                        ? "  Example {$code}: already installed."
+                        : "  Example {$code}: kept the example the school uploaded.",
+                    'yellow',
+                );
+
+                continue;
+            }
+
+            try {
+                $stored = $storage->store($file, $name);
+            } catch (UploadRejected $e) {
+                CLI::error("Example {$name}: " . $e->getMessage());
+
+                return EXIT_ERROR;
+            }
+
+            $model->update((int) $type['id'], $stored + ['template_enabled' => 1]);
+            CLI::write("  Example {$code}: {$name} installed and shown to applicants.", 'green');
+        }
+
+        return EXIT_SUCCESS;
     }
 
     /**

@@ -1,16 +1,21 @@
 ## Mendaftar online
 
+Formulir diisi langkah demi langkah. Di bagian atas ada nomor langkah yang dihubungkan garis. Langkah yang sudah selesai diberi tanda centang. Di ponsel tertulis, misalnya, "Langkah 2 dari 5".
+
 1. Buka halaman [Daftar](/daftar) dari ponsel atau komputer.
-2. Isi data calon murid, alamat, orang tua atau wali, dan sekolah asal. Kotak tanpa tulisan "tidak wajib" harus diisi.
-3. Periksa kembali nama dan tanggal lahir. Keduanya harus sama dengan akta kelahiran.
-4. Tekan **Kirim Pendaftaran**.
-5. Catat atau foto **nomor pendaftaran** yang tampil.
-6. Simpan **tautan pribadi**, misalnya tekan **Simpan ke WhatsApp** lalu kirim ke nomor Anda sendiri.
+2. **Langkah 1, Data calon murid:** isi nama, jenis kelamin, tempat dan tanggal lahir, dan data lain. Tekan **Lanjut**.
+3. **Langkah 2, Alamat:** isi alamat rumah. Tekan **Lanjut**.
+4. **Langkah 3, Orang tua atau wali:** isi data ayah dan ibu. Lalu jawab pertanyaan tentang wali: pilih **Tidak ada wali** jika calon murid tinggal bersama ayah atau ibu kandung, atau **Ada wali** jika diasuh orang lain, misalnya kakek, nenek, atau paman. Kotak data wali hanya muncul setelah Anda memilih **Ada wali**.
+5. **Langkah 4, Sekolah asal:** ketik nama sekolah lalu pilih dari daftar. Tekan **Lanjut**.
+6. **Langkah 5, Periksa dan kirim:** baca ringkasan semua data. Tekan **Ubah** di bagian yang salah untuk memperbaikinya. Jika sudah benar, centang pernyataan persetujuan lalu tekan **Kirim Pendaftaran**.
+7. Catat atau foto **nomor pendaftaran** yang tampil, lalu simpan **tautan pribadi**, misalnya tekan **Simpan ke WhatsApp** dan kirim ke nomor Anda sendiri.
 
-> **Tips:** Tautan pribadi hanya tampil sekali. Dengan tautan itu Anda bisa membuka data pendaftar tanpa mengetik nomor. Jangan bagikan tautan ke orang lain.
+> **Tips:** Kotak tanpa tulisan "tidak wajib" harus diisi. Data yang sudah diketik tidak hilang saat Anda menekan **Kembali** atau tombol kembali di peramban. Nama dan tanggal lahir harus sama dengan akta kelahiran.
 
+- Jika tombol **Lanjut** tidak berpindah langkah, maka ada kotak yang belum diisi. Kotak itu diberi tulisan merah di bawahnya.
+- Jika setelah dikirim muncul titik merah di salah satu nomor langkah, maka ada isian yang perlu diperbaiki di langkah itu. Formulir langsung membuka langkah tersebut. Perbaiki isiannya lalu kirim lagi.
 - Jika halaman Daftar bertuliskan "Pendaftaran online sedang ditutup", maka belum ada gelombang yang dibuka atau kuotanya sudah penuh. Lihat jadwal gelombang atau hubungi panitia.
-- Jika muncul tulisan merah di bawah kotak isian, maka perbaiki isian tersebut sesuai petunjuknya lalu kirim lagi.
+- Jika tautan pribadi hilang, maka buka data Anda lewat [Cek Status](/cek-status) dengan nomor pendaftaran dan tanggal lahir.
 
 ## Mengecek status pendaftaran
 

@@ -15,13 +15,13 @@ $last = count($breadcrumbs) - 1;
             <?php $middle = $i > 0 && $i < $last; ?>
             <?php if ($middle && $i === 1) : ?>
                 <li class="flex items-center md:hidden" aria-hidden="true">
-                    <?= icon('chevron', 'mx-1 h-4 w-4 text-gray-400 rtl:rotate-180') ?>
+                    <?= icon('chevron', 'mx-1 h-4 w-4 text-gray-400') ?>
                     <span class="text-gray-500 dark:text-gray-400">…</span>
                 </li>
             <?php endif ?>
             <li class="<?= $middle ? 'hidden md:flex' : 'flex' ?> min-w-0 items-center" <?= $i === $last ? 'aria-current="page"' : '' ?>>
                 <?php if ($i > 0) : ?>
-                    <?= icon('chevron', 'mx-1 h-4 w-4 shrink-0 text-gray-400 rtl:rotate-180') ?>
+                    <?= icon('chevron', 'mx-1 h-4 w-4 shrink-0 text-gray-400') ?>
                 <?php endif ?>
                 <?php if ($i !== $last && ! empty($crumb['url'])) : ?>
                     <a href="<?= esc(site_url($crumb['url']), 'attr') ?>" class="truncate text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white">

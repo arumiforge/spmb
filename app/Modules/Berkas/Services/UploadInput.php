@@ -7,8 +7,9 @@ namespace Modules\Berkas\Services;
 use CodeIgniter\HTTP\IncomingRequest;
 
 /**
- * Reads the uploaded file of a document form (field "berkas") and turns PHP
- * upload errors into friendly messages.
+ * Reads the uploaded file of a document form (field "berkas", or another
+ * field such as the example file "template") and turns PHP upload errors into
+ * friendly messages.
  */
 final class UploadInput
 {
@@ -19,9 +20,9 @@ final class UploadInput
      *
      * @throws UploadRejected
      */
-    public static function read(IncomingRequest $request): array
+    public static function read(IncomingRequest $request, string $field = self::FIELD): array
     {
-        $file = $request->getFile(self::FIELD);
+        $file = $request->getFile($field);
 
         if ($file === null || $file->getError() === UPLOAD_ERR_NO_FILE) {
             throw new UploadRejected(lang('Berkas.errNoFile'));
@@ -39,6 +40,16 @@ final class UploadInput
         }
 
         return ['tmp' => $tmp, 'name' => (string) $file->getClientName()];
+    }
+
+    /**
+     * True when the form sent a file in this field (chosen, even if it failed).
+     */
+    public static function sent(IncomingRequest $request, string $field): bool
+    {
+        $file = $request->getFile($field);
+
+        return $file !== null && $file->getError() !== UPLOAD_ERR_NO_FILE;
     }
 
     /**

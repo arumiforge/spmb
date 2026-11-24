@@ -5,6 +5,13 @@
  * Small bar on top (social media, staff sign-in), sticky header (menu inline from md,
  * drawer from the right below md), mobile bottom bar with Daftar raised in the middle (D-081).
  *
+ * Module panels: public_top (under the header on every page, e.g. the Situs news ticker),
+ * public_home (home page only, e.g. the Situs popup), public_footer (above the copyright line).
+ *
+ * Languages (D-109): Indonesian, English (/en/…) and Arabic (/ar/…, right to left). <html lang dir> follow
+ * the page, the switcher sits in the top bar, the drawer and the footer, and school texts use their
+ * translation when filled (setting_localized()). In Arabic the drawer opens from the left.
+ *
  * Sections: content (required), scripts (optional).
  *
  * @var string|null                               $title
@@ -13,21 +20,23 @@
 // Beranda and Panduan are fixed; enabled modules add links in Config/PublicMenu.php.
 $nav      = public_nav();
 $bottom   = public_bottom_nav($nav);
-$address  = (string) setting('School.address');
+$locale   = locale_current();
+$rtl      = locale_is_rtl();
+$address  = setting_localized('School.address');
 $phone    = (string) setting('School.phone');
 $whatsapp = (string) setting('School.whatsapp');
 $email    = (string) setting('School.email');
-$motto    = (string) setting('School.motto');
+$motto    = setting_localized('School.motto');
 $social   = school_social_links();
 ?>
 <!doctype html>
-<html lang="id">
+<html lang="<?= $locale ?>" dir="<?= $rtl ? 'rtl' : 'ltr' ?>" data-lipat-lebih="<?= esc(lang('App.readMore'), 'attr') ?>" data-lipat-kurang="<?= esc(lang('App.readLess'), 'attr') ?>">
 <head>
-    <?= view('partials/head', ['title' => $title ?? '', 'robots' => 'index, follow']) ?>
+    <?= view('partials/head', ['title' => $title ?? '', 'robots' => 'index, follow', 'alternates' => true]) ?>
     <?= $this->renderSection('head') ?>
 </head>
 <body class="flex min-h-screen flex-col bg-white pb-24 text-gray-900 antialiased md:pb-0 dark:bg-gray-900 dark:text-gray-100">
-<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-primary-700 focus:shadow"><?= lang('App.skipToContent') ?></a>
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-primary-700 focus:shadow"><?= lang('App.skipToContent') ?></a>
 
 <?php // Desktop only: on phones the drawer holds the same links (D-092). ?>
 <div class="bar-atas hidden bg-primary-800 text-white md:block dark:bg-gray-950" data-no-print>
@@ -43,11 +52,12 @@ $social   = school_social_links();
                 <?php endforeach ?>
             </ul>
         <?php else : ?>
-            <p class="hidden truncate text-white/85 sm:block"><?= esc($motto !== '' ? $motto : (string) setting('School.tagline')) ?></p>
+            <p class="hidden truncate text-white/85 sm:block"><?= esc($motto !== '' ? $motto : setting_localized('School.tagline')) ?></p>
         <?php endif ?>
         <div class="ms-auto flex items-center gap-4">
+            <?= view('partials/bahasa_pilih', ['switcher' => ['variant' => 'bar']]) ?>
             <?php if ($phone !== '') : ?>
-                <a href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>" class="hidden items-center gap-1.5 text-white/85 hover:text-white lg:inline-flex"><?= icon('phone', 'h-4 w-4') ?><?= esc($phone) ?></a>
+                <a href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>" class="hidden items-center gap-1.5 text-white/85 hover:text-white lg:inline-flex"><?= icon('phone', 'h-4 w-4') ?><span dir="ltr"><?= esc($phone) ?></span></a>
             <?php endif ?>
             <?php if ($email !== '') : ?>
                 <a href="mailto:<?= esc($email, 'attr') ?>" class="hidden items-center gap-1.5 text-white/85 hover:text-white lg:inline-flex"><?= icon('mail', 'h-4 w-4') ?><?= esc($email) ?></a>
@@ -75,15 +85,17 @@ $social   = school_social_links();
         </ul>
         <div class="flex items-center gap-1">
             <?= view('partials/theme_toggle') ?>
-            <button type="button" data-drawer-target="menu-publik" data-drawer-show="menu-publik" data-drawer-placement="right" aria-controls="menu-publik"
+            <button type="button" data-drawer-target="menu-publik" data-drawer-show="menu-publik" data-drawer-placement="<?= $rtl ? 'left' : 'right' ?>" aria-controls="menu-publik"
                     class="inline-flex h-11 w-11 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 md:hidden dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                 <span class="sr-only"><?= lang('App.openMenu') ?></span><?= icon('menu', 'h-6 w-6') ?>
             </button>
         </div>
     </nav>
 </header>
+<?= view('partials/bahasa_saran') ?>
+<?= module_panels('public_top') ?>
 
-<div id="menu-publik" class="fixed right-0 top-0 z-50 flex h-dvh w-80 max-w-[85vw] translate-x-full flex-col overflow-y-auto bg-white p-4 shadow-xl transition-transform duration-300 md:hidden dark:bg-gray-800"
+<div id="menu-publik" class="fixed <?= $rtl ? 'left-0 -translate-x-full' : 'right-0 translate-x-full' ?> top-0 z-50 flex h-dvh w-80 max-w-[85vw] flex-col overflow-y-auto bg-white p-4 shadow-xl transition-transform duration-300 md:hidden dark:bg-gray-800"
      tabindex="-1" aria-labelledby="menu-publik-judul" aria-hidden="true">
     <div class="mb-4 flex items-center justify-between gap-2">
         <p id="menu-publik-judul" class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('App.menu') ?></p>
@@ -102,8 +114,11 @@ $social   = school_social_links();
             </li>
         <?php endforeach ?>
     </ul>
+    <div class="mt-4">
+        <?= view('partials/bahasa_pilih', ['switcher' => ['variant' => 'drawer']]) ?>
+    </div>
     <div class="mt-auto space-y-2 border-t border-gray-200 pt-4 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-300">
-        <?php if ($phone !== '') : ?><a class="flex items-center gap-2 py-1.5 hover:underline" href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>"><?= icon('phone', 'h-4 w-4') ?><?= esc($phone) ?></a><?php endif ?>
+        <?php if ($phone !== '') : ?><a class="flex items-center gap-2 py-1.5 hover:underline" href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>"><?= icon('phone', 'h-4 w-4') ?><span dir="ltr"><?= esc($phone) ?></span></a><?php endif ?>
         <?php if ($email !== '') : ?><a class="flex items-center gap-2 py-1.5 hover:underline" href="mailto:<?= esc($email, 'attr') ?>"><?= icon('mail', 'h-4 w-4') ?><?= esc($email) ?></a><?php endif ?>
         <a href="<?= url_to('login') ?>" class="flex items-center gap-2 py-1.5 font-medium text-primary-700 hover:underline dark:text-primary-400"><?= icon('log-in', 'h-4 w-4') ?><?= lang('App.staffLogin') ?></a>
         <?php if ($social !== []) : ?>
@@ -130,8 +145,10 @@ $social   = school_social_links();
 </main>
 
 <?php
-// Footer links: only Cek Status, Tanya Jawab and Panduan, when their module is on (D-092).
-$footerLinks = array_values(array_filter(array_map(static fn (string $url) => array_column($nav, null, 'url')[$url] ?? null, ['cek-status', 'tanya-jawab', 'panduan'])));
+// Footer links: edited in Website → Tautan bawah website; by default Cek Status, Tanya Jawab and
+// Panduan. Links to switched-off modules or pages without content stay hidden.
+$footerLinks  = Modules\Situs\Libraries\FooterLinks::visible($nav);
+$footerPanels = module_panels('public_footer');
 $partnerName = (string) setting('School.partnerName');
 $partnerLogo = brand_asset_url('partnerLogo');
 $hasContact  = $address !== '' || $phone !== '' || $whatsapp !== '' || $email !== '';
@@ -145,15 +162,27 @@ $hasContact  = $address !== '' || $phone !== '' || $whatsapp !== '' || $email !=
                 <?php endif ?>
                 <p class="font-semibold text-gray-900 dark:text-white"><?= esc(setting('School.name')) ?></p>
             </div>
-            <?php if ($motto !== '') : ?><p class="text-gray-600 italic dark:text-gray-400"><?= esc($motto) ?></p><?php endif ?>
+            <?php if ($motto !== '') : ?><p class="text-gray-600 italic dark:text-gray-400"><bdi><?= esc($motto) ?></bdi></p><?php endif ?>
+            <?php if ($social !== []) : ?>
+                <ul class="mt-4 flex flex-wrap items-center gap-2" aria-label="<?= lang('App.socialLabel') ?>">
+                    <?php foreach ($social as $link) : ?>
+                        <li>
+                            <a href="<?= esc($link['url'], 'attr') ?>" target="_blank" rel="noopener" aria-label="<?= esc($link['label'], 'attr') ?>" title="<?= esc($link['label'], 'attr') ?>"
+                               class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 hover:border-primary-300 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:text-white">
+                                <?= social_icon($link['network'], 'h-5 w-5') ?>
+                            </a>
+                        </li>
+                    <?php endforeach ?>
+                </ul>
+            <?php endif ?>
         </div>
         <?php if ($hasContact) : ?>
         <div>
             <h2 class="mb-3 font-semibold text-gray-900 dark:text-white"><?= lang('App.contactTitle') ?></h2>
             <ul class="space-y-2 text-gray-600 dark:text-gray-400">
-                <?php if ($address !== '') : ?><li class="flex gap-2"><?= icon('map-pin', 'mt-0.5 h-4 w-4 shrink-0') ?><span><?= nl2br(esc($address)) ?></span></li><?php endif ?>
-                <?php if ($phone !== '') : ?><li><a class="flex items-center gap-2 hover:underline" href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>"><?= icon('phone', 'h-4 w-4 shrink-0') ?><?= esc($phone) ?></a></li><?php endif ?>
-                <?php if ($whatsapp !== '') : ?><li><a class="flex items-center gap-2 hover:underline" href="<?= esc(whatsapp_url($whatsapp), 'attr') ?>" target="_blank" rel="noopener"><?= social_icon('whatsapp', 'h-4 w-4 shrink-0') ?><?= esc($whatsapp) ?></a></li><?php endif ?>
+                <?php if ($address !== '') : ?><li class="flex gap-2"><?= icon('map-pin', 'mt-0.5 h-4 w-4 shrink-0') ?><span><bdi><?= nl2br(esc($address)) ?></bdi></span></li><?php endif ?>
+                <?php if ($phone !== '') : ?><li><a class="flex items-center gap-2 hover:underline" href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>"><?= icon('phone', 'h-4 w-4 shrink-0') ?><span dir="ltr"><?= esc($phone) ?></span></a></li><?php endif ?>
+                <?php if ($whatsapp !== '') : ?><li><a class="flex items-center gap-2 hover:underline" href="<?= esc(whatsapp_url($whatsapp), 'attr') ?>" target="_blank" rel="noopener"><?= social_icon('whatsapp', 'h-4 w-4 shrink-0') ?><span dir="ltr"><?= esc($whatsapp) ?></span></a></li><?php endif ?>
                 <?php if ($email !== '') : ?><li><a class="flex items-center gap-2 break-all hover:underline" href="mailto:<?= esc($email, 'attr') ?>"><?= icon('mail', 'h-4 w-4 shrink-0') ?><?= esc($email) ?></a></li><?php endif ?>
             </ul>
         </div>
@@ -163,7 +192,11 @@ $hasContact  = $address !== '' || $phone !== '' || $whatsapp !== '' || $email !=
             <h2 class="mb-3 font-semibold text-gray-900 dark:text-white"><?= lang('App.footerLinks') ?></h2>
             <ul class="space-y-2 text-gray-600 dark:text-gray-400">
                 <?php foreach ($footerLinks as $item) : ?>
-                    <li><a class="inline-flex min-h-6 items-center hover:underline" href="<?= esc(site_url($item['url']), 'attr') ?>"><?= esc($item['label']) ?></a></li>
+                    <li>
+                        <a class="inline-flex min-h-6 items-center gap-1 hover:underline" href="<?= esc($item['href'], 'attr') ?>"<?= $item['external'] ? ' target="_blank" rel="noopener"' : '' ?>>
+                            <?= esc($item['label']) ?><?php if ($item['external']) : ?><?= icon('external-link', 'h-3.5 w-3.5') ?><span class="sr-only"><?= lang('Situs.opensNewTab') ?></span><?php endif ?>
+                        </a>
+                    </li>
                 <?php endforeach ?>
             </ul>
         </div>
@@ -179,14 +212,21 @@ $hasContact  = $address !== '' || $phone !== '' || $whatsapp !== '' || $email !=
         <?php endif ?>
     </div>
     <div class="border-t border-gray-200 dark:border-gray-700">
+        <?php if (trim($footerPanels) !== '') : ?>
+            <div class="mx-auto max-w-screen-xl px-4 pt-4 text-center text-xs text-gray-500 sm:text-start dark:text-gray-400"><?= $footerPanels ?></div>
+        <?php endif ?>
         <div class="mx-auto flex max-w-screen-xl flex-col items-center justify-between gap-1 px-4 py-4 text-center text-xs text-gray-500 sm:flex-row sm:text-start dark:text-gray-400">
-            <p><?= esc(setting('School.footerText') ?: '© ' . date('Y') . ' ' . setting('School.name') . '. ' . lang('App.footerRights')) ?></p>
-            <p><?= lang('App.developedBy') ?></p>
+            <p><?= esc(setting_localized('School.footerText') ?: '© ' . date('Y') . ' ' . setting('School.name') . '. ' . lang('App.footerRights')) ?></p>
+            <?= view('partials/bahasa_pilih', ['switcher' => ['variant' => 'footer']]) ?>
+            <p lang="en" dir="ltr"><?= lang('App.developedBy') ?></p>
         </div>
     </div>
 </footer>
 
 <?= view('partials/bottom_nav', ['bottomNav' => ['label' => lang('App.bottomNavLabel'), 'items' => $bottom]]) ?>
+<?php if (trim(uri_string(), '/') === '') : ?>
+    <?= module_panels('public_home') ?>
+<?php endif ?>
 <?= view('partials/flash') ?>
 <script src="<?= esc(asset_url('app.js'), 'attr') ?>"></script>
 <?= $this->renderSection('scripts') ?>

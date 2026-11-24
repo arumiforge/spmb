@@ -45,8 +45,8 @@ final class BerkasPengaturanTest extends CIUnitTestCase
         (new InstallSeeder(config('Database')))->run();
 
         $active = model(DocumentTypeModel::class)->active();
-        $this->assertSame(['kk', 'akta', 'foto', 'rapor-skl'], array_column($active, 'code'));
-        $this->assertSame('1', (string) $active[3]['may_follow']);
+        $this->assertSame(['kk', 'akta', 'foto', 'sk-aktif', 'rapor-skl'], array_column($active, 'code'));
+        $this->assertSame('1', (string) $active[4]['may_follow']);
     }
 
     public function testPermissions(): void
@@ -75,7 +75,7 @@ final class BerkasPengaturanTest extends CIUnitTestCase
         $type = $this->type('sehat');
         $this->assertSame('jpg,jpeg,pdf', $type['extensions']);
         $this->assertSame('0', (string) $type['is_required']);
-        $this->assertSame('sehat', array_column(model(DocumentTypeModel::class)->active(), 'code')[4]);
+        $this->assertSame('sehat', array_column(model(DocumentTypeModel::class)->active(), 'code')[5]);
 
         $this->actingAs($admin)->get("admin/pengaturan/berkas/{$type['id']}/ubah")->assertSee('Surat Keterangan Sehat');
         $this->actingAs($admin)->post("admin/pengaturan/berkas/{$type['id']}/ubah", [
@@ -108,11 +108,11 @@ final class BerkasPengaturanTest extends CIUnitTestCase
         $foto  = $this->type('foto');
 
         $this->actingAs($admin)->post("admin/pengaturan/berkas/{$foto['id']}/pindah", ['arah' => 'naik'])->assertRedirect();
-        $this->assertSame(['kk', 'foto', 'akta', 'rapor-skl'], array_column(model(DocumentTypeModel::class)->active(), 'code'));
+        $this->assertSame(['kk', 'foto', 'akta', 'sk-aktif', 'rapor-skl'], array_column(model(DocumentTypeModel::class)->active(), 'code'));
 
         $this->actingAs($admin)->post("admin/pengaturan/berkas/{$foto['id']}/pindah", ['arah' => 'naik'])->assertRedirect();
         $this->actingAs($admin)->post("admin/pengaturan/berkas/{$foto['id']}/pindah", ['arah' => 'naik'])->assertRedirect();
-        $this->assertSame(['foto', 'kk', 'akta', 'rapor-skl'], array_column(model(DocumentTypeModel::class)->active(), 'code'));
+        $this->assertSame(['foto', 'kk', 'akta', 'sk-aktif', 'rapor-skl'], array_column(model(DocumentTypeModel::class)->active(), 'code'));
     }
 
     public function testDeleteOnlyWhenUnused(): void

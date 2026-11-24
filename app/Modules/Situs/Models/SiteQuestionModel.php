@@ -29,7 +29,7 @@ class SiteQuestionModel extends Model
     protected $returnType     = 'array';
     protected $useSoftDeletes = true;
     protected $useTimestamps  = true;
-    protected $allowedFields  = ['topic', 'question', 'answer', 'sort_order', 'is_published'];
+    protected $allowedFields  = ['topic', 'question', 'answer', 'topic_en', 'topic_ar', 'question_en', 'question_ar', 'answer_en', 'answer_ar', 'sort_order', 'is_published'];
 
     protected function initialize(): void
     {

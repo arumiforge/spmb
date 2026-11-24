@@ -45,6 +45,7 @@ BSD-3-Clause and are not deployed (`composer install --no-dev`).
 | simple-icons | CC0-1.0 | Brand marks of social networks; only the paths of the icons in use are copied into `app/Helpers` at development time (D-081). Brand names and logos stay trademarks of their owners and are used only to link to the school's own accounts |
 | svgo | MIT | Development only: minifies SVG files for the public folder (D-086) |
 | apexcharts | ApexCharts licence (v4+) | **Verify** the current terms on apexcharts.com: v4 is free only below a revenue threshold for the licensee; buy a licence if Arumi Studios or a client exceeds it, or switch charts library |
+| @fontsource/noto-sans-arabic | OFL-1.1 (SIL Open Font License; package MIT) | Noto Sans Arabic font files, copied into `public/build/fonts/` for the Arabic website (D-109). The font may be bundled and served with the product; it is not sold on its own and keeps its name and licence |
 | qr-scanner (nimiq) | MIT | Camera QR scanning for test attendance (phase 3, `resources/js/scanner.js`) |
 
 ## Server images and tools (not distributed with the product)

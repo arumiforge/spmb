@@ -15,4 +15,9 @@ return [
     'searchHint'    => 'Ketik kata, misalnya "berkas" atau "kartu"',
     'searchFound'   => '{n} bagian cocok. Bagian lain disembunyikan sementara.',
     'searchNone'    => 'Tidak ada bagian yang cocok. Coba kata lain yang lebih pendek.',
+    'pageTitle'     => 'Panduan {0}',
+    // Public guides in the page's language (D-109); staff guides keep the titles in Config/Roles.php.
+    'roles' => [
+        'calon-murid' => ['title' => 'Calon Murid dan Orang Tua', 'description' => 'Cara mendaftar, mengunggah berkas, dan mencetak kartu.'],
+    ],
 ];

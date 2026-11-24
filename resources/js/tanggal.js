@@ -1,17 +1,71 @@
 /*
- * Friendly Indonesian date picker (D-088).
+ * Friendly date picker (D-088), in the page's language (<html lang>: id, en or ar, D-109).
  *
  * Every <input type="date"> is enhanced (opt out with data-tanggal="asli"): the original input becomes
  * a hidden field that still carries name and ISO value (YYYY-MM-DD) for the server, and a text field
  * shows the date as "17 Agustus 2014". People can type ("17/08/2014", "17-8-2014", "17 agustus 2014")
  * or pick from a calendar with month and year lists, which makes birth dates quick to choose.
  * Keyboard: arrows move by day/week, PageUp/PageDown by month, Home/End to the week edges,
- * Enter picks, Escape closes.
+ * Enter picks, Escape closes. On right-to-left pages the left and right arrows follow the mirrored grid.
  */
 
-const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-const DAYS_SHORT = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-const DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+const TEXTS = {
+    id: {
+        months: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+        daysShort: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+        days: ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'],
+        placeholder: 'Contoh: 17/08/2014',
+        open: 'Pilih tanggal dari kalender',
+        calendar: 'Kalender',
+        prev: 'Bulan sebelumnya',
+        next: 'Bulan berikutnya',
+        month: 'Bulan',
+        year: 'Tahun',
+        today: 'Hari ini',
+        clear: 'Hapus',
+        invalid: 'Tulis tanggal seperti 17/08/2014, atau pilih dari kalender.',
+        range: (from, until) => `Pilih tanggal${from ? ` mulai ${from}` : ''}${until ? ` sampai ${until}` : ''}.`,
+    },
+    en: {
+        months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        placeholder: 'Example: 17/08/2014',
+        open: 'Choose a date from the calendar',
+        calendar: 'Calendar',
+        prev: 'Previous month',
+        next: 'Next month',
+        month: 'Month',
+        year: 'Year',
+        today: 'Today',
+        clear: 'Clear',
+        invalid: 'Write the date like 17/08/2014 (day/month/year), or choose it from the calendar.',
+        range: (from, until) => `Choose a date${from ? ` from ${from}` : ''}${until ? ` until ${until}` : ''}.`,
+    },
+    ar: {
+        months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+        daysShort: ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
+        days: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+        placeholder: 'مثال: 17/08/2014',
+        open: 'اختر التاريخ من التقويم',
+        calendar: 'التقويم',
+        prev: 'الشهر السابق',
+        next: 'الشهر التالي',
+        month: 'الشهر',
+        year: 'السنة',
+        today: 'اليوم',
+        clear: 'مسح',
+        invalid: 'اكتب التاريخ بصيغة 17/08/2014 (يوم/شهر/سنة)، أو اختره من التقويم.',
+        range: (from, until) => `اختر تاريخًا${from ? ` من ${from}` : ''}${until ? ` حتى ${until}` : ''}.`,
+    },
+};
+const T = TEXTS[(document.documentElement.lang || 'id').slice(0, 2)] || TEXTS.id;
+const MONTHS = T.months;
+const DAYS_SHORT = T.daysShort;
+const DAYS = T.days;
+// Typed month names are recognised in the page's language and in Indonesian.
+const TYPED_MONTHS = [MONTHS, TEXTS.id.months];
+const RTL = document.documentElement.dir === 'rtl';
 
 const pad = (n) => String(n).padStart(2, '0');
 const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -47,7 +101,7 @@ export function parseTanggal(text) {
         if (!m) {
             return null;
         }
-        const index = MONTHS.findIndex((name) => name.toLowerCase().startsWith(m[2].slice(0, 3)));
+        const index = TYPED_MONTHS.map((names) => names.findIndex((name) => name.toLowerCase().startsWith(m[2].slice(0, 3)))).find((i) => i >= 0) ?? -1;
         if (index < 0) {
             return null;
         }
@@ -78,7 +132,7 @@ function enhance(original) {
     field.className = `${original.className} pe-12`;
     field.autocomplete = 'off';
     field.inputMode = 'numeric';
-    field.placeholder = original.placeholder || 'Contoh: 17/08/2014';
+    field.placeholder = original.placeholder || T.placeholder;
     field.required = original.required;
     field.disabled = original.disabled;
     ['aria-describedby', 'aria-invalid', 'title'].forEach((name) => {
@@ -98,7 +152,7 @@ function enhance(original) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'absolute inset-y-0 end-0 flex w-12 items-center justify-center rounded-e-lg text-gray-500 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-gray-400 dark:hover:text-white';
-    button.setAttribute('aria-label', 'Pilih tanggal dari kalender');
+    button.setAttribute('aria-label', T.open);
     button.setAttribute('aria-haspopup', 'dialog');
     button.setAttribute('aria-expanded', 'false');
     button.innerHTML = '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>';
@@ -109,7 +163,7 @@ function enhance(original) {
     panel.hidden = true;
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-modal', 'false');
-    panel.setAttribute('aria-label', 'Kalender');
+    panel.setAttribute('aria-label', T.calendar);
     wrap.append(panel);
 
     let selected = fromIso(original.value);
@@ -170,15 +224,15 @@ function enhance(original) {
 
         panel.innerHTML = `
             <div class="tanggal-kepala">
-                <button type="button" class="tanggal-geser" data-geser="-1" aria-label="Bulan sebelumnya"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-                <select data-bulan aria-label="Bulan">${MONTHS.map((name, i) => `<option value="${i}"${i === month ? ' selected' : ''}>${name}</option>`).join('')}</select>
-                <select data-tahun aria-label="Tahun">${years}</select>
-                <button type="button" class="tanggal-geser" data-geser="1" aria-label="Bulan berikutnya"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+                <button type="button" class="tanggal-geser" data-geser="-1" aria-label="${T.prev}"><svg class="rtl:-scale-x-100" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+                <select data-bulan aria-label="${T.month}">${MONTHS.map((name, i) => `<option value="${i}"${i === month ? ' selected' : ''}>${name}</option>`).join('')}</select>
+                <select data-tahun aria-label="${T.year}">${years}</select>
+                <button type="button" class="tanggal-geser" data-geser="1" aria-label="${T.next}"><svg class="rtl:-scale-x-100" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
             </div>
             <div class="tanggal-grid" role="group" aria-label="${MONTHS[month]} ${year}">${days}</div>
             <div class="tanggal-kaki">
-                <button type="button" data-hari-ini${allowed(today) ? '' : ' disabled'}>Hari ini</button>
-                <button type="button" data-hapus>Hapus</button>
+                <button type="button" data-hari-ini${allowed(today) ? '' : ' disabled'}>${T.today}</button>
+                <button type="button" data-hapus>${T.clear}</button>
             </div>`;
     };
 
@@ -249,9 +303,9 @@ function enhance(original) {
         }
         const d = parseTanggal(field.value);
         if (!d) {
-            field.setCustomValidity('Tulis tanggal seperti 17/08/2014, atau pilih dari kalender.');
+            field.setCustomValidity(T.invalid);
         } else if (!allowed(d)) {
-            field.setCustomValidity(`Pilih tanggal ${min ? `mulai ${long(min)}` : ''}${min && max ? ' ' : ''}${max ? `sampai ${long(max)}` : ''}.`);
+            field.setCustomValidity(T.range(min ? long(min) : '', max ? long(max) : ''));
         } else {
             selected = d;
             original.value = iso(d);
@@ -295,7 +349,7 @@ function enhance(original) {
             return;
         }
         const current = fromIso(day.dataset.hari);
-        const moves = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7, Home: -current.getDay(), End: 6 - current.getDay() };
+        const moves = { ArrowLeft: RTL ? 1 : -1, ArrowRight: RTL ? -1 : 1, ArrowUp: -7, ArrowDown: 7, Home: -current.getDay(), End: 6 - current.getDay() };
         let next = null;
         if (event.key in moves) {
             next = new Date(current.getFullYear(), current.getMonth(), current.getDate() + moves[event.key]);

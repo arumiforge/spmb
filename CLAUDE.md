@@ -18,7 +18,7 @@ recorded decision — ask, or record a new decision.
 | --- | --- |
 | Replies to the user in chat | **English**, even when the user writes Indonesian |
 | `docs/`, `*.md`, code comments, commit messages, PRs | English |
-| UI text, URLs/route slugs, emails, PDFs, guide pages (`/panduan`) | Friendly, plain **Indonesian** |
+| UI text, URLs/route slugs, emails, PDFs, guide pages (`/panduan`) | Friendly, plain **Indonesian** (the public site also has English and Arabic translations, D-109; slugs stay Indonesian) |
 | Super-admin-only screens | Technical Indonesian/English terms allowed |
 
 Users are non-technical school staff, students and parents. Avoid jargon outside

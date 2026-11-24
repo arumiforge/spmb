@@ -21,3 +21,15 @@ Fitur yang dimatikan langsung hilang dari menu, halaman, dan panduan semua petug
 > **Tips:** Fitur dasar (Pengaturan, Pengguna, Profil Saya, Panduan, Riwayat Perubahan) selalu menyala.
 
 - Jika fitur yang baru dinyalakan belum muncul di menu, maka muat ulang halaman.
+
+## Melihat kondisi server
+
+Halaman ini membantu memeriksa apakah server siap dipakai, misalnya apakah foto dari ponsel bisa diunggah.
+
+1. Di menu kiri, pilih **Kondisi server**.
+2. Lihat kotak di atas: hijau berarti aman, kuning perlu diperhatikan, merah ada masalah.
+3. Buka bagian yang berwarna kuning atau merah untuk melihat barisnya. Keterangan kecil di bawah nama baris menjelaskan apa yang perlu dilakukan.
+
+Angka **Berkas terbesar yang bisa diunggah sekarang** harus sama atau lebih besar dari batas berkas terbesar di **Berkas Wajib**. Batas PHP diatur di `docker/php/spmb.ini`, batas Nginx di `docker/nginx/spmb.conf`; setelah mengubahnya jalankan `spmb deploy staging`, periksa, lalu `spmb deploy production`.
+
+> **Tips:** Halaman ini hanya membaca. Tidak ada pengaturan yang berubah saat halaman dibuka.

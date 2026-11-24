@@ -48,7 +48,7 @@ class Pendaftar extends BaseController
             if ($this->request->getPost('aksi') === 'menyusul') {
                 (new DocumentService())->markToFollow($applicant, $type, null);
 
-                return $back->with('message', lang('Berkas.markedToFollow', [$type['name']]));
+                return $back->with('message', lang('Berkas.markedToFollow', [localized($type, 'name')]));
             }
 
             $input = UploadInput::read($this->request);
@@ -57,7 +57,7 @@ class Pendaftar extends BaseController
             return $back->with('berkas_error', [$typeId => $e->getMessage()]);
         }
 
-        return $back->with('message', lang('Berkas.uploaded', [$type['name']]));
+        return $back->with('message', lang('Berkas.uploaded', [localized($type, 'name')]));
     }
 
     /**

@@ -10,9 +10,20 @@ Berkas dikirim dari halaman status pendaftaran Anda. Foto dari kamera HP bisa la
 
 > **Tips:** Foto dokumen di tempat yang terang, letakkan di atas meja, dan pastikan semua tulisan terbaca. Jangan sampai ada bagian yang terpotong.
 
+## Mengunduh contoh berkas
+
+Untuk beberapa berkas, sekolah menyediakan contoh atau format surat. Contohnya Surat Keterangan Aktif yang perlu diisi dan ditandatangani kepala SD/MI.
+
+1. Cari tautan **Unduh contoh** di bawah nama berkas, di halaman **Persyaratan** atau di bagian **Berkas Pendaftaran**.
+2. Tekan tautan itu. File contoh tersimpan di HP atau komputer Anda.
+3. Cetak contohnya dan bawa ke SD/MI asal untuk diisi, dicap, dan ditandatangani.
+4. Foto atau scan surat yang sudah jadi, lalu unggah seperti berkas lainnya.
+
+> **Catatan:** Tautan ini hanya ada jika sekolah menyediakan contohnya. Contoh bisa diunduh siapa saja, tanpa nomor pendaftaran.
+
 ## Berkas yang dikirim menyusul
 
-Beberapa berkas, misalnya rapor atau Surat Keterangan Lulus, boleh dikirim belakangan.
+Beberapa berkas, misalnya Surat Keterangan Aktif, rapor, atau Surat Keterangan Lulus, boleh dikirim belakangan.
 
 1. Pada berkas yang belum Anda miliki, tekan **Kirim Menyusul**.
 2. Jika berkasnya sudah ada, kembali ke halaman status dan unggah seperti biasa.

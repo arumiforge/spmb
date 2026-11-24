@@ -8,9 +8,9 @@
  * @var bool                             $twoFactorOn
  * @var array<string, mixed>|null        $stats       see Modules\Pendaftaran\Services\ApplicantStats::summary()
  * @var bool                             $canViewList
+ * @var list<array<string, mixed>>       $setup       see App\Libraries\SetupChecklist::steps()
  */
 $num   = static fn (int $n): string => number_format($n, 0, ',', '.');
-$card  = 'rounded-lg border border-gray-200 bg-white p-5 shadow-xs dark:border-gray-700 dark:bg-gray-800';
 $tileBox = 'rounded-lg border border-gray-200 bg-white p-4 shadow-xs sm:p-5 dark:border-gray-700 dark:bg-gray-800';
 $tiles = $stats === null ? [] : [
     ['label' => 'Total Pendaftar', 'value' => $stats['total'], 'icon' => 'users', 'note' => 'Tahun ajaran ' . $stats['year'], 'url' => 'admin/pendaftar'],
@@ -40,8 +40,12 @@ $tiles = $stats === null ? [] : [
     </div>
 <?php endif ?>
 
+<?php if ($setup !== []) : ?>
+    <?= view('admin/_persiapan', ['setup' => $setup], ['saveData' => false]) ?>
+<?php endif ?>
+
 <?php // Cards flow in columns (two from xl, three from 2xl) so wide screens have no empty side column. ?>
-<div class="<?= $stats !== null ? 'mt-6 ' : '' ?>grid grid-cols-1 items-start gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+<div class="<?= $stats !== null || $setup !== [] ? 'mt-6 ' : '' ?>grid grid-cols-1 items-start gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <?php // Modules add their own summary here (panel slot "dashboard"); each panel checks its permission and is one grid item. ?>
     <div class="contents"><?= module_panels('dashboard', ['user' => $user]) ?></div>
     <?php if ($stats === null || $stats['total'] === 0) : ?>
@@ -53,8 +57,7 @@ $tiles = $stats === null ? [] : [
                 'imageAlt' => lang('App.altNoData'),
             ]]) ?></div>
         <?php else : ?>
-            <section class="<?= $card ?> motion-rise" style="--rise-delay: 200ms">
-                <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Pendaftar per gelombang</h2>
+            <?= lipatan_buka(['id' => 'gelombang', 'title' => 'Pendaftar per gelombang', 'icon' => 'calendar', 'class' => 'shadow-xs motion-rise']) ?>
                 <ul class="space-y-4">
                     <?php foreach ($stats['waves'] as $wave) : ?>
                         <?php $pct = $wave['quota'] ? min(100, (int) round($wave['count'] / $wave['quota'] * 100)) : null; ?>
@@ -74,9 +77,8 @@ $tiles = $stats === null ? [] : [
                         <li class="flex justify-between text-sm"><span class="font-medium text-gray-900 dark:text-white">Tanpa gelombang</span><span class="text-gray-700 dark:text-gray-300"><?= $num($stats['noWave']) ?> pendaftar</span></li>
                     <?php endif ?>
                 </ul>
-            </section>
-            <section class="<?= $card ?> motion-rise" style="--rise-delay: 200ms">
-                <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Cara mendaftar</h2>
+            <?= lipatan_tutup() ?>
+            <?= lipatan_buka(['id' => 'cara-daftar', 'title' => 'Cara mendaftar', 'icon' => 'chart-pie', 'class' => 'shadow-xs motion-rise']) ?>
                 <div class="@container"><div class="grid grid-cols-1 items-center gap-4 @lg:grid-cols-[minmax(0,1fr)_12rem]">
                     <?php
                     $methodChart = [
@@ -92,10 +94,9 @@ $tiles = $stats === null ? [] : [
                         <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700"><dt class="text-sm text-gray-500 dark:text-gray-400">Di sekolah</dt><dd class="mt-1 text-2xl font-bold text-gray-900 dark:text-white"><?= $num($stats['offline']) ?></dd></div>
                     </dl>
                 </div></div>
-            </section>
+            <?= lipatan_tutup() ?>
         <?php endif ?>
-    <div class="<?= $card ?>">
-        <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Akun Anda</h2>
+    <?= lipatan_buka(['id' => 'akun', 'title' => 'Akun Anda', 'icon' => 'circle-user', 'class' => 'shadow-xs']) ?>
         <dl class="space-y-3 text-sm">
             <div>
                 <dt class="text-gray-500 dark:text-gray-400">Peran</dt>
@@ -114,7 +115,7 @@ $tiles = $stats === null ? [] : [
             </div>
         </dl>
         <a href="<?= site_url('admin/panduan') ?>" class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary-700 hover:underline dark:text-primary-400"><?= icon('book', 'h-4 w-4') ?> Buka panduan penggunaan</a>
-    </div>
+    <?= lipatan_tutup() ?>
 </div>
 <?= $this->endSection() ?>
 

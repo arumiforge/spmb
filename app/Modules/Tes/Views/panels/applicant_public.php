@@ -35,16 +35,16 @@ $notes    = trim((string) setting('Tes.instructions'));
             <p class="mb-4 text-sm text-gray-600 dark:text-gray-300"><?= lang('TesPenjadwalan.publicIntro') ?></p>
             <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div><dt class="<?= $dt ?>"><?= lang('Tes.date') ?></dt><dd class="<?= $dd ?>"><?= esc($schedule['day']) ?></dd></div>
-                <div><dt class="<?= $dt ?>"><?= lang('Tes.time') ?></dt><dd class="<?= $dd ?>"><?= esc($schedule['time']) ?></dd></div>
-                <div><dt class="<?= $dt ?>"><?= lang('Tes.room') ?></dt><dd class="<?= $dd ?>"><?= esc($schedule['room']) ?></dd></div>
+                <div><dt class="<?= $dt ?>"><?= lang('Tes.time') ?></dt><dd class="<?= $dd ?>"><span dir="ltr"><?= esc($schedule['time']) ?></span></dd></div>
+                <div><dt class="<?= $dt ?>"><?= lang('Tes.room') ?></dt><dd class="<?= $dd ?>"><bdi><?= esc($schedule['room']) ?></bdi></dd></div>
                 <?php if ($schedule['location'] !== '') : ?>
-                    <div><dt class="<?= $dt ?>"><?= lang('Tes.location') ?></dt><dd class="<?= $dd ?>"><?= esc($schedule['location']) ?></dd></div>
+                    <div><dt class="<?= $dt ?>"><?= lang('Tes.location') ?></dt><dd class="<?= $dd ?>"><bdi><?= esc($schedule['location']) ?></bdi></dd></div>
                 <?php endif ?>
             </dl>
             <?php if ($notes !== '') : ?>
                 <div class="mt-4 rounded-lg bg-primary-50 p-4 text-sm text-gray-800 dark:bg-gray-700 dark:text-gray-200">
                     <p class="mb-1 font-semibold text-gray-900 dark:text-white"><?= lang('Tes.instructions') ?></p>
-                    <p class="whitespace-pre-line"><?= esc($notes) ?></p>
+                    <p class="whitespace-pre-line"><bdi><?= esc($notes) ?></bdi></p>
                 </div>
             <?php endif ?>
         <?php endif ?>

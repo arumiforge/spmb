@@ -25,6 +25,12 @@ $action = $wave === null ? url_to('gelombang') : url_to('gelombang.simpan', $wav
             <div class="sm:col-span-2"><?= $f('quota_mode', lang('Pendaftaran.waveQuotaMode'), ['type' => 'select', 'required' => true, 'options' => lang('Pendaftaran.waveQuotaModes'), 'value' => $wave['quota_mode'] ?? 'none', 'help' => lang('Pendaftaran.waveQuotaModeHelp')]) ?></div>
             <?= $f('online_quota', lang('Pendaftaran.waveOnlineQuota'), ['type' => 'number', 'help' => lang('Pendaftaran.waveOnlineQuotaHelp'), 'attrs' => ['min' => '1', 'inputmode' => 'numeric']]) ?>
             <div class="sm:col-span-2"><?= $f('description', lang('Pendaftaran.waveDescription'), ['type' => 'textarea']) ?></div>
+            <div class="sm:col-span-2">
+                <?= view('partials/terjemahan', ['translation' => ['fields' => [
+                    ['name' => 'name', 'label' => lang('Pendaftaran.waveName'), 'values' => ['en' => (string) ($wave['name_en'] ?? ''), 'ar' => (string) ($wave['name_ar'] ?? '')], 'maxlength' => 60],
+                    ['name' => 'description', 'label' => lang('Pendaftaran.waveDescription'), 'type' => 'textarea', 'values' => ['en' => (string) ($wave['description_en'] ?? ''), 'ar' => (string) ($wave['description_ar'] ?? '')], 'maxlength' => 1000],
+                ]]]) ?>
+            </div>
             <div class="sm:col-span-2"><?= $f('is_active', lang('Pendaftaran.waveActive'), ['type' => 'checkbox', 'value' => $wave === null ? '1' : (string) $wave['is_active']]) ?></div>
         </div>
     </section>

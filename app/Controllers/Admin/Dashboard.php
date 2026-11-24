@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\SetupChecklist;
 use Modules\Pendaftaran\Services\ApplicantStats;
 
 class Dashboard extends BaseController
@@ -26,6 +27,8 @@ class Dashboard extends BaseController
             // Registration counts while the Pendaftaran module is on (null otherwise).
             'stats'       => service('modules')->isEnabled('Pendaftaran') ? (new ApplicantStats())->summary() : null,
             'canViewList' => $user->can('pendaftar.view'),
+            // "Persiapan sistem" (D-099) for the people who set the system up, with only the steps they can fix.
+            'setup' => $user->can('pengaturan.sekolah') || $user->can('sistem.server') ? (new SetupChecklist())->steps($user) : [],
         ]);
     }
 

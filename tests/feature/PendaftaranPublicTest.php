@@ -202,4 +202,96 @@ final class PendaftaranPublicTest extends CIUnitTestCase
 
         $this->withSession($_SESSION)->post('cek-status/ubah', ['address' => 'Jl. Pindahan 5', 'parent_phone' => '123'])->assertSessionHas('errors');
     }
+
+    public function testFormIsAWizardWithOneStepPerSectionAndTheGuardianQuestion(): void
+    {
+        $this->makeWave();
+        $page = $this->get('daftar');
+
+        $this->assertStringContainsString('data-wizard', $page->getBody());
+        $this->assertStringContainsString('class="stepper wizard-saja"', $page->getBody());
+
+        foreach (['langkah-1', 'langkah-2', 'langkah-3', 'langkah-4', 'langkah-5'] as $step) {
+            $this->assertStringContainsString('id="' . $step . '"', $page->getBody());
+        }
+        $page->assertSee('Periksa dan kirim');
+        $page->assertSee('Langkah 1 dari 5');
+        $page->assertSee('Apakah calon murid tinggal bersama atau diasuh oleh wali?');
+        $this->assertStringContainsString('name="has_guardian" value="0"', $page->getBody());
+        $this->assertStringContainsString('name="agree"', $page->getBody());
+        // "Tidak ada wali" is the default answer.
+        $this->assertMatchesRegularExpression('/name="has_guardian" value="0"[^>]*checked/', $page->getBody());
+        $this->assertDoesNotMatchRegularExpression('/stepper-item[^"]*has-error/', $page->getBody());
+    }
+
+    public function testAllStepsAreSentInOnePostWithAGuardian(): void
+    {
+        $this->makeWave();
+        setting('Pendaftaran.requiredFields', ['nisn', 'guardian_relation']);
+
+        $this->post('daftar', $this->applicantInput([
+            'kk_number'     => '3319010101140009', 'phone' => '085712345678', 'has_guardian' => '1',
+            'guardian_name' => 'Khadijah Umar', 'guardian_relation' => 'Nenek', 'guardian_occupation' => 'Pensiunan',
+        ]))->assertRedirectTo(site_url('daftar/selesai'));
+
+        $row = model(ApplicantModel::class)->first();
+        $this->assertSame('1', (string) $row['has_guardian']);
+        $this->assertSame('Khadijah Umar', $row['guardian_name']);
+        $this->assertSame('Nenek', $row['guardian_relation']);
+        $this->assertSame('Pensiunan', $row['guardian_occupation']);
+        $this->assertSame('3319010101140009', $row['kk_number']);
+    }
+
+    public function testNoGuardianSkipsRequiredGuardianFieldsAndClearsThem(): void
+    {
+        $this->makeWave();
+        setting('Pendaftaran.requiredFields', ['nisn', 'guardian_name', 'guardian_relation']);
+
+        $this->post('daftar', $this->applicantInput(['has_guardian' => '0', 'guardian_name' => 'Terisi tanpa sengaja']))
+            ->assertRedirectTo(site_url('daftar/selesai'));
+
+        $row = model(ApplicantModel::class)->first();
+        $this->assertSame('0', (string) $row['has_guardian']);
+        $this->assertNull($row['guardian_name']);
+        $this->assertNull($row['guardian_relation']);
+    }
+
+    public function testWithGuardianTheRequiredFieldsAreCheckedAndTheStepIsMarked(): void
+    {
+        $this->makeWave();
+        setting('Pendaftaran.requiredFields', ['nisn', 'guardian_relation']);
+
+        $this->post('daftar', $this->applicantInput(['has_guardian' => '1', 'agree' => '0']))->assertSessionHas('errors');
+        $errors = session('errors');
+        $this->assertArrayHasKey('guardian_name', $errors);
+        $this->assertArrayHasKey('guardian_relation', $errors);
+        $this->assertSame('Centang pernyataan persetujuan sebelum mengirim pendaftaran.', $errors['agree']);
+        $this->assertSame(0, model(ApplicantModel::class)->countAllResults());
+
+        // Back on the form: the parents step opens first, the steps with errors carry a red dot.
+        $page = $this->withSession($_SESSION)->get('daftar');
+        $this->assertStringContainsString('data-wizard-awal="3"', $page->getBody());
+        $this->assertStringContainsString('data-wizard-terisi="1"', $page->getBody());
+        $page->assertSee('Ada isian yang perlu diperbaiki di langkah ini.');
+        $this->assertMatchesRegularExpression('/stepper-item is-aktif has-error" data-stepper-item="3"/', $page->getBody());
+        $this->assertMatchesRegularExpression('/stepper-item is-nanti has-error" data-stepper-item="5"/', $page->getBody());
+        $this->assertMatchesRegularExpression('/name="has_guardian" value="1"[^>]*checked/', $page->getBody());
+    }
+
+    public function testDataPageShowsTheGuardianAnswer(): void
+    {
+        $result = $this->registered(['has_guardian' => '1', 'guardian_name' => 'Khadijah Umar', 'guardian_relation' => 'Nenek']);
+        $this->get('tautan/' . $result['token']);
+
+        $page = $this->withSession($_SESSION)->get('cek-status/data');
+        $page->assertSee('Ada wali');
+        $page->assertSee('Khadijah Umar');
+
+        $this->resetVisitor();
+        $other = $this->registered(['has_guardian' => '0', 'nisn' => '0987654321', 'nik' => '3319011705150009', 'full_name' => 'Anak Lain']);
+        $this->get('tautan/' . $other['token']);
+        $page = $this->withSession($_SESSION)->get('cek-status/data');
+        $page->assertSee('Tidak ada wali');
+        $page->assertDontSee('Hubungan wali dengan calon murid');
+    }
 }

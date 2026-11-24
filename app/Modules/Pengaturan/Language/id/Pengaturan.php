@@ -95,4 +95,26 @@ return [
     'featuresConfirm'   => 'Simpan perubahan fitur? Fitur yang dimatikan langsung hilang dari menu semua petugas.',
     'featuresSaved'     => 'Pilihan fitur berhasil disimpan.',
     'featuresUnchanged' => 'Tidak ada fitur yang berubah.',
+
+    'serverTitle'     => 'Kondisi server',
+    'serverIntro'     => 'Batas unggah, pengaturan PHP, ekstensi, ruang disk, dan database. Halaman ini hanya membaca; tidak ada yang diubah.',
+    'serverOk'        => 'Semua pemeriksaan aman.',
+    'serverWarn'      => 'Ada yang perlu diperhatikan. Lihat baris berwarna kuning.',
+    'serverBad'       => 'Ada masalah yang bisa mengganggu sistem. Lihat baris berwarna merah.',
+    'serverMaxUpload' => 'Berkas terbesar yang bisa diunggah sekarang',
+    'serverUnlimited' => 'tanpa batas dari PHP',
+    'serverHowToFix'  => 'Batas PHP diatur di docker/php/spmb.ini dan batas Nginx di docker/nginx/spmb.conf. Setelah mengubahnya, jalankan spmb deploy <env>.',
+    'serverSections'  => ['upload' => 'Unggah berkas', 'php' => 'PHP', 'extensions' => 'Ekstensi PHP', 'storage' => 'Penyimpanan dan sumber daya', 'database' => 'Database', 'app' => 'Aplikasi'],
+    'serverStatus'    => ['ok' => 'Aman', 'warn' => 'Perhatian', 'bad' => 'Masalah', 'info' => 'Info'],
+    'serverColItem'   => 'Pemeriksaan',
+    'serverColValue'  => 'Nilai',
+    'serverColStatus' => 'Status',
+
+    // Website languages (D-109).
+    'sectionLanguages'      => 'Bahasa website',
+    'sectionLanguagesIntro' => 'Website selalu tersedia dalam Bahasa Indonesia. Versi bahasa Inggris dan Arab memakai terjemahan yang sudah disiapkan; teks yang Anda ketik sendiri tampil dalam terjemahan Anda jika diisi, atau dalam Bahasa Indonesia jika kosong.',
+    'languageEn'            => 'Tampilkan versi bahasa Inggris (English)',
+    'languageEnHelp'        => 'Alamatnya diawali /en/, misalnya /en/jadwal. Jika dimatikan, pengunjung diarahkan ke halaman bahasa Indonesia.',
+    'languageAr'            => 'Tampilkan versi bahasa Arab (العربية)',
+    'languageArHelp'        => 'Alamatnya diawali /ar/ dan halaman dibaca dari kanan ke kiri. Jika dimatikan, pengunjung diarahkan ke halaman bahasa Indonesia.',
 ];

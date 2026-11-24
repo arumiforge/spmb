@@ -6,6 +6,7 @@ namespace Modules\Pengaturan\Controllers;
 
 use App\Controllers\BaseController;
 use App\Libraries\BrandingAssets;
+use App\Libraries\TranslationInput;
 use CodeIgniter\HTTP\RedirectResponse;
 
 /**
@@ -21,12 +22,48 @@ class Sekolah extends BaseController
     public const FIELDS = ['name', 'shortName', 'tagline', 'motto', 'address', 'phone', 'whatsapp', 'email', 'website', 'mapEmbed',
         'socialInstagram', 'socialFacebook', 'socialYoutube', 'socialTiktok', 'primaryColor', 'timezoneLabel', 'footerText', 'partnerName', 'illustrationAccent'];
 
+    /**
+     * School texts with optional English and Arabic versions (D-109), with their length limits.
+     *
+     * @var array<string, array{max: int, multiline?: bool}>
+     */
+    public const TRANSLATED = [
+        'tagline'    => ['max' => 150],
+        'motto'      => ['max' => 200],
+        'address'    => ['max' => 500, 'multiline' => true],
+        'footerText' => ['max' => 255],
+    ];
+
+    /**
+     * Switches of the English and Arabic website (D-109).
+     */
+    public const LANGUAGES = ['languageEn', 'languageAr'];
+
+    /**
+     * @return list<string> e.g. motto_en, motto_ar
+     */
+    private static function translatedKeys(): array
+    {
+        $keys = [];
+
+        foreach (array_keys(self::TRANSLATED) as $field) {
+            $keys[] = $field . '_en';
+            $keys[] = $field . '_ar';
+        }
+
+        return $keys;
+    }
+
     public function index(): string
     {
         $values = [];
 
-        foreach (self::FIELDS as $field) {
+        foreach ([...self::FIELDS, ...self::translatedKeys()] as $field) {
             $values[$field] = (string) setting('School.' . $field);
+        }
+
+        foreach (self::LANGUAGES as $field) {
+            $values[$field] = (bool) setting('School.' . $field) ? '1' : '0';
         }
 
         return view('Modules\Pengaturan\Views\sekolah', [
@@ -80,12 +117,41 @@ class Sekolah extends BaseController
         $rules['partnerName']        = ['label' => lang('Pengaturan.partnerName'), 'rules' => 'permit_empty|max_length[150]'];
         $rules['illustrationAccent'] = ['label' => lang('Pengaturan.illustrationAccent'), 'rules' => 'permit_empty|in_list[hijau]'];
 
-        if (! $this->validate($rules)) {
+        // Optional English/Arabic versions of the school texts (D-109), saved as School.motto_en and so on.
+        [$translations, $translationRules] = TranslationInput::read($this->request, self::TRANSLATED, false);
+
+        if (! $this->validate($rules + $translationRules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $old = [];
         $new = [];
+
+        foreach ($translations as $field => $value) {
+            $current = (string) setting('School.' . $field);
+
+            if ($value !== $current) {
+                $old[$field] = $current;
+                $new[$field] = $value;
+                setting('School.' . $field, $value);
+            }
+        }
+
+        // Website languages: Indonesian is always on; English and Arabic can be switched off.
+        foreach (self::LANGUAGES as $field) {
+            if ($this->request->getPost($field) === null) {
+                continue; // not on the submitted form
+            }
+
+            $value   = $this->request->getPost($field) === '1';
+            $current = (bool) setting('School.' . $field);
+
+            if ($value !== $current) {
+                $old[$field] = (int) $current;
+                $new[$field] = (int) $value;
+                setting('School.' . $field, $value);
+            }
+        }
 
         foreach (self::FIELDS as $field) {
             $value = trim((string) $this->request->getPost($field));

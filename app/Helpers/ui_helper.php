@@ -133,7 +133,9 @@ if (! function_exists('initials')) {
 
 if (! function_exists('tanggal_indo')) {
     /**
-     * Indonesian date, e.g. "17 November 2026" or "17 November 2026, 08.00 WIB".
+     * Date in the page's language (D-109), e.g. "17 November 2026, 08.00 WIB" in Indonesian,
+     * "17 November 2026, 08:00 WIB" in English and "17 نوفمبر 2026، 08:00 WIB" in Arabic (Western digits).
+     * The staff dashboard and PDFs are always Indonesian.
      */
     function tanggal_indo(DateTimeInterface|string|null $date, bool $withTime = false): string
     {
@@ -141,12 +143,14 @@ if (! function_exists('tanggal_indo')) {
             return '-';
         }
 
-        $months = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        helper('locale');
+        $locale = locale_current();
+        $months = locale_month_names($locale);
         $date   = $date instanceof DateTimeInterface ? $date : new DateTimeImmutable($date);
         $text   = $date->format('j') . ' ' . $months[(int) $date->format('n')] . ' ' . $date->format('Y');
 
         if ($withTime) {
-            $text .= ', ' . $date->format('H.i') . ' ' . setting('School.timezoneLabel');
+            $text .= ($locale === 'ar' ? '، ' : ', ') . $date->format($locale === 'id' ? 'H.i' : 'H:i') . ' ' . setting('School.timezoneLabel');
         }
 
         return $text;
@@ -168,6 +172,11 @@ if (! function_exists('icon')) {
         $name = $set['aliases'][$name] ?? $name;
         $body = $set['icons'][$name] ?? $set['icons']['info'];
 
+        // Icons that point a way are mirrored on right-to-left pages (Arabic, D-109).
+        if (preg_match('/\A(arrow|chevron|chevrons)-(left|right)\z|\A(log-in|log-out|undo-2|redo-2|corner-down-left)\z/', $name) === 1) {
+            $class .= ' rtl:-scale-x-100';
+        }
+
         return '<svg class="' . esc($class) . '" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"'
             . ' fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' . $body . '</svg>';
     }
@@ -183,6 +192,32 @@ if (! function_exists('icon_exists')) {
         $set ??= require __DIR__ . '/lucide_icons.php';
 
         return isset($set['icons'][$set['aliases'][$name] ?? $name]);
+    }
+}
+
+if (! function_exists('lipatan_buka')) {
+    /**
+     * Opens a folding card (partials/lipatan_buka, D-100). Use this helper instead of
+     * view(): it does not leak `title` and friends into the page's view data.
+     *
+     * @param array{id: string, title: string, intro?: string|null, icon?: string|null, badge?: string|null, open?: bool, class?: string|null, heading?: string} $card
+     */
+    function lipatan_buka(array $card): string
+    {
+        // Every option is passed: the renderer still holds data from earlier views (e.g. a `badge` array).
+        $card += ['intro' => null, 'icon' => null, 'badge' => null, 'open' => true, 'class' => null, 'heading' => 'h2'];
+
+        return view('partials/lipatan_buka', $card, ['saveData' => false]);
+    }
+}
+
+if (! function_exists('lipatan_tutup')) {
+    /**
+     * Closes a folding card opened with lipatan_buka().
+     */
+    function lipatan_tutup(): string
+    {
+        return view('partials/lipatan_tutup', [], ['saveData' => false]);
     }
 }
 
@@ -402,6 +437,13 @@ if (! function_exists('public_bottom_nav')) {
                     $bottom[] = $byUrl[$url] + ['center' => $url === 'daftar', 'art' => $url === 'daftar' ? 'ikon/ikon-daftar' : null];
                     if ($url === 'daftar') {
                         $bottom[array_key_last($bottom)]['label'] = lang('App.navRegister');
+                    }
+
+                    // A shorter label where the menu text is long in another language (D-109).
+                    $short = lang('App.navShort.' . $url);
+
+                    if (is_string($short) && $short !== 'App.navShort.' . $url) {
+                        $bottom[array_key_last($bottom)]['label'] = $short;
                     }
 
                     break;

@@ -350,7 +350,7 @@ health_check() {
 
 stack_running() { [ -f "$(env_dir "$1")/compose.yaml" ] && [ -n "$(dc "$1" ps -q db 2>/dev/null)" ]; }
 
-# Start <env> on image <tag>: copy compose.yaml of that commit, back up, up, migrate, import, check.
+# Start <env> on image <tag>: copy compose.yaml of that commit, back up, up, migrate, import, clear cache, check.
 activate() {
     local env="$1" tag="$2" dir sha current
     dir="$(env_dir "$env")"
@@ -385,6 +385,8 @@ activate() {
         || ! dc "$env" exec -T app php spark referensi:import --bawaan; then
         fail_and_roll_back "$env" "$current" "migration or data import failed"
     fi
+    # Cached values (e.g. the visitor numbers in the footer) may be shaped by the old code: start clean.
+    dc "$env" exec -T app php spark cache:clear >/dev/null 2>&1 || warn "cache:clear failed; continuing."
 
     if ! health_check "$env"; then
         dc "$env" logs --tail 50 app web || true

@@ -10,6 +10,7 @@ use CodeIgniter\Shield\Entities\User;
 use Modules\Berkas\Database\Seeds\InstallSeeder;
 use Modules\Berkas\Models\ApplicantDocumentModel;
 use Modules\Berkas\Models\DocumentTypeModel;
+use Modules\Berkas\Services\TemplateStorage;
 use Modules\Pendaftaran\Models\ApplicantModel;
 
 /**
@@ -26,7 +27,7 @@ trait BerkasTestHelpers
 
     protected function fixture(string $name): string
     {
-        return __DIR__ . '/' . $name;
+        return str_starts_with($name, '/') ? $name : __DIR__ . '/' . $name;
     }
 
     /**
@@ -42,12 +43,13 @@ trait BerkasTestHelpers
     }
 
     /**
-     * Fakes $_FILES['berkas'] for the next request.
+     * Fakes $_FILES['berkas'] (or another field) for the next request. A
+     * fixture path starting with "/" is used as is.
      */
-    protected function fakeUpload(string $fixture, ?string $clientName = null, int $error = UPLOAD_ERR_OK): void
+    protected function fakeUpload(string $fixture, ?string $clientName = null, int $error = UPLOAD_ERR_OK, string $field = 'berkas'): void
     {
         $tmp    = $this->tmpCopy($fixture);
-        $_FILES = ['berkas' => [
+        $_FILES = [$field => [
             'name'     => $clientName ?? $fixture,
             'type'     => 'application/octet-stream',
             'tmp_name' => $tmp,
@@ -150,6 +152,13 @@ trait BerkasTestHelpers
 
         foreach ($rows as $row) {
             @unlink(WRITEPATH . 'uploads/berkas/' . $row['file_path']);
+        }
+
+        // Example files of the test's document types only (the folder is shared with the dev app).
+        if (db_connect()->fieldExists('template_path', 'document_types')) {
+            foreach (model(DocumentTypeModel::class, false)->withDeleted()->where('template_path IS NOT NULL')->findColumn('template_path') ?? [] as $stored) {
+                (new TemplateStorage())->delete((string) $stored);
+            }
         }
 
         $this->clearUpload();

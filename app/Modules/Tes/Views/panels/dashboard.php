@@ -26,9 +26,8 @@ if ($user->can('tes.atur')) {
         ->countAllResults();
 }
 ?>
-<section class="rounded-lg border border-gray-200 bg-white p-5 shadow-xs dark:border-gray-700 dark:bg-gray-800" aria-labelledby="panel-tes-dasbor">
-    <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h2 id="panel-tes-dasbor" class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('TesKehadiran.dashTitle') ?></h2>
+<?= lipatan_buka(['id' => 'tes-hari-ini', 'title' => lang('TesKehadiran.dashTitle'), 'icon' => 'clipboard-check', 'class' => 'shadow-xs']) ?>
+    <div class="mb-4 flex justify-end">
         <a href="<?= site_url('admin/tes/kehadiran') ?>" class="inline-flex items-center gap-1 text-sm font-medium text-primary-700 hover:underline dark:text-primary-400"><?= lang('TesKehadiran.dashOpen') ?><?= icon('arrow-right', 'h-4 w-4') ?></a>
     </div>
     <?php if ($sessions === []) : ?>
@@ -59,4 +58,4 @@ if ($user->can('tes.atur')) {
             <?php endif ?>
         </div>
     <?php endif ?>
-</section>
+<?= lipatan_tutup() ?>

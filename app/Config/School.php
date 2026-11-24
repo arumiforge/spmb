@@ -107,4 +107,26 @@ class School extends BaseConfig
      * Indonesian time zone label shown next to times: WIB, WITA or WIT.
      */
     public string $timezoneLabel = 'WIB';
+
+    /**
+     * English and Arabic versions of the public website (D-109), switched off by the school in
+     * Identitas Sekolah → Bahasa website. Indonesian is always on.
+     */
+    public bool $languageEn = true;
+
+    public bool $languageAr = true;
+
+    /**
+     * Optional English and Arabic versions of the texts above (D-109); empty = the Indonesian text shows.
+     * Read them with setting_localized('School.motto').
+     */
+    public string $tagline_en = '';
+
+    public string $tagline_ar    = '';
+    public string $motto_en      = '';
+    public string $motto_ar      = '';
+    public string $address_en    = '';
+    public string $address_ar    = '';
+    public string $footerText_en = '';
+    public string $footerText_ar = '';
 }
