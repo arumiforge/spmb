@@ -7,6 +7,12 @@ personal data.
 
 ## Current phase
 
+**Admin round (D-098…D-109)** on `igi/gifted-davinci-j917i9`: document examples + SK Aktif, setup checklist, server page,
+folding cards, one-column settings with "Isi halaman" rail, wider sidebar, news ticker, home popup, editable footer
+links + social icons, visitor statistics (module Analitik), step-by-step registration with the guardian question and
+consent, home timeline, complete demo applicant, logo-redirect fix. Workers A–D merged; worker E (public site in
+Indonesian/English/Arabic, D-109) in progress.
+
 **Public polish round (D-090…D-095)**: merged into `main` (PR #50). Codex paintings 019–027 and 035 installed (019, 020, 027
 repainted for D-089; 020 and 027 still need a slot in the views), "Cara mendaftar" art slots (briefs 046–048 rewritten, 072 new), map preview without an
 embed, footer/top bar changes, official name "Sistem Penerimaan Murid Baru (SPMB)" (migration), HTML minifier,
@@ -48,7 +54,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `igi/gifted-davinci-j917i9` | session admin-site | Admin round (D-098…): document templates + SK aktif, visitor stats, news ticker, home popup, editable footer links + social icons, setup checklist, server check page, wider sidebar, folding sections, registration stepper + guardian question, home steps timeline, complete demo applicant, user-create redirect bug | in progress |
+| `igi/gifted-davinci-j917i9` | session admin-site | Admin round (D-098…D-109), integration branch; workers A (Berkas examples), B (Analitik), C (Situs ticker/popup/footer), D (registration stepper) merged; worker E (three languages) running | in progress |
 | `nty/intelligent-curie-pb1lv6` | session guides | Home map/contact layout (D-096), staff guides in the dashboard + in-page search on Panduan and Tanya Jawab (D-097) | PR open |
 | `pw/sleepy-hopper-d0a7h5` | session polish | Public polish round (D-090…D-095), Codex #49 and `langkah`, PR #43 notes | #50, #51 merged; follow-up PR open |
 | `feat/ui-codex` | worker A (ui-round) | Codex briefs 036–071 (`docs/ui-round-plan.md` A) | merged into the integration branch (#42) |
@@ -69,6 +75,15 @@ create your own branch from `main` instead.
 | `phase-2` and `feat/p2-*` | coordinator, workers A–D | Phase 2 | merged into `main` (PR #14) |
 
 ## Next steps
+
+00000. **Admin round** (`igi/gifted-davinci-j917i9`): merge worker E (D-109, translate the Analitik footer line too),
+   run the full suite, open the PR. After merge: `spmb deploy staging` (migrations: has_guardian, document examples,
+   SK Aktif, site_news, analytics tables), check `/`, `/daftar`, `/admin`, Website pages, then production; run
+   `spmb spark production spmb:branding clients/smp-nu-al-maruf-kudus/branding` once more to install the SK Aktif
+   example. User to confirm two D-107 details (guardian name always required with "Ada wali"; explicit consent box).
+   Follow-ups: per-parent "masih hidup / sudah meninggal"; referrer/device totals in Analitik (D-053); Codex
+   empty-state paintings `kosong-berita`, `kosong-tautan`, `kosong-pengunjung`; module commands vs Composer `App\`
+   mapping (command discovery can include a module command twice in one test run).
 
 0000. **Guides and contacts (D-096, D-097)**: after the PR is merged, `spmb deploy staging`, check `/` (map on the right,
    below the contacts on phones), `/tanya-jawab` and `/panduan/calon-murid` (search box), `/admin/panduan` as Panitia and
@@ -130,6 +145,7 @@ when the container idles).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-25 · session admin-site · `igi/gifted-davinci-j917i9` — admin round D-098…D-109 with workers A–E: logo 304 redirect fix, server page, setup checklist, folding cards, one-column settings + rail, Berkas examples + SK Aktif, Analitik, ticker/popup/footer links, registration stepper + guardian + consent, home timeline, complete demo applicant; deploy clears cache. Next: merge E (three languages), full suite, PR.
 - 2026-11-24 · session guides · `nty/intelligent-curie-pb1lv6` — home "Lokasi dan kontak": contacts card left, one map right / below on phones, map caption + directions button (D-096); staff guides moved to `/admin/panduan` (own role, Super Admin all; old public links redirect), search box inside Panduan and Tanya Jawab (D-097); 475 tests green. Next: merge, deploy staging, check, production.
 - 2026-11-24 · session polish · `pw/sleepy-hopper-d0a7h5` — PR #51 merged (019/020/027 repainted); Codex `langkah` batch reviewed and installed (046–048 scenes, 072 card backgrounds); PR #43's go-live notes carried into this file. Next: deploy, load branding on production, school data, uptime monitor.
 - 2026-11-24 · session polish · `pw/sleepy-hopper-d0a7h5` — checked production (was on 04b2ccc, then on #47 after the user's deploy); reviewed Codex #49 (019–027 and 035 installed after Codex repainted 019, 020, 027 for D-089); D-090…D-095: step-card art and briefs, map preview, footer/top bar, SPMB name + migration, HTML minifier, dashboard bottom bar Pengaturan and site link, subgrid form alignment; 471 tests green. PR #50 merged. Next: deploy, load branding on production, Codex `langkah` batch.
@@ -139,4 +155,3 @@ when the container idles).
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — new account's cloud environment checked (442 tests green); domain on Cloudflare confirmed; full server flow rehearsed in the container (all steps passed). Next: user runs `setup.sh` on `spmb-prod`, then tunnel.
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — PR #32 (example env files) merged; docs refreshed to the current state: README, roadmap (phase 1 done, platform round row, phase 6 partly done), architecture (stack, tables, visual rules), requirements (FR-WEB-03, NFR-02/03/08), module index, third-party server images, CLAUDE.md roles and commands, coordination notes. Next: go-live, Codex `svg-kit`.
 - 2026-11-23 · coordinator (session docker) · `main` — CI green on all checks; PR #26 merged into `main` on the user's request. Next: go-live on `spmb-prod` (`docs/deployment.md` → First server), Codex `svg-kit` batch.
-- 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user decided: direct SSH port stays open, key-only (D-077); `setup.sh`, deployment guide (Bitvise key steps, no fail2ban on the NAT VPS), deploy skill and CLAUDE.md updated. Next: user merges #26, go-live.

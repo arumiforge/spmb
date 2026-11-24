@@ -15,6 +15,7 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
+use Modules\Analitik\Filters\CountVisit;
 
 class Filters extends BaseFilters
 {
@@ -40,6 +41,7 @@ class Filters extends BaseFilters
         'staff'         => StaffArea::class,
         'minifyhtml'    => MinifyHtml::class,
         'bahasa'        => WebsiteLanguage::class,
+        'analitik'      => CountVisit::class,
     ];
 
     /**
@@ -88,6 +90,7 @@ class Filters extends BaseFilters
             // 'honeypot',
             'secureheaders',
             'minifyhtml', // smaller pages, view files untouched (D-094)
+            'analitik',   // visitor statistics, public pages only (module Analitik)
         ],
     ];
 

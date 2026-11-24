@@ -94,6 +94,10 @@ final class BahasaWebsiteTest extends CIUnitTestCase
         $this->assertStringContainsString('data-bahasa="ar"', (string) $result->getBody());
         $this->assertStringContainsString('aria-current="true" lang="en"', (string) $result->getBody());
         $result->assertSee('New Student Admission System (SPMB)');
+        // Module panels in the footer follow the language too (Analitik visitor line).
+        if ((bool) setting('Analitik.showInFooter') && service('modules')->isEnabled('Analitik')) {
+            $result->assertSee('Visitors today');
+        }
     }
 
     public function testSwitcherKeepsThePathAndQuery(): void
