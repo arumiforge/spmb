@@ -21,6 +21,8 @@ class InstallSeeder extends Seeder
         ['code' => 'kk', 'name' => 'Kartu Keluarga', 'description' => 'Foto atau scan Kartu Keluarga. Semua tulisan harus terbaca jelas.', 'is_required' => 1, 'may_follow' => 0, 'max_size_kb' => 2048, 'extensions' => 'jpg,jpeg,png,pdf'],
         ['code' => 'akta', 'name' => 'Akta Kelahiran', 'description' => 'Foto atau scan Akta Kelahiran calon murid.', 'is_required' => 1, 'may_follow' => 0, 'max_size_kb' => 2048, 'extensions' => 'jpg,jpeg,png,pdf'],
         ['code' => 'foto', 'name' => 'Pas Foto', 'description' => 'Foto wajah terbaru, tampak depan, latar polos.', 'is_required' => 1, 'may_follow' => 0, 'max_size_kb' => 1024, 'extensions' => 'jpg,jpeg,png'],
+        // Also added to installations seeded earlier by migration AddSkAktifDocumentType (keep both in step).
+        ['code' => 'sk-aktif', 'name' => 'Surat Keterangan Aktif dari SD/MI', 'description' => 'Surat dari kepala SD/MI yang menyatakan calon murid masih terdaftar sebagai murid di sekolah itu. Harus ada cap sekolah dan tanda tangan kepala sekolah.', 'is_required' => 1, 'may_follow' => 1, 'max_size_kb' => 2048, 'extensions' => 'jpg,jpeg,png,pdf'],
         ['code' => 'rapor-skl', 'name' => 'Rapor / Surat Keterangan Lulus', 'description' => 'Rapor kelas 6 semester terakhir atau Surat Keterangan Lulus. Boleh dikirim menyusul.', 'is_required' => 1, 'may_follow' => 1, 'max_size_kb' => 5120, 'extensions' => 'jpg,jpeg,png,pdf'],
     ];
 

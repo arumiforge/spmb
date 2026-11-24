@@ -41,6 +41,10 @@ $hint      = lang('Berkas.formatsHint', [DocumentTypeModel::formatLabel($type), 
                 <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-300"><?= esc($type['description']) ?></p>
             <?php endif ?>
             <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400"><?= esc($hint) ?></p>
+            <?php $templateLink = view('Modules\Berkas\Views\partials\template_link', ['link' => ['type' => $type]], ['saveData' => false]); ?>
+            <?php if (trim($templateLink) !== '') : ?>
+                <p class="mt-1.5"><?= $templateLink ?></p>
+            <?php endif ?>
             <?php if ($hasFile) : ?>
                 <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     <?= esc(lang('Berkas.uploadedAt', [tanggal_indo($doc['created_at'], true)])) ?><?= $isAdmin && $doc['uploaded_by'] !== null ? ' · ' . lang('Berkas.uploadedByStaff') : '' ?>

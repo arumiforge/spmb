@@ -23,6 +23,10 @@ $badges = static function (array $type): string {
         $html .= ' ' . view('partials/status_badge', ['badge' => ['label' => lang('Berkas.badgeInactive'), 'color' => 'gray']]);
     }
 
+    if (DocumentTypeModel::hasTemplate($type)) {
+        $html .= ' ' . view('partials/status_badge', ['badge' => (bool) $type['template_enabled'] ? ['label' => lang('Berkas.badgeTemplateOn'), 'color' => 'blue'] : ['label' => lang('Berkas.badgeTemplateOff'), 'color' => 'gray']]);
+    }
+
     return $html;
 };
 $rules = static fn (array $type): string => lang('Berkas.rulesLine', [DocumentTypeModel::formatLabel($type), DocumentStorage::sizeLabel((int) $type['max_size_kb'])]);

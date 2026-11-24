@@ -1,6 +1,7 @@
 <?php
 
 use Modules\Berkas\Models\DocumentTypeModel;
+use Modules\Berkas\Services\TemplateStorage;
 
 /**
  * @var array<string, mixed> $type
@@ -13,11 +14,12 @@ $checked = is_array($posted) ? $posted : array_values(array_unique(array_map(sta
 $errors  = session('errors');
 $fmtErr  = is_array($errors) ? ($errors['formats'] ?? null) : null;
 $card    = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-700 dark:bg-gray-800';
+$hasTpl  = ! $isNew && DocumentTypeModel::hasTemplate($type);
 ?>
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<form method="post" action="<?= $action ?>" class="form-lebar">
+<form method="post" action="<?= $action ?>" enctype="multipart/form-data" class="form-lebar">
     <?= csrf_field() ?>
     <section class="<?= $card ?>">
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -47,6 +49,29 @@ $card    = 'rounded-lg border border-gray-200 bg-white p-5 sm:p-6 dark:border-gr
                 <?= view('partials/form_field', ['field' => ['name' => 'may_follow', 'type' => 'checkbox', 'label' => lang('Berkas.fieldMayFollow'), 'value' => (string) (int) $type['may_follow']]]) ?>
                 <?= view('partials/form_field', ['field' => ['name' => 'is_active', 'type' => 'checkbox', 'label' => lang('Berkas.fieldActive'), 'value' => (string) (int) $type['is_active']]]) ?>
             </div>
+        </div>
+    </section>
+
+    <section class="<?= $card ?>" aria-labelledby="template-heading">
+        <h2 id="template-heading" class="text-lg font-semibold text-gray-900 dark:text-white"><?= lang('Berkas.templateHeading') ?></h2>
+        <p class="mb-4 mt-1 text-sm text-gray-500 dark:text-gray-400"><?= lang('Berkas.templateHelp') ?></p>
+        <?php // One column: a plain stack, not a grid, so the fields keep their natural height (no D-095 row tracks). ?>
+        <div class="space-y-5">
+            <?php if ($hasTpl) : ?>
+                <div class="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 text-sm sm:flex-row sm:items-center sm:justify-between dark:bg-gray-700">
+                    <p class="min-w-0 text-gray-900 dark:text-white">
+                        <span class="text-gray-500 dark:text-gray-400"><?= lang('Berkas.templateCurrent') ?>:</span>
+                        <span class="break-all font-medium"><?= esc(TemplateStorage::downloadName($type)) ?></span>
+                    </p>
+                    <a href="<?= url_to('berkas.jenis.contoh', $type['id']) ?>" class="inline-flex shrink-0 items-center gap-1.5 font-medium text-primary-700 hover:underline dark:text-primary-400"><?= icon('download', 'h-4 w-4') ?><?= lang('Berkas.templateDownload') ?></a>
+                </div>
+            <?php endif ?>
+            <?= view('partials/form_field', ['field' => ['name' => 'template', 'type' => 'file', 'label' => lang('Berkas.templateFile'), 'help' => lang('Berkas.templateFileHelp'), 'attrs' => ['accept' => TemplateStorage::accept()]]]) ?>
+            <?php if ($hasTpl) : ?>
+                <?= view('partials/form_field', ['field' => ['name' => 'remove_template', 'type' => 'checkbox', 'label' => lang('Berkas.templateRemove'), 'value' => '0']]) ?>
+            <?php endif ?>
+            <?= view('partials/form_field', ['field' => ['name' => 'template_label', 'label' => lang('Berkas.templateLabelField'), 'value' => (string) ($type['template_label'] ?? ''), 'help' => lang('Berkas.templateLabelHelp'), 'placeholder' => lang('Berkas.templateDefaultLabel'), 'attrs' => ['maxlength' => '60']]]) ?>
+            <?= view('partials/form_field', ['field' => ['name' => 'template_enabled', 'type' => 'checkbox', 'label' => lang('Berkas.templateEnabled'), 'value' => (string) (int) ($type['template_enabled'] ?? 0)]]) ?>
         </div>
     </section>
 

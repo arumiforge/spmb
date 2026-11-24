@@ -6,6 +6,7 @@ namespace Modules\Berkas\Models;
 
 use App\Models\Concerns\Auditable;
 use CodeIgniter\Model;
+use Modules\Berkas\Services\TemplateStorage;
 
 /**
  * Document types applicants hand in (table document_types). Owner: work package C (Berkas).
@@ -38,6 +39,7 @@ class DocumentTypeModel extends Model
     protected $useTimestamps  = true;
     protected $allowedFields  = [
         'code', 'name', 'description', 'is_required', 'may_follow', 'max_size_kb', 'extensions', 'sort_order', 'is_active',
+        'template_path', 'template_name', 'template_enabled', 'template_label',
     ];
 
     protected function initialize(): void
@@ -156,5 +158,38 @@ class DocumentTypeModel extends Model
         $last = array_pop($labels);
 
         return implode(', ', $labels) . ' ' . lang('Berkas.or') . ' ' . $last;
+    }
+
+    /**
+     * True when the type has an example file stored, shown or not.
+     *
+     * @param array<string, mixed> $type
+     */
+    public static function hasTemplate(array $type): bool
+    {
+        return (new TemplateStorage())->path($type['template_path'] ?? null) !== null;
+    }
+
+    /**
+     * True when applicants may download the example file: the type is
+     * active, the school switched the example on and the file exists.
+     *
+     * @param array<string, mixed> $type
+     */
+    public static function templateShown(array $type): bool
+    {
+        return (bool) ($type['is_active'] ?? false) && (bool) ($type['template_enabled'] ?? false) && self::hasTemplate($type);
+    }
+
+    /**
+     * Link text for the example file ("Unduh contoh" unless the school wrote its own).
+     *
+     * @param array<string, mixed> $type
+     */
+    public static function templateLabel(array $type): string
+    {
+        $label = trim((string) ($type['template_label'] ?? ''));
+
+        return $label !== '' ? $label : lang('Berkas.templateDefaultLabel');
     }
 }
