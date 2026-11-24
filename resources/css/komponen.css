@@ -765,4 +765,91 @@
     .dark mark.tanda-cari {
         background-color: var(--color-yellow-300);
     }
+
+    /* ---------- News ticker under the public header ("Berita singkat", Situs). With JavaScript the
+       items share one grid cell (the bar keeps the height of the longest item, so nothing jumps) and
+       only .is-tampil is visible; without JavaScript they are a plain list. ---------- */
+    .js .berita-daftar {
+        display: grid;
+    }
+
+    .js .berita-item {
+        grid-area: 1 / 1;
+        min-width: 0;
+        transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+    }
+
+    .js .berita-item:not(.is-tampil) {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(0.4rem);
+    }
+
+    .berita-item + .berita-item {
+        margin-top: 0.25rem;
+    }
+
+    .js .berita-item + .berita-item {
+        margin-top: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .js .berita-item {
+            transition: none;
+            transform: none !important;
+        }
+    }
+
+    /* ---------- Home page popup (Situs): a centred dialog that scrolls inside on small screens ---------- */
+    .popup-beranda {
+        width: min(36rem, calc(100vw - 2rem));
+        max-width: calc(100vw - 2rem);
+        max-height: calc(100dvh - 2rem);
+        margin: auto;
+        overflow: hidden;
+        border: 0;
+        border-radius: 1rem;
+        background: white;
+        padding: 0;
+        color: inherit;
+        box-shadow: 0 20px 50px -12px rgb(0 0 0 / 0.45);
+    }
+
+    .dark .popup-beranda {
+        background: var(--color-gray-800);
+    }
+
+    .popup-beranda::backdrop {
+        background: rgb(17 24 39 / 0.6);
+    }
+
+    .popup-isi a {
+        color: var(--color-primary-700);
+        text-decoration: underline;
+    }
+
+    .dark .popup-isi a {
+        color: var(--color-primary-300);
+    }
+
+    .popup-isi ul {
+        list-style: disc;
+        padding-inline-start: 1.25rem;
+    }
+
+    .popup-isi ol {
+        list-style: decimal;
+        padding-inline-start: 1.25rem;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .popup-beranda[open] {
+            animation: popup-muncul 0.22s ease-out;
+        }
+    }
+
+    @keyframes popup-muncul {
+        from { transform: translateY(12px) scale(0.98); opacity: 0; }
+        to { transform: none; opacity: 1; }
+    }
 }

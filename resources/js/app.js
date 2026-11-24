@@ -5,6 +5,8 @@
 import 'flowbite';
 import { initDialogs, initFolds, initTableOfContents, initSlideshow, initIcons3d, initPageSearch } from './ui.js';
 import { initTanggal } from './tanggal.js';
+import { initBerita } from './berita.js';
+import { initPopup } from './popup.js';
 
 const storage = {
     get(key) {
@@ -137,4 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initPageSearch();
     initSlideshow();
     initIcons3d();
+    initBerita();
+    initPopup();
 });
