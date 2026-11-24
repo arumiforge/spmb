@@ -58,6 +58,8 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
         }
 
         Services::resetSingle('modules');
+        Services::resetSingle('routes');
+        Services::resetSingle('router');
         parent::tearDown();
     }
 
@@ -289,8 +291,11 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
     {
         $this->seed();
         Services::injectMock('modules', new ModuleRegistry(APPPATH . 'Modules', config('Features')->core, ['Situs']));
+        // Reload the routes as a request would: a switched-off module has none (D-112).
+        Services::resetSingle('routes');
+        Services::resetSingle('router');
 
-        // Routes of switched-off modules are covered generically in FiturTest.
+        // Routes of switched-off modules are covered generically in ModuleRoutesTest.
         $this->get('/')->assertDontSee('href="' . site_url('tanya-jawab') . '"', null, false);
     }
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Situs\Libraries;
 
-use CodeIgniter\Router\RouteCollection;
-use Config\Modules;
-use Config\Routing;
 use Modules\Situs\Models\SiteQuestionModel;
 
 /**
@@ -128,8 +125,8 @@ final class FooterLinks
 
     /**
      * An internal page exists when it is in the website menu, or when a route
-     * answers it that does not belong to a switched-off module, and it is not a
-     * menu page hidden for lack of content.
+     * answers it, and it is not a menu page hidden for lack of content. Routes of
+     * switched-off modules are never loaded (D-112), so the route list is exact.
      *
      * @param list<string> $menu
      */
@@ -143,8 +140,7 @@ final class FooterLinks
             return false;
         }
 
-        return self::matches($path, array_keys(service('routes')->getRoutes('GET')))
-            && ! self::matches($path, self::switchedOffRoutes());
+        return self::matches($path, array_keys(service('routes')->getRoutes('GET')));
     }
 
     /**
@@ -161,49 +157,6 @@ final class FooterLinks
         }
 
         return false;
-    }
-
-    /**
-     * GET routes of switched-off modules. The framework's route discovery also
-     * loads their Config/Routes.php, so the main route list alone cannot tell.
-     *
-     * @return list<int|string>
-     */
-    private static function switchedOffRoutes(): array
-    {
-        static $cache = [];
-
-        $off = service('modules')->disabled();
-
-        if ($off === []) {
-            return [];
-        }
-
-        return $cache[implode(',', $off)] ??= self::collectRoutes($off);
-    }
-
-    /**
-     * @param list<string> $off
-     *
-     * @return list<int|string>
-     */
-    private static function collectRoutes(array $off): array
-    {
-        $config          = clone config(Modules::class);
-        $config->enabled = false; // No discovery: only the files included below.
-        $routes          = new RouteCollection(service('locator'), $config, config(Routing::class));
-
-        foreach ($off as $module) {
-            $file = APPPATH . 'Modules/' . $module . '/Config/Routes.php';
-
-            if (is_file($file)) {
-                (static function (RouteCollection $routes, string $file): void {
-                    require $file;
-                })($routes, $file);
-            }
-        }
-
-        return array_keys($routes->getRoutes('GET'));
     }
 
     /**

@@ -44,6 +44,9 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 - `spmb deploy` clears the app cache after migrations.
 
 ### Fixed
+- A module switched off on Pengaturan → Fitur now loses its pages too (404 on public and admin addresses), not only
+  its menu entries; switching it on brings them back (D-112). Route auto-discovery is off; `app/Config/Routes.php`
+  loads the routes of enabled modules only.
 - Saving a form with an error (for example adding a user) no longer opens the logo: the logo's 304 answer now
   carries its image type, so it is never remembered as the previous page.
 

@@ -89,9 +89,11 @@ Profil, Panduan, Riwayat) cannot be disabled. Super Admin switches modules on th
 (`/admin/pengaturan/fitur`, permission `sistem.modul`); each change is audited as `features_changed`.
 Each module describes itself for that page in `Config/Module.php` (`label`, `description`, `icon`;
 D-025), read with `service('modules')->info($name)` even while the module is off. `app/Config/Routes.php` loads `Config/Routes.php` of enabled modules
-only, so a disabled module's URLs return 404 (CodeIgniter's route auto-discovery is off in
-`Config\Modules::$aliases` for that reason: it would load every module's routes). Each module is also registered as namespace
-`Modules\<Name>` (in `Config\Autoload`), so `Language/id/<Name>.php` and `Views` resolve.
+only, so a disabled module's URLs (public and admin) return 404 and its named routes do not exist. Each module is also registered as namespace
+`Modules\<Name>` (in `Config\Autoload`), so `Language/id/<Name>.php` and `Views` resolve. Because of that,
+route auto-discovery is off (`'routes'` is not in `Config\Modules::$aliases`, D-112): it would load the
+routes of switched-off modules too. A link from one module to another (`url_to('<name>')`) checks
+`service('modules')->isEnabled()` first unless the target is core or listed in the module's `requires`.
 
 `service('menu')` builds the sidebar from each enabled module's `Config/Menu.php`
 (`label`, `url`, `icon`, `permission`, `group`, `order`) and keeps only entries the user can access.

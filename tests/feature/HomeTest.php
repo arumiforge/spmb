@@ -47,6 +47,8 @@ final class HomeTest extends CIUnitTestCase
         }
 
         Services::resetSingle('modules');
+        Services::resetSingle('routes');
+        Services::resetSingle('router');
         parent::tearDown();
     }
 
@@ -90,6 +92,9 @@ final class HomeTest extends CIUnitTestCase
     public function testWithoutRegistrationModuleOnlyTheGuideIsOffered(): void
     {
         Services::injectMock('modules', new ModuleRegistry(APPPATH . 'Modules', config('Features')->core, ['Pendaftaran']));
+        // Reload the routes as a request would: a switched-off module has none (D-112).
+        Services::resetSingle('routes');
+        Services::resetSingle('router');
         $this->makeWave();
 
         $result = $this->get('/');

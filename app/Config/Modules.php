@@ -70,15 +70,18 @@ class Modules extends BaseModules
      *
      * If it is not listed, only the base application elements will be used.
      *
+     * 'routes' is left out on purpose (D-112): every feature module is its own
+     * namespace (Config\Autoload), so route discovery would also load
+     * app/Modules/<Name>/Config/Routes.php of switched-off modules.
+     * app/Config/Routes.php loads the routes of enabled modules only, through
+     * service('modules'), so a switched-off module's pages answer 404.
+     *
      * @var list<string>
      */
     public $aliases = [
         'events',
         'filters',
         'registrars',
-        // No 'routes': discovery would load Config/Routes.php of every module in
-        // app/Modules, also switched-off ones. app/Config/Routes.php loads the
-        // routes of enabled modules only (ModuleRegistry), so a disabled module 404s.
         'services',
     ];
 }
