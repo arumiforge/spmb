@@ -525,7 +525,7 @@ final class StatistikQuery
     {
         $rank = static fn (array $r): int => match (true) {
             $r['key'] === 'lain' || in_array($r['key'], $last, true) => 1,
-            $r['key'] === ''     || $r['label'] === ''                   => 2,
+            $r['key'] === ''     || $r['label'] === ''               => 2,
             default                                                  => 0,
         };
 
