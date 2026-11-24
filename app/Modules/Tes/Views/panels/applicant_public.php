@@ -44,7 +44,7 @@ $notes    = trim((string) setting('Tes.instructions'));
             <?php if ($notes !== '') : ?>
                 <div class="mt-4 rounded-lg bg-primary-50 p-4 text-sm text-gray-800 dark:bg-gray-700 dark:text-gray-200">
                     <p class="mb-1 font-semibold text-gray-900 dark:text-white"><?= lang('Tes.instructions') ?></p>
-                    <p class="whitespace-pre-line"><?= esc($notes) ?></p>
+                    <p class="whitespace-pre-line"><bdi><?= esc($notes) ?></bdi></p>
                 </div>
             <?php endif ?>
         <?php endif ?>
