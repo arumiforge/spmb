@@ -1,7 +1,7 @@
 ## Mendaftarkan calon murid yang datang ke sekolah
 
 1. Di menu kiri, pilih **Tambah Pendaftar**.
-2. Isi data calon murid sesuai dokumen yang dibawa orang tua. Di bagian **Wali**, tanyakan dulu apakah calon murid diasuh wali. Pilih **Tidak ada wali** atau **Ada wali**; kotak data wali hanya diisi jika memilih **Ada wali**.
+2. Isi data calon murid sesuai dokumen yang dibawa orang tua. Di bagian **Wali**, tanyakan dulu apakah calon murid diasuh wali. Pilih **Tidak ada wali** atau **Ada wali**; kotak data wali hanya diisi jika memilih **Ada wali**. Untuk alamat, ketik nama desa di **Cari desa atau kelurahan** lalu pilih dari daftar; desa sampai provinsi langsung terisi. Lihat Kartu Keluarga agar desanya tepat.
 3. Gelombang otomatis terisi gelombang yang sedang dibuka. Ubah hanya jika perlu.
 4. Tekan **Simpan Data**.
 5. Jika muncul kotak kuning **Ada data yang mirip**, periksa daftar pendaftar di dalamnya. Jika memang anak yang berbeda, centang konfirmasi lalu tekan **Simpan Data** lagi.

@@ -60,7 +60,7 @@ class ApplicantService
         $year = (string) setting('Pendaftaran.academicYear');
         $wave = $this->pickWave($data, $method, $year);
 
-        $fields = array_intersect_key($data, array_flip([...ApplicantForm::CORE, ...ApplicantForm::CONFIGURABLE, ...ApplicantForm::CHOICES, 'previous_school_id']));
+        $fields = array_intersect_key($data, array_flip([...ApplicantForm::CORE, ...ApplicantForm::CONFIGURABLE, ...ApplicantForm::CHOICES, ...ApplicantForm::REGION_CODES, 'previous_school_id']));
 
         if ($method === 'offline') {
             $fields['notes'] = $data['notes'] ?? null;
@@ -142,7 +142,7 @@ class ApplicantService
     public function update(int $id, array $changes): array
     {
         $current = $this->applicants->find($id) ?? throw new InvalidArgumentException('Applicant not found: ' . $id);
-        $changes = array_intersect_key($changes, array_flip([...ApplicantForm::CORE, ...ApplicantForm::CONFIGURABLE, ...ApplicantForm::CHOICES, ...ApplicantForm::STAFF_ONLY, 'previous_school_id']));
+        $changes = array_intersect_key($changes, array_flip([...ApplicantForm::CORE, ...ApplicantForm::CONFIGURABLE, ...ApplicantForm::CHOICES, ...ApplicantForm::REGION_CODES, ...ApplicantForm::STAFF_ONLY, 'previous_school_id']));
 
         if (array_key_exists('full_name', $changes)) {
             $changes['name_key'] = DuplicateChecker::nameKey((string) $changes['full_name']);

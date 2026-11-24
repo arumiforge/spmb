@@ -53,4 +53,22 @@ class Referensi extends BaseConfig
      * ref_sekolah (written by BundledSchools, D-058). Empty = not loaded yet.
      */
     public string $bundledVersion = '';
+
+    /**
+     * Version of the bundled national region list already loaded into
+     * ref_wilayah (written by BundledRegions, D-111). Empty = not loaded yet.
+     */
+    public string $regionsVersion = '';
+
+    /**
+     * Region list requests (children of a province, regency or district)
+     * allowed per visitor (IP address) per minute. Answers are cached by the
+     * browser for a day, so a visitor rarely needs many.
+     */
+    public int $regionListPerMinute = 120;
+
+    /**
+     * Village/district name searches allowed per visitor per minute.
+     */
+    public int $regionSearchPerMinute = 60;
 }

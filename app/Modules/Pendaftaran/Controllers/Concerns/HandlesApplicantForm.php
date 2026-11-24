@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Pendaftaran\Controllers\Concerns;
 
 use Modules\Pendaftaran\Libraries\ApplicantForm;
+use Modules\Referensi\Libraries\RegionInput;
 use Modules\Referensi\Models\SchoolModel;
 
 /**
@@ -16,7 +17,8 @@ trait HandlesApplicantForm
     /**
      * Validates the posted $fields. Returns [cleaned data, errors]; errors is
      * empty when everything is fine. With "Tidak ada wali" the guardian fields
-     * are cleared and not checked.
+     * are cleared and not checked. The address codes of the region picker are
+     * checked and turned into names (RegionInput, D-111) before the text rules run.
      *
      * @param list<string> $fields
      *
@@ -24,9 +26,16 @@ trait HandlesApplicantForm
      */
     protected function validateApplicant(ApplicantForm $form, array $fields): array
     {
-        $data   = ApplicantForm::clean((array) $this->request->getPost(), $fields);
-        $fields = ApplicantForm::fieldsToCheck($fields, $data);
-        $rules  = $form->rules($fields, $data);
+        $posted       = (array) $this->request->getPost();
+        $data         = ApplicantForm::clean($posted, $fields);
+        $fields       = ApplicantForm::fieldsToCheck($fields, $data);
+        $regionErrors = [];
+
+        if (self::regionPickerAvailable()) {
+            [$data, $regionErrors] = (new RegionInput())->resolve($posted, $data, $fields);
+        }
+
+        $rules = $form->rules($fields, $data);
 
         if (in_array('previous_school_name', $fields, true) && self::schoolPickerAvailable()) {
             $rules['previous_school_id'] = ['label' => lang('Pendaftaran.fields.previous_school_id'), 'rules' => 'permit_empty|is_natural'];
@@ -36,7 +45,7 @@ trait HandlesApplicantForm
 
         $validation = service('validation', null, false)->setRules($rules);
         $validation->run($data);
-        $errors = $validation->getErrors() + $form->extraErrors($data, $fields);
+        $errors = $regionErrors + $validation->getErrors() + $form->extraErrors($data, $fields);
 
         if (array_key_exists('previous_school_id', $data)) {
             // The picker posts an id and/or free text; Referensi decides which one counts.
@@ -53,6 +62,14 @@ trait HandlesApplicantForm
     {
         return service('modules')->isEnabled('Referensi')
             && is_file(APPPATH . 'Modules/Referensi/Views/partials/school_picker.php');
+    }
+
+    /**
+     * The Referensi region picker is used when the module is on and the region list is loaded (D-111).
+     */
+    public static function regionPickerAvailable(): bool
+    {
+        return class_exists(RegionInput::class) && RegionInput::available();
     }
 
     /**

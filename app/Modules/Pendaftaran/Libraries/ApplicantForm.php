@@ -63,6 +63,14 @@ class ApplicantForm
     public const PARENT_NAMES = ['father_name', 'mother_name', 'guardian_name'];
 
     /**
+     * Region codes of the address (D-111), set by the region picker next to the text fields
+     * province, regency, district and village (Referensi RegionInput). Not form fields themselves.
+     *
+     * @var list<string>
+     */
+    public const REGION_CODES = ['province_code', 'regency_code', 'district_code', 'village_code'];
+
+    /**
      * Guardian fields: asked only after the "Ada wali" answer (has_guardian = 1).
      *
      * @var list<string>

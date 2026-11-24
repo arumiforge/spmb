@@ -42,7 +42,7 @@ final class Locales
     /**
      * Files and data served by controllers or Nginx: one address for every language.
      */
-    public const FILE_PATHS = ['aset', 'build', 'assets', 'berkas/contoh', 'popup/gambar', 'popup/lampiran', 'favicon.ico', 'robots.txt'];
+    public const FILE_PATHS = ['aset', 'build', 'assets', 'berkas/contoh', 'popup/gambar', 'popup/lampiran', 'asisten/gambar', 'favicon.ico', 'robots.txt'];
 
     /**
      * Short labels in the switcher, each in its own language.

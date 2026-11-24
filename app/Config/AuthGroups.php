@@ -105,6 +105,9 @@ class AuthGroups extends ShieldAuthGroups
         'situs.kelola'  => 'Mengubah isi halaman website dan pengumuman',
         'analitik.view' => 'Melihat statistik pengunjung website',
         'chat.balas'    => 'Membalas pesan di layanan chat',
+
+        'asisten.atur' => 'Mengatur Tanya Asisten (tampil di website, sapaan, pilihan cepat) dan melihat pertanyaan pengunjung',
+        'asisten.ai'   => 'Mengatur koneksi AI Tanya Asisten (penyedia, API key, batas pemakaian)',
     ];
 
     /**
@@ -116,14 +119,14 @@ class AuthGroups extends ShieldAuthGroups
         'superadmin' => [
             'dasbor.*', 'sistem.*', 'pengaturan.*', 'pengguna.*', 'audit.*',
             'pendaftar.*', 'kartu.*', 'referensi.*', 'tes.*', 'daftar-ulang.*', 'seragam.*',
-            'laporan.*', 'situs.*', 'analitik.*', 'chat.*',
+            'laporan.*', 'situs.*', 'analitik.*', 'chat.*', 'asisten.*',
         ],
         'admin' => [
             'dasbor.view', 'pengaturan.*',
             'pengguna.view', 'pengguna.create', 'pengguna.edit', 'pengguna.delete',
             'audit.view',
             'pendaftar.*', 'kartu.*', 'referensi.*', 'tes.*', 'daftar-ulang.*', 'seragam.*',
-            'laporan.*', 'situs.*', 'analitik.*', 'chat.*',
+            'laporan.*', 'situs.*', 'analitik.*', 'chat.*', 'asisten.atur',
         ],
         'panitia' => [
             'dasbor.view', 'pendaftar.view', 'pendaftar.create', 'pendaftar.edit',

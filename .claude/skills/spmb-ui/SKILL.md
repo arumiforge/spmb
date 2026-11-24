@@ -75,6 +75,9 @@ Text must never overlap, especially at 360 px:
   rotate long x labels (`rotate: -45`, `hideOverlappingLabels: true`) or switch to horizontal bars;
 - donut/pie: centre label short, legend below, no labels on slices under ~8%;
 - give the chart a fixed minimum height so labels have room; check 360, 768 and 1280 px with screenshots.
+- options that JSON cannot express go under `"spmb"` in `data-chart` (see the top of `charts.js`): `mask: 3` (tooltips show
+  "< 3" for 1–2, D-111), `links` (one address per bar, for drill-down), `sequential` (light → dark brand steps for ordered
+  series), `gap` (card-coloured line between stacked segments), `percentAxis`.
 
 ## Breadcrumbs (required on every page except the home page)
 
