@@ -766,3 +766,679 @@
         background-color: var(--color-yellow-300);
     }
 }
+
+/*
+ * ---------- Steps: numbered circles joined by a line (wizard stepper, "Cara mendaftar" timeline) ----------
+ * .langkah-bulat       numbered circle (filled brand colour by default)
+ * .stepper             step indicator of a form wizard (app/Views/partials/stepper.php, resources/js/wizard.js)
+ * .wizard*             the wizard itself: one step visible, sticky Back/Next bar, summary of the last step
+ * .pilihan-kartu       large radio cards ("Ada wali?")
+ * .garis-waktu         ordered list as a timeline: vertical line on phones, horizontal with .garis-waktu-mendatar
+ */
+@layer components {
+    .langkah-bulat {
+        --ukuran: var(--bulat, 2.5rem);
+        position: relative;
+        display: inline-grid;
+        flex-shrink: 0;
+        place-items: center;
+        width: var(--ukuran);
+        height: var(--ukuran);
+        border-radius: 9999px;
+        background: var(--color-primary-600);
+        color: white;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+    }
+
+    /* ---------- Stepper ---------- */
+    .stepper {
+        --bulat: 1.75rem;
+        scroll-margin-top: 6rem;
+    }
+
+    .stepper-ringkas {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.375rem;
+        margin: 0 0 0.5rem;
+        font-size: 0.875rem;
+        color: var(--color-gray-600);
+    }
+
+    .stepper-ringkas-judul {
+        font-weight: 600;
+        color: var(--color-gray-900);
+    }
+
+    .stepper-kemajuan {
+        height: 0.25rem;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        border-radius: 9999px;
+        background: var(--color-gray-200);
+    }
+
+    .stepper-kemajuan > span {
+        display: block;
+        width: var(--kemajuan, 0%);
+        height: 100%;
+        border-radius: inherit;
+        background: var(--color-primary-600);
+    }
+
+    .stepper-daftar {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .stepper-item {
+        position: relative;
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    /* The line from the previous circle to this one; coloured once this step is reached. */
+    .stepper-item + .stepper-item::before {
+        position: absolute;
+        inset-block-start: calc(var(--bulat) / 2 + 0.25rem - 1px);
+        inset-inline-end: 50%;
+        width: 100%;
+        height: 2px;
+        border-radius: 9999px;
+        background: var(--color-gray-200);
+        content: "";
+    }
+
+    .stepper-item.is-selesai::before,
+    .stepper-item.is-aktif::before {
+        background: var(--color-primary-600);
+    }
+
+    .stepper-tautan {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem;
+        border-radius: 0.75rem;
+        text-decoration: none;
+    }
+
+    .stepper-tautan:focus-visible {
+        outline: 2px solid var(--color-primary-600);
+        outline-offset: 2px;
+    }
+
+    .stepper .langkah-bulat {
+        font-size: 0.8125rem;
+        border: 2px solid var(--color-gray-300);
+        background: white;
+        color: var(--color-gray-500);
+    }
+
+    .stepper-item.is-aktif .langkah-bulat {
+        border-color: var(--color-primary-600);
+        color: var(--color-primary-700);
+        box-shadow: 0 0 0 4px var(--color-primary-100);
+    }
+
+    .stepper-item.is-selesai .langkah-bulat {
+        border-color: var(--color-primary-600);
+        background: var(--color-primary-600);
+        color: white;
+    }
+
+    /* Done: a check mark instead of the number (the number stays for screen readers in the link text). */
+    .stepper-item.is-selesai .langkah-angka {
+        opacity: 0;
+    }
+
+    .stepper-item.is-selesai .langkah-bulat::after {
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-start: 50%;
+        width: 0.38em;
+        height: 0.7em;
+        border: solid white;
+        border-width: 0 0.15em 0.15em 0;
+        transform: translate(-50%, -62%) rotate(45deg);
+        content: "";
+    }
+
+    /* A step with something to fix: a red dot on the circle. */
+    .stepper-item.has-error .langkah-bulat::before {
+        position: absolute;
+        inset-block-start: -0.2rem;
+        inset-inline-end: -0.2rem;
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 9999px;
+        background: var(--color-red-600);
+        box-shadow: 0 0 0 2px white;
+        content: "";
+    }
+
+    .stepper-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .dark .stepper-ringkas {
+        color: var(--color-gray-400);
+    }
+
+    .dark .stepper-ringkas-judul {
+        color: white;
+    }
+
+    .dark .stepper-kemajuan,
+    .dark .stepper-item + .stepper-item::before {
+        background: var(--color-gray-700);
+    }
+
+    .dark .stepper-kemajuan > span,
+    .dark .stepper-item.is-selesai::before,
+    .dark .stepper-item.is-aktif::before {
+        background: var(--color-primary-500);
+    }
+
+    .dark .stepper .langkah-bulat {
+        border-color: var(--color-gray-600);
+        background: var(--color-gray-800);
+        color: var(--color-gray-400);
+    }
+
+    .dark .stepper-item.is-aktif .langkah-bulat {
+        border-color: var(--color-primary-400);
+        color: white;
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-primary-500) 30%, transparent);
+    }
+
+    .dark .stepper-item.is-selesai .langkah-bulat {
+        border-color: var(--color-primary-500);
+        background: var(--color-primary-500);
+        color: white;
+    }
+
+    .dark .stepper-item.has-error .langkah-bulat::before {
+        box-shadow: 0 0 0 2px var(--color-gray-900);
+    }
+
+    @media (width >= 48rem) {
+        .stepper {
+            --bulat: 2.5rem;
+        }
+
+        .stepper-ringkas,
+        .stepper-kemajuan {
+            display: none;
+        }
+
+        .stepper .langkah-bulat {
+            font-size: 1rem;
+        }
+
+        .stepper-label {
+            position: static;
+            width: auto;
+            height: auto;
+            overflow: visible;
+            clip-path: none;
+            padding-inline: 0.25rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            line-height: 1.25;
+            text-align: center;
+            white-space: normal;
+            color: var(--color-gray-500);
+        }
+
+        .stepper-item.is-selesai .stepper-label {
+            color: var(--color-gray-700);
+        }
+
+        .stepper-item.is-aktif .stepper-label {
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+
+        .stepper-item.has-error .stepper-label {
+            color: var(--color-red-700);
+        }
+
+        .dark .stepper-label {
+            color: var(--color-gray-400);
+        }
+
+        .dark .stepper-item.is-selesai .stepper-label {
+            color: var(--color-gray-300);
+        }
+
+        .dark .stepper-item.is-aktif .stepper-label {
+            color: white;
+        }
+
+        .dark .stepper-item.has-error .stepper-label {
+            color: var(--color-red-400);
+        }
+
+        .stepper-tautan:hover .langkah-bulat {
+            border-color: var(--color-primary-400);
+        }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .stepper .langkah-bulat,
+        .stepper-item::before,
+        .stepper-kemajuan > span {
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, width 0.35s ease;
+        }
+    }
+
+    /* ---------- Wizard ---------- */
+    [data-wizard]:not(.is-wizard) .wizard-saja {
+        display: none !important;
+    }
+
+    .is-wizard .wizard-langkah:not(.is-aktif) {
+        display: none;
+    }
+
+    .wizard-langkah h2[tabindex="-1"]:focus {
+        outline: none;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .is-wizard .wizard-langkah.is-aktif {
+            animation: wizard-muncul 0.28s ease-out;
+        }
+    }
+
+    @keyframes wizard-muncul {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: none; }
+    }
+
+    .wizard-aksi {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 0.75rem;
+    }
+
+    /* Back / Next stay in reach: a floating bar above the mobile bottom bar (D-081) and its raised button. */
+    .is-wizard .wizard-aksi {
+        position: sticky;
+        inset-block-end: calc(6rem + env(safe-area-inset-bottom));
+        z-index: 30;
+        flex-wrap: nowrap;
+        padding: 0.625rem;
+        border: 1px solid var(--color-gray-200);
+        border-radius: 1rem;
+        background: color-mix(in srgb, white 92%, transparent);
+        box-shadow: 0 12px 30px -14px rgb(0 0 0 / 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .is-wizard .wizard-aksi > button {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    .is-wizard .wizard-aksi > [data-wizard-kembali] {
+        flex: 0 1 auto;
+    }
+
+    .dark .is-wizard .wizard-aksi {
+        border-color: var(--color-gray-700);
+        background: color-mix(in srgb, var(--color-gray-800) 92%, transparent);
+    }
+
+    /* From md the bar is part of the page (nothing to reach for on a large screen). */
+    @media (width >= 48rem) {
+        .is-wizard .wizard-aksi {
+            position: static;
+            padding: 0;
+            border-color: transparent;
+            background: none;
+            box-shadow: none;
+            backdrop-filter: none;
+        }
+
+        .dark .is-wizard .wizard-aksi {
+            border-color: transparent;
+            background: none;
+        }
+
+        .is-wizard .wizard-aksi > button,
+        .is-wizard .wizard-aksi > [data-wizard-kembali] {
+            flex: 0 0 auto;
+        }
+
+        .is-wizard .wizard-aksi > [data-wizard-lanjut],
+        .is-wizard .wizard-aksi > [data-wizard-kirim] {
+            margin-inline-start: auto;
+        }
+    }
+
+    /* Summary of the last step */
+    .wizard-ringkasan-kartu {
+        padding: 1rem;
+        border: 1px solid var(--color-gray-200);
+        border-radius: 0.75rem;
+    }
+
+    .wizard-ringkasan-kepala {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .wizard-ringkasan-kepala h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-gray-900);
+    }
+
+    .wizard-ringkasan-ubah {
+        flex-shrink: 0;
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-primary-700);
+    }
+
+    .wizard-ringkasan-ubah:hover {
+        background: var(--color-primary-50);
+    }
+
+    .wizard-ringkasan-ubah:focus-visible {
+        outline: 2px solid var(--color-primary-600);
+        outline-offset: 2px;
+    }
+
+    .wizard-ringkasan-daftar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.75rem 1.5rem;
+        font-size: 0.875rem;
+    }
+
+    .wizard-ringkasan-daftar dt {
+        color: var(--color-gray-500);
+    }
+
+    .wizard-ringkasan-daftar dd {
+        margin-top: 0.125rem;
+        overflow-wrap: anywhere;
+        font-weight: 500;
+        color: var(--color-gray-900);
+    }
+
+    .wizard-ringkasan-daftar dd.is-kosong {
+        font-weight: 400;
+        color: var(--color-gray-400);
+    }
+
+    @media (width >= 40rem) {
+        .wizard-ringkasan-daftar {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    .dark .wizard-ringkasan-kartu {
+        border-color: var(--color-gray-700);
+    }
+
+    .dark .wizard-ringkasan-kepala h3,
+    .dark .wizard-ringkasan-daftar dd {
+        color: white;
+    }
+
+    .dark .wizard-ringkasan-daftar dt,
+    .dark .wizard-ringkasan-daftar dd.is-kosong {
+        color: var(--color-gray-400);
+    }
+
+    .dark .wizard-ringkasan-ubah {
+        color: var(--color-primary-300);
+    }
+
+    .dark .wizard-ringkasan-ubah:hover {
+        background: var(--color-gray-700);
+    }
+
+    /* Parents section: father, mother, guardian and contact as groups */
+    .kelompok-isian-bagian + .kelompok-isian-bagian {
+        margin-top: 1.75rem;
+        padding-top: 1.75rem;
+        border-top: 1px solid var(--color-gray-200);
+    }
+
+    .dark .kelompok-isian-bagian + .kelompok-isian-bagian {
+        border-color: var(--color-gray-700);
+    }
+
+    /* ---------- Large radio cards ---------- */
+    .pilihan-kartu {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.875rem;
+        padding: 1rem;
+        border: 1.5px solid var(--color-gray-200);
+        border-radius: 0.875rem;
+        background: white;
+        cursor: pointer;
+    }
+
+    .pilihan-kartu:hover {
+        border-color: var(--color-primary-300);
+    }
+
+    .pilihan-kartu:has(:checked) {
+        border-color: var(--color-primary-600);
+        background: var(--color-primary-50);
+        box-shadow: 0 0 0 3px var(--color-primary-100);
+    }
+
+    .pilihan-kartu:has(:focus-visible) {
+        outline: 2px solid var(--color-primary-600);
+        outline-offset: 2px;
+    }
+
+    .pilihan-kartu-input {
+        order: 3;
+        flex-shrink: 0;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin: 0.125rem 0 0 auto;
+        border-color: var(--color-gray-300);
+        color: var(--color-primary-600);
+        cursor: pointer;
+    }
+
+    .pilihan-kartu-input:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    .pilihan-kartu-ikon {
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+        color: var(--color-gray-500);
+    }
+
+    .pilihan-kartu:has(:checked) .pilihan-kartu-ikon {
+        color: var(--color-primary-700);
+    }
+
+    .pilihan-kartu-judul {
+        display: block;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-gray-900);
+    }
+
+    .pilihan-kartu-teks {
+        display: block;
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: var(--color-gray-600);
+    }
+
+    .dark .pilihan-kartu {
+        border-color: var(--color-gray-600);
+        background: var(--color-gray-800);
+    }
+
+    .dark .pilihan-kartu:has(:checked) {
+        border-color: var(--color-primary-400);
+        background: color-mix(in oklab, var(--color-primary-700) 25%, var(--color-gray-800));
+        box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary-500) 25%, transparent);
+    }
+
+    .dark .pilihan-kartu-judul {
+        color: white;
+    }
+
+    .dark .pilihan-kartu-teks,
+    .dark .pilihan-kartu-ikon {
+        color: var(--color-gray-400);
+    }
+
+    .dark .pilihan-kartu:has(:checked) .pilihan-kartu-ikon {
+        color: var(--color-primary-300);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .pilihan-kartu {
+            transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+    }
+
+    /* ---------- Timeline (ordered list) ---------- */
+    .garis-waktu {
+        --bulat: 2.75rem;
+        --jarak: 1.5rem;
+        display: grid;
+        gap: var(--jarak);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .garis-waktu-item {
+        position: relative;
+        display: grid;
+        grid-template-columns: var(--bulat) minmax(0, 1fr);
+        align-items: start;
+        column-gap: 1rem;
+    }
+
+    .garis-waktu-item > .langkah-bulat {
+        z-index: 1;
+        grid-column: 1;
+        font-size: 1.0625rem;
+        box-shadow: 0 0 0 5px var(--garis-waktu-latar, white);
+    }
+
+    .garis-waktu-item > :not(.langkah-bulat) {
+        grid-column: 2;
+    }
+
+    /* Vertical line from this circle down to the next one. */
+    .garis-waktu-item:not(:last-child)::before {
+        position: absolute;
+        inset-block: calc(var(--bulat) / 2) calc(-1 * var(--jarak));
+        inset-inline-start: calc(var(--bulat) / 2 - 1px);
+        width: 2px;
+        border-radius: 9999px;
+        background: linear-gradient(var(--color-primary-500), var(--color-primary-200));
+        content: "";
+    }
+
+    .dark .garis-waktu-item > .langkah-bulat {
+        box-shadow: 0 0 0 5px var(--garis-waktu-latar-gelap, var(--color-gray-800));
+    }
+
+    .dark .garis-waktu-item:not(:last-child)::before {
+        background: linear-gradient(var(--color-primary-500), var(--color-primary-800));
+    }
+
+    /* Small version (side box of the registration form). */
+    .garis-waktu-ringkas {
+        --bulat: 1.75rem;
+        --jarak: 0.875rem;
+    }
+
+    .garis-waktu-ringkas .garis-waktu-item > .langkah-bulat {
+        font-size: 0.8125rem;
+        box-shadow: none;
+    }
+
+    .garis-waktu-ringkas .garis-waktu-isi {
+        padding-top: 0.2rem;
+    }
+
+    /* Horizontal from md: circles in one row joined by a line, cards under them. */
+    @media (width >= 48rem) {
+        .garis-waktu-mendatar {
+            --bulat: 3.25rem;
+            grid-template-columns: repeat(var(--garis-waktu-kolom, 3), minmax(0, 1fr));
+        }
+
+        .garis-waktu-mendatar .garis-waktu-item {
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-rows: auto 1fr;
+            row-gap: 1.25rem;
+            justify-items: center;
+        }
+
+        .garis-waktu-mendatar .garis-waktu-item > .langkah-bulat,
+        .garis-waktu-mendatar .garis-waktu-item > :not(.langkah-bulat) {
+            grid-column: 1;
+        }
+
+        .garis-waktu-mendatar .garis-waktu-item > :not(.langkah-bulat) {
+            justify-self: stretch;
+        }
+
+        .garis-waktu-mendatar .garis-waktu-item:not(:last-child)::before {
+            inset-block: calc(var(--bulat) / 2 - 1px) auto;
+            inset-inline-start: 50%;
+            width: calc(100% + var(--jarak));
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-primary-500), var(--color-primary-300));
+        }
+
+        .dark .garis-waktu-mendatar .garis-waktu-item:not(:last-child)::before {
+            background: linear-gradient(90deg, var(--color-primary-500), var(--color-primary-700));
+        }
+    }
+
+    @media print {
+        .is-wizard .wizard-langkah:not(.is-aktif) {
+            display: block;
+        }
+
+        .stepper,
+        .wizard-aksi {
+            display: none !important;
+        }
+    }
+}

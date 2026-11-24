@@ -126,4 +126,13 @@ return [
     'altFeatures'       => 'Susunan balok yang menggambarkan fitur yang bisa ditambahkan.',
     'altGuideStaff'     => 'Dua petugas sekolah membaca panduan bersama.',
     'altGuideApplicant' => 'Orang tua dan calon murid membaca panduan pendaftaran di ponsel.',
+
+    // Step indicator (partials/stepper)
+    'stepper' => [
+        'counter'  => 'Langkah {0} dari {1}',
+        'done'     => 'sudah diisi',
+        'current'  => 'langkah sekarang',
+        'upcoming' => 'belum diisi',
+        'error'    => 'ada isian yang perlu diperbaiki',
+    ],
 ];

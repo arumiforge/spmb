@@ -209,4 +209,22 @@ final class HomeTest extends CIUnitTestCase
         // D-094: the HTML is sent without indentation.
         $this->assertDoesNotMatchRegularExpression('/\n[ \t]+</', $body);
     }
+
+    public function testHowToRegisterIsAnOrderedTimeline(): void
+    {
+        $this->makeWave(['name' => 'Gelombang 1', 'starts_on' => '2027-01-04', 'ends_on' => '2027-02-27']);
+
+        $body = $this->get('/')->getBody();
+
+        $this->assertMatchesRegularExpression('/<ol class="garis-waktu garis-waktu-mendatar[^"]*"/', $body);
+        $this->assertSame(3, substr_count($body, 'class="garis-waktu-item'));
+        // The numbered circles are decoration; the step number is also written in each card.
+        $this->assertSame(3, substr_count($body, '<span class="langkah-bulat" aria-hidden="true">'));
+
+        foreach (['Langkah 1', 'Langkah 2', 'Langkah 3'] as $step) {
+            $this->assertStringContainsString($step, $body);
+        }
+        $this->assertStringContainsString('kartu-langkah kartu-langkah-1', $body);
+        $this->assertStringContainsString('Siapkan berkas', $body);
+    }
 }

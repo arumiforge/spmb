@@ -9,6 +9,7 @@
  * @var Modules\Pendaftaran\Libraries\ApplicantForm $form
  */
 
+use Modules\Pendaftaran\Libraries\ApplicantForm;
 use Modules\Pendaftaran\Models\ApplicantModel;
 
 $a      = $applicant;
@@ -35,6 +36,7 @@ $shown  = [
     'mother_name'          => $a['mother_name'],
     'mother_occupation'    => $a['mother_occupation'],
     'mother_income'        => $a['mother_income'] ?? null,
+    'has_guardian'         => lang('Pendaftaran.guardianOptions')[(string) ($a['has_guardian'] ?? '')] ?? null,
     'guardian_name'        => $a['guardian_name'],
     'guardian_relation'    => $a['guardian_relation'],
     'guardian_occupation'  => $a['guardian_occupation'] ?? null,
@@ -45,7 +47,11 @@ $shown  = [
     'graduation_year'      => $a['graduation_year'],
 ];
 // Show the fields the form asks, plus any hidden field that holds a value.
-$shown = array_filter($shown, static fn ($v, string $f): bool => $form->shows($f) || ($a[$f] ?? null) !== null, ARRAY_FILTER_USE_BOTH);
+// The guardian answer shows when it was asked; with "Tidak ada wali" the (empty) guardian fields are left out.
+$noGuardian = (string) ($a['has_guardian'] ?? '') === '0';
+$shown      = array_filter($shown, static fn ($v, string $f): bool => $f === 'has_guardian'
+    ? ($a['has_guardian'] ?? null) !== null
+    : ($form->shows($f) || ($a[$f] ?? null) !== null) && ! ($noGuardian && in_array($f, ApplicantForm::GUARDIAN, true)), ARRAY_FILTER_USE_BOTH);
 $button = 'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-base font-medium';
 ?>
 <?= $this->extend('layouts/public') ?>

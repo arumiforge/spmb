@@ -5,6 +5,7 @@
 import 'flowbite';
 import { initDialogs, initFolds, initTableOfContents, initSlideshow, initIcons3d, initPageSearch } from './ui.js';
 import { initTanggal } from './tanggal.js';
+import { initGuardianChoice, initWizards } from './wizard.js';
 
 const storage = {
     get(key) {
@@ -132,6 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initToggleText();
     initDialogs();
     initTanggal();
+    initGuardianChoice();
+    initWizards();
     initFolds();
     initTableOfContents();
     initPageSearch();
