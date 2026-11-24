@@ -136,7 +136,7 @@ final class BrandingTest extends CIUnitTestCase
     {
         $this->loadPack();
         $etag = $this->get('aset/logo')->response()->getHeaderLine('ETag');
-        $this->resetServices();
+        \Config\Services::resetSingle('response');
 
         // Without an image type the empty 304 kept text/html, CodeIgniter stored the logo as the
         // "previous page" and redirect()->back() after a form error opened the logo (user report).
