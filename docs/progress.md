@@ -48,6 +48,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
+| `igi/gifted-davinci-j917i9` | session admin-site | Admin round (D-098…): document templates + SK aktif, visitor stats, news ticker, home popup, editable footer links + social icons, setup checklist, server check page, wider sidebar, folding sections, registration stepper + guardian question, home steps timeline, complete demo applicant, user-create redirect bug | in progress |
 | `nty/intelligent-curie-pb1lv6` | session guides | Home map/contact layout (D-096), staff guides in the dashboard + in-page search on Panduan and Tanya Jawab (D-097) | PR open |
 | `pw/sleepy-hopper-d0a7h5` | session polish | Public polish round (D-090…D-095), Codex #49 and `langkah`, PR #43 notes | #50, #51 merged; follow-up PR open |
 | `feat/ui-codex` | worker A (ui-round) | Codex briefs 036–071 (`docs/ui-round-plan.md` A) | merged into the integration branch (#42) |
