@@ -77,6 +77,7 @@ flowbite/              Flowbite Pro templates — markup reference only (private
 | Laporan | Dashboard stats, filters, XLSX/CSV/PDF export, XLSX import | 4 |
 | Situs | Public pages: Persyaratan, Jadwal, Tanya Jawab (edited under Website) and later announcements | 2 (Persyaratan, Jadwal), platform round (Tanya Jawab, `modules/situs.md`) → 5 |
 | Analitik | Light visitor tracking | 5 |
+| Statistik | Applicant statistics for school planning: location drill-down, origin schools, family, age, registrations over time, cross-tabs (D-111) | platform round (built, `modules/statistik.md`) |
 | (messages, name to be chosen) | Messages, criticism and suggestions from applicants with committee replies — not live chat (D-052) | 5 |
 
 ### Module registry and menu
@@ -87,7 +88,8 @@ Profil, Panduan, Riwayat) cannot be disabled. Super Admin switches modules on th
 (`/admin/pengaturan/fitur`, permission `sistem.modul`); each change is audited as `features_changed`.
 Each module describes itself for that page in `Config/Module.php` (`label`, `description`, `icon`;
 D-025), read with `service('modules')->info($name)` even while the module is off. `app/Config/Routes.php` loads `Config/Routes.php` of enabled modules
-only, so a disabled module's URLs return 404. Each module is also registered as namespace
+only, so a disabled module's URLs return 404 (CodeIgniter's route auto-discovery is off in
+`Config\Modules::$aliases` for that reason: it would load every module's routes). Each module is also registered as namespace
 `Modules\<Name>` (in `Config\Autoload`), so `Language/id/<Name>.php` and `Views` resolve.
 
 `service('menu')` builds the sidebar from each enabled module's `Config/Menu.php`

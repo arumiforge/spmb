@@ -1667,3 +1667,10 @@
         unicode-bidi: isolate;
     }
 }
+
+/* Statistik (D-111): bars that open the next level of the location chart. */
+@layer components {
+    .chart-tautan .apexcharts-bar-area {
+        cursor: pointer;
+    }
+}
