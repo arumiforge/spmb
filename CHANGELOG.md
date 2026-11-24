@@ -5,6 +5,20 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- National region list (D-111): 83,762 villages (Kepmendagri 2025) as default data, address picker province →
+  regency/city → district → village with search on the registration and staff forms, one-time matching of old
+  typed addresses.
+- Statistik (D-111): applicant statistics for planning: home location drill-down, origin schools per district or
+  regency, parents' occupation and income, guardian, gender, religion, age, registrations over time, cross-tabs,
+  CSV export, small counts masked.
+- Tanya Asisten (D-110): help widget with quick choices, Tanya Jawab search first, AI answers from the school's own
+  content via rotating OpenAI-compatible connections with failover, WhatsApp handover, per-visitor and daily
+  limits, question log; managed by Admin Sekolah and Super Admin.
+
+### Fixed
+- Pages of a module switched off in Fitur answer 404 (module routes are no longer auto-discovered).
+
+### Added
 - Admin round (D-098…D-109):
   - **Documents:** new default "Surat Keterangan Aktif dari SD/MI" (required, may follow; a migration adds it to
     existing installations). Each document type can carry an example file (on/off, "Unduh contoh"); the first client's
