@@ -6,6 +6,7 @@ exports, and which role guides cover it.
 
 | Module | Doc |
 | --- | --- |
+| Analitik | [analitik.md](analitik.md) (visitor statistics) |
 | Berkas | [berkas.md](berkas.md) |
 | Kartu | [kartu.md](kartu.md) |
 | Panduan | [panduan.md](panduan.md) |
