@@ -170,12 +170,24 @@ final class FooterLinks
      */
     private static function switchedOffRoutes(): array
     {
+        static $cache = [];
+
         $off = service('modules')->disabled();
 
         if ($off === []) {
             return [];
         }
 
+        return $cache[implode(',', $off)] ??= self::collectRoutes($off);
+    }
+
+    /**
+     * @param list<string> $off
+     *
+     * @return list<int|string>
+     */
+    private static function collectRoutes(array $off): array
+    {
         $config          = clone config(Modules::class);
         $config->enabled = false; // No discovery: only the files included below.
         $routes          = new RouteCollection(service('locator'), $config, config(Routing::class));
