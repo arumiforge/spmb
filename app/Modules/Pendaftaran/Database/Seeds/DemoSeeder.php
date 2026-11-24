@@ -34,8 +34,51 @@ class DemoSeeder extends Seeder
     private const FIRST_NAMES = ['Ahmad', 'Siti', 'Muhammad', 'Nur', 'Rizky', 'Aisyah', 'Fajar', 'Dewi', 'Bayu', 'Putri', 'Dimas', 'Laila', 'Hafiz', 'Zahra', 'Ilham', 'Nabila', 'Raka', 'Salsabila', 'Yusuf', 'Kirana'];
     private const LAST_NAMES  = ['Pratama', 'Rahmawati', 'Hidayat', 'Lestari', 'Saputra', 'Maharani', 'Firmansyah', 'Anggraini', 'Nugroho', 'Wulandari', 'Ramadhan', 'Fitriani'];
     private const PLACES      = ['Kudus', 'Jepara', 'Pati', 'Demak', 'Semarang'];
-    private const DISTRICTS   = ['Jati', 'Kota Kudus', 'Bae', 'Kaliwungu', 'Mejobo', 'Gebog', 'Dawe'];
-    private const SCHOOLS     = ['SD Negeri 1 Getas Pejaten', 'SD Negeri 2 Jati Kulon', 'MI NU Miftahul Huda', 'SD Muhammadiyah Kudus', 'SD Negeri 3 Purwosari', 'MI Qudsiyyah'];
+
+    /**
+     * Real villages around the first client (Kemendagri codes, D-111), so Statistik has meaningful
+     * groups: village code, village, district, regency (display name). Province: Jawa Tengah (33).
+     *
+     * @var list<array{0: string, 1: string, 2: string, 3: string}>
+     */
+    public const VILLAGES = [
+        ['33.19.03.2006', 'Ploso', 'Jati', 'Kab. Kudus'],
+        ['33.19.02.2021', 'Glantengan', 'Kota Kudus', 'Kab. Kudus'],
+        ['33.18.10.1005', 'Pati Wetan', 'Pati', 'Kab. Pati'],
+        ['33.19.03.2007', 'Jati Kulon', 'Jati', 'Kab. Kudus'],
+        ['33.19.07.2001', 'Dersalam', 'Bae', 'Kab. Kudus'],
+        ['33.20.06.1004', 'Bapangan', 'Jepara', 'Kab. Jepara'],
+        ['33.19.03.2008', 'Getaspejaten', 'Jati', 'Kab. Kudus'],
+        ['33.19.02.1001', 'Purwosari', 'Kota Kudus', 'Kab. Kudus'],
+        ['33.21.11.1018', 'Bintoro', 'Demak', 'Kab. Demak'],
+        ['33.19.01.2014', 'Kaliwungu', 'Kaliwungu', 'Kab. Kudus'],
+        ['33.19.05.2009', 'Mejobo', 'Mejobo', 'Kab. Kudus'],
+        ['33.18.11.2001', 'Wuwur', 'Gabus', 'Kab. Pati'],
+        ['33.19.08.2001', 'Gribig', 'Gebog', 'Kab. Kudus'],
+        ['33.19.07.2004', 'Gondangmanis', 'Bae', 'Kab. Kudus'],
+        ['33.20.02.2003', 'Gerdu', 'Pecangaan', 'Kab. Jepara'],
+        ['33.19.09.2018', 'Colo', 'Dawe', 'Kab. Kudus'],
+        ['33.19.02.2012', 'Kramat', 'Kota Kudus', 'Kab. Kudus'],
+        ['33.21.05.2001', 'Ploso', 'Karangtengah', 'Kab. Demak'],
+        ['33.19.06.2009', 'Jekulo', 'Jekulo', 'Kab. Kudus'],
+        ['33.18.10.1007', 'Pati Kidul', 'Pati', 'Kab. Pati'],
+        ['33.19.04.2008', 'Undaan Kidul', 'Undaan', 'Kab. Kudus'],
+        ['33.20.12.2001', 'Blimbingrejo', 'Nalumsari', 'Kab. Jepara'],
+        ['33.21.06.2001', 'Doreng', 'Wonosalam', 'Kab. Demak'],
+    ];
+
+    /**
+     * Addresses typed by hand before the region list existed (no codes), for Sekolah Asal → Alamat pendaftar.
+     *
+     * @var list<array{village: string, district: string, regency: string, province: string}>
+     */
+    private const TYPED_ADDRESSES = [
+        ['village' => 'Ds. Getas Pejaten', 'district' => 'Kec. Jati', 'regency' => 'Kudus', 'province' => 'Jateng'],
+        ['village' => 'Desa Contoh', 'district' => 'Bae', 'regency' => 'Kudus', 'province' => 'Jawa Tengah'],
+        ['village' => 'Kel. Purwosari', 'district' => 'Kota Kudus', 'regency' => 'Kab. Kudus', 'province' => 'Jawa Tengah'],
+    ];
+
+    private const SCHOOLS = ['SD Negeri 1 Getas Pejaten', 'SD Negeri 2 Jati Kulon', 'MI NU Miftahul Huda', 'SD Muhammadiyah Kudus', 'SD Negeri 3 Purwosari', 'MI Qudsiyyah'];
 
     /**
      * The example applicant after run(): row, plain private-link token (only when created now) and whether it was created now.
@@ -83,18 +126,15 @@ class DemoSeeder extends Seeder
             $gender = in_array($first, ['Siti', 'Nur', 'Aisyah', 'Dewi', 'Putri', 'Laila', 'Zahra', 'Nabila', 'Salsabila', 'Kirana'], true) ? 'P' : 'L';
             $birth  = sprintf('%d-%02d-%02d', (int) date('Y') - 12 + ($i % 2), 1 + ($i * 5) % 12, 1 + ($i * 11) % 28);
             $data   = [
-                'full_name'            => $first . ' ' . $last,
-                'gender'               => $gender,
-                'birth_place'          => self::PLACES[$i % count(self::PLACES)],
-                'birth_date'           => $birth,
-                'nisn'                 => sprintf('01%08d', 12345 + $i * 97),
-                'nik'                  => $i % 3 === 0 ? null : sprintf('331901%010d', 4400000 + $i * 131),
-                'religion'             => 'Islam',
-                'address'              => 'Jl. Contoh No. ' . ($i + 1) . ', RT 0' . (1 + $i % 5) . '/RW 0' . (1 + $i % 3),
-                'village'              => 'Desa Contoh ' . (1 + $i % 6),
-                'district'             => self::DISTRICTS[$i % count(self::DISTRICTS)],
-                'regency'              => 'Kudus',
-                'province'             => 'Jawa Tengah',
+                'full_name'   => $first . ' ' . $last,
+                'gender'      => $gender,
+                'birth_place' => self::PLACES[$i % count(self::PLACES)],
+                'birth_date'  => $birth,
+                'nisn'        => sprintf('01%08d', 12345 + $i * 97),
+                'nik'         => $i % 3 === 0 ? null : sprintf('331901%010d', 4400000 + $i * 131),
+                'religion'    => 'Islam',
+                'address'     => 'Jl. Contoh No. ' . ($i + 1) . ', RT 0' . (1 + $i % 5) . '/RW 0' . (1 + $i % 3),
+                ...($i % 10 === 9 ? self::TYPED_ADDRESSES[intdiv($i, 10)] : self::region(self::VILLAGES[$i % count(self::VILLAGES)])),
                 'father_name'          => 'Bapak ' . $last,
                 'mother_name'          => 'Ibu ' . $last,
                 'has_guardian'         => '0',
@@ -156,20 +196,17 @@ class DemoSeeder extends Seeder
             : null;
 
         $data = [
-            'full_name'            => self::EXAMPLE_NAME,
-            'gender'               => 'P',
-            'birth_place'          => 'Kudus',
-            'birth_date'           => ((int) date('Y') - 12) . '-03-14',
-            'nisn'                 => '0129876543',
-            'nik'                  => '3319015403140002',
-            'kk_number'            => '3319010101140009',
-            'religion'             => 'Islam',
-            'phone'                => '085712345678',
-            'address'              => 'Jl. Sunan Muria No. 17, RT 03/RW 05',
-            'village'              => 'Glantengan',
-            'district'             => 'Kota Kudus',
-            'regency'              => 'Kudus',
-            'province'             => 'Jawa Tengah',
+            'full_name'   => self::EXAMPLE_NAME,
+            'gender'      => 'P',
+            'birth_place' => 'Kudus',
+            'birth_date'  => ((int) date('Y') - 12) . '-03-14',
+            'nisn'        => '0129876543',
+            'nik'         => '3319015403140002',
+            'kk_number'   => '3319010101140009',
+            'religion'    => 'Islam',
+            'phone'       => '085712345678',
+            'address'     => 'Jl. Sunan Muria No. 17, RT 03/RW 05',
+            ...self::region(self::VILLAGES[1]),
             'father_name'          => 'Ahmad Fauzan Ramadhan',
             'father_occupation'    => $pick('father_occupation', 'Wiraswasta', 8),
             'father_income'        => $pick('father_income', 'Rp2.000.000 – Rp4.999.999', 4),
@@ -200,6 +237,29 @@ class DemoSeeder extends Seeder
         $service->changeStatus($id, 'verified', 'Data contoh lengkap');
 
         return ['applicant' => $model->find($id), 'token' => $result['token'], 'created' => true];
+    }
+
+    /**
+     * Address fields (codes and display names) of a VILLAGES entry.
+     *
+     * @param array{0: string, 1: string, 2: string, 3: string} $village
+     *
+     * @return array<string, string>
+     */
+    public static function region(array $village): array
+    {
+        [$code, $name, $district, $regency] = $village;
+
+        return [
+            'village'       => $name,
+            'district'      => $district,
+            'regency'       => $regency,
+            'province'      => 'Jawa Tengah',
+            'province_code' => substr($code, 0, 2),
+            'regency_code'  => substr($code, 0, 5),
+            'district_code' => substr($code, 0, 8),
+            'village_code'  => $code,
+        ];
     }
 
     /**

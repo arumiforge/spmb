@@ -32,3 +32,19 @@ Jika sekolah tidak ada di daftar, calon murid boleh menulis nama sekolahnya send
 4. Jika sekolahnya memang belum ada di daftar, isi kotak **Atau tambahkan sebagai sekolah baru**, lalu tekan **Tambah dan Hubungkan**.
 
 - Jika satu nama ditulis oleh beberapa pendaftar, maka semuanya terhubung sekaligus.
+
+## Mencocokkan alamat pendaftar lama
+
+Sekarang alamat pendaftar dipilih dari daftar wilayah resmi. Pendaftar yang mendaftar sebelumnya menulis alamatnya sendiri. Cocokkan alamat mereka sekali saja, supaya laporan per desa dan kecamatan lengkap.
+
+1. Di menu kiri, pilih **Sekolah Asal**, lalu tekan **Alamat pendaftar**.
+2. Lihat berapa pendaftar yang alamatnya belum dicocokkan.
+3. Tekan **Lihat hasil pencocokan**. Belum ada yang disimpan pada langkah ini.
+4. Periksa tabelnya. **Cocok semua** berarti desa sampai provinsi ditemukan. **Cocok sebagian** berarti hanya sebagian yang ditemukan, misalnya kecamatannya. **Tidak cocok** berarti alamatnya tidak ditemukan di daftar.
+5. Jika sudah sesuai, tekan **Simpan hasil pencocokan**.
+
+> **Tips:** Bagian yang cocok diganti dengan nama resmi, misalnya "Kudus" menjadi "Kab. Kudus". Bagian yang tidak cocok tetap seperti tulisan pendaftar. Setiap perubahan tercatat di **Riwayat Perubahan**.
+
+- Jika ada alamat yang tidak cocok, maka buka data pendaftar itu, tekan **Ubah**, lalu pilih desanya dari daftar.
+- Jika tertulis "Daftar wilayah belum dimuat", maka hubungi pengelola server. Daftar ini dimuat otomatis saat sistem diperbarui.
+- Jika halaman ini dibuka lagi setelah semua disimpan, maka hanya alamat yang belum cocok yang diperiksa ulang. Aman dijalankan berkali-kali.

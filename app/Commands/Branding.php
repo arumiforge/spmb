@@ -8,6 +8,7 @@ use App\Libraries\BrandingAssets;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use Config\School;
+use Modules\Asisten\Libraries\AvatarStorage;
 use Modules\Berkas\Models\DocumentTypeModel;
 use Modules\Berkas\Services\TemplateStorage;
 use Modules\Berkas\Services\UploadRejected;
@@ -33,6 +34,10 @@ use Throwable;
  * berkas-contoh/<code>.<pdf|doc|docx|jpg|jpeg|png>, e.g. sk-aktif.doc. A file is
  * installed and switched on only for a type that has no example yet; the same
  * file again changes nothing, and an example the school uploaded itself is kept.
+ *
+ * The Tanya Asisten picture (D-110) comes from asisten.webp (or .png/.jpg) next to branding.json;
+ * asisten-<School.illustrationAccent>.webp is preferred when it exists. It is installed only while
+ * the school has no picture of its own, and the same file again changes nothing.
  */
 class Branding extends BaseCommand
 {
@@ -129,8 +134,67 @@ class Branding extends BaseCommand
         CLI::write('Branding loaded: ' . count($new) . ' setting(s) changed.', 'green');
 
         $result = $this->loadQuestions($dir);
+        $result = $result === EXIT_SUCCESS ? $this->loadTemplates($dir) : $result;
 
-        return $result === EXIT_SUCCESS ? $this->loadTemplates($dir) : $result;
+        return $result === EXIT_SUCCESS ? $this->loadAssistantPicture($dir) : $result;
+    }
+
+    /**
+     * Installs the Tanya Asisten picture (asisten.webp) from the pack folder, if present.
+     */
+    private function loadAssistantPicture(string $dir): int
+    {
+        $accent     = (string) setting('School.illustrationAccent');
+        $candidates = [];
+
+        if (preg_match('/\A[a-z]+\z/', $accent) === 1) {
+            $candidates[] = $dir . '/asisten-' . $accent . '.webp';
+        }
+
+        foreach (['webp', 'png', 'jpg'] as $ext) {
+            $candidates[] = $dir . '/asisten.' . $ext;
+        }
+
+        $file = null;
+
+        foreach ($candidates as $candidate) {
+            if (is_file($candidate)) {
+                $file = $candidate;
+
+                break;
+            }
+        }
+
+        if ($file === null || ! service('modules')->isEnabled('Asisten')) {
+            return EXIT_SUCCESS;
+        }
+
+        $current = AvatarStorage::file();
+
+        if ($current !== '') {
+            CLI::write(
+                hash_file('sha256', AvatarStorage::DIR . $current) === hash_file('sha256', $file)
+                    ? '  Assistant picture: already installed.'
+                    : '  Assistant picture: kept the picture the school uploaded.',
+                'yellow',
+            );
+
+            return EXIT_SUCCESS;
+        }
+
+        try {
+            $stored = AvatarStorage::storeFile($file);
+        } catch (Throwable $e) {
+            CLI::error('Assistant picture ' . basename($file) . ': ' . $e->getMessage());
+
+            return EXIT_ERROR;
+        }
+
+        $old = AvatarStorage::replace($stored);
+        service('audit')->log('settings_updated', 'settings', 'Asisten', ['avatar' => $old], ['avatar' => $stored], 'Gambar Tanya Asisten dimuat dari paket branding');
+        CLI::write('  Assistant picture: ' . basename($file) . ' installed.', 'green');
+
+        return EXIT_SUCCESS;
     }
 
     /**

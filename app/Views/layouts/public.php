@@ -6,7 +6,8 @@
  * drawer from the right below md), mobile bottom bar with Daftar raised in the middle (D-081).
  *
  * Module panels: public_top (under the header on every page, e.g. the Situs news ticker),
- * public_home (home page only, e.g. the Situs popup), public_footer (above the copyright line).
+ * public_home (home page only, e.g. the Situs popup), public_footer (above the copyright line),
+ * public_end (before </body> on every page, e.g. the Asisten chat widget).
  *
  * Languages (D-109): Indonesian, English (/en/…) and Arabic (/ar/…, right to left). <html lang dir> follow
  * the page, the switcher sits in the top bar, the drawer and the footer, and school texts use their
@@ -227,6 +228,7 @@ $hasContact  = $address !== '' || $phone !== '' || $whatsapp !== '' || $email !=
 <?php if (trim(uri_string(), '/') === '') : ?>
     <?= module_panels('public_home') ?>
 <?php endif ?>
+<?= module_panels('public_end') ?>
 <?= view('partials/flash') ?>
 <script src="<?= esc(asset_url('app.js'), 'attr') ?>"></script>
 <?= $this->renderSection('scripts') ?>

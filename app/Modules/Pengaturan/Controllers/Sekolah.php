@@ -8,6 +8,8 @@ use App\Controllers\BaseController;
 use App\Libraries\BrandingAssets;
 use App\Libraries\TranslationInput;
 use CodeIgniter\HTTP\RedirectResponse;
+use Modules\Referensi\Libraries\RegionInput;
+use Modules\Referensi\Models\RegionModel;
 
 /**
  * School identity and branding (white label), stored with setting('School.*').
@@ -66,12 +68,17 @@ class Sekolah extends BaseController
             $values[$field] = (bool) setting('School.' . $field) ? '1' : '0';
         }
 
+        // The school's own regency/city from the national region list (D-111), when it is loaded.
+        $values['regionCode'] = (string) setting('School.regionCode');
+        $regionOptions        = self::regionsAvailable() ? model(RegionModel::class)->regencyOptions() : null;
+
         return view('Modules\Pengaturan\Views\sekolah', [
             'title'       => lang('Pengaturan.schoolTitle'),
             'subtitle'    => lang('Pengaturan.schoolIntro'),
             'breadcrumbs' => [['label' => 'Dasbor', 'url' => 'admin'], ['label' => 'Pengaturan'], ['label' => 'Identitas Sekolah']],
             'values'      => $values,
             'images'      => array_map(static fn (string $key): ?string => BrandingAssets::url($key), array_combine(array_keys(BrandingAssets::ASSETS), array_keys(BrandingAssets::ASSETS))),
+            'regions'     => $regionOptions,
         ]);
     }
 
@@ -126,6 +133,25 @@ class Sekolah extends BaseController
 
         $old = [];
         $new = [];
+
+        // School region (D-111): a regency/city code from the list, or empty for none.
+        $region = $this->request->getPost('regionCode');
+
+        if (is_string($region) && self::regionsAvailable()) {
+            $region = trim($region);
+
+            if ($region !== '' && (RegionModel::levelOf($region) !== 2 || model(RegionModel::class)->region($region) === null)) {
+                return redirect()->back()->withInput()->with('errors', ['regionCode' => lang('Pengaturan.regionCodeInvalid')]);
+            }
+
+            $current = (string) setting('School.regionCode');
+
+            if ($region !== $current) {
+                $old['regionCode'] = $current;
+                $new['regionCode'] = $region;
+                setting('School.regionCode', $region);
+            }
+        }
 
         foreach ($translations as $field => $value) {
             $current = (string) setting('School.' . $field);
@@ -204,5 +230,10 @@ class Sekolah extends BaseController
         }
 
         return redirect()->route('pengaturan.sekolah')->with('message', lang('Pengaturan.saved'));
+    }
+
+    private static function regionsAvailable(): bool
+    {
+        return class_exists(RegionInput::class) && RegionInput::available();
     }
 }

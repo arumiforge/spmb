@@ -24,6 +24,16 @@ Identitas sekolah tampil di website, halaman masuk, kartu pendaftaran, dan dokum
 
 - Jika logo tidak berubah, maka muat ulang halaman (tekan Ctrl+F5 di komputer).
 
+## Memilih kabupaten/kota sekolah
+
+Pilihan ini membuat isian alamat di formulir pendaftaran langsung terisi provinsi dan kabupaten/kota sekolah. Calon murid tinggal memilih kecamatan dan desa.
+
+1. Di menu kiri, pilih **Identitas Sekolah**.
+2. Di kotak **Kabupaten/kota sekolah**, pilih kabupaten atau kota tempat sekolah berada. Daftarnya dikelompokkan per provinsi.
+3. Tekan **Simpan Pengaturan**.
+
+> **Tips:** Pencarian desa di formulir juga mendahulukan desa di kabupaten/kota ini. Pilih **Belum dipilih** jika tidak ingin ada isian yang terisi lebih dulu.
+
 ## Mengatur bahasa website
 
 Website sekolah bisa dibaca dalam tiga bahasa: Bahasa Indonesia, bahasa Inggris (alamatnya diawali /en/), dan bahasa Arab (alamatnya diawali /ar/, dibaca dari kanan ke kiri). Pengunjung memilih bahasa lewat tulisan **ID · EN · العربية** di bagian atas atau bawah website. Dasbor petugas, kartu pendaftaran, dan data yang diisi pendaftar tetap dalam Bahasa Indonesia.

@@ -75,6 +75,31 @@ on servers that Arumi Studios operates, not shipped to clients as software.
 | Data | Source | Note |
 | --- | --- | --- |
 | National SD/MI list (`app/Modules/Referensi/Database/Data/sekolah-sd-mi/`) | Public school reference data (Kemendikdasmen / Kemenag), compiled by Arumi Studios | Public data, no personal data (D-058) |
+| National region list (`app/Modules/Referensi/Database/Data/wilayah/`) | [cahyadsn/wilayah](https://github.com/cahyadsn/wilayah) `db/wilayah.sql`, codes and names per Kepmendagri No 300.2.2-2138 Tahun 2025; MIT, Copyright (c) 2025 cahya dsn | Converted by `scripts/wilayah.mjs` (codes and names only); public data, no personal data (D-111). The MIT licence text follows below. |
+
+### cahyadsn/wilayah (MIT)
+
+```
+Copyright (c) 2025 by cahya dsn; cahyadsn@gmail.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
 ## CodeIgniter application starter
 
