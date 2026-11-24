@@ -38,13 +38,13 @@ $banner   = [
 
     <?= view('partials/lipatan_semua') ?>
 
-    <div class="grid grid-cols-1 items-start gap-6 xl:grid-cols-2">
+    <div class="gap-6 xl:columns-2">
         <?php foreach ($report as $key => $rows) : ?>
             <?php
             $worst = in_array('bad', array_column($rows, 'status'), true) ? 'bad' : (in_array('warn', array_column($rows, 'status'), true) ? 'warn' : 'ok');
             $badge = view('partials/status_badge', ['badge' => ['label' => $statuses[$worst], 'color' => $colors[$worst]]]);
             ?>
-            <?= view('partials/lipatan_buka', ['id' => 'server-' . $key, 'title' => $sections[$key] ?? $key, 'icon' => $icons[$key] ?? 'server', 'badge' => $badge, 'open' => $key !== 'extensions' || $worst !== 'ok']) ?>
+            <?= lipatan_buka(['id' => 'server-' . $key, 'title' => $sections[$key] ?? $key, 'icon' => $icons[$key] ?? 'server', 'badge' => $badge, 'open' => $key !== 'extensions' || $worst !== 'ok', 'class' => 'mb-6']) ?>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
                         <thead class="sr-only">
@@ -59,14 +59,14 @@ $banner   = [
                                             <span class="mt-0.5 block text-xs font-normal text-gray-500 dark:text-gray-400"><?= esc($row['hint']) ?></span>
                                         <?php endif ?>
                                     </th>
-                                    <td class="break-all py-2.5 pe-3 font-mono text-xs text-gray-700 sm:text-sm dark:text-gray-300"><?= esc($row['value']) ?></td>
+                                    <td class="break-words py-2.5 pe-3 font-mono text-xs text-gray-700 sm:text-sm dark:text-gray-300"><?= esc($row['value']) ?></td>
                                     <td class="py-2.5 text-end"><?= view('partials/status_badge', ['badge' => ['label' => $statuses[$row['status']] ?? $row['status'], 'color' => $colors[$row['status']] ?? 'gray']]) ?></td>
                                 </tr>
                             <?php endforeach ?>
                         </tbody>
                     </table>
                 </div>
-            <?= view('partials/lipatan_tutup') ?>
+            <?= lipatan_tutup() ?>
         <?php endforeach ?>
     </div>
 </div>

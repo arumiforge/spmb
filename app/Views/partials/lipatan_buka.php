@@ -2,11 +2,12 @@
 /**
  * Opens a folding card (D-100): a native <details> that opens and closes without
  * JavaScript; resources/js/lipatan.js remembers its state and opens it when it
- * holds an error. Close it with view('partials/lipatan_tutup').
+ * holds an error. Always render it through the helpers (they keep `title` out of
+ * the page's view data):
  *
- *   <?= view('partials/lipatan_buka', ['id' => 'kontak', 'title' => 'Kontak', 'intro' => '…', 'icon' => 'phone']) ?>
+ *   <?= lipatan_buka(['id' => 'kontak', 'title' => 'Kontak', 'intro' => '…', 'icon' => 'phone']) ?>
  *       …content…
- *   <?= view('partials/lipatan_tutup') ?>
+ *   <?= lipatan_tutup() ?>
  *
  * @var string      $id      Unique on the page; used to remember the state
  * @var string      $title
@@ -21,7 +22,7 @@ $open    ??= true;
 $heading ??= 'h2';
 $heading   = in_array($heading, ['h2', 'h3'], true) ? $heading : 'h2';
 ?>
-<details class="lipatan group rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 <?= esc($class ?? '', 'attr') ?>" data-lipatan="<?= esc($id, 'attr') ?>"<?= $open ? ' open' : '' ?>>
+<details class="lipatan group break-inside-avoid rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 <?= esc($class ?? '', 'attr') ?>" data-lipatan="<?= esc($id, 'attr') ?>"<?= $open ? ' open' : '' ?>>
     <summary class="flex cursor-pointer list-none items-start gap-3 rounded-lg p-5 hover:bg-gray-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-300 sm:p-6 dark:hover:bg-gray-700/40 dark:focus-visible:ring-primary-800 [&::-webkit-details-marker]:hidden">
         <?php if (! empty($icon)) : ?>
             <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-gray-700 dark:text-primary-300" aria-hidden="true"><?= icon($icon, 'h-5 w-5') ?></span>

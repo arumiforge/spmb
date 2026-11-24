@@ -186,6 +186,29 @@ if (! function_exists('icon_exists')) {
     }
 }
 
+if (! function_exists('lipatan_buka')) {
+    /**
+     * Opens a folding card (partials/lipatan_buka, D-100). Use this helper instead of
+     * view(): it does not leak `title` and friends into the page's view data.
+     *
+     * @param array{id: string, title: string, intro?: string|null, icon?: string|null, badge?: string|null, open?: bool, class?: string|null, heading?: string} $card
+     */
+    function lipatan_buka(array $card): string
+    {
+        return view('partials/lipatan_buka', $card, ['saveData' => false]);
+    }
+}
+
+if (! function_exists('lipatan_tutup')) {
+    /**
+     * Closes a folding card opened with lipatan_buka().
+     */
+    function lipatan_tutup(): string
+    {
+        return view('partials/lipatan_tutup', [], ['saveData' => false]);
+    }
+}
+
 if (! function_exists('module_panels')) {
     /**
      * Renders the panel <name> of every enabled module that provides
