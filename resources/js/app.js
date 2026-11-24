@@ -9,6 +9,7 @@ import { initLipatan } from './lipatan.js';
 import { initGuardianChoice, initWizards } from './wizard.js';
 import { initBerita } from './berita.js';
 import { initPopup } from './popup.js';
+import { initAsisten } from './asisten.js';
 
 const storage = {
     get(key) {
@@ -146,4 +147,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initIcons3d();
     initBerita();
     initPopup();
+    initAsisten();
 });

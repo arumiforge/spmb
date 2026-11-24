@@ -77,6 +77,7 @@ flowbite/              Flowbite Pro templates — markup reference only (private
 | Laporan | Dashboard stats, filters, XLSX/CSV/PDF export, XLSX import | 4 |
 | Situs | Public pages: Persyaratan, Jadwal, Tanya Jawab (edited under Website) and later announcements | 2 (Persyaratan, Jadwal), platform round (Tanya Jawab, `modules/situs.md`) → 5 |
 | Analitik | Light visitor tracking | 5 |
+| Asisten | "Tanya Asisten" help widget: quick choices, Tanya Jawab search, AI answers from the school's own content with rotating OpenAI-compatible connections (D-110) | platform round (built, `modules/asisten.md`) |
 | (messages, name to be chosen) | Messages, criticism and suggestions from applicants with committee replies — not live chat (D-052) | 5 |
 
 ### Module registry and menu
@@ -193,11 +194,12 @@ sign-in (`TwoFactor.maxAttempts`).
 | `test_rooms`, `test_holidays`, `test_sessions`, `test_assignments`, `test_schedule_changes` | Tes | Rooms, calendar, sessions, seats and the schedule change log (D-059…D-064) |
 | `site_questions` | Situs | Tanya Jawab questions and answers (Markdown), audited (D-072) |
 | `site_news` | Situs | News ticker items under the public header ("Berita singkat"), audited |
+| `asisten_providers`, `asisten_questions`, `asisten_usage` | Asisten | AI connections (key encrypted), visitor question log without IP, daily AI answer counts (D-110) |
 
 Module extension points (D-033): `Config/Module.php` `requires`, `Config/PublicMenu.php`, `Config/Audit.php`,
 `Views/panels/<slot>.php` rendered with `module_panels()`, and `InstallSeeder`/`DemoSeeder` run by `spmb:install`.
 Public layout slots: `public_top` (under the header, every page), `public_home` (home page only),
-`public_footer` (above the copyright line).
+`public_footer` (above the copyright line), `public_end` (before `</body>` on every page; the Asisten chat widget).
 The public applicant session is `service('applicantAccess')` (D-034).
 
 ## Key design rules
