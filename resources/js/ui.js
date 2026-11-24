@@ -1,7 +1,7 @@
 /*
  * Small page behaviours added in the November 2026 UI round (D-081…D-088):
- * dialogs, "Lihat selengkapnya" folds, table of contents highlight, hero slideshow
- * and the lazy loader of the three.js icons.
+ * dialogs, "Lihat selengkapnya" folds, table of contents highlight, hero slideshow,
+ * the lazy loader of the three.js icons and the search inside guide and Q&A pages (D-097).
  */
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -86,6 +86,7 @@ function makeFold(fold) {
         }
     });
     fold.addEventListener('lipat:buka', () => setOpen(true));
+    fold.addEventListener('lipat:tutup', () => setOpen(false));
     media?.addEventListener('change', update);
     update();
 }
@@ -255,4 +256,166 @@ export function initIcons3d() {
     } else {
         window.setTimeout(load, 1200);
     }
+}
+
+/*
+ * Search inside a page (D-097), markup in app/Views/partials/cari_halaman.php:
+ * <div data-cari-halaman data-cari-wadah="#selector" data-cari-jenis="bagian|butir" hidden>.
+ * "bagian": every <h2> of the container with everything up to the next <h2> (guide pages; the
+ * folds of initFolds open while they match). "butir": every <details> (Q&A); a <section> with no
+ * matching question hides too. All words must appear; matches are marked with <mark>. Contents
+ * links to hidden parts hide as well. Clearing the box puts the page back as it was.
+ */
+const normalise = (text) => text.toLocaleLowerCase('id').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+function unitsOf(container, kind) {
+    if (kind === 'butir') {
+        return [...container.querySelectorAll('details')].map((node) => ({ nodes: [node], details: node, group: node.closest('section') }));
+    }
+    const units = [];
+    let intro = { nodes: [], intro: true };
+    let current = intro;
+    [...container.children].forEach((node) => {
+        if (node.tagName === 'H2') {
+            current = { nodes: [node] };
+            units.push(current);
+        } else {
+            current.nodes.push(node);
+        }
+    });
+    return intro.nodes.length > 0 ? [intro, ...units] : units;
+}
+
+function unmark(container) {
+    container.querySelectorAll('mark.tanda-cari').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+    });
+}
+
+function mark(root, words) {
+    const pattern = new RegExp(words.map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi');
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode: (node) => (node.parentElement.closest('script, style, mark, button, svg') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
+    });
+    const nodes = [];
+    while (walker.nextNode()) {
+        nodes.push(walker.currentNode);
+    }
+    nodes.forEach((node) => {
+        const text = node.nodeValue;
+        pattern.lastIndex = 0;
+        if (!pattern.test(text)) {
+            return;
+        }
+        pattern.lastIndex = 0;
+        const fragment = document.createDocumentFragment();
+        let last = 0;
+        text.replace(pattern, (found, offset) => {
+            fragment.append(text.slice(last, offset));
+            const highlight = document.createElement('mark');
+            highlight.className = 'tanda-cari';
+            highlight.textContent = found;
+            fragment.append(highlight);
+            last = offset + found.length;
+            return found;
+        });
+        fragment.append(text.slice(last));
+        node.replaceWith(fragment);
+    });
+}
+
+export function initPageSearch() {
+    document.querySelectorAll('[data-cari-halaman]').forEach((box) => {
+        const container = document.querySelector(box.dataset.cariWadah);
+        const input = box.querySelector('input[type="search"]');
+        const clear = box.querySelector('[data-cari-hapus]');
+        const status = box.querySelector('[data-cari-status]');
+        if (!container || !input) {
+            return;
+        }
+        box.hidden = false;
+        const kind = box.dataset.cariJenis || 'bagian';
+        let units = null; // built on first use, after initFolds has wrapped the sections
+        const openedBySearch = new Set();
+
+        const tocLinks = () => [...document.querySelectorAll('[data-daftar-isi] a[href^="#"]')];
+
+        const run = () => {
+            units ??= unitsOf(container, kind);
+            const words = normalise(input.value).split(/\s+/).filter((word) => word.length > 0);
+            unmark(container);
+            clear.hidden = words.length === 0;
+
+            if (words.length === 0) {
+                units.forEach((unit) => unit.nodes.forEach((node) => { node.hidden = false; }));
+                container.querySelectorAll('section').forEach((section) => { section.hidden = false; });
+                openedBySearch.forEach((node) => {
+                    if (node.tagName === 'DETAILS') {
+                        node.open = false;
+                    } else {
+                        node.dispatchEvent(new Event('lipat:tutup'));
+                    }
+                });
+                openedBySearch.clear();
+                tocLinks().forEach((link) => { link.closest('li').hidden = false; });
+                status.textContent = '';
+                return;
+            }
+
+            let count = 0;
+            units.forEach((unit) => {
+                const text = normalise(unit.nodes.map((node) => node.textContent).join(' '));
+                const match = !unit.intro && words.every((word) => text.includes(word));
+                unit.nodes.forEach((node) => { node.hidden = !match; });
+                if (!match) {
+                    return;
+                }
+                count += 1;
+                unit.nodes.forEach((node) => mark(node, words));
+                if (unit.details && !unit.details.open) {
+                    unit.details.open = true;
+                    openedBySearch.add(unit.details);
+                }
+                unit.nodes.filter((node) => node.matches('.lipat[data-lipat-siap]:not(.is-terbuka)')).forEach((fold) => {
+                    fold.dispatchEvent(new Event('lipat:buka'));
+                    openedBySearch.add(fold);
+                });
+            });
+            if (kind === 'butir') {
+                container.querySelectorAll('section').forEach((section) => {
+                    section.hidden = !section.querySelector('details:not([hidden])');
+                });
+            }
+            tocLinks().forEach((link) => {
+                const target = document.getElementById(decodeURIComponent(link.getAttribute('href').slice(1)));
+                link.closest('li').hidden = !target || target.hidden || target.closest('[hidden]') !== null;
+            });
+            status.textContent = count > 0 ? box.dataset.cariKetemu.replace('{n}', String(count)) : box.dataset.cariKosong;
+        };
+
+        let timer = 0;
+        input.addEventListener('input', () => {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(run, 150);
+        });
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && input.value !== '') {
+                event.preventDefault();
+                input.value = '';
+                run();
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                window.clearTimeout(timer);
+                run();
+                container.querySelector('mark.tanda-cari')?.scrollIntoView({ block: 'center', behavior: reducedMotion() ? 'auto' : 'smooth' });
+            }
+        });
+        clear.addEventListener('click', () => {
+            input.value = '';
+            run();
+            input.focus();
+        });
+    });
 }

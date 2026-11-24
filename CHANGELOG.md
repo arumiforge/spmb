@@ -4,7 +4,17 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 
 ## [Unreleased]
 
+### Changed
+- Home "Lokasi dan kontak" (D-096): contacts in one tidy card on the left, one map card on the right (below the
+  contacts on phones, full width) with a map icon caption and a "Buka petunjuk arah" button; WhatsApp row shows the
+  WhatsApp mark.
+- Staff guides (Panitia, Admin Sekolah, Super Admin) moved from the public site into the dashboard at
+  `/admin/panduan` (D-097); each role reads its own guide, Super Admin reads all. Old public addresses redirect there
+  (sign-in required); `/panduan` opens the applicant/parent guide.
+
 ### Added
+- Search inside the page on Panduan and Tanya Jawab (D-097): parts without the typed words hide, matches are marked,
+  folded parts and answers open, and a short message says how many parts match.
 - Public polish round (D-090…D-095): Codex paintings 021–026 installed beside the headings of Persyaratan, Jadwal,
   Tanya Jawab, Cek Status, the card page and "Cara mendaftar"; generic link-preview painting (035) used when a school
   has no share image; "Cara mendaftar" cards with an art background and slots for step scenes (briefs 046–048

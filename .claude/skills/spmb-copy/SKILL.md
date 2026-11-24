@@ -52,8 +52,10 @@ super admin may see technical language.
 
 ## Guide pages (`/panduan`)
 
-One guide per role, written in Indonesian, served at `/panduan/<role-slug>`
-(e.g. `/panduan/calon-murid`, `/panduan/panitia-pendaftaran`, `/panduan/admin-sekolah`).
+One guide per role, written in Indonesian. The applicant/parent guide is public at `/panduan/calon-murid`;
+staff guides are only inside the dashboard at `/admin/panduan/<role-slug>` (`panitia`, `admin-sekolah`,
+`super-admin`), each role its own (D-097). Write `##` sections that make sense on their own: the in-page
+search shows or hides whole sections.
 Each guide:
 1. "Apa yang bisa Anda lakukan" — bullet list of tasks.
 2. One section per task: numbered steps (max 7), screenshot/illustration placeholder,

@@ -170,6 +170,24 @@ final class HomeTest extends CIUnitTestCase
         $this->assertStringContainsString(lang('Situs.homeDirections'), $body);
     }
 
+    public function testContactsComeFirstAndOneMapSitsBesideThem(): void
+    {
+        setting('School.mapEmbed', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961');
+        setting('School.address', 'Jl. Contoh No. 1');
+        setting('School.whatsapp', '081234567890');
+
+        $body = $this->get('/')->getBody();
+
+        // D-096: one map for every screen size, after the contact list (so on the right from lg, below on phones).
+        $this->assertSame(1, substr_count($body, '<iframe'));
+        $this->assertLessThan(strpos($body, 'class="peta-kartu'), strpos($body, 'class="kontak-daftar'));
+        $this->assertStringContainsString(lang('Situs.homeDirections'), $body);
+        // The WhatsApp row shows the WhatsApp mark while the painted icon is not delivered.
+        $list = substr($body, (int) strpos($body, 'class="kontak-daftar'), 6000);
+        $this->assertStringContainsString('<svg class="h-1/2 w-1/2" aria-hidden="true"', $list);
+        $this->assertStringContainsString('M17.472', $list);
+    }
+
     public function testFooterLinksAreOnlyStatusQuestionsAndGuide(): void
     {
         $body = $this->get('/')->getBody();

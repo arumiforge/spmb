@@ -136,7 +136,7 @@ final class BrandingTest extends CIUnitTestCase
     {
         $this->loadPack();
 
-        $page = $this->get('panduan');
+        $page = $this->get('panduan/calon-murid');
         $page->assertOK();
         $body = $page->getBody();
         $this->assertStringContainsString('property="og:image" content="' . site_url('aset/gambar-bagikan'), $body);
@@ -153,7 +153,7 @@ final class BrandingTest extends CIUnitTestCase
 
     public function testWithoutBrandImagesTheDefaultsStay(): void
     {
-        $page = $this->get('panduan');
+        $page = $this->get('panduan/calon-murid');
 
         // No share image uploaded: the generic painting (brief 035) is the link preview.
         $page->assertSee('assets/img/share/bagikan-umum');

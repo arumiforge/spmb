@@ -48,6 +48,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
+| `nty/intelligent-curie-pb1lv6` | session guides | Home map/contact layout (D-096), staff guides in the dashboard + in-page search on Panduan and Tanya Jawab (D-097) | PR open |
 | `pw/sleepy-hopper-d0a7h5` | session polish | Public polish round (D-090…D-095), Codex #49 and `langkah`, PR #43 notes | #50, #51 merged; follow-up PR open |
 | `feat/ui-codex` | worker A (ui-round) | Codex briefs 036–071 (`docs/ui-round-plan.md` A) | merged into the integration branch (#42) |
 | `feat/ui-minify` | worker B (ui-round) | Minified assets, SVG originals in `resources/img/` (B) | merged into the integration branch (#44) |
@@ -68,6 +69,9 @@ create your own branch from `main` instead.
 
 ## Next steps
 
+0000. **Guides and contacts (D-096, D-097)**: after the PR is merged, `spmb deploy staging`, check `/` (map on the right,
+   below the contacts on phones), `/tanya-jawab` and `/panduan/calon-murid` (search box), `/admin/panduan` as Panitia and
+   Admin Sekolah, then `spmb deploy production`. No migration.
 000. **Public polish round**: after the PR is merged, `spmb deploy staging` (runs the tagline migration), check, then
    `spmb deploy production`. Load the updated branding pack on production
    (`spmb spark production spmb:branding clients/smp-nu-al-maruf-kudus/branding`: new tagline and share image; production
@@ -125,6 +129,7 @@ when the container idles).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-24 · session guides · `nty/intelligent-curie-pb1lv6` — home "Lokasi dan kontak": contacts card left, one map right / below on phones, map caption + directions button (D-096); staff guides moved to `/admin/panduan` (own role, Super Admin all; old public links redirect), search box inside Panduan and Tanya Jawab (D-097); 475 tests green. Next: merge, deploy staging, check, production.
 - 2026-11-24 · session polish · `pw/sleepy-hopper-d0a7h5` — PR #51 merged (019/020/027 repainted); Codex `langkah` batch reviewed and installed (046–048 scenes, 072 card backgrounds); PR #43's go-live notes carried into this file. Next: deploy, load branding on production, school data, uptime monitor.
 - 2026-11-24 · session polish · `pw/sleepy-hopper-d0a7h5` — checked production (was on 04b2ccc, then on #47 after the user's deploy); reviewed Codex #49 (019–027 and 035 installed after Codex repainted 019, 020, 027 for D-089); D-090…D-095: step-card art and briefs, map preview, footer/top bar, SPMB name + migration, HTML minifier, dashboard bottom bar Pengaturan and site link, subgrid form alignment; 471 tests green. PR #50 merged. Next: deploy, load branding on production, Codex `langkah` batch.
 - 2026-11-24 · coordinator (session ui-round) · `nty/vigilant-wozniak-lvnhku` — UI round: email-or-username sign-in, mobile bottom bar (raised middle button without text), right drawer, top bar, slogan/map/social settings, hero slideshow with uploads, art buttons and painted-icon slots with three.js, date picker, folds and contents highlight, full-width admin; workers A (Codex briefs 036–071, #42), B (minified SVGs, #44), C (dashboard pass, #45), D (public pages, tests) merged; cloud setup script moved to packages.sury.org; 465 tests green. Next: Codex batches. User merged PR #47; CI additions (Docker build check, dependency audit, server-side staging auto-deploy) offered and declined for now.
@@ -134,4 +139,3 @@ when the container idles).
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — PR #32 (example env files) merged; docs refreshed to the current state: README, roadmap (phase 1 done, platform round row, phase 6 partly done), architecture (stack, tables, visual rules), requirements (FR-WEB-03, NFR-02/03/08), module index, third-party server images, CLAUDE.md roles and commands, coordination notes. Next: go-live, Codex `svg-kit`.
 - 2026-11-23 · coordinator (session docker) · `main` — CI green on all checks; PR #26 merged into `main` on the user's request. Next: go-live on `spmb-prod` (`docs/deployment.md` → First server), Codex `svg-kit` batch.
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user decided: direct SSH port stays open, key-only (D-077); `setup.sh`, deployment guide (Bitvise key steps, no fail2ban on the NAT VPS), deploy skill and CLAUDE.md updated. Next: user merges #26, go-live.
-- 2026-11-22 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — merged D (#27 Codex briefs, AGENTS.md, D-075), B (#28 Lucide, visual rules, motion, charts), A (#29 Docker, setup.sh, `spmb` CLI, D-076), C (#30 Tanya Jawab, menu fix); combined run 442 tests green, lint clean, build OK, pages checked at 360/1280 px; Docker web image and PHP base build here (Composer download blocked only by this container's proxy). Next: user merges #26, SSH port decision, go-live.

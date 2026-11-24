@@ -4,7 +4,7 @@ White-label school admission system (Sistem Penerimaan Murid Baru) by Arumi Stud
 First client: **SMP NU Al Ma'ruf Kudus**, academic year 2027/2028.
 
 Documentation is written in English and grows phase by phase (see `roadmap.md`).
-User-facing guides for each role are in Indonesian and live inside the app at `/panduan`.
+User-facing guides for each role are in Indonesian and live inside the app: `/panduan` for applicants and parents, `/admin/panduan` for staff (D-097).
 
 | Document | Purpose |
 | --- | --- |

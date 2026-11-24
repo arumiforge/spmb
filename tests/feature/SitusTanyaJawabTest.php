@@ -253,6 +253,23 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
         $this->assertStringContainsString('id="biaya" class="mb-4 scroll-mt-56', $body);
     }
 
+    public function testPublicPageHasASearchBox(): void
+    {
+        $this->seed();
+
+        $body = $this->get('tanya-jawab')->getBody();
+
+        // D-097: a search box that filters the questions while typing (ui.js); hidden until the script runs.
+        $this->assertMatchesRegularExpression('/<div class="mb-8" role="search" data-cari-halaman data-cari-wadah="#daftar-tanya-jawab" data-cari-jenis="butir"[^>]* hidden>/', $body);
+        $this->assertStringContainsString('<div id="daftar-tanya-jawab"', $body);
+        $this->assertStringContainsString(lang('Situs.qaSearchLabel'), $body);
+        $this->assertStringContainsString('<input type="search" id="cari-tanya-jawab"', $body);
+
+        // No questions published: no search box.
+        $this->questions->where('id >', 0)->delete();
+        $this->assertStringNotContainsString('data-cari-halaman', $this->get('tanya-jawab')->getBody());
+    }
+
     public function testPublicPageWithoutQuestions(): void
     {
         $this->questions->insert(['topic' => 'Biaya', 'question' => 'Tersembunyi?', 'answer' => 'Ya.', 'is_published' => 0]);

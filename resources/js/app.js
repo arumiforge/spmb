@@ -3,7 +3,7 @@
  * dismiss) are initialised from data attributes by the flowbite package.
  */
 import 'flowbite';
-import { initDialogs, initFolds, initTableOfContents, initSlideshow, initIcons3d } from './ui.js';
+import { initDialogs, initFolds, initTableOfContents, initSlideshow, initIcons3d, initPageSearch } from './ui.js';
 import { initTanggal } from './tanggal.js';
 
 const storage = {
@@ -134,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTanggal();
     initFolds();
     initTableOfContents();
+    initPageSearch();
     initSlideshow();
     initIcons3d();
 });

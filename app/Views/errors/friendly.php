@@ -31,7 +31,7 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
                 <a href="<?= site_url($staff ? 'admin' : '/') ?>" class="<?= $secondary ?>"><?= $staff ? lang('App.backDashboard') : lang('App.backHome') ?></a>
             <?php else : ?>
                 <a href="<?= site_url($staff ? 'admin' : '/') ?>" class="<?= $primary ?>"><?= icon($staff ? 'chart' : 'home', 'h-4 w-4') ?><?= $staff ? lang('App.backDashboard') : lang('App.backHome') ?></a>
-                <a href="<?= site_url('panduan') ?>" class="<?= $secondary ?>"><?= icon('book', 'h-4 w-4') ?><?= lang('App.readGuide') ?></a>
+                <a href="<?= site_url($staff ? 'admin/panduan' : 'panduan') ?>" class="<?= $secondary ?>"><?= icon('book', 'h-4 w-4') ?><?= lang('App.readGuide') ?></a>
             <?php endif ?>
             <?php if ($error['whatsapp'] !== '') : ?>
                 <a href="https://wa.me/<?= esc($error['whatsapp'], 'attr') ?>" rel="noopener" class="<?= $secondary ?>"><?= lang('App.contactWhatsapp') ?></a>

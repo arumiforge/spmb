@@ -174,61 +174,54 @@ $cardIcons = ['persyaratan' => 'clipboard-list', 'jadwal' => 'calendar-days', 'c
 <?php endif ?>
 
 <?php if ($mapUrl !== '' || $address !== '' || $phone !== '' || $whatsapp !== '' || $email !== '') : ?>
+    <?php
+    // Contacts on the left, the map on the right from lg; on phones the map follows the contacts at full width (D-096).
+    $directions = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode(trim($schoolName . ' ' . str_replace(["\r", "\n"], ' ', $address)));
+    $contacts   = array_values(array_filter([
+        $address !== '' ? ['art' => 'ikon/ikon-alamat', 'icon' => 'map-pin', 'label' => lang('Situs.homeAddress'), 'html' => nl2br(esc($address)), 'href' => null] : null,
+        $phone !== '' ? ['art' => 'ikon/ikon-telepon', 'icon' => 'phone', 'label' => lang('Situs.homePhone'), 'html' => esc($phone), 'href' => 'tel:' . preg_replace('/[^0-9+]/', '', $phone)] : null,
+        $whatsapp !== '' ? ['art' => 'ikon/ikon-pesan', 'brand' => 'whatsapp', 'label' => lang('Situs.homeWhatsapp'), 'html' => esc($whatsapp), 'href' => whatsapp_url($whatsapp), 'external' => true] : null,
+        $email !== '' ? ['art' => 'ikon/ikon-email', 'icon' => 'mail', 'label' => lang('Situs.homeEmail'), 'html' => esc($email), 'href' => 'mailto:' . $email, 'breakAll' => true] : null,
+    ]));
+    ?>
     <section class="bg-gray-50 dark:bg-gray-800" aria-labelledby="lokasi-kontak">
-        <div class="mx-auto grid max-w-screen-xl gap-8 px-4 py-10 sm:py-14 <?= $mapUrl !== '' ? 'lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]' : '' ?>">
-            <?php if ($mapUrl !== '') : ?>
-                <div class="hidden lg:block">
-                    <iframe src="<?= esc($mapUrl, 'attr') ?>" title="<?= esc(lang('App.mapTitle', [$schoolName]), 'attr') ?>" class="peta-sekolah shadow-sm" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                </div>
-            <?php endif ?>
-            <div>
+        <div class="mx-auto grid max-w-screen-xl gap-6 px-4 py-10 sm:py-14 lg:gap-10 <?= $mapUrl !== '' ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:items-start' : '' ?>">
+            <div class="<?= $mapUrl === '' ? 'max-w-2xl' : '' ?>">
                 <h2 id="lokasi-kontak" class="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white"><?= lang('Situs.homeContactTitle') ?></h2>
                 <p class="mb-6 text-gray-600 dark:text-gray-400"><?= lang('Situs.homeContactIntro') ?></p>
-                <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                    <?php if ($address !== '') : ?>
-                        <li class="flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-4 sm:col-span-2 lg:col-span-1 dark:border-gray-700 dark:bg-gray-900" data-ikon-3d-area>
-                            <?= art_icon('ikon/ikon-alamat', 'map-pin', 'h-14 w-14 shrink-0') ?>
-                            <div class="min-w-0 flex-1">
-                                <p class="font-semibold text-gray-900 dark:text-white"><?= lang('Situs.homeAddress') ?></p>
-                                <p class="text-gray-600 dark:text-gray-300"><?= nl2br(esc($address)) ?></p>
-                                <a class="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-primary-700 hover:underline dark:text-primary-400" target="_blank" rel="noopener"
-                                   href="https://www.google.com/maps/search/?api=1&amp;query=<?= rawurlencode($schoolName . ' ' . $address) ?>"><?= lang('Situs.homeDirections') ?><?= icon('external-link', 'h-4 w-4') ?></a>
-                                <?php if ($mapUrl !== '') : ?>
-                                    <?php // Phones and tablets: the map preview right under the address (D-091); the large map shows from lg. ?>
-                                    <iframe src="<?= esc($mapUrl, 'attr') ?>" title="<?= esc(lang('App.mapTitle', [$schoolName]), 'attr') ?>" class="peta-sekolah peta-sekolah-kecil mt-3 lg:hidden" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                                <?php endif ?>
-                            </div>
-                        </li>
-                    <?php endif ?>
-                    <?php if ($phone !== '') : ?>
-                        <li class="flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900" data-ikon-3d-area>
-                            <?= art_icon('ikon/ikon-telepon', 'phone', 'h-14 w-14 shrink-0') ?>
-                            <div class="min-w-0">
-                                <p class="font-semibold text-gray-900 dark:text-white"><?= lang('Situs.homePhone') ?></p>
-                                <a class="text-gray-700 hover:underline dark:text-gray-200" href="tel:<?= esc(preg_replace('/[^0-9+]/', '', $phone), 'attr') ?>"><?= esc($phone) ?></a>
-                            </div>
-                        </li>
-                    <?php endif ?>
-                    <?php if ($whatsapp !== '') : ?>
-                        <li class="flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900" data-ikon-3d-area>
-                            <?= art_icon('ikon/ikon-pesan', 'message-circle-question-mark', 'h-14 w-14 shrink-0') ?>
-                            <div class="min-w-0">
-                                <p class="font-semibold text-gray-900 dark:text-white"><?= lang('Situs.homeWhatsapp') ?></p>
-                                <a class="text-gray-700 hover:underline dark:text-gray-200" href="<?= esc(whatsapp_url($whatsapp), 'attr') ?>" target="_blank" rel="noopener"><?= esc($whatsapp) ?></a>
-                            </div>
-                        </li>
-                    <?php endif ?>
-                    <?php if ($email !== '') : ?>
-                        <li class="flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900" data-ikon-3d-area>
-                            <?= art_icon('ikon/ikon-email', 'mail', 'h-14 w-14 shrink-0') ?>
-                            <div class="min-w-0">
-                                <p class="font-semibold text-gray-900 dark:text-white"><?= lang('Situs.homeEmail') ?></p>
-                                <a class="break-all text-gray-700 hover:underline dark:text-gray-200" href="mailto:<?= esc($email, 'attr') ?>"><?= esc($email) ?></a>
-                            </div>
-                        </li>
-                    <?php endif ?>
-                </ul>
+                <?php if ($contacts !== []) : ?>
+                    <ul class="kontak-daftar divide-y divide-gray-200 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900">
+                        <?php foreach ($contacts as $contact) : ?>
+                            <li class="flex items-start gap-4 px-4 py-4 sm:px-5" data-ikon-3d-area>
+                                <?= art_icon($contact['art'], $contact['brand'] ?? $contact['icon'], 'kontak-ikon h-11 w-11 shrink-0') ?>
+                                <div class="min-w-0 flex-1 pt-0.5">
+                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400"><?= $contact['label'] ?></p>
+                                    <?php if ($contact['href'] === null) : ?>
+                                        <p class="font-medium leading-relaxed text-gray-900 dark:text-white"><?= $contact['html'] ?></p>
+                                    <?php else : ?>
+                                        <a class="font-medium text-gray-900 hover:text-primary-700 hover:underline dark:text-white dark:hover:text-primary-400 <?= ! empty($contact['breakAll']) ? 'break-all' : '' ?>" href="<?= esc($contact['href'], 'attr') ?>"<?= ! empty($contact['external']) ? ' target="_blank" rel="noopener"' : '' ?>><?= $contact['html'] ?></a>
+                                    <?php endif ?>
+                                </div>
+                            </li>
+                        <?php endforeach ?>
+                    </ul>
+                <?php endif ?>
+                <?php if ($mapUrl === '' && $address !== '') : ?>
+                    <a class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary-700 hover:underline dark:text-primary-400" target="_blank" rel="noopener" href="<?= esc($directions, 'attr') ?>"><?= icon('map', 'h-4 w-4') ?><?= lang('Situs.homeDirections') ?></a>
+                <?php endif ?>
             </div>
+            <?php if ($mapUrl !== '') : ?>
+                <figure class="peta-kartu overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                    <iframe src="<?= esc($mapUrl, 'attr') ?>" title="<?= esc(lang('App.mapTitle', [$schoolName]), 'attr') ?>" class="peta-sekolah" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <figcaption class="flex flex-col gap-3 border-t border-gray-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-gray-700">
+                        <span class="flex min-w-0 items-center gap-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+                            <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-gray-800 dark:text-primary-200" aria-hidden="true"><?= icon('map', 'h-5 w-5') ?></span>
+                            <span class="min-w-0"><?= esc(lang('App.mapTitle', [$schoolName])) ?></span>
+                        </span>
+                        <a class="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800" target="_blank" rel="noopener" href="<?= esc($directions, 'attr') ?>"><?= lang('Situs.homeDirections') ?><?= icon('external-link', 'h-4 w-4') ?></a>
+                    </figcaption>
+                </figure>
+            <?php endif ?>
         </div>
     </section>
 <?php endif ?>

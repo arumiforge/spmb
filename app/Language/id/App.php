@@ -22,6 +22,7 @@ return [
     'cancel'                 => 'Batal',
     'back'                   => 'Kembali',
     'search'                 => 'Cari',
+    'searchClear'            => 'Hapus kata pencarian',
     'reset'                  => 'Atur Ulang',
     'optional'               => 'tidak wajib',
     'required'               => 'wajib diisi',
