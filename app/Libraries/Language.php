@@ -17,8 +17,31 @@ use MessageFormatter;
  */
 class Language extends BaseLanguage
 {
+    /**
+     * A language chosen for a moment (lang($line, [], 'en')); null follows the current request, so one
+     * shared instance serves every request and test (service('language') does not re-run the factory).
+     */
+    private ?string $override = null;
+
+    public function setLocale(?string $locale = null)
+    {
+        if ($locale !== null) {
+            $this->override = $locale === Locales::current() ? null : $locale;
+            $this->locale   = $locale;
+        }
+
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->override ?? Locales::current();
+    }
+
     public function getLine(string $line, array $args = [])
     {
+        $this->locale = $this->getLocale();
+
         if (! str_contains($line, '.')) {
             return $this->formatMessage($line, $args);
         }

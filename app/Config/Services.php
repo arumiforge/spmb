@@ -85,7 +85,7 @@ class Services extends BaseService
     public static function language(?string $locale = null, bool $getShared = true)
     {
         if ($getShared) {
-            return static::getSharedInstance('language', $locale)->setLocale($locale ?? Locales::current());
+            return static::getSharedInstance('language', $locale)->setLocale($locale);
         }
 
         return new Language($locale ?? Locales::current());
