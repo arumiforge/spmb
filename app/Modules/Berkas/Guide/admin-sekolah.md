@@ -13,6 +13,25 @@ Daftar berkas menentukan apa yang perlu dikirim calon murid saat mendaftar.
 
 - Jika berkas tidak bisa dihapus, maka berkas itu sudah pernah diunggah pendaftar. Hapus centang **Tampilkan ke calon murid** untuk menyembunyikannya.
 
+## Memberi contoh berkas untuk pendaftar
+
+Untuk berkas yang dibuat oleh sekolah asal, misalnya **Surat Keterangan Aktif dari SD/MI**, Anda bisa memberi contoh atau format suratnya. Pendaftar bisa mengunduhnya tanpa nomor pendaftaran, lalu membawanya ke SD/MI untuk diisi.
+
+1. Di menu kiri, pilih **Berkas Wajib**, lalu tekan **Ubah** pada berkas yang ingin diberi contoh.
+2. Di bagian **Contoh berkas untuk pendaftar**, tekan **Pilih file** dan pilih file contoh (PDF, Word, JPG, atau PNG, paling besar 5 MB).
+3. Centang **Tampilkan contoh untuk pendaftar**.
+4. Jika perlu, isi **Tulisan tautan unduhan**, misalnya "Unduh contoh surat". Jika dikosongkan, tulisannya "Unduh contoh".
+5. Tekan **Simpan Berkas**.
+
+Tautan **Unduh contoh** lalu tampil di halaman **Persyaratan** dan di bagian **Berkas Pendaftaran** milik setiap pendaftar. Di daftar berkas, label **Contoh ditampilkan** atau **Contoh disembunyikan** menunjukkan berkas yang sudah punya contoh.
+
+> **Tips:** Tekan **Unduh file ini** di halaman ubah berkas untuk memeriksa contoh yang tersimpan.
+
+- Jika ingin menyembunyikan contoh sementara, hapus centang **Tampilkan contoh untuk pendaftar**. Filenya tetap tersimpan.
+- Jika ingin mengganti contoh, pilih file baru lalu simpan. File lama akan terhapus.
+- Jika ingin menghapus contoh, centang **Hapus file contoh ini**, lalu simpan.
+- Jika muncul pesan "Jenis file belum sesuai", maka simpan ulang file sebagai PDF atau Word, lalu unggah lagi.
+
 ## Ukuran foto dan batas waktu berkas menyusul
 
 1. Di halaman **Berkas Wajib**, gulir ke bagian **Ukuran Foto dan Batas Waktu**.

@@ -6,7 +6,8 @@ use CodeIgniter\Router\RouteCollection;
  * Routes of the Berkas module. Indonesian slugs; every admin route carries a
  * permission filter. The URLs are listed in docs/phase-2-plan.md.
  * Public routes (/cek-status/berkas/...) check the applicant grant
- * (service('applicantAccess')) in the controller.
+ * (service('applicantAccess')) in the controller; /berkas/contoh/<code>
+ * (example files) is open to everyone.
  *
  * @var RouteCollection $routes
  */
@@ -19,6 +20,7 @@ $routes->group('admin/pengaturan/berkas', ['namespace' => 'Modules\Berkas\Contro
     $routes->post('(:num)/ubah', 'Pengaturan::update/$1', ['filter' => 'permission:pengaturan.pendaftaran']);
     $routes->post('(:num)/pindah', 'Pengaturan::move/$1', ['as' => 'berkas.jenis.pindah', 'filter' => 'permission:pengaturan.pendaftaran']);
     $routes->post('(:num)/hapus', 'Pengaturan::delete/$1', ['as' => 'berkas.jenis.hapus', 'filter' => 'permission:pengaturan.pendaftaran']);
+    $routes->get('(:num)/contoh', 'Pengaturan::template/$1', ['as' => 'berkas.jenis.contoh', 'filter' => 'permission:pengaturan.pendaftaran']);
 });
 
 $routes->group('admin/berkas', ['namespace' => 'Modules\Berkas\Controllers'], static function ($routes): void {
@@ -34,3 +36,6 @@ $routes->group('cek-status/berkas', ['namespace' => 'Modules\Berkas\Controllers'
     $routes->post('(:num)', 'Pendaftar::upload/$1', ['as' => 'berkas.unggah']);
     $routes->get('(:num)', 'Pendaftar::show/$1', ['as' => 'berkas.milik-saya']);
 });
+
+// Example file of a document type ("Unduh contoh"); public, applicants have no account.
+$routes->get('berkas/contoh/([a-z0-9_-]+)', '\Modules\Berkas\Controllers\Contoh::download/$1', ['as' => 'berkas.contoh']);

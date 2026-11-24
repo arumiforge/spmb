@@ -35,6 +35,9 @@ return [
     'deleteInUse'       => 'Berkas ini sudah pernah diunggah pendaftar, jadi tidak bisa dihapus. Sembunyikan saja dengan menghapus centang "Tampilkan ke calon murid".',
     'typeSaved'         => 'Jenis berkas sudah disimpan.',
     'typeNotFound'      => 'Jenis berkas tidak ditemukan.',
+    'typeNotSaved'      => 'Jenis berkas belum tersimpan. Coba lagi.',
+    'badgeTemplateOn'   => 'Contoh ditampilkan',
+    'badgeTemplateOff'  => 'Contoh disembunyikan',
     'imageHeading'      => 'Ukuran Foto dan Batas Waktu',
     'imageHelp'         => 'Foto yang diunggah akan diperkecil otomatis agar hemat tempat dan cepat dibuka. PDF disimpan apa adanya.',
     'imageMaxEdge'      => 'Sisi foto terpanjang (piksel)',
@@ -70,6 +73,22 @@ return [
     'formatPng'            => 'Gambar PNG',
     'formatPdf'            => 'PDF',
     'saveType'             => 'Simpan Berkas',
+
+    // Example file per type ("Unduh contoh")
+    'templateHeading'      => 'Contoh berkas untuk pendaftar',
+    'templateHelp'         => 'Unggah contoh atau format surat, misalnya surat keterangan yang perlu diisi sekolah asal. Pendaftar bisa mengunduhnya di halaman persyaratan dan di bagian berkas mereka.',
+    'templateFile'         => 'File contoh',
+    'templateFileHelp'     => 'PDF, Word (DOC atau DOCX), JPG, atau PNG, maksimal 5 MB. File baru akan mengganti contoh yang lama.',
+    'templateCurrent'      => 'File sekarang',
+    'templateDownload'     => 'Unduh file ini',
+    'templateRemove'       => 'Hapus file contoh ini',
+    'templateEnabled'      => 'Tampilkan contoh untuk pendaftar',
+    'templateLabelField'   => 'Tulisan tautan unduhan',
+    'templateLabelHelp'    => 'Kosongkan untuk memakai "Unduh contoh". Misalnya "Unduh contoh surat".',
+    'templateDefaultLabel' => 'Unduh contoh',
+    'templateFor'          => 'untuk {0}',
+    'templateErrFormat'    => 'Jenis file belum sesuai. Gunakan file PDF, Word (DOC atau DOCX), JPG, atau PNG.',
+    'templateErrNeedFile'  => 'Pilih file contoh terlebih dahulu, atau hapus centang "Tampilkan contoh untuk pendaftar".',
 
     // Upload panel (shared by applicant and staff)
     'panelTitle'      => 'Berkas Pendaftaran',

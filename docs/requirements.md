@@ -36,6 +36,7 @@ extra per-user permissions; changing a role's permission set is a configuration 
 - FR-DOC-02 Images resized/compressed on upload; PDFs size-limited. **[built in phase 2]**
 - FR-DOC-03 Files stored outside the public web root, served only to authorised users. **[built in phase 2]**
 - FR-DOC-04 Verification status per document and per applicant (complete / incomplete / to follow). **[built in phase 2]**
+- FR-DOC-05 Each document type can offer an example file (PDF, Word, JPG or PNG) that applicants download without signing in; the school uploads it and switches it on or off per type. Default types include "Surat Keterangan Aktif dari SD/MI" (may follow). **[built: `docs/modules/berkas.md`]**
 
 ### Card (CARD)
 - FR-CARD-01 PDF card: number, name, wave, previous school, method, test status/schedule, QR. **[built in phase 2]**

@@ -51,7 +51,7 @@ deploy/compose.yaml    Docker Compose stack per environment (staging, production
 deploy/env/            example stack.env / app.env per environment (placeholders only)
 docker/                Dockerfile (app: PHP-FPM 8.5, web: Nginx), Nginx and PHP config
 ai/                    Codex briefs, delivered assets and the asset checker (D-073, D-075)
-clients/<school>/      per-school branding pack and starter Tanya Jawab (loaded by spmb:branding)
+clients/<school>/      per-school branding pack, starter Tanya Jawab and example files for document types (loaded by spmb:branding)
 .claude/               agent skills; cloud/setup.sh for Claude Code cloud environments (D-074)
 flowbite/              Flowbite Pro templates — markup reference only (private repo)
 ```

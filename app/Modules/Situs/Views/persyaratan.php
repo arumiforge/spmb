@@ -71,6 +71,7 @@ $secondary = 'inline-flex w-full items-center justify-center gap-2 rounded-lg bo
                                 <p class="mb-1 text-sm text-gray-600 dark:text-gray-300"><?= lang('Situs.mayFollowHelp') ?></p>
                             <?php endif ?>
                             <p class="text-sm text-gray-500 dark:text-gray-400"><?= esc(lang('Situs.fileRule', [implode(', ', $extensions), $size((int) $doc['max_size_kb'])])) ?></p>
+                            <?= view('Modules\Berkas\Views\partials\template_link', ['link' => ['type' => $doc, 'class' => 'mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-primary-400']], ['saveData' => false]) ?>
                         </div>
                     </li>
                 <?php endforeach ?>

@@ -5,16 +5,29 @@ declare(strict_types=1);
 namespace Modules\Berkas\Controllers;
 
 use App\Controllers\BaseController;
+use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Berkas\Models\ApplicantDocumentModel;
 use Modules\Berkas\Models\DocumentTypeModel;
+use Modules\Berkas\Services\TemplateStorage;
+use Modules\Berkas\Services\UploadInput;
+use Modules\Berkas\Services\UploadRejected;
 
 /**
- * Required documents (document types) and image settings (FR-DOC-01, FR-DOC-02).
- * Permission pengaturan.pendaftaran.
+ * Required documents (document types), their example files ("Unduh contoh")
+ * and image settings (FR-DOC-01, FR-DOC-02). Permission pengaturan.pendaftaran.
+ * Changes to a type, its example file included, are audited by the model.
  */
 class Pengaturan extends BaseController
 {
+    use ServesTemplates;
+
+    /**
+     * Upload field of the example file.
+     */
+    public const TEMPLATE_FIELD = 'template';
+
     /**
      * Settings editable on this page (setting('Berkas.<key>')).
      *
@@ -93,8 +106,19 @@ class Pengaturan extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $template = $this->postedTemplate(null, $data);
+
+        if (is_string($template)) {
+            return redirect()->back()->withInput()->with('errors', [self::TEMPLATE_FIELD => $template]);
+        }
+
         $data['sort_order'] = $this->types->nextSortOrder();
-        $this->types->insert($data);
+
+        if ($this->types->insert($data) === false) {
+            (new TemplateStorage())->delete($template['stored']);
+
+            return redirect()->back()->withInput()->with('error', lang('Berkas.typeNotSaved'));
+        }
 
         return redirect()->route('berkas.pengaturan')->with('message', lang('Berkas.typeSaved'));
     }
@@ -112,7 +136,9 @@ class Pengaturan extends BaseController
 
     public function update(int $id): RedirectResponse
     {
-        if ($this->types->find($id) === null) {
+        $current = $this->types->find($id);
+
+        if ($current === null) {
             return redirect()->route('berkas.pengaturan')->with('error', lang('Berkas.typeNotFound'));
         }
 
@@ -122,9 +148,39 @@ class Pengaturan extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $this->types->update($id, $data);
+        $template = $this->postedTemplate($current, $data);
+
+        if (is_string($template)) {
+            return redirect()->back()->withInput()->with('errors', [self::TEMPLATE_FIELD => $template]);
+        }
+
+        $storage = new TemplateStorage();
+
+        if ($this->types->update($id, $data) === false) {
+            $storage->delete($template['stored']);
+
+            return redirect()->back()->withInput()->with('error', lang('Berkas.typeNotSaved'));
+        }
+
+        // The replaced or removed file goes only after the row points elsewhere.
+        $storage->delete($template['old']);
 
         return redirect()->route('berkas.pengaturan')->with('message', lang('Berkas.typeSaved'));
+    }
+
+    /**
+     * GET /admin/pengaturan/berkas/<id>/contoh — the stored example file, also
+     * while it is switched off, so the school can check it.
+     */
+    public function template(int $id): ResponseInterface
+    {
+        $type = $this->types->find($id);
+
+        if ($type === null) {
+            throw PageNotFoundException::forPageNotFound();
+        }
+
+        return $this->sendTemplate($type);
     }
 
     /**
@@ -171,7 +227,9 @@ class Pengaturan extends BaseController
             return redirect()->route('berkas.pengaturan')->with('error', lang('Berkas.deleteInUse'));
         }
 
+        $type = $this->types->find($id);
         $this->types->delete($id);
+        (new TemplateStorage())->delete($type['template_path'] ?? null);
 
         return redirect()->route('berkas.pengaturan')->with('message', lang('Berkas.deleted'));
     }
@@ -187,8 +245,9 @@ class Pengaturan extends BaseController
             'title'       => $title,
             'breadcrumbs' => [['label' => 'Dasbor', 'url' => 'admin'], ['label' => 'Pengaturan'], ['label' => 'Berkas Wajib', 'url' => 'admin/pengaturan/berkas'], ['label' => $type === null ? 'Tambah' : 'Ubah']],
             'type'        => $type ?? [
-                'code'        => '', 'name' => '', 'description' => '', 'is_required' => 1, 'may_follow' => 0,
-                'max_size_kb' => 2048, 'extensions' => 'jpg,jpeg,png,pdf', 'is_active' => 1,
+                'code'          => '', 'name' => '', 'description' => '', 'is_required' => 1, 'may_follow' => 0,
+                'max_size_kb'   => 2048, 'extensions' => 'jpg,jpeg,png,pdf', 'is_active' => 1,
+                'template_path' => null, 'template_name' => null, 'template_enabled' => 0, 'template_label' => null,
             ],
             'isNew' => $type === null,
         ]);
@@ -212,6 +271,8 @@ class Pengaturan extends BaseController
             'description' => ['label' => lang('Berkas.fieldDescription'), 'rules' => 'permit_empty|max_length[255]'],
             'max_size_kb' => ['label' => lang('Berkas.fieldMaxSize'), 'rules' => 'required|integer|greater_than_equal_to[100]|less_than_equal_to[10240]', 'errors' => ['integer' => lang('Berkas.fieldMaxSizeError'), 'greater_than_equal_to' => lang('Berkas.fieldMaxSizeError'), 'less_than_equal_to' => lang('Berkas.fieldMaxSizeError')]],
             'formats_'    => ['label' => lang('Berkas.fieldFormats'), 'rules' => 'required', 'errors' => ['required' => lang('Berkas.fieldFormatsError')]],
+            // Mirrors the column size (VARCHAR 60).
+            'template_label' => ['label' => lang('Berkas.templateLabelField'), 'rules' => 'permit_empty|max_length[60]'],
         ];
 
         if (! $this->validateData($post, $rules)) {
@@ -240,6 +301,54 @@ class Pengaturan extends BaseController
             'is_active'   => (int) (($post['is_active'] ?? '0') === '1'),
             'max_size_kb' => (int) $post['max_size_kb'],
             'extensions'  => implode(',', $extensions),
+            // Example file: switch and link text; the file itself comes from postedTemplate().
+            'template_enabled' => (int) (($post['template_enabled'] ?? '0') === '1'),
+            'template_label'   => trim((string) ($post['template_label'] ?? '')) ?: null,
         ];
+    }
+
+    /**
+     * Example file from the form: a newly chosen file is checked and stored
+     * now; "remove" clears it (and switches it off). Adds the template columns
+     * to $data. Returns an error message for the file field, or the stored
+     * file name (to remove if saving fails) and the old one (to remove after saving).
+     *
+     * @param array<string, mixed>|null $current document_types row being edited
+     * @param array<string, mixed>      $data    validated type data, extended in place
+     *
+     * @return array{stored: string|null, old: string|null}|string
+     */
+    private function postedTemplate(?array $current, array &$data): array|string
+    {
+        $currentPath = $current['template_path'] ?? null;
+        $hasFile     = $current !== null && DocumentTypeModel::hasTemplate($current);
+        $stored      = null;
+        $old         = null;
+
+        if (UploadInput::sent($this->request, self::TEMPLATE_FIELD)) {
+            try {
+                $input = UploadInput::read($this->request, self::TEMPLATE_FIELD);
+                $file  = (new TemplateStorage())->store($input['tmp'], $input['name']);
+            } catch (UploadRejected $e) {
+                return $e->getMessage();
+            }
+
+            $data += $file;
+            $stored  = $file['template_path'];
+            $old     = $currentPath;
+            $hasFile = true;
+        } elseif ($this->request->getPost('remove_template') === '1' && $currentPath !== null) {
+            $data['template_path']    = null;
+            $data['template_name']    = null;
+            $data['template_enabled'] = 0;
+            $old                      = $currentPath;
+            $hasFile                  = false;
+        }
+
+        if ($data['template_enabled'] === 1 && ! $hasFile) {
+            return lang('Berkas.templateErrNeedFile');
+        }
+
+        return ['stored' => $stored, 'old' => $old];
     }
 }
