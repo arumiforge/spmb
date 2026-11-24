@@ -195,6 +195,9 @@ if (! function_exists('lipatan_buka')) {
      */
     function lipatan_buka(array $card): string
     {
+        // Every option is passed: the renderer still holds data from earlier views (e.g. a `badge` array).
+        $card += ['intro' => null, 'icon' => null, 'badge' => null, 'open' => true, 'class' => null, 'heading' => 'h2'];
+
         return view('partials/lipatan_buka', $card, ['saveData' => false]);
     }
 }

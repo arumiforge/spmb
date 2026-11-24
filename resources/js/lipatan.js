@@ -42,7 +42,14 @@ export function initLipatan() {
             details.open = saved === '1';
         }
 
-        details.addEventListener('toggle', () => write(key(details), details.open ? '1' : '0'));
+        details.addEventListener('toggle', () => {
+            write(key(details), details.open ? '1' : '0');
+
+            // Charts drawn while the card was closed have no width; a resize makes them redraw.
+            if (details.open && details.querySelector('[data-chart]')) {
+                window.dispatchEvent(new Event('resize'));
+            }
+        });
     });
 
     // The browser cannot focus an invalid field inside a closed card: open it first.
