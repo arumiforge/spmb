@@ -38,6 +38,7 @@ $appIcon    = brand_asset_url('icon');
 <link rel="stylesheet" href="<?= esc(asset_url('app.css'), 'attr') ?>">
 <style>:root{--brand:<?= brand_color() ?>}</style>
 <script>
+    document.documentElement.classList.add('js');
     try {
         var t = localStorage.getItem('spmb-theme');
         // Light by default whatever the device theme (D-078); dark only when chosen with the toggle.

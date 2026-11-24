@@ -181,9 +181,12 @@ sign-in (`TwoFactor.maxAttempts`).
 | `card_tokens` | Kartu | Revocable QR tokens (D-034) |
 | `test_rooms`, `test_holidays`, `test_sessions`, `test_assignments`, `test_schedule_changes` | Tes | Rooms, calendar, sessions, seats and the schedule change log (D-059…D-064) |
 | `site_questions` | Situs | Tanya Jawab questions and answers (Markdown), audited (D-072) |
+| `site_news` | Situs | News ticker items under the public header ("Berita singkat"), audited |
 
 Module extension points (D-033): `Config/Module.php` `requires`, `Config/PublicMenu.php`, `Config/Audit.php`,
 `Views/panels/<slot>.php` rendered with `module_panels()`, and `InstallSeeder`/`DemoSeeder` run by `spmb:install`.
+Public layout slots: `public_top` (under the header, every page), `public_home` (home page only),
+`public_footer` (above the copyright line).
 The public applicant session is `service('applicantAccess')` (D-034).
 
 ## Key design rules
