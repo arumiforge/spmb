@@ -146,9 +146,14 @@ final class StatistikTest extends CIUnitTestCase
 
     public function testLocationUsesRegionCodesWhenTheColumnExists(): void
     {
+        // The region list (D-111) adds the code columns; add one here only when it is missing.
         $forge = Database::forge();
-        $forge->addColumn('applicants', ['regency_code' => ['type' => 'VARCHAR', 'constraint' => 13, 'null' => true]]);
-        db_connect()->resetDataCache();
+        $added = ! db_connect()->fieldExists('regency_code', 'applicants');
+
+        if ($added) {
+            $forge->addColumn('applicants', ['regency_code' => ['type' => 'VARCHAR', 'constraint' => 13, 'null' => true]]);
+            db_connect()->resetDataCache();
+        }
 
         try {
             $this->applicant(['regency' => 'KABUPATEN KUDUS', 'regency_code' => '33.19']);
@@ -162,8 +167,10 @@ final class StatistikTest extends CIUnitTestCase
             $this->assertSame('t:kudus', $rows[1]['key'], 'rows without a code keep the text grouping');
             $this->assertSame('district', $this->query(['kab' => '33.19'])->location()['level']);
         } finally {
-            $forge->dropColumn('applicants', 'regency_code');
-            db_connect()->resetDataCache();
+            if ($added) {
+                $forge->dropColumn('applicants', 'regency_code');
+                db_connect()->resetDataCache();
+            }
         }
     }
 
