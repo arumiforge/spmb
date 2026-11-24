@@ -496,3 +496,31 @@ Decision: A read-only page `/admin/pengaturan/kondisi-server` (permission `siste
 Status: accepted (user, 2026-11-25: option C; replaces the two columns of cards from xl in `.form-lebar`)
 Context: Two cards side by side read in a zig-zag, leave holes when one is folded, and squeeze the fields inside.
 Decision: Every admin form and settings page shows its sections one below the other at full width; fields inside a card still sit side by side. From 2xl (1536 px) a sticky rail beside the form ("Isi halaman") lists the sections (highlighting the one in view, a red dot on sections with errors), carries "Buka semua / Tutup semua" and repeats the save button. Summary pages (dashboard, visitor statistics) keep several cards per row; list pages keep full-width tables; phones are unchanged.
+
+## D-103 — "Berita singkat": rotating news under the top menu (2026-11-25)
+Status: accepted (user, 2026-11-25)
+Decision: Website → Berita singkat holds several short news items (text up to 160 characters, optional link, optional show-from/until dates, shown/hidden, order). When switched on (default off) a slim bar under the public header shows one item at a time and moves to the next automatically (speed 3–30 s, default 5). It pauses on hover, focus and in a hidden tab, has previous/pause/next buttons, does not rotate under reduced motion, and lists all items without JavaScript. Hidden when off or when no item is active today.
+
+## D-104 — Popup on the home page only (2026-11-25)
+Status: accepted (user, 2026-11-25: "flexible: once, every visit; home page only")
+Decision: Website → Popup beranda (default off): title, text (Tanya Jawab formatting), optional image, optional button (label + link), optional attachment (PDF/Word/Excel), show-from/until dates and frequency: once until the popup changes, once a day, or every visit. Every save is a new version, so "once" shows again after an edit. It appears only on `/` as an accessible dialog; dismissal is remembered in the browser per version and frequency. Admins can preview it at `/?popup=pratinjau`, even while it is off.
+
+## D-105 — Editable footer links; social and WhatsApp icons in the footer (2026-11-25)
+Status: accepted (user, 2026-11-25; changes the fixed "Tautan" list of D-092)
+Decision: Website → Tautan bawah website manages the footer's "Tautan" column (label, internal path or https address, order, shown/hidden, up to 12, "Kembalikan ke bawaan"). The default list and the rule that links to switched-off pages are hidden stay. Under the school's logo, name and slogan the footer shows round icon buttons for the filled-in Instagram, Facebook, YouTube, TikTok and WhatsApp links. Public layout panel slots: `public_top`, `public_home`, `public_footer`.
+
+## D-106 — Visitor statistics without personal data (2026-11-25)
+Status: accepted (user, 2026-11-25; implements D-009/D-053)
+Decision: Public page views and unique visitors per day are counted from a one-way hash of IP and browser with a salt that changes every day; no IP address, browser string or other personal data is stored, and bots, the staff area and signed-in staff are skipped. Admin Sekolah sees a summary, a chart and the most opened pages (module Analitik, permission `analitik.view`) plus a dashboard card; the public footer shows visitors today, this month and in total (setting, default on).
+
+## D-107 — Step-by-step registration form; guardian question; explicit consent (2026-11-25)
+Status: accepted (user, 2026-11-25)
+Decision: The public registration form is one form shown as five steps (Data calon murid, Alamat, Orang tua atau wali, Sekolah asal, Periksa dan kirim) with a numbered stepper joined by a line (compact "Langkah 2 dari 5" with a progress bar on phones); each step is checked before moving on, the last step is a summary with "Ubah" links, and without JavaScript it is one long page. The guardian part first asks whether the child lives with or is cared for by a guardian ("Tidak ada wali" by default); guardian fields appear and are checked only with "Ada wali", where the guardian's name is always required (`applicants.has_guardian`). The parent/guardian ticks an explicit consent box before sending (checked on the server too). The admin form keeps one page with the same question.
+
+## D-108 — "Cara mendaftar" as a timeline; a complete example applicant (2026-11-25)
+Status: accepted (user, 2026-11-25)
+Decision: The home page steps are an ordered timeline: numbered circles joined by a line (horizontal from `md`, vertical on phones) with the painted scenes kept. Demo data (`spmb:install --demo`) includes "Contoh Lengkap – Aisyah Putri Ramadhani", an applicant with every field filled, a guardian, all documents uploaded and valid, so staff can see what a complete record looks like.
+
+## D-109 — Public site in Indonesian, English and Arabic (2026-11-25)
+Status: accepted (user, 2026-11-25; extends the language rule in CLAUDE.md for the public site)
+Decision: The whole public site (every page a visitor or applicant sees, including registration, Cek Status, the applicant page and the parent guide) is available in Indonesian (default, at `/`), English (`/en/…`) and Arabic (`/ar/…`, right to left). A small switcher (top bar, drawer, footer) changes language and is remembered. Text the school types (slogan, Tanya Jawab, news, popup, footer link labels, document names and descriptions, wave names) gets optional English and Arabic fields; when empty, the Indonesian text shows. The staff dashboard, PDFs (card, attendance sheet) and data entered by applicants stay Indonesian. Claude's draft translations go live directly (the school may correct them later); each extra language can be switched off by the school.
