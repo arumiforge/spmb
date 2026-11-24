@@ -278,7 +278,9 @@ final class SitusTanyaJawabTest extends CIUnitTestCase
         $page->assertOK();
         $page->assertSee('Belum ada tanya jawab');
         $page->assertDontSee('Tersembunyi?');
-        $page->assertDontSee('href="' . site_url('tanya-jawab') . '"', null, false);
+        // No link to the page; the hreflang alternates of the page itself (D-109) do not count.
+        $withoutAlternates = static fn (string $html): string => (string) preg_replace('#<link rel="alternate"[^>]*>#', '', $html);
+        $this->assertStringNotContainsString('href="' . site_url('tanya-jawab') . '"', $withoutAlternates((string) $page->getBody()));
 
         $this->get('/')->assertDontSee('href="' . site_url('tanya-jawab') . '"', null, false);
     }
