@@ -75,6 +75,16 @@ final class PendaftaranDemoSeederTest extends CIUnitTestCase
         $this->assertNotEmpty($row['notes']);
         $this->assertSame('verified', $row['status']);
 
+        // A real address from the national region list (D-111), for the Statistik pages.
+        $this->assertSame(['33', '33.19', '33.19.02', '33.19.02.2021'], [$row['province_code'], $row['regency_code'], $row['district_code'], $row['village_code']]);
+        $this->assertSame(['Jawa Tengah', 'Kab. Kudus', 'Kota Kudus', 'Glantengan'], [$row['province'], $row['regency'], $row['district'], $row['village']]);
+
+        // The other demo applicants live in Kudus, Pati, Jepara and Demak; a few addresses are typed by hand.
+        $regencies = array_column(db_connect()->table('applicants')->select('regency_code')->distinct()->where('regency_code IS NOT NULL', null, false)->get()->getResultArray(), 'regency_code');
+        sort($regencies);
+        $this->assertSame(['33.18', '33.19', '33.20', '33.21'], $regencies);
+        $this->assertGreaterThan(0, model(ApplicantModel::class)->where('village_code', null)->countAllResults());
+
         // The record passes the form's own checks, so staff can edit it as it is.
         $form = new ApplicantForm();
         $data = ApplicantForm::clean($row, [...ApplicantForm::CORE, ...ApplicantForm::CONFIGURABLE]);

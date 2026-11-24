@@ -232,7 +232,7 @@ Server IPs, ports and passwords stay out of the repository.
 5. Back up the database and uploads (when the stack already runs).
 6. `docker compose up -d --wait` (healthchecks: MySQL ping, PHP-FPM port, Nginx `/healthz`).
 7. `php spark migrate --all`, then `php spark referensi:import --bawaan` (a no-op unless the bundled
-   SD/MI list changed, D-058), then `php spark cache:clear` (cached values from the old code are dropped).
+   SD/MI list or region list changed, D-058, D-111), then `php spark cache:clear` (cached values from the old code are dropped).
 8. Health check: HTTP 200 on `/` through the published port.
 9. Keep the newest 5 image tags plus every tag in use or recorded as previous; remove older ones.
 
@@ -241,6 +241,21 @@ already ran are **not** undone: if the old version misbehaves, restore the backu
 
 Deploys and rollbacks are logged in `/opt/apps/spmb/<env>/deploys.log`. Only one `spmb` command runs at a
 time (lock file).
+
+## One-time step after the region list arrives (D-111)
+
+The first deploy with the national region list loads it automatically (step 7, about 5 seconds). Applicants who
+registered before typed their address by hand; match those addresses once so Statistik can group them by village
+and district:
+
+```bash
+spmb spark <env> referensi:cocokkan-alamat --dry-run   # look at the result first
+spmb spark <env> referensi:cocokkan-alamat             # save; every change is in Riwayat Perubahan
+```
+
+Admin Sekolah can do the same without a shell: Sekolah Asal → Alamat pendaftar → "Lihat hasil pencocokan" →
+"Simpan hasil pencocokan". It is not run automatically because it rewrites applicant data. Running it again is safe.
+Ask the school to choose its regency/city in Identitas Sekolah, so the form starts with the school's region.
 
 ## Backups
 

@@ -1,0 +1,11 @@
+{
+  "version": "2099-01-01",
+  "description": "Test fixture: all provinces, Jawa Tengah regencies and districts, villages of a few districts.",
+  "file": "wilayah.json.gz",
+  "sha256": "60525ed48a2388690ef099c17647a273901b8b014f08235c28e213d024dd1f8d",
+  "regions": 1670,
+  "provinces": 38,
+  "regencies": 35,
+  "districts": 576,
+  "villages": 1021
+}
