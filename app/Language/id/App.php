@@ -130,4 +130,13 @@ return [
     'foldCloseAll'      => 'Tutup semua',
     'pageContents'      => 'Isi halaman',
     'pageSectionError'  => 'ada isian yang perlu diperbaiki',
+
+    // Step indicator (partials/stepper)
+    'stepper' => [
+        'counter'  => 'Langkah {0} dari {1}',
+        'done'     => 'sudah diisi',
+        'current'  => 'langkah sekarang',
+        'upcoming' => 'belum diisi',
+        'error'    => 'ada isian yang perlu diperbaiki',
+    ],
 ];

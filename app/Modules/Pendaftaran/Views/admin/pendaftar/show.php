@@ -44,6 +44,7 @@ $rows    = [
         'mother_name'       => $a['mother_name'],
         'mother_occupation' => $a['mother_occupation'],
         'mother_income'     => $a['mother_income'] ?? null,
+        'has_guardian'      => lang('Pendaftaran.guardianOptions')[(string) ($a['has_guardian'] ?? '')] ?? null,
         'guardian_name'     => $a['guardian_name'],
         'guardian_relation' => $a['guardian_relation'],
         'guardian_occupation' => $a['guardian_occupation'] ?? null,
@@ -56,6 +57,10 @@ $rows    = [
         'graduation_year'      => $a['graduation_year'],
     ],
 ];
+// "Tidak ada wali": the guardian rows are left out (they are empty).
+if ((string) ($a['has_guardian'] ?? '') === '0') {
+    $rows['sectionParents'] = array_diff_key($rows['sectionParents'], array_flip(Modules\Pendaftaran\Libraries\ApplicantForm::GUARDIAN));
+}
 $waPhone = preg_replace('/\D/', '', (string) $a['parent_phone']) ?? '';
 $waPhone = str_starts_with($waPhone, '0') ? '62' . substr($waPhone, 1) : $waPhone;
 $button  = 'inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium';

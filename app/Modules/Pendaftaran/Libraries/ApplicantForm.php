@@ -63,6 +63,35 @@ class ApplicantForm
     public const PARENT_NAMES = ['father_name', 'mother_name', 'guardian_name'];
 
     /**
+     * Guardian fields: asked only after the "Ada wali" answer (has_guardian = 1).
+     *
+     * @var list<string>
+     */
+    public const GUARDIAN = ['guardian_name', 'guardian_relation', 'guardian_occupation', 'guardian_income'];
+
+    /**
+     * Answers stored besides the fields (has_guardian: 1 = has a guardian, 0 = none, null = not asked).
+     *
+     * @var list<string>
+     */
+    public const CHOICES = ['has_guardian'];
+
+    /**
+     * Form sections in order (the steps of the public form wizard).
+     *
+     * @var array<string, list<string>>
+     */
+    public const SECTIONS = [
+        'sectionStudent' => ['full_name', 'gender', 'birth_place', 'birth_date', 'nisn', 'nik', 'kk_number', 'religion', 'phone'],
+        'sectionAddress' => ['address', 'village', 'district', 'regency', 'province'],
+        'sectionParents' => [
+            'father_name', 'father_occupation', 'father_income', 'mother_name', 'mother_occupation', 'mother_income',
+            'guardian_name', 'guardian_relation', 'guardian_occupation', 'guardian_income', 'parent_phone', 'parent_email',
+        ],
+        'sectionSchool' => ['previous_school_name', 'graduation_year'],
+    ];
+
+    /**
      * @var list<string>
      */
     private array $required;
@@ -151,7 +180,79 @@ class ApplicantForm
     }
 
     /**
+     * The sections that hold some of $fields, each with those fields in form order.
+     *
+     * @param list<string> $fields
+     *
+     * @return array<string, list<string>>
+     */
+    public static function sections(array $fields): array
+    {
+        $out = [];
+
+        foreach (self::SECTIONS as $section => $names) {
+            $names = array_values(array_intersect($names, $fields));
+
+            if ($names !== []) {
+                $out[$section] = $names;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * The section a field or error key belongs to (has_guardian and previous_school_id included).
+     */
+    public static function sectionOf(string $field): ?string
+    {
+        $field = match ($field) {
+            'has_guardian'       => 'guardian_name',
+            'previous_school_id' => 'previous_school_name',
+            default              => $field,
+        };
+
+        foreach (self::SECTIONS as $section => $names) {
+            if (in_array($field, $names, true)) {
+                return $section;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Whether a form with $fields asks "Ada wali?" (some guardian field is on it).
+     *
+     * @param list<string> $fields
+     */
+    public static function asksGuardian(array $fields): bool
+    {
+        return array_intersect(self::GUARDIAN, $fields) !== [];
+    }
+
+    /**
+     * The fields to validate: without the guardian fields when the answer is "Tidak ada wali".
+     *
+     * @param list<string>               $fields
+     * @param array<string, string|null> $data   Cleaned input
+     *
+     * @return list<string>
+     */
+    public static function fieldsToCheck(array $fields, array $data): array
+    {
+        if (($data['has_guardian'] ?? null) !== '0') {
+            return $fields;
+        }
+
+        return array_values(array_diff($fields, self::GUARDIAN));
+    }
+
+    /**
      * Trims and normalises posted values; keeps only $fields (+ previous_school_id).
+     * When $fields holds guardian fields, also answers has_guardian ('1' / '0'): the
+     * posted choice, or '1' when a guardian field is filled in and no choice was
+     * posted. With "Tidak ada wali" the guardian fields are cleared (null).
      *
      * @param array<string, mixed> $input
      * @param list<string>         $fields
@@ -183,6 +284,22 @@ class ApplicantForm
             $out[$field] = $value === '' ? null : $value;
         }
 
+        if (self::asksGuardian($fields)) {
+            $choice = $input['has_guardian'] ?? null;
+            $choice = is_scalar($choice) ? trim((string) $choice) : '';
+            $has    = $choice === ''
+                ? array_filter(self::GUARDIAN, static fn (string $f): bool => ($out[$f] ?? null) !== null) !== []
+                : in_array(strtolower($choice), ['1', 'ya', 'on', 'true'], true);
+
+            $out['has_guardian'] = $has ? '1' : '0';
+
+            if (! $has) {
+                foreach (array_intersect(self::GUARDIAN, $fields) as $field) {
+                    $out[$field] = null;
+                }
+            }
+        }
+
         return $out;
     }
 
@@ -197,11 +314,14 @@ class ApplicantForm
     /**
      * Validation rules for $fields (CodeIgniter format, with labels and friendly messages).
      *
-     * @param list<string> $fields
+     * The guardian's name is required when the answer is "Ada wali" ($data['has_guardian'] = '1').
+     *
+     * @param list<string>               $fields
+     * @param array<string, string|null> $data   Cleaned input
      *
      * @return array<string, array{label: string, rules: string, errors?: array<string, string>}>
      */
-    public function rules(array $fields): array
+    public function rules(array $fields, array $data = []): array
     {
         $base = [
             'full_name'            => "max_length[100]|regex_match[/\\A[\\p{L} .,'-]+\\z/u]",
@@ -244,7 +364,8 @@ class ApplicantForm
             }
 
             // The previous school may come as an id from the school picker; extraErrors() checks it.
-            $required = $this->requires($field) && $field !== 'previous_school_name' ? 'required' : 'permit_empty';
+            $required = ($this->requires($field) && $field !== 'previous_school_name')
+                || ($field === 'guardian_name' && ($data['has_guardian'] ?? null) === '1') ? 'required' : 'permit_empty';
 
             $rules[$field] = [
                 'label' => lang('Pendaftaran.fields.' . $field),

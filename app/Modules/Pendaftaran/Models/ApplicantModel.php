@@ -29,7 +29,7 @@ class ApplicantModel extends Model
         'full_name', 'name_key', 'gender', 'birth_place', 'birth_date', 'nik', 'nisn', 'kk_number', 'religion',
         'address', 'village', 'district', 'regency', 'province', 'phone',
         'father_name', 'father_occupation', 'father_income', 'mother_name', 'mother_occupation', 'mother_income',
-        'guardian_name', 'guardian_relation', 'guardian_occupation', 'guardian_income',
+        'has_guardian', 'guardian_name', 'guardian_relation', 'guardian_occupation', 'guardian_income',
         'parent_phone', 'parent_email', 'previous_school_id', 'previous_school_name', 'graduation_year',
         'possible_duplicate', 'access_token_hash', 'notes', 'created_by', 'registered_at',
     ];

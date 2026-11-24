@@ -15,7 +15,8 @@ trait HandlesApplicantForm
 {
     /**
      * Validates the posted $fields. Returns [cleaned data, errors]; errors is
-     * empty when everything is fine.
+     * empty when everything is fine. With "Tidak ada wali" the guardian fields
+     * are cleared and not checked.
      *
      * @param list<string> $fields
      *
@@ -23,8 +24,9 @@ trait HandlesApplicantForm
      */
     protected function validateApplicant(ApplicantForm $form, array $fields): array
     {
-        $data  = ApplicantForm::clean((array) $this->request->getPost(), $fields);
-        $rules = $form->rules($fields);
+        $data   = ApplicantForm::clean((array) $this->request->getPost(), $fields);
+        $fields = ApplicantForm::fieldsToCheck($fields, $data);
+        $rules  = $form->rules($fields, $data);
 
         if (in_array('previous_school_name', $fields, true) && self::schoolPickerAvailable()) {
             $rules['previous_school_id'] = ['label' => lang('Pendaftaran.fields.previous_school_id'), 'rules' => 'permit_empty|is_natural'];

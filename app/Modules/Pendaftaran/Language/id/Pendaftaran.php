@@ -107,6 +107,7 @@ return [
         'mother_name'          => 'Nama ibu',
         'mother_occupation'    => 'Pekerjaan ibu',
         'mother_income'        => 'Penghasilan ibu per bulan',
+        'has_guardian'         => 'Wali',
         'guardian_name'        => 'Nama wali',
         'guardian_relation'    => 'Hubungan wali dengan calon murid',
         'guardian_occupation'  => 'Pekerjaan wali',
@@ -144,6 +145,34 @@ return [
     'sectionParents' => 'Orang tua atau wali',
     'sectionSchool'  => 'Sekolah asal',
     'sectionStaff'   => 'Untuk petugas',
+    'groupFather'    => 'Ayah',
+    'groupMother'    => 'Ibu',
+    'groupGuardian'  => 'Wali',
+    'groupContact'   => 'Kontak orang tua atau wali',
+
+    // Guardian question: asked first, guardian fields only after "Ada wali"
+    'guardianQuestion'     => 'Apakah calon murid tinggal bersama atau diasuh oleh wali?',
+    'guardianQuestionHelp' => 'Wali adalah orang dewasa selain ayah atau ibu kandung yang mengasuh calon murid, misalnya kakek, nenek, paman, atau bibi.',
+    'guardianOptions'      => ['0' => 'Tidak ada wali', '1' => 'Ada wali'],
+    'guardianOptionHelp'   => [
+        '0' => 'Calon murid tinggal bersama ayah atau ibu kandung.',
+        '1' => 'Calon murid diasuh oleh orang lain, misalnya kakek, nenek, atau paman.',
+    ],
+    'guardianFieldsNote' => 'Isi bagian ini hanya jika Anda memilih "Ada wali".',
+
+    // Step-by-step form (wizard)
+    'wizardLabel'         => 'Langkah pengisian formulir',
+    'stepLabels'          => ['sectionStudent' => 'Calon murid', 'sectionAddress' => 'Alamat', 'sectionParents' => 'Orang tua', 'sectionSchool' => 'Sekolah asal', 'sectionReview' => 'Periksa'],
+    'sectionReview'       => 'Periksa dan kirim',
+    'summaryIntro'        => 'Periksa kembali data di bawah ini. Tekan "Ubah" jika ada yang perlu diperbaiki.',
+    'summaryEdit'         => 'Ubah',
+    'summaryEditLabel'    => 'Ubah bagian {0}',
+    'summaryEmpty'        => 'Belum diisi',
+    'wizardBack'          => 'Kembali',
+    'wizardNext'          => 'Lanjut',
+    'wizardFieldRequired' => 'Kotak ini harus diisi.',
+    'wizardFieldInvalid'  => 'Isian belum sesuai. Periksa kembali.',
+    'wizardStepErrors'    => 'Ada isian yang perlu diperbaiki di langkah ini.',
 
     // Applicant list and detail (admin)
     'listTitle'              => 'Data Pendaftar',
@@ -221,7 +250,8 @@ return [
     'publicSteps'        => ['Isi formulir ini', 'Simpan nomor pendaftaran dan tautan pribadi', 'Unggah berkas dan cetak kartu dari halaman data pendaftar'],
     'publicStepsTitle'   => 'Langkah pendaftaran',
     'publicRequiredNote' => 'Kotak tanpa tulisan "tidak wajib" harus diisi.',
-    'publicAgree'        => 'Dengan menekan tombol di bawah, Anda menyatakan data yang diisi benar dan setuju data ini dipakai sekolah untuk penerimaan murid baru.',
+    'publicAgree'        => 'Saya menyatakan data yang diisi benar dan setuju data ini dipakai sekolah untuk penerimaan murid baru.',
+    'agreeRequired'      => 'Centang pernyataan persetujuan sebelum mengirim pendaftaran.',
     'publicSubmit'       => 'Kirim Pendaftaran',
     'publicHoneypot'     => 'Jangan isi kotak ini',
     'tooManySubmits'     => 'Terlalu banyak percobaan dalam waktu singkat. Tunggu satu menit lalu kirim lagi.',

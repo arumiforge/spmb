@@ -22,7 +22,7 @@ return [
     'settingGroups' => [
         'Pendaftaran' => 'Pengaturan Pendaftaran',
     ],
-    'boolFields' => ['possible_duplicate', 'is_active', 'onlineOpen'],
+    'boolFields' => ['possible_duplicate', 'is_active', 'onlineOpen', 'has_guardian'],
     'fields'     => [
         'registration_number'  => 'Nomor pendaftaran',
         'academic_year'        => 'Tahun ajaran',
@@ -53,6 +53,7 @@ return [
         'staffOnlyFields'      => 'Isian yang hanya diisi petugas',
         'occupationOptions'    => 'Pilihan pekerjaan',
         'incomeOptions'        => 'Pilihan penghasilan',
+        'has_guardian'         => 'Ada wali',
         'guardian_name'        => 'Nama wali',
         'guardian_relation'    => 'Hubungan wali',
         'parent_phone'         => 'Nomor WhatsApp orang tua',

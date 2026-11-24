@@ -128,22 +128,26 @@ $cardIcons = ['persyaratan' => 'clipboard-list', 'jadwal' => 'calendar-days', 'c
                 </div>
                 <?php if ($stepsArt !== '') : ?><div class="order-first shrink-0 md:order-none"><?= $stepsArt ?></div><?php endif ?>
             </div>
-            <ol class="grid gap-5 md:grid-cols-3">
+            <?php // Timeline (D-090 art kept): numbered circles joined by a line, vertical on phones, horizontal from md. ?>
+            <ol class="garis-waktu garis-waktu-mendatar [--garis-waktu-latar:var(--color-gray-50)]" style="--garis-waktu-kolom: 3">
                 <?php foreach (['homeStep1', 'homeStep2', 'homeStep3'] as $i => $key) : ?>
                     <?php
                     // Step scene (briefs 046–048, D-090); a painted icon or Lucide icon until it arrives.
                     $alt   = lang('Situs.homeStepAlts')[$i];
                     $scene = illustration('langkah/langkah-' . ($i + 1), $alt, 'mx-auto aspect-[4/3] w-full max-w-xs object-contain');
                     ?>
-                    <li class="kartu-langkah kartu-langkah-<?= $i + 1 ?> motion-rise flex flex-col items-center rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm sm:p-6 dark:border-gray-700 dark:bg-gray-900" style="--rise-delay: <?= $i * 80 ?>ms" data-ikon-3d-area>
-                        <?php if ($scene !== '') : ?>
-                            <div class="mb-4 w-full"><?= $scene ?></div>
-                        <?php else : ?>
-                            <?= art_icon('langkah/langkah-' . ($i + 1), ['clipboard-list', 'pencil', 'id-card'][$i], 'mb-4 mt-2 h-28 w-28 sm:h-32 sm:w-32', $alt) ?>
-                        <?php endif ?>
-                        <p class="mb-1 text-sm font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.step', [$i + 1]) ?></p>
-                        <h3 class="mb-2 text-lg font-bold text-gray-900 dark:text-white"><?= esc(lang('Situs.homeStepTitles')[$i]) ?></h3>
-                        <p class="text-gray-600 dark:text-gray-300"><?= lang('Situs.' . $key) ?></p>
+                    <li class="garis-waktu-item motion-rise" style="--rise-delay: <?= $i * 80 ?>ms">
+                        <span class="langkah-bulat" aria-hidden="true"><?= $i + 1 ?></span>
+                        <div class="kartu-langkah kartu-langkah-<?= $i + 1 ?> flex h-full flex-col items-center rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm sm:p-6 dark:border-gray-700 dark:bg-gray-900" data-ikon-3d-area>
+                            <?php if ($scene !== '') : ?>
+                                <div class="mb-4 w-full"><?= $scene ?></div>
+                            <?php else : ?>
+                                <?= art_icon('langkah/langkah-' . ($i + 1), ['clipboard-list', 'pencil', 'id-card'][$i], 'mb-4 mt-2 h-28 w-28 sm:h-32 sm:w-32', $alt) ?>
+                            <?php endif ?>
+                            <p class="mb-1 text-sm font-semibold text-primary-700 dark:text-primary-400"><?= lang('Situs.step', [$i + 1]) ?></p>
+                            <h3 class="mb-2 text-lg font-bold text-gray-900 dark:text-white"><?= esc(lang('Situs.homeStepTitles')[$i]) ?></h3>
+                            <p class="text-gray-600 dark:text-gray-300"><?= lang('Situs.' . $key) ?></p>
+                        </div>
                     </li>
                 <?php endforeach ?>
             </ol>
