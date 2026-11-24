@@ -48,6 +48,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
+| `igi/dreamy-babbage-f2pzav` | session module-routes | Switched-off modules lose their routes (404), route discovery off (D-110) | PR open |
 | `nty/intelligent-curie-pb1lv6` | session guides | Home map/contact layout (D-096), staff guides in the dashboard + in-page search on Panduan and Tanya Jawab (D-097) | PR open |
 | `pw/sleepy-hopper-d0a7h5` | session polish | Public polish round (D-090…D-095), Codex #49 and `langkah`, PR #43 notes | #50, #51 merged; follow-up PR open |
 | `feat/ui-codex` | worker A (ui-round) | Codex briefs 036–071 (`docs/ui-round-plan.md` A) | merged into the integration branch (#42) |
@@ -69,6 +70,12 @@ create your own branch from `main` instead.
 
 ## Next steps
 
+00000. **Module routes (D-110)**: after the PR is merged, deploy as usual (no migration). The admin-round branch
+   (`igi/gifted-davinci-j917i9`) numbers its decisions D-098…D-109, so this fix took D-110. When that branch merges `main`,
+   simplify `Modules\Situs\Libraries\FooterLinks`: drop `switchedOffRoutes()` and `collectRoutes()` (and the `Modules`,
+   `Routing`, `RouteCollection` imports); `pageExists()` only needs `self::matches($path, array_keys(service('routes')->getRoutes('GET')))`,
+   because the main route list no longer holds routes of switched-off modules. Keep its test for a link into a switched-off
+   module (it must still be hidden). Any new cross-module `url_to()` must check `isEnabled()` first (spmb-module skill).
 0000. **Guides and contacts (D-096, D-097)**: after the PR is merged, `spmb deploy staging`, check `/` (map on the right,
    below the contacts on phones), `/tanya-jawab` and `/panduan/calon-murid` (search box), `/admin/panduan` as Panitia and
    Admin Sekolah, then `spmb deploy production`. No migration.
@@ -129,6 +136,7 @@ when the container idles).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-25 · session module-routes · `igi/dreamy-babbage-f2pzav` — switched-off modules answered on their pages because route discovery loaded every module's `Config/Routes.php`; `'routes'` removed from `Config\Modules::$aliases` (D-110), `ModuleRoutesTest` (404 public/admin, back on, required modules, core modules, linking pages render); 482 tests green. Next: merge; admin-round branch simplifies `FooterLinks`.
 - 2026-11-24 · session guides · `nty/intelligent-curie-pb1lv6` — home "Lokasi dan kontak": contacts card left, one map right / below on phones, map caption + directions button (D-096); staff guides moved to `/admin/panduan` (own role, Super Admin all; old public links redirect), search box inside Panduan and Tanya Jawab (D-097); 475 tests green. Next: merge, deploy staging, check, production.
 - 2026-11-24 · session polish · `pw/sleepy-hopper-d0a7h5` — PR #51 merged (019/020/027 repainted); Codex `langkah` batch reviewed and installed (046–048 scenes, 072 card backgrounds); PR #43's go-live notes carried into this file. Next: deploy, load branding on production, school data, uptime monitor.
 - 2026-11-24 · session polish · `pw/sleepy-hopper-d0a7h5` — checked production (was on 04b2ccc, then on #47 after the user's deploy); reviewed Codex #49 (019–027 and 035 installed after Codex repainted 019, 020, 027 for D-089); D-090…D-095: step-card art and briefs, map preview, footer/top bar, SPMB name + migration, HTML minifier, dashboard bottom bar Pengaturan and site link, subgrid form alignment; 471 tests green. PR #50 merged. Next: deploy, load branding on production, Codex `langkah` batch.
@@ -138,4 +146,3 @@ when the container idles).
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — new account's cloud environment checked (442 tests green); domain on Cloudflare confirmed; full server flow rehearsed in the container (all steps passed). Next: user runs `setup.sh` on `spmb-prod`, then tunnel.
 - 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — PR #32 (example env files) merged; docs refreshed to the current state: README, roadmap (phase 1 done, platform round row, phase 6 partly done), architecture (stack, tables, visual rules), requirements (FR-WEB-03, NFR-02/03/08), module index, third-party server images, CLAUDE.md roles and commands, coordination notes. Next: go-live, Codex `svg-kit`.
 - 2026-11-23 · coordinator (session docker) · `main` — CI green on all checks; PR #26 merged into `main` on the user's request. Next: go-live on `spmb-prod` (`docs/deployment.md` → First server), Codex `svg-kit` batch.
-- 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — user decided: direct SSH port stays open, key-only (D-077); `setup.sh`, deployment guide (Bitvise key steps, no fail2ban on the NAT VPS), deploy skill and CLAUDE.md updated. Next: user merges #26, go-live.

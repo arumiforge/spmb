@@ -4,6 +4,11 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- A module switched off on Pengaturan → Fitur now loses its pages too (404 on public and admin addresses), not only
+  its menu entries; switching it on brings them back (D-110). Route auto-discovery is off; `app/Config/Routes.php`
+  loads the routes of enabled modules only.
+
 ### Changed
 - Home "Lokasi dan kontak" (D-096): contacts in one tidy card on the left, one map card on the right (below the
   contacts on phones, full width) with a map icon caption and a "Buka petunjuk arah" button; WhatsApp row shows the
