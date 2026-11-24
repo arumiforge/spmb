@@ -10,6 +10,7 @@ use CodeIgniter\Shield\Test\AuthenticationTesting;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
 use CodeIgniter\Test\FeatureTestTrait;
+use Config\School;
 use Config\Services;
 use Modules\Berkas\Models\DocumentTypeModel;
 use Modules\Pendaftaran\Models\ApplicantModel;
@@ -213,7 +214,7 @@ final class BahasaWebsiteTest extends CIUnitTestCase
 
     public function testDefaultSloganIsTranslated(): void
     {
-        setting('School.tagline', (new Config\School())->tagline);
+        setting('School.tagline', (new School())->tagline);
 
         $this->get('ar/')->assertSee('نظام قبول الطلاب الجدد (SPMB)');
 
@@ -280,8 +281,13 @@ final class BahasaWebsiteTest extends CIUnitTestCase
         $admin = $this->makeAdmin();
 
         $this->actingAs($admin)->post('admin/tanya-jawab/tambah', [
-            'topic' => 'Biaya', 'question' => 'Apakah gratis?', 'answer' => 'Ya.', 'is_published' => '1',
-            'question_en' => 'Is it free?', 'question_ar' => '', 'answer_en' => 'Yes.',
+            'topic'        => 'Biaya',
+            'question'     => 'Apakah gratis?',
+            'answer'       => 'Ya.',
+            'is_published' => '1',
+            'question_en'  => 'Is it free?',
+            'question_ar'  => '',
+            'answer_en'    => 'Yes.',
         ])->assertRedirect();
 
         $row = model(SiteQuestionModel::class)->where('question', 'Apakah gratis?')->first();
@@ -300,8 +306,13 @@ final class BahasaWebsiteTest extends CIUnitTestCase
         $form->assertSee('Bahasa website');
 
         $this->actingAs($admin)->post('admin/pengaturan/sekolah', [
-            'name' => 'SMP Contoh', 'shortName' => 'SMP Contoh', 'primaryColor' => '#2563eb', 'timezoneLabel' => 'WIB',
-            'languageEn' => '1', 'languageAr' => '0', 'motto_en' => 'Good character',
+            'name'          => 'SMP Contoh',
+            'shortName'     => 'SMP Contoh',
+            'primaryColor'  => '#2563eb',
+            'timezoneLabel' => 'WIB',
+            'languageEn'    => '1',
+            'languageAr'    => '0',
+            'motto_en'      => 'Good character',
         ])->assertRedirect();
 
         $this->assertTrue((bool) setting('School.languageEn'));

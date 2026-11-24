@@ -139,6 +139,14 @@ Phone photos are larger than PHP's default 2 MB upload limit. Set
 `upload_max_filesize = 10M`, `post_max_size = 12M` (php-fpm) and
 `client_max_body_size 12m;` (nginx), matching `Berkas.imageUploadLimitKb`.
 
+## Languages (D-109)
+
+The applicant's documents panel and the requirements page follow the page language
+(`Language/{en,ar}/Berkas.php`, [../i18n.md](../i18n.md)). Document types have optional `name_en/_ar`,
+`description_en/_ar` and `template_label_en/_ar` (migration `AddTranslationsToDocumentTypes`, type form →
+"Terjemahan (tidak wajib)"), read with `localized($type, 'name')` and `DocumentTypeModel::templateLabel()`.
+Example downloads (`berkas/contoh/<code>`) and file addresses never carry a language prefix.
+
 ## Guides
 
 `Guide/calon-murid.md` (upload, menyusul, statuses, problems),

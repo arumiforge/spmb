@@ -112,6 +112,16 @@ Permissions stay declared centrally in `Config\AuthGroups` (tested by `AuthGroup
 - Partials receive one array (`field`, `badge`, `empty`, `brand`) because CI view data is shared
   between renders (`saveData`); a partial must not rely on loose variables.
 
+### Website languages (D-109)
+
+The public website is Indonesian (`/`), English (`/en/…`) and Arabic (`/ar/…`, right to left). The prefix is
+taken off the request before routing (`Config\Services::incomingrequest`, `App\Libraries\Locales`), the
+required filter `bahasa` (`App\Filters\WebsiteLanguage`) redirects prefixed staff/file addresses and
+switched-off languages, `site_url()` adds the prefix back (`app/Helpers/url_helper.php`), and
+`App\Libraries\Language` falls back to Indonesian per key. School texts have optional `_en`/`_ar`
+fields read with `localized()` / `setting_localized()`. Dashboard, sign-in and PDFs stay Indonesian.
+Details: [i18n.md](i18n.md).
+
 ### Audit log viewer (Riwayat)
 
 `/admin/riwayat` (permission `audit.view`: Super Admin, Admin Sekolah) lists `audit_logs` newest first,
@@ -129,7 +139,8 @@ there. Role keys are shown as role titles, redacted values as "(disembunyikan)".
 `PageNotFoundException` from controllers render a friendly 404 (status 404): admin layout for signed-in
 staff, public layout otherwise. With `display_errors` off, `app/Views/errors/html/production.php` renders
 the 500 page the same way. If the layout cannot render (e.g. database down, routes not loaded),
-`Errors::fallback()` returns a self-contained Indonesian page with inline CSS (D-026). In development
+`Errors::fallback()` returns a self-contained page with inline CSS (D-026) in the page's language. On an
+English or Arabic address the error page always uses the public layout in that language (D-109). In development
 CodeIgniter's detailed exception page is unchanged.
 
 ### Request pipeline

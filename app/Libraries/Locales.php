@@ -6,6 +6,7 @@ namespace App\Libraries;
 
 use CodeIgniter\HTTP\IncomingRequest;
 use Config\Services;
+use Locale;
 use Throwable;
 
 /**
@@ -127,7 +128,7 @@ final class Locales
     public static function apply(IncomingRequest $request, string $locale): void
     {
         $request->setLocale($locale);
-        \Locale::setDefault($request->getLocale() === 'ar' ? 'ar@numbers=latn' : $request->getLocale());
+        Locale::setDefault($request->getLocale() === 'ar' ? 'ar@numbers=latn' : $request->getLocale());
     }
 
     public static function isDefault(?string $locale = null): bool
@@ -257,7 +258,7 @@ final class Locales
      */
     public static function field(array|object $row, string $field, ?string $locale = null): string
     {
-        $row    = is_object($row) ? (method_exists($row, 'toArray') ? $row->toArray() : get_object_vars($row)) : $row;
+        $row = is_object($row) ? (method_exists($row, 'toArray') ? $row->toArray() : get_object_vars($row)) : $row;
         $locale ??= self::current();
 
         if ($locale !== self::DEFAULT) {

@@ -120,7 +120,7 @@ class GuideBuilder
         // Links to pages of this website ("/daftar") keep the page's language and a sub-folder install.
         $html = (string) preg_replace_callback('#href="/(?!/)([^"]*)"#', static fn (array $m): string => 'href="' . esc(site_url(html_entity_decode($m[1], ENT_QUOTES)), 'attr') . '"', $html);
         $toc  = [];
-        $used      = [];
+        $used = [];
 
         $html = (string) preg_replace_callback('#<h2>(.*?)</h2>#s', static function (array $m) use (&$toc, &$used): string {
             $label = trim(strip_tags($m[1]));

@@ -6,13 +6,6 @@ return [
     'sectionIdentity'           => 'Identitas',
     'sectionContact'            => 'Kontak',
     'sectionLook'               => 'Tampilan',
-    // Website languages (D-109).
-    'sectionLanguages'      => 'Bahasa website',
-    'sectionLanguagesIntro' => 'Website selalu tersedia dalam Bahasa Indonesia. Versi bahasa Inggris dan Arab memakai terjemahan yang sudah disiapkan; teks yang Anda ketik sendiri tampil dalam terjemahan Anda jika diisi, atau dalam Bahasa Indonesia jika kosong.',
-    'languageEn'            => 'Tampilkan versi bahasa Inggris (English)',
-    'languageEnHelp'        => 'Alamatnya diawali /en/, misalnya /en/jadwal. Jika dimatikan, pengunjung diarahkan ke halaman bahasa Indonesia.',
-    'languageAr'            => 'Tampilkan versi bahasa Arab (العربية)',
-    'languageArHelp'        => 'Alamatnya diawali /ar/ dan halaman dibaca dari kanan ke kiri. Jika dimatikan, pengunjung diarahkan ke halaman bahasa Indonesia.',
     'name'                      => 'Nama sekolah',
     'nameHelp'                  => 'Nama lengkap seperti di dokumen resmi.',
     'shortName'                 => 'Nama singkat',
@@ -116,4 +109,12 @@ return [
     'serverColItem'   => 'Pemeriksaan',
     'serverColValue'  => 'Nilai',
     'serverColStatus' => 'Status',
+
+    // Website languages (D-109).
+    'sectionLanguages'      => 'Bahasa website',
+    'sectionLanguagesIntro' => 'Website selalu tersedia dalam Bahasa Indonesia. Versi bahasa Inggris dan Arab memakai terjemahan yang sudah disiapkan; teks yang Anda ketik sendiri tampil dalam terjemahan Anda jika diisi, atau dalam Bahasa Indonesia jika kosong.',
+    'languageEn'            => 'Tampilkan versi bahasa Inggris (English)',
+    'languageEnHelp'        => 'Alamatnya diawali /en/, misalnya /en/jadwal. Jika dimatikan, pengunjung diarahkan ke halaman bahasa Indonesia.',
+    'languageAr'            => 'Tampilkan versi bahasa Arab (العربية)',
+    'languageArHelp'        => 'Alamatnya diawali /ar/ dan halaman dibaca dari kanan ke kiri. Jika dimatikan, pengunjung diarahkan ke halaman bahasa Indonesia.',
 ];

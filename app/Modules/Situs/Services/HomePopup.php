@@ -101,7 +101,7 @@ final class HomePopup
         $attachment = PopupFiles::path($s['attachment']) !== null;
         $buttonUrl  = SiteLink::normalise($s['buttonUrl']) ?? '';
         // Texts in the page's language when the school filled in a translation (D-109).
-        $text            = localized($s, 'text');
+        $text             = localized($s, 'text');
         $s['buttonLabel'] = localized($s, 'buttonLabel');
 
         return [

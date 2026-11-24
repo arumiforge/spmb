@@ -120,7 +120,8 @@ class School extends BaseConfig
      * Optional English and Arabic versions of the texts above (D-109); empty = the Indonesian text shows.
      * Read them with setting_localized('School.motto').
      */
-    public string $tagline_en    = '';
+    public string $tagline_en = '';
+
     public string $tagline_ar    = '';
     public string $motto_en      = '';
     public string $motto_ar      = '';

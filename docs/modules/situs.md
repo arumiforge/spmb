@@ -145,6 +145,19 @@ TikTok (http/https only) and WhatsApp (`wa.me`), from `school_social_links()`. T
 `module_panels('public_footer')` sits above the copyright line in small text (the Analitik module
 fills it with a visitor summary). The copyright line and "Developed by : Mr. F" are unchanged.
 
+## Languages (D-109)
+
+Every public page of the module also answers at `/en/…` and `/ar/…` (see [../i18n.md](../i18n.md)). Strings:
+`Language/{id,en,ar}/Situs.php` (en/ar hold only the public keys; staff keys fall back to Indonesian). The
+menu labels in `Config/PublicMenu.php` come from `Situs.nav*`. School texts have optional translations:
+`site_questions.topic_en/_ar`, `question_en/_ar`, `answer_en/_ar`, `site_news.text_en/_ar` (migration
+`AddTranslationsToSiteContent`), the popup settings `Situs.popupTitle_en/_ar`, `popupText_en/_ar`,
+`popupButtonLabel_en/_ar`, and `label_en`/`label_ar` in each `Situs.footerLinks` item
+(`FooterLinks::label()`; default links keep the built-in translation while their Indonesian text is
+unchanged). The admin forms show them in the fold "Terjemahan (tidak wajib)". Question anchors and topic
+slugs follow the Indonesian topic, so links to a topic work in every language; the topic's translation is
+typed per question and the first one filled in is used.
+
 ## Starter questions (client pack)
 
 `php spark spmb:branding <pack>` also loads `tanya-jawab.json` from the pack folder or its

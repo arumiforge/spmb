@@ -120,6 +120,17 @@ step, the consent checkbox and the submit button.
   valid. `spmb:install --demo` prints its registration number, date of birth and private link. Idempotent: the 30 only
   for a year without applicants, the example only when no applicant has that name.
 
+## Languages (D-109)
+
+The registration form, success page, status check and applicant page also answer at `/en/…` and `/ar/…`
+([../i18n.md](../i18n.md)): labels, help, steps, summary, consent and validation messages come from
+`Language/{en,ar}/Pendaftaran.php` (public keys only), framework validation messages from
+`codeigniter4/translations`. Forms post to the prefixed address and redirect back to it; the private link
+shown after registering keeps the language. Data the applicant types is stored as typed (school lists such
+as occupations and incomes stay as the school wrote them). Waves have optional `name_en/_ar` and
+`description_en/_ar` (migration `AddTranslationsToWaves`, Gelombang form → "Terjemahan (tidak wajib)"),
+read with `localized($wave, 'name')`. The staff pages stay Indonesian.
+
 ## Guides
 
 `Guide/calon-murid.md`, `Guide/panitia.md`, `Guide/admin-sekolah.md`.

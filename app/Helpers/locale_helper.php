@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Libraries\Locales;
+use Config\School;
 
 /*
  * Website language helpers (D-109, docs/i18n.md). The public site is Indonesian (default), English
@@ -49,7 +50,7 @@ if (! function_exists('setting_localized')) {
     {
         $value = Locales::setting($key);
 
-        if ($key === 'School.tagline' && ! Locales::isDefault() && $value === (new Config\School())->tagline) {
+        if ($key === 'School.tagline' && ! Locales::isDefault() && $value === (new School())->tagline) {
             return lang('App.defaultTagline');
         }
 

@@ -90,6 +90,16 @@ under `md` or scroll horizontally inside their own container — never the page.
 Admin content uses the full width on large screens (no `max-w-*` on admin pages). Forms with several cards
 use `.form-lebar` (one column, two columns from `xl`; the last child, alerts and a single card span both).
 
+## Public pages in three languages (D-109, `docs/i18n.md`)
+
+- Public views run in Indonesian, English (`/en/…`) and Arabic (`/ar/…`, `dir="rtl"`): every text via
+  `lang()`, links via `site_url()`/`url_to()` (they keep the prefix), assets via `asset_url()`/`base_url()`.
+- Use logical utilities only (`ms-/me-/ps-/pe-/start-/end-/text-start/rounded-s-/border-e`), never
+  `left/right/ml/mr/pl/pr/text-left`; for a directional transform add `rtl:` (e.g.
+  `group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5`). `icon()` already flips arrows and chevrons.
+- School-typed text: `localized($row, 'field')` / `setting_localized('School.key')`, wrapped in `<bdi>`;
+  phone numbers in `dir="ltr"`. Check new public pages at `/ar/…` on a 390 px screen.
+
 ## White label / theming
 
 - Colours come from settings as CSS variables (`--color-primary-*`) set in the

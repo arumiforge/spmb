@@ -23,7 +23,7 @@ $shown  = [
     'nisn'                 => $a['nisn'],
     'nik'                  => ApplicantModel::maskNik($a['nik']),
     'kk_number'            => ApplicantModel::maskNik($a['kk_number']),
-    'religion'             => $a['religion'],
+    'religion'             => lang('Pendaftaran.religionOptions')[(string) $a['religion']] ?? $a['religion'],
     'phone'                => $a['phone'],
     'address'              => $a['address'],
     'village'              => $a['village'],
@@ -106,7 +106,8 @@ $button = 'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 te
                 <?php foreach ($shown as $field => $v) : ?>
                     <div class="min-w-0">
                         <dt class="text-gray-500 dark:text-gray-400"><?= lang('Pendaftaran.fields.' . $field) ?></dt>
-                        <dd class="mt-0.5 break-words font-medium text-gray-900 dark:text-white"><?= esc($v === null || $v === '' ? '-' : (string) $v) ?></dd>
+                        <?php // Numbers and contacts stay left to right on Arabic pages; typed text is isolated (D-109). ?>
+                        <dd class="mt-0.5 break-words font-medium text-gray-900 dark:text-white"><?php if (in_array($field, ['nik', 'kk_number', 'nisn', 'phone', 'parent_phone', 'parent_email', 'graduation_year'], true)) : ?><span dir="ltr"><?= esc($v === null || $v === '' ? '-' : (string) $v) ?></span><?php else : ?><bdi><?= esc($v === null || $v === '' ? '-' : (string) $v) ?></bdi><?php endif ?></dd>
                     </div>
                 <?php endforeach ?>
             </dl>

@@ -51,8 +51,11 @@ class WebsiteLanguage implements FilterInterface
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        if (! $request instanceof IncomingRequest || $request->getMethod() !== 'GET' || $response->getStatusCode() !== 200
-            || ! str_contains($response->getHeaderLine('Content-Type'), 'text/html') || Locales::isUnprefixed($request->getPath())) {
+        if (! $request instanceof IncomingRequest || $request->getMethod() !== 'GET' || $response->getStatusCode() !== 200) {
+            return null;
+        }
+
+        if (! str_contains($response->getHeaderLine('Content-Type'), 'text/html') || Locales::isUnprefixed($request->getPath())) {
             return null;
         }
 

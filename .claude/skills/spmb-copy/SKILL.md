@@ -65,3 +65,26 @@ Sources live in each module's `Guide/` folder as Markdown; the Panduan module
 assembles them by role and permission.
 
 All strings go in `Language/id/*.php`; never hard-code text in views.
+
+## English and Arabic versions of public text (D-109)
+
+The public website also comes in English (`/en/…`) and Arabic (`/ar/…`); see `docs/i18n.md`. Write the
+Indonesian text first, then add the same key to `Language/en/<File>.php` and `Language/ar/<File>.php`
+(public strings only; staff screens, sign-in and PDFs stay Indonesian, and a missing key shows the
+Indonesian text).
+
+- **Meaning, not words.** Keep the friendly, plain voice for parents: short sentences, everyday words, one
+  instruction per sentence. English: sentence case, "you"; "admission team" for *panitia*, "future
+  student" for *calon murid*, "registration round" for *gelombang*, "Check status" for *Cek Status*.
+- **Arabic:** Modern Standard Arabic that parents in Indonesia and abroad understand; polite second person
+  (أنت / صيغة الأمر المهذبة), لجنة القبول for *panitia*, الطالب الجديد for *calon murid*, دفعة for
+  *gelombang*. Western digits (0–9) only; Arabic punctuation (، ؟ «») inside Arabic text.
+- **School and Islamic terms:** keep Indonesian names that parents must recognise, with an explanation
+  the first time: "Junior High School (SMP)", "Madrasah Ibtidaiyah (MI)", "family card (Kartu Keluarga)",
+  NIK, NISN, RT/RW, kecamatan. Keep the school's name, people's names and addresses as written.
+- **Placeholders** (`{0}`, `{field}`, `{n}`) and Markdown links stay exactly as in Indonesian; reorder the
+  sentence around them if the language needs it.
+- **Guides:** translate `Guide/calon-murid.md` into `calon-murid.en.md` and `calon-murid.ar.md` next to it,
+  same headings order; button names in bold must match the translated buttons.
+- Lists read item by item (e.g. `App.navShort`) must be complete in each language file.
+- Texts the school types are translated by the school in the admin fold "Terjemahan (tidak wajib)".

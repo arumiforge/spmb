@@ -50,8 +50,6 @@ return [
     'footerLinks'            => 'Tautan',
     'bottomNavLabel'         => 'Menu cepat',
     'navRegister'            => 'Daftar',
-    // Shorter labels in the mobile bottom bar (other languages have longer menu texts, D-109).
-    'navShort'               => ['cek-status' => 'Cek Status', 'tanya-jawab' => 'Tanya Jawab', 'persyaratan' => 'Persyaratan'],
     'readMore'               => 'Lihat selengkapnya',
     'readLess'               => 'Tutup',
     'tocTitle'               => 'Daftar isi',
@@ -134,6 +132,8 @@ return [
     'pageSectionError'  => 'ada isian yang perlu diperbaiki',
 
     // Website languages (D-109): switcher and the offer to return to the language chosen before.
+    // navShort: shorter labels in the mobile bottom bar (other languages have longer menu texts).
+    'navShort'            => ['cek-status' => 'Cek Status', 'tanya-jawab' => 'Tanya Jawab', 'persyaratan' => 'Persyaratan'],
     'languageLabel'       => 'Pilih bahasa',
     'languageSuggest'     => 'Terakhir kali Anda membuka website ini dalam Bahasa Indonesia.',
     'languageSuggestGo'   => 'Lanjut dalam Bahasa Indonesia',

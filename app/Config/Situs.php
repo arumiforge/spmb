@@ -79,7 +79,8 @@ class Situs extends BaseConfig
     /**
      * Optional translations of the popup (empty = the Indonesian text shows).
      */
-    public string $popupTitle_en       = '';
+    public string $popupTitle_en = '';
+
     public string $popupTitle_ar       = '';
     public string $popupText_en        = '';
     public string $popupText_ar        = '';
