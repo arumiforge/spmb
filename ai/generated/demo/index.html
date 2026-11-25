@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../install/css/pola.css">
     <link rel="stylesheet" href="../install/css/pemisah.css">
     <link rel="stylesheet" href="../install/css/tombol-daftar.css">
+    <link rel="stylesheet" href="../install/css/tombol-seni.css">
     <link rel="stylesheet" href="../install/css/memuat.css">
     <link rel="stylesheet" href="../install/css/latar-langkah.css">
     <style>
@@ -110,6 +111,17 @@
         .tombol-daftar {
             --tombol-pola: url("../img/pola/pola-kawung.svg");
             --tombol-ornamen: url("../img/tombol/tombol-ornamen.svg");
+        }
+
+        .tombol-seni {
+            --tombol-seni-bentuk: url("../img/tombol/tombol-seni-bentuk.svg");
+            --tombol-seni-tepi: url("../img/tombol/tombol-seni-tepi.svg");
+            --tombol-seni-pola: url("../img/pola/pola-kawung.svg");
+        }
+
+        .nav-bawah-tengah-bulat {
+            --lencana-bentuk: url("../img/tombol/lencana-tengah.svg");
+            --lencana-pola: url("../img/pola/pola-kawung.svg");
         }
 
         .tombol-daftar, .memuat-kecil {
@@ -238,6 +250,60 @@
 
         .dark .nomor-langkah { color: var(--color-primary-300); }
         .contoh-langkah h3 { margin-block: .25rem .375rem; }
+
+        .contoh-tombol-seni {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.25rem;
+            margin-block: 1rem 1.5rem;
+            padding-block-start: .625rem;
+        }
+
+        .bilah-pratinjau {
+            display: grid;
+            justify-items: center;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 1rem;
+            margin-block-start: 1rem;
+        }
+
+        @media (width >= 52rem) {
+            .bilah-pratinjau { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        .bilah-pratinjau figure { width: min(360px, 100vw); }
+        .bilah-pratinjau figcaption { margin: 0 0 2.5rem; text-align: center; }
+
+        .bilah-pratinjau .nav-bawah {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            background: var(--permukaan);
+            border-block-start: 1px solid var(--batas);
+        }
+
+        .bilah-pratinjau a {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            flex-direction: column;
+            min-height: 64px;
+            position: relative;
+            padding: 0 .125rem .45rem;
+            color: var(--teks-sekunder);
+            font-size: .6875rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .bilah-pratinjau a:focus-visible {
+            outline: 2px solid var(--color-primary-600);
+            outline-offset: -4px;
+            border-radius: .75rem;
+        }
+
+        .bilah-pratinjau .is-aktif { color: var(--color-primary-700); }
+        .dark .bilah-pratinjau .is-aktif { color: var(--color-primary-300); }
     </style>
 </head>
 <body>
@@ -409,6 +475,78 @@
                         </span>
                     </button>
                 </div>
+            </div>
+        </section>
+        <section class="isi" aria-labelledby="judul-tombol-seni">
+            <h2 id="judul-tombol-seni">Tombol seni</h2>
+            <p>Arahkan penunjuk, fokuskan dengan Tab, atau tekan tombol untuk melihat tiap keadaan.</p>
+            <h3 class="kelompok-tombol">Ikon lukis</h3>
+            <div class="contoh-tombol-seni">
+                <a class="tombol-daftar tombol-daftar-penuh" href="#judul-tombol-seni"><span class="tombol-daftar-isi">Daftar sekarang</span></a>
+                <a class="tombol-seni" href="#judul-tombol-seni" data-ikon-3d-area>
+                    <span class="tombol-seni-gambar"><span class="ikon-3d" data-ikon-3d aria-hidden="true"><img src="contoh-ikon.webp" alt=""></span></span>
+                    <span class="tombol-seni-teks">Cek Status</span>
+                </a>
+                <a class="tombol-seni tombol-seni-lembut" href="#judul-tombol-seni" data-ikon-3d-area>
+                    <span class="tombol-seni-gambar"><span class="ikon-3d" data-ikon-3d aria-hidden="true"><img src="contoh-ikon.webp" alt=""></span></span>
+                    <span class="tombol-seni-teks">Lihat Persyaratan</span>
+                </a>
+                <a class="tombol-seni" role="link" aria-disabled="true">
+                    <span class="tombol-seni-gambar"><span class="ikon-3d" aria-hidden="true"><img src="contoh-ikon.webp" alt=""></span></span>
+                    <span class="tombol-seni-teks">Cek Status (nonaktif)</span>
+                </a>
+                <a class="tombol-seni tombol-seni-lembut" role="link" aria-disabled="true">
+                    <span class="tombol-seni-gambar"><span class="ikon-3d" aria-hidden="true"><img src="contoh-ikon.webp" alt=""></span></span>
+                    <span class="tombol-seni-teks">Lihat Persyaratan (nonaktif)</span>
+                </a>
+            </div>
+            <h3>Ikon cadangan</h3>
+            <div class="contoh-tombol-seni">
+                <a class="tombol-seni" href="#judul-tombol-seni">
+                    <span class="tombol-seni-gambar"><span class="ikon-cadangan" aria-hidden="true"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span></span>
+                    <span class="tombol-seni-teks">Cek Status</span>
+                </a>
+                <a class="tombol-seni tombol-seni-lembut" href="#judul-tombol-seni">
+                    <span class="tombol-seni-gambar"><span class="ikon-cadangan" aria-hidden="true"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2m1 8h6m-6 4h6"/></svg></span></span>
+                    <span class="tombol-seni-teks">Lihat Persyaratan</span>
+                </a>
+                <a class="tombol-seni" role="link" aria-disabled="true">
+                    <span class="tombol-seni-gambar"><span class="ikon-cadangan" aria-hidden="true"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span></span>
+                    <span class="tombol-seni-teks">Cek Status (nonaktif)</span>
+                </a>
+                <a class="tombol-seni tombol-seni-lembut" role="link" aria-disabled="true">
+                    <span class="tombol-seni-gambar"><span class="ikon-cadangan" aria-hidden="true"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2m1 8h6m-6 4h6"/></svg></span></span>
+                    <span class="tombol-seni-teks">Lihat Persyaratan (nonaktif)</span>
+                </a>
+            </div>
+            <h3>Lencana navigasi bawah</h3>
+            <div class="bilah-pratinjau">
+                <figure>
+                    <figcaption>Halaman lain</figcaption>
+                    <nav class="nav-bawah" aria-label="Contoh navigasi dari halaman lain">
+                        <a href="#judul-tombol-seni" aria-current="page">Beranda</a>
+                        <a href="#judul-tombol-seni">Jadwal</a>
+                        <a href="#judul-tombol-seni" class="nav-bawah-tengah">
+                            <span class="nav-bawah-tengah-bulat" aria-hidden="true"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14m-7-7h14"/></svg></span>
+                            <span class="nav-bawah-label">Daftar</span>
+                        </a>
+                        <a href="#judul-tombol-seni">Cek Status</a>
+                        <a href="#judul-tombol-seni">Kontak</a>
+                    </nav>
+                </figure>
+                <figure>
+                    <figcaption>Halaman pendaftaran aktif</figcaption>
+                    <nav class="nav-bawah" aria-label="Contoh navigasi dari halaman pendaftaran">
+                        <a href="#judul-tombol-seni">Beranda</a>
+                        <a href="#judul-tombol-seni">Jadwal</a>
+                        <a href="#judul-tombol-seni" class="nav-bawah-tengah is-aktif" aria-current="page">
+                            <span class="nav-bawah-tengah-bulat ada-seni" aria-hidden="true"><img src="contoh-ikon.webp" alt=""></span>
+                            <span class="nav-bawah-label">Daftar</span>
+                        </a>
+                        <a href="#judul-tombol-seni">Cek Status</a>
+                        <a href="#judul-tombol-seni">Kontak</a>
+                    </nav>
+                </figure>
             </div>
         </section>
         <section class="isi" aria-labelledby="judul-memuat">

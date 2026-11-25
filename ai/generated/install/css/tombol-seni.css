@@ -1,0 +1,361 @@
+@layer components {
+    .tombol-seni {
+        --tombol-seni-latar: var(--color-primary-50);
+        --tombol-seni-teks: var(--color-primary-800);
+        --tombol-seni-garis: var(--color-primary-200);
+        --tombol-seni-bentuk: url("/assets/img/tombol/tombol-seni-bentuk.svg");
+        --tombol-seni-tepi: url("/assets/img/tombol/tombol-seni-tepi.svg");
+        --tombol-seni-pola: url("/assets/img/pola/pola-kawung.svg");
+        --tombol-seni-warna-tepi: var(--tombol-seni-garis);
+        --tombol-seni-kilau: color-mix(in srgb, white 70%, transparent);
+        --tombol-seni-campuran-hover: var(--color-primary-200);
+        position: relative;
+        isolation: isolate;
+        display: inline-flex;
+        box-sizing: border-box;
+        align-items: center;
+        gap: .75rem;
+        min-height: 56px;
+        padding-block: .5rem;
+        padding-inline: 4.25rem 1.5rem;
+        border-radius: 1.75rem 1rem 1.75rem 1.25rem;
+        filter: drop-shadow(0 3px 4px color-mix(in srgb, var(--color-primary-700) 18%, transparent));
+        color: var(--tombol-seni-teks);
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.25;
+        text-decoration: none;
+    }
+
+    .tombol-seni-lembut {
+        --tombol-seni-latar: white;
+        --tombol-seni-teks: #111827;
+        --tombol-seni-garis: #e5e7eb;
+    }
+
+    .dark .tombol-seni {
+        --tombol-seni-latar: color-mix(in srgb, var(--color-primary-900) 45%, #1f2937);
+        --tombol-seni-teks: white;
+        --tombol-seni-garis: var(--color-primary-800);
+        --tombol-seni-warna-tepi: var(--color-primary-700);
+        --tombol-seni-kilau: transparent;
+        --tombol-seni-campuran-hover: var(--color-primary-600);
+    }
+
+    .dark .tombol-seni-lembut {
+        --tombol-seni-latar: #1f2937;
+        --tombol-seni-garis: #4b5563;
+    }
+
+    .tombol-seni::before,
+    .tombol-seni::after,
+    .tombol-seni-teks::before,
+    .tombol-seni-teks::after {
+        position: absolute;
+        pointer-events: none;
+        content: "";
+    }
+
+    /* Inset the second copy of the mask to expose a fine outline. */
+    .tombol-seni::before,
+    .tombol-seni::after {
+        -webkit-mask: var(--tombol-seni-bentuk) center / 100% 100% no-repeat;
+        mask: var(--tombol-seni-bentuk) center / 100% 100% no-repeat;
+    }
+
+    .tombol-seni::before {
+        z-index: -3;
+        inset: 0;
+        background: var(--tombol-seni-garis);
+    }
+
+    .tombol-seni::after {
+        z-index: -2;
+        inset: 1.5px;
+        background:
+            radial-gradient(120% 140% at 0% 0%, var(--tombol-seni-kilau), transparent 60%),
+            var(--tombol-seni-isi, var(--tombol-seni-latar));
+    }
+
+    .tombol-seni-teks::before {
+        z-index: -1;
+        inset: 1.5px;
+        background: var(--color-primary-600);
+        opacity: .07;
+        -webkit-mask: var(--tombol-seni-pola) 0 0 / 34px repeat, var(--tombol-seni-bentuk) center / 100% 100% no-repeat;
+        mask: var(--tombol-seni-pola) 0 0 / 34px repeat, var(--tombol-seni-bentuk) center / 100% 100% no-repeat;
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
+    }
+
+    .tombol-seni-teks::after {
+        --tombol-seni-tepi-pudar: linear-gradient(to right, transparent, #000 10% 90%, transparent);
+        z-index: -1;
+        inset-block-end: 4.5px;
+        inset-inline: 15% 19%;
+        height: 6px;
+        background: var(--tombol-seni-warna-tepi);
+        opacity: .45;
+        -webkit-mask: var(--tombol-seni-tepi) 0 0 / 18px 6px repeat-x, var(--tombol-seni-tepi-pudar);
+        mask: var(--tombol-seni-tepi) 0 0 / 18px 6px repeat-x, var(--tombol-seni-tepi-pudar);
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
+    }
+
+    .tombol-seni-gambar {
+        position: absolute;
+        inset-inline-start: -.4rem;
+        inset-block-end: .15rem;
+        display: block;
+        width: 68px;
+        height: 68px;
+        pointer-events: none;
+    }
+
+    .tombol-seni:has(.ikon-cadangan) {
+        padding-inline-start: 1.25rem;
+    }
+
+    .tombol-seni-gambar:has(.ikon-cadangan) {
+        position: static;
+        flex: none;
+        width: 24px;
+        height: 24px;
+    }
+
+    .tombol-seni-gambar :is(.ikon-3d, picture, img, .ikon-cadangan) {
+        width: 100%;
+        height: 100%;
+    }
+
+    .tombol-seni-gambar :is(.ikon-3d, picture, img) {
+        display: block;
+    }
+
+    .tombol-seni-gambar img {
+        object-fit: contain;
+    }
+
+    .tombol-seni-gambar .ikon-cadangan {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tombol-seni-gambar .ikon-cadangan svg {
+        min-inline-size: 100%;
+        min-block-size: 100%;
+    }
+
+    .tombol-seni:focus-visible {
+        outline: 3px solid var(--color-primary-500);
+        outline-offset: 3px;
+    }
+
+    .tombol-seni:not([aria-disabled="true"]):hover {
+        --tombol-seni-isi: color-mix(in srgb, var(--tombol-seni-latar) 84%, var(--tombol-seni-campuran-hover));
+        filter: drop-shadow(0 6px 6px color-mix(in srgb, var(--color-primary-700) 24%, transparent));
+    }
+
+    .tombol-seni:not([aria-disabled="true"]):active {
+        filter: drop-shadow(0 1px 2px color-mix(in srgb, var(--color-primary-700) 18%, transparent));
+    }
+
+    .tombol-seni[aria-disabled="true"] {
+        --tombol-seni-latar: #f3f4f6;
+        --tombol-seni-teks: #6b7280;
+        --tombol-seni-garis: #e5e7eb;
+        --tombol-seni-kilau: transparent;
+        filter: none;
+        cursor: not-allowed;
+    }
+
+    .dark .tombol-seni[aria-disabled="true"] {
+        --tombol-seni-latar: #1f2937;
+        --tombol-seni-garis: #374151;
+    }
+
+    .tombol-seni[aria-disabled="true"] .tombol-seni-teks::before,
+    .tombol-seni[aria-disabled="true"] .tombol-seni-teks::after {
+        display: none;
+    }
+
+    .tombol-seni[aria-disabled="true"] .tombol-seni-gambar {
+        filter: grayscale(1);
+        opacity: .5;
+    }
+
+    @media (width < 640px) {
+        .tombol-seni {
+            justify-content: center;
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .nav-bawah-tengah-bulat {
+        --lencana-bentuk: url("/assets/img/tombol/lencana-tengah.svg");
+        --lencana-pola: url("/assets/img/pola/pola-kawung.svg");
+        --lencana-cincin: color-mix(in srgb, white 90%, transparent);
+        --lencana-cincin-aktif: var(--color-primary-200);
+        position: absolute;
+        inset-block-start: -28px;
+        inset-inline-start: 50%;
+        isolation: isolate;
+        display: grid;
+        box-sizing: border-box;
+        place-items: center;
+        width: 68px;
+        height: 68px;
+        translate: -50% 0;
+        border-radius: 50%;
+        background:
+            radial-gradient(circle at 30% 25%, color-mix(in srgb, white 28%, transparent), transparent 55%),
+            linear-gradient(145deg, var(--color-primary-500), var(--color-primary-700));
+        box-shadow: 0 10px 22px -8px color-mix(in srgb, var(--color-primary-700) 70%, transparent);
+        color: white;
+    }
+
+    [dir="rtl"] .nav-bawah-tengah-bulat {
+        translate: 50% 0;
+    }
+
+    .nav-bawah-tengah-bulat::before,
+    .nav-bawah-tengah-bulat::after {
+        position: absolute;
+        z-index: -1;
+        pointer-events: none;
+        content: "";
+    }
+
+    .nav-bawah-tengah-bulat::before {
+        inset: -7px;
+        background: var(--lencana-cincin);
+        -webkit-mask: var(--lencana-bentuk) center / 100% 100% no-repeat;
+        mask: var(--lencana-bentuk) center / 100% 100% no-repeat;
+    }
+
+    .nav-bawah-tengah-bulat::after {
+        inset: 0;
+        border-radius: inherit;
+        background: white;
+        opacity: .14;
+        -webkit-mask: var(--lencana-pola) 0 0 / 26px repeat;
+        mask: var(--lencana-pola) 0 0 / 26px repeat;
+    }
+
+    .dark .nav-bawah-tengah-bulat {
+        --lencana-cincin: var(--color-gray-800, #1f2937);
+        --lencana-cincin-aktif: var(--color-primary-700);
+        box-shadow: 0 10px 22px -8px color-mix(in srgb, #030712 60%, transparent);
+    }
+
+    .nav-bawah-tengah.is-aktif .nav-bawah-tengah-bulat {
+        outline: 1px solid var(--lencana-cincin-aktif);
+        outline-offset: 7px;
+    }
+
+    .nav-bawah-tengah-bulat.ada-seni {
+        padding: 8px;
+    }
+
+    .nav-bawah-tengah-bulat picture,
+    .nav-bawah-tengah-bulat img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .nav-bawah-tengah-bulat svg {
+        width: 28px;
+        height: 28px;
+        max-inline-size: 28px;
+        max-block-size: 28px;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .tombol-seni {
+            transition: transform 200ms ease, filter 200ms ease;
+        }
+
+        .tombol-seni-gambar {
+            transition: transform 250ms ease;
+        }
+
+        .tombol-seni-teks::after {
+            transition: mask-position 200ms ease;
+        }
+
+        .tombol-seni:not([aria-disabled="true"]):hover {
+            transform: translateY(-2px);
+        }
+
+        .tombol-seni:not([aria-disabled="true"]):hover .tombol-seni-gambar {
+            transform: rotate(-6deg) scale(1.06);
+        }
+
+        .tombol-seni:not([aria-disabled="true"]):hover .tombol-seni-teks::after {
+            -webkit-mask-position: 6px 0, 0 0;
+            mask-position: 6px 0, 0 0;
+        }
+
+        .tombol-seni:not([aria-disabled="true"]):active {
+            transform: translateY(1px);
+        }
+
+        .nav-bawah-tengah-bulat {
+            transition: transform 200ms ease;
+        }
+
+        :root:not(.dark) .nav-bawah-tengah-bulat {
+            animation: lencana-tengah-napas 3.2s ease-in-out infinite;
+        }
+
+        .nav-bawah-tengah:active .nav-bawah-tengah-bulat {
+            transform: scale(.94);
+        }
+
+        @keyframes lencana-tengah-napas {
+            0%, 100% {
+                box-shadow: 0 10px 22px -8px color-mix(in srgb, var(--color-primary-700) 70%, transparent);
+            }
+
+            50% {
+                box-shadow: 0 12px 26px -8px color-mix(in srgb, var(--color-primary-700) 70%, transparent);
+            }
+        }
+    }
+
+    @media (forced-colors: active) {
+        .tombol-seni,
+        .tombol-seni:not([aria-disabled="true"]):is(:hover, :active) {
+            forced-color-adjust: none;
+            border: 1px solid ButtonText;
+            background: ButtonFace;
+            filter: none;
+            color: ButtonText;
+        }
+
+        .tombol-seni .ikon-cadangan svg {
+            color: ButtonText;
+        }
+
+        .tombol-seni[aria-disabled="true"],
+        .tombol-seni[aria-disabled="true"] .ikon-cadangan svg {
+            border-color: GrayText;
+            color: GrayText;
+        }
+
+        .tombol-seni:focus-visible {
+            outline-color: Highlight;
+        }
+
+        .tombol-seni::before,
+        .tombol-seni::after,
+        .tombol-seni-teks::before,
+        .tombol-seni-teks::after {
+            display: none;
+        }
+    }
+}
