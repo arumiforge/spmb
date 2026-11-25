@@ -12,6 +12,15 @@
 #   SWAP_SIZE            swap file size when the server has no swap (default 2G; 0 = none)
 #   KEEP_SSH_OPEN        auto (default) | 0 — see "Lock-out guards" (0 = do not add the SSH rule)
 #   SSH_PASSWORD_LOGIN   auto (default) | keep — "keep" never touches sshd's password setting
+#   ALLOW_PORTS          extra inbound TCP ports to keep open, e.g. "80 443" on a server that
+#                        already serves something directly (check.sh prints the list)
+#   FIREWALL             auto (default) | on | off — auto does not switch ufw on while other
+#                        services listen publicly and are not in ALLOW_PORTS; on closes them
+#
+# Fresh server or one already in use (D-112): run `bash check.sh` first. On a server that already
+# has Docker, this script keeps Docker's packages (docker-ce or Ubuntu's docker.io; only snap is
+# refused), merges its settings into an existing daemon.json, and never restarts Docker while
+# containers run. Other public services are not cut off unless FIREWALL=on.
 #
 # What it does: base packages, unattended security updates (no automatic reboot), swap,
 # journald and Docker log limits, Docker Engine + compose plugin (Docker's apt repository,
@@ -36,7 +45,10 @@ ADMIN_USER="${ADMIN_USER:-}"
 SWAP_SIZE="${SWAP_SIZE:-2G}"
 KEEP_SSH_OPEN="${KEEP_SSH_OPEN:-auto}"
 SSH_PASSWORD_LOGIN="${SSH_PASSWORD_LOGIN:-auto}"
+ALLOW_PORTS="${ALLOW_PORTS:-}"
+FIREWALL="${FIREWALL:-auto}"
 APPS_DIR=/opt/apps
+SETUP_VERSION=2
 
 step() { printf '\n== %s\n' "$*"; }
 say()  { printf '   %s\n' "$*"; }
@@ -124,32 +136,73 @@ say "journald: 500 MB; Docker: 10 MB × 5 files per container (below)."
 
 # ---------------------------------------------------------------------------------------
 step "Docker Engine"
-if ! dpkg -s docker-ce >/dev/null 2>&1; then
-    if dpkg -s docker.io >/dev/null 2>&1; then
-        warn "Ubuntu's docker.io package is installed; leaving it. Remove it and run again to use Docker's own packages."
+pkg_installed() { dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q 'ok installed'; }
+DOCKER_OK=1
+if command -v snap >/dev/null && snap list docker >/dev/null 2>&1; then
+    # Two Docker engines on one host fight over the socket and iptables; moving containers is a
+    # decision for the developer (docs/server-playbook.md, "Docker from snap").
+    DOCKER_OK=0
+    warn "Docker from snap is installed: Docker steps skipped. Move its containers, 'snap remove docker', then run this again."
+elif pkg_installed docker-ce; then
+    say "Docker's own packages (docker-ce) are installed; adding any missing plugin."
+    pkg_installed docker-compose-plugin || apt_get install -y -q docker-compose-plugin
+    pkg_installed docker-buildx-plugin || apt_get install -y -q docker-buildx-plugin
+elif pkg_installed docker.io; then
+    # Keep Ubuntu's engine (replacing it would stop every running container); add Compose v2 and
+    # Buildx from Ubuntu too, so `docker compose` and BuildKit builds work.
+    say "Ubuntu's docker.io is installed; keeping it."
+    docker compose version >/dev/null 2>&1 || apt_get install -y -q docker-compose-v2
+    docker buildx version >/dev/null 2>&1 || apt_get install -y -q docker-buildx
+elif command -v docker >/dev/null; then
+    DOCKER_OK=0
+    warn "A 'docker' command exists that apt did not install ($(command -v docker)): Docker steps skipped. Check it by hand."
+else
+    install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    chmod a+r /etc/apt/keyrings/docker.asc
+    echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $CODENAME stable" \
+        > /etc/apt/sources.list.d/docker.list
+    apt_get update -q
+    apt_get install -y -q docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+fi
+
+if [ "$DOCKER_OK" = 1 ]; then
+    # Merge our settings into daemon.json instead of replacing it: keys set by others stay.
+    # live-restore keeps containers running while Docker itself restarts; log limits apply to the
+    # default json-file driver only (another log driver chosen on purpose is left alone).
+    mkdir -p /etc/docker
+    DJ=/etc/docker/daemon.json
+    current='{}'
+    [ ! -s "$DJ" ] || current="$(cat "$DJ")"
+    if ! wanted="$(jq -S '
+            ."live-restore" = true
+            | if (."log-driver" // "json-file") == "json-file" then
+                ."log-driver" = "json-file"
+                | ."log-opts" = ({"max-size": "10m", "max-file": "5"} + (."log-opts" // {}))
+              else . end' <<< "$current" 2>/dev/null)"; then
+        warn "$DJ is not valid JSON; left as it is. Fix it, then run this again."
+    elif [ "$(jq -S . <<< "$current")" != "$wanted" ]; then
+        [ ! -f "$DJ" ] || cp "$DJ" "$DJ.bak-$(date +%Y%m%d%H%M%S)"
+        printf '%s\n' "$wanted" > "$DJ"
+        running="$(docker ps -q 2>/dev/null | wc -l || echo 0)"
+        if ! systemctl is-active --quiet docker 2>/dev/null; then
+            say "daemon.json written; Docker starts below."
+        elif [ "$running" -eq 0 ]; then
+            systemctl restart docker 2>/dev/null || warn "Docker did not restart; check: journalctl -u docker"
+            say "daemon.json updated; Docker restarted (no container was running)."
+        else
+            # SIGHUP applies live-restore without touching containers; the log settings wait for
+            # the next Docker restart (our stacks set their own log limits in compose.yaml anyway).
+            systemctl reload docker 2>/dev/null || true
+            say "daemon.json updated; $running containers run, so Docker was reloaded, not restarted."
+            warn "New default log limits apply after a Docker restart in a quiet hour: systemctl restart docker (live-restore keeps containers running)."
+        fi
     else
-        install -m 0755 -d /etc/apt/keyrings
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-        chmod a+r /etc/apt/keyrings/docker.asc
-        echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $CODENAME stable" \
-            > /etc/apt/sources.list.d/docker.list
-        apt_get update -q
-        apt_get install -y -q docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        say "daemon.json already has live-restore and log limits."
     fi
+    systemctl enable --now docker >/dev/null 2>&1 || true
+    say "$(docker --version 2>/dev/null || echo 'docker not available'); $(docker compose version 2>/dev/null || true)"
 fi
-DAEMON_JSON='{
-  "live-restore": true,
-  "log-driver": "json-file",
-  "log-opts": { "max-size": "10m", "max-file": "5" }
-}'
-mkdir -p /etc/docker
-if [ "$(cat /etc/docker/daemon.json 2>/dev/null || true)" != "$DAEMON_JSON" ]; then
-    [ ! -f /etc/docker/daemon.json ] || cp /etc/docker/daemon.json "/etc/docker/daemon.json.bak-$(date +%Y%m%d%H%M%S)"
-    printf '%s\n' "$DAEMON_JSON" > /etc/docker/daemon.json
-    systemctl restart docker 2>/dev/null || warn "Docker did not restart; check: journalctl -u docker"
-fi
-systemctl enable --now docker >/dev/null 2>&1 || true
-say "$(docker --version 2>/dev/null || echo 'docker not available'); $(docker compose version 2>/dev/null || true)"
 
 step "cloudflared (Cloudflare Tunnel)"
 if ! command -v cloudflared >/dev/null; then
@@ -245,21 +298,54 @@ if [ -n "$CURRENT_PORT" ] && [[ " $OPEN_PORTS " != *" $CURRENT_PORT "* ]]; then
     OPEN_PORTS="${OPEN_PORTS:+$OPEN_PORTS }$CURRENT_PORT"
 fi
 
-ufw default deny incoming >/dev/null
-ufw default allow outgoing >/dev/null
+# Services that already listen on a public address (a server in use, D-112). Docker's published
+# ports (docker-proxy) are left out: Docker's iptables rules bypass ufw, so ufw cannot close them.
+public_ports() {
+    ss -ltnpH 2>/dev/null | awk '{
+        addr = $4; port = addr; sub(/.*:/, "", port)
+        host = addr; sub(/:[^:]*$/, "", host)
+        if (host ~ /^127\./ || host == "[::1]" || host ~ /^\[::ffff:127\./) next
+        proc = "?"
+        if (match($0, /users:\(\("[^"]+"/)) proc = substr($0, RSTART + 9, RLENGTH - 10)
+        if (proc == "docker-proxy" || proc == "sshd" || proc == "systemd") next
+        print port " " proc
+    }' | sort -u -k1,1n
+}
+UNLISTED=""
+while read -r port proc; do
+    [ -n "$port" ] || continue
+    [[ " $OPEN_PORTS $ALLOW_PORTS " == *" $port "* ]] && continue
+    UNLISTED="${UNLISTED:+$UNLISTED }$port"
+    say "Port $port ($proc) listens publicly and is not in ALLOW_PORTS."
+done < <(public_ports)
+
+ufw_active=0
+ufw status 2>/dev/null | grep -q '^Status: active' && ufw_active=1
 for port in $OPEN_PORTS; do
     ufw allow "$port/tcp" comment 'SSH (key-only), last way in when the tunnel is down' >/dev/null
 done
-if ufw --force enable >/dev/null; then
-    if [ -n "$OPEN_PORTS" ]; then
-        say "SSH port(s) kept open: $OPEN_PORTS"
-    else
-        say "No inbound port open."
-    fi
+for port in $ALLOW_PORTS; do
+    ufw allow "$port/tcp" comment 'kept open on purpose (ALLOW_PORTS)' >/dev/null
+done
+if [ "$FIREWALL" = off ]; then
+    say "Left as it is (FIREWALL=off); rules for SSH${ALLOW_PORTS:+ and $ALLOW_PORTS} are in place."
+elif [ "$ufw_active" = 0 ] && [ -n "$UNLISTED" ] && [ "$FIREWALL" != on ]; then
+    warn "ufw NOT switched on: port(s) $UNLISTED serve something today and would be cut off. Run again with ALLOW_PORTS=\"$UNLISTED\" to keep them, or FIREWALL=on to close them."
 else
-    warn "ufw could not be enabled (virtualisation?); the server has no host firewall."
+    ufw default deny incoming >/dev/null
+    ufw default allow outgoing >/dev/null
+    if ufw --force enable >/dev/null; then
+        say "Open: SSH ${OPEN_PORTS:-none}${ALLOW_PORTS:+; also $ALLOW_PORTS}."
+        [ -z "$UNLISTED" ] || say "Closed from outside: $UNLISTED."
+    else
+        warn "ufw could not be enabled (virtualisation?); the server has no host firewall."
+    fi
 fi
 say "Docker stacks publish on 127.0.0.1 only, so Docker's own iptables rules open nothing publicly."
+if command -v docker >/dev/null; then
+    pub="$(docker ps --format '{{.Names}} {{.Ports}}' 2>/dev/null | grep -E '(0\.0\.0\.0|\[?::\]?):[0-9]+->' | awk '{print $1}' | tr '\n' ' ' || true)"
+    [ -z "$pub" ] || warn "Container(s) $pub publish a port on all addresses: Docker bypasses ufw, so those ports are open to the internet. Publish them on 127.0.0.1 and route them through the tunnel."
+fi
 
 step "SSH password login"
 # A key line starts with its type; lines with options (a provider's command="..." stub) do not count.
@@ -310,6 +396,14 @@ if [ ! -f "$APPS_DIR/PORTS" ]; then
     chmod 0644 "$APPS_DIR/PORTS"
 fi
 say "Each app lives in $APPS_DIR/<app>/ and takes a port from $APPS_DIR/PORTS (127.0.0.1 only)."
+# Marker read by check.sh: this server has been prepared (and with which domain).
+cat > "$APPS_DIR/.server-setup" <<MARK
+# Written by deploy/server/setup.sh; read by check.sh (D-112).
+version=$SETUP_VERSION
+last_run=$(date -Iseconds)
+domain=$DOMAIN
+allow_ports=$ALLOW_PORTS
+MARK
 
 # ---------------------------------------------------------------------------------------
 D="${DOMAIN:-<domain>}"
@@ -336,8 +430,11 @@ fi
 cat <<NEXT
  4. Give this server read access to the repository (your own deploy key or token; never commit
     it), then: git clone <repository URL> $APPS_DIR/spmb/src
- 5. bash $APPS_DIR/spmb/src/deploy/server/spmb init staging staging.$D
-    spmb deploy staging && spmb spark staging spmb:install
+ 5. bash $APPS_DIR/spmb/src/deploy/server/spmb up staging staging.$D
+    (creates the environment, builds, starts, asks for the first Super Admin), then
+    spmb up production $D
+ Lost? Run 'bash check.sh' (or 'spmb check' after step 5): it shows where this server is and
+ the next command (docs/server-playbook.md).
 NEXT
 if [ "${#NOTES[@]}" -gt 0 ]; then
     echo

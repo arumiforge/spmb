@@ -8,8 +8,10 @@ The server pulls and builds; there is no deploy key in the repository or in GitH
 | --- | --- |
 | Images | `docker/Dockerfile` (targets `app` = PHP-FPM 8.5, `web` = Nginx with `public/` only), `docker/nginx/`, `docker/php/` |
 | Stack | `deploy/compose.yaml` (services `db` MySQL 8.4, `app`, `web`; volumes `db`, `writable`) |
-| Server preparation | `deploy/server/setup.sh` (once per server, idempotent) |
-| Server CLI | `deploy/server/spmb` → `/usr/local/bin/spmb` (`init`, `deploy`, `rollback`, `status`, `logs`, `backup`, `restore`, `spark`) |
+| Server state check | `deploy/server/check.sh` / `spmb check` (read-only: state S0…S9 and the next command; flow in [server-playbook.md](server-playbook.md), D-112) |
+| Server preparation | `deploy/server/setup.sh` (once per server, idempotent; fresh or already in use) |
+| Server CLI | `deploy/server/spmb` → `/usr/local/bin/spmb` (`check`, `up`, `init`, `deploy`, `rollback`, `status`, `logs`, `backup`, `restore`, `spark`) |
+| Other apps on the server | `deploy/templates/app.compose.yaml` and the rules in [server-playbook.md](server-playbook.md) |
 | Agent how-to | `.claude/skills/spmb-deploy/SKILL.md` |
 
 ## Topology
@@ -95,6 +97,12 @@ Examples of both settings files, with every key explained and no real values, ar
 the real files with fresh passwords and keys; use the examples to check or repair a file by hand.
 
 ## First server (once)
+
+Not sure where a server stands (fresh, Docker already there, half set up)? Upload `deploy/server/check.sh`
+too and run `sudo bash check.sh` first: it changes nothing and prints the state and the next command
+([server-playbook.md](server-playbook.md)). A server that already runs Docker or other services is fine:
+`setup.sh` keeps its Docker packages, merges `daemon.json`, does not restart Docker while containers run,
+and does not switch the firewall on while public services are not listed in `ALLOW_PORTS` (D-112).
 
 Prerequisites: a VPS with Ubuntu Server 24.04 (2 vCPU, 2–4 GB RAM, 40 GB disk is enough for the first year),
 root access (password from the provider panel), the domain on the developer's Cloudflare account.
@@ -182,11 +190,12 @@ Server IPs, ports and passwords stay out of the repository.
 6. **Staging.**
 
    ```bash
-   bash /opt/apps/spmb/src/deploy/server/spmb init staging staging.<domain>   # links /usr/local/bin/spmb
-   spmb deploy staging                                                        # origin/main
-   spmb spark staging spmb:install                                            # first Super Admin (asks)
+   bash /opt/apps/spmb/src/deploy/server/spmb up staging staging.<domain>   # init + deploy + first Super Admin; links /usr/local/bin/spmb
    spmb spark staging spmb:branding clients/<school>/branding
    ```
+
+   `spmb up` is the same as `spmb init staging staging.<domain>`, `spmb deploy staging` (origin/main) and
+   `spmb spark staging spmb:install`, each only when still needed; run it again at any time.
 
    Add the staging port (printed by `init`, also in `/opt/apps/PORTS`) as the `staging.<domain>` public hostname.
    Staging runs with `CI_ENVIRONMENT = production`, so `--demo` accounts are refused there too; create
@@ -196,9 +205,7 @@ Server IPs, ports and passwords stay out of the repository.
 7. **Production.**
 
    ```bash
-   spmb init production <domain>
-   spmb deploy production                    # promotes the image running on staging
-   spmb spark production spmb:install
+   spmb up production <domain>               # init + promote staging's image (asks) + first Super Admin
    spmb spark production spmb:branding clients/<school>/branding
    ```
 
@@ -206,6 +213,8 @@ Server IPs, ports and passwords stay out of the repository.
 
 | Task | Command |
 | --- | --- |
+| Where is this server, what next? | `spmb check` (read-only) |
+| Bring an environment up (new, stopped or broken start) | `spmb up <env> [domain]` (safe to repeat) |
 | Deploy the latest `main` to staging | `spmb deploy staging` |
 | Deploy a branch, tag or commit to staging | `spmb deploy staging <ref>` |
 | Promote what staging runs to production | `spmb deploy production` (asks; `--yes` to skip) |

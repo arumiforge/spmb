@@ -54,6 +54,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
+| `pw/peaceful-tesla-bjooc9` | session server-flow | Server flow (D-112): `check.sh` / `spmb check`, `setup.sh` safe on servers in use, `spmb up`, server playbook, app compose template | PR open |
 | `igi/gifted-davinci-j917i9` | session admin-site | Admin round (D-098…D-109), integration branch; round one merged (#56); round two: F (region list), G (Asisten), H (Statistik) merged | PR open |
 | `nty/intelligent-curie-pb1lv6` | session guides | Home map/contact layout (D-096), staff guides in the dashboard + in-page search on Panduan and Tanya Jawab (D-097) | PR open |
 | `pw/sleepy-hopper-d0a7h5` | session polish | Public polish round (D-090…D-095), Codex #49 and `langkah`, PR #43 notes | #50, #51 merged; follow-up PR open |
@@ -75,6 +76,12 @@ create your own branch from `main` instead.
 | `phase-2` and `feat/p2-*` | coordinator, workers A–D | Phase 2 | merged into `main` (PR #14) |
 
 ## Next steps
+
+000000. **Server flow (D-112)**: after the PR is merged, on `spmb-prod`: `spmb deploy staging` (moves the
+   checkout to the new commit, so `spmb check` and `spmb up` exist), then `spmb check` — expected state S9 with the earlier-setup marker note;
+   run `setup.sh` once more (same variables) to write `/opt/apps/.server-setup` (its `daemon.json` is unchanged, so Docker
+   is not restarted). Not yet rehearsed end to end on a VM: `setup.sh` on a server already running Docker containers and
+   a public nginx (logic unit-tested: `daemon.json` merge, listener and published-port detection).
 
 00000. **Admin round**: round one merged (#56). Round two (region list, Statistik, Tanya Asisten) in the next PR. After merge also: `spmb spark production referensi:cocokkan-alamat --dry-run` then without `--dry-run` (one-time), Super Admin adds the AI connection and switches AI on, Admin Sekolah switches the widget on. Codex batches `asisten-chat` and `kosong-states-2` (073–079) are queued; when 074 lands, copy it into the client pack as `asisten.webp`. After merge: `spmb deploy staging` (migrations: has_guardian, document examples,
    SK Aktif, site_news, analytics tables), check `/`, `/daftar`, `/admin`, Website pages, then production; run
@@ -148,6 +155,7 @@ when the container idles).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-25 · session server-flow · `pw/peaceful-tesla-bjooc9` — D-112: read-only `check.sh` (states S0…S9 + next command), `setup.sh` for servers already running Docker/other services (keeps packages, merges daemon.json, no restart while containers run, `ALLOW_PORTS`/`FIREWALL`, marker file), `spmb up` and `spmb check`, `docs/server-playbook.md`, `deploy/templates/app.compose.yaml`. Next: merge, run `spmb check` on `spmb-prod`.
 - 2026-11-25 · session admin-site · `igi/gifted-davinci-j917i9` — PR #56 merged (CI green); round two with workers F (region list + address picker), G (Tanya Asisten), H (Statistik, also fixed switched-off module routes); Codex briefs 073–079. Next: PR for round two, deploy, one-time address matching, AI connection setup.
 - 2026-11-25 · session admin-site · `igi/gifted-davinci-j917i9` — admin round D-098…D-109 with workers A–E: logo 304 redirect fix, server page, setup checklist, folding cards, one-column settings + rail, Berkas examples + SK Aktif, Analitik, ticker/popup/footer links, registration stepper + guardian + consent, home timeline, complete demo applicant; deploy clears cache. Next: merge E (three languages), full suite, PR.
 - 2026-11-24 · session guides · `nty/intelligent-curie-pb1lv6` — home "Lokasi dan kontak": contacts card left, one map right / below on phones, map caption + directions button (D-096); staff guides moved to `/admin/panduan` (own role, Super Admin all; old public links redirect), search box inside Panduan and Tanya Jawab (D-097); 475 tests green. Next: merge, deploy staging, check, production.
@@ -157,4 +165,3 @@ when the container idles).
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — staging and production live on `spmb-prod` (04b2ccc), staging behind Access, Laragon exposure removed; `spmb domain` (#40); off-site backups to Cloudflare R2 with restic (D-079). Next: `spmb offsite setup` on the server, Admin Sekolah account, school data.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — `setup.sh` waits for first-boot updates (#36, #37), per-repo deploy key docs (#38), light theme by default (D-078), Codex `svg-kit` installed; server: setup, tunnel, key-only SSH, clone done. Next: staging check, production, Admin Sekolah.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — new account's cloud environment checked (442 tests green); domain on Cloudflare confirmed; full server flow rehearsed in the container (all steps passed). Next: user runs `setup.sh` on `spmb-prod`, then tunnel.
-- 2026-11-23 · coordinator (session docker) · `pw/zealous-albattani-2rz2z1` — PR #32 (example env files) merged; docs refreshed to the current state: README, roadmap (phase 1 done, platform round row, phase 6 partly done), architecture (stack, tables, visual rules), requirements (FR-WEB-03, NFR-02/03/08), module index, third-party server images, CLAUDE.md roles and commands, coordination notes. Next: go-live, Codex `svg-kit`.

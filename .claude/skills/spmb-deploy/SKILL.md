@@ -9,6 +9,14 @@ Full reference: `docs/deployment.md`. Decisions: D-065 (lock-out guards), D-066 
 cloudflared + Cockpit, no Proxmox), D-067 (staging + production on one VPS from `main`), D-068 (server
 pulls and builds, no deploy key in the repo/GitHub), D-069 (PHP 8.5.13, Node 24, MySQL 8.4).
 
+## Start with the server's state (D-112)
+
+Any server question (new server, server that already runs Docker, "the site is down", a new compose file
+for another app) starts from `sudo bash check.sh` / `spmb check` output — ask the user for it instead of
+re-deriving the server from memory. Its **State** (S0…S9) and **Next** lines map to
+`docs/server-playbook.md`; follow that page, and record any new rule there and in `decisions.md`.
+Other apps on the same server follow the playbook's rules and `deploy/templates/app.compose.yaml`.
+
 ## Files
 
 | File | Role |
@@ -18,11 +26,16 @@ pulls and builds, no deploy key in the repo/GitHub), D-069 (PHP 8.5.13, Node 24,
 | `docker/nginx/*.conf` | Real IP from `CF-Connecting-IP`, HTTPS flag from `X-Forwarded-Proto`, caching, only `index.php` runs |
 | `.dockerignore` | Keeps `flowbite/` (licensed, D-018), `.git`, tests, docs, `.env`, `writable/*` out of the context |
 | `deploy/compose.yaml` | `db` (mysql:8.4), `app`, `web` on `127.0.0.1:${SPMB_PORT}`; volumes `db`, `writable`; `app.env` mounted read-only |
-| `deploy/server/setup.sh` | One-time server preparation (Docker, cloudflared, Cockpit, ufw, updates, swap), idempotent |
-| `deploy/server/spmb` | Server CLI: `init`, `deploy`, `rollback`, `status`, `logs`, `backup`, `restore`, `spark` |
+| `deploy/server/check.sh` | Read-only state check (S0…S9 + next command); also `spmb check` |
+| `deploy/server/setup.sh` | Server preparation (Docker, cloudflared, Cockpit, ufw, updates, swap), idempotent; fresh or in-use servers (keeps Docker packages, merges `daemon.json`, no Docker restart while containers run, `ALLOW_PORTS` / `FIREWALL`) |
+| `deploy/server/spmb` | Server CLI: `check`, `up`, `init`, `deploy`, `rollback`, `status`, `logs`, `backup`, `restore`, `spark`, `domain`, `offsite` |
+| `deploy/templates/app.compose.yaml` | Starting point for another app's stack on the same server |
 
 ## Rules
 
+- **Never break what already runs.** On a server in use, `setup.sh` must not replace Docker's engine, must
+  merge (not overwrite) `daemon.json`, must not restart Docker while containers run, and must not switch ufw
+  on while a public service is missing from `ALLOW_PORTS`. Keep `check.sh` read-only.
 - **Never lock the admin out.** The VPS has no provider console. Any change to `setup.sh` must keep:
   the SSH port(s) always open (key-only, D-077); the port of the session in use open; password login off only with a proven key (`sshd -t` first, drop-in `00-spmb.conf`);
   sshd reloaded, never restarted; no network configuration changes (no NetworkManager, no netplan edits).
@@ -46,6 +59,9 @@ docker build -f docker/Dockerfile --target app -t spmb-app:local .
 docker build -f docker/Dockerfile --target web -t spmb-web:local .
 
 # On the server (root)
+spmb check                          # state + next command (read-only)
+spmb up staging staging.<domain>    # first time: init + deploy + first Super Admin; later: restart if down
+spmb up production <domain>
 spmb deploy staging                 # origin/main → staging
 spmb deploy staging <branch|tag|sha>
 spmb deploy production              # promote staging's image (asks; --yes)
@@ -82,7 +98,11 @@ spmb status; spmb logs staging app
    `SPMB_ROOT=<scratch>/opt spmb deploy staging <ref>` (existing images are not rebuilt).
 4. `spmb spark staging spmb:install …`, load `/`, `/masuk`, `/admin` through the port, screenshots at
    360 and 1280 px; `spmb backup`, `spmb restore`, `spmb deploy production`, `spmb rollback`.
-5. `setup.sh`: run it in a privileged systemd `ubuntu:24.04` container (own network namespace, never with
+5. `check.sh`: run it with `SPMB_ROOT=<scratch>/opt OFFLINE=1` against a fake layout (marker, `PORTS`,
+   `stack.env`) to see each state. `setup.sh` on a server in use: also start a container published on
+   `0.0.0.0`, a service listening on port 80 and a custom `daemon.json`, and check that the container keeps
+   running, the file is merged and ufw stays off until `ALLOW_PORTS` lists the port.
+6. `setup.sh`: run it in a privileged systemd `ubuntu:24.04` container (own network namespace, never with
    `--network host`), with `SSH_CONNECTION` set to simulate a session; run it twice. A privileged
    systemd container shares the kernel clock and can shift it by the time-zone offset (systemd's RTC
    "warp"), which breaks TLS ("certificate is not yet valid"): remove the container afterwards and reset
