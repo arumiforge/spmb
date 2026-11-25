@@ -88,6 +88,17 @@ Server (Docker, staging + production): `spmb deploy staging`, `spmb deploy produ
 | `spmb-interview` | Continuing the requirements interview with the user |
 | `spmb-commit` | Committing, pushing, opening PRs |
 
+## Fondasi (shared rules, data and skills)
+
+This app follows `arumiforge/fondasi` (Arumi Studios' shared foundation; named `arumiforge/server` until the
+rename). When the work touches the server or deploys, file storage (S3/R2), integration settings (env vs panel,
+Turnstile), shared reference data (regions, schools, calendars, Dapodik lists, athletics) or Indonesian
+user-facing text: attach the repository (`add_repo`), read its `CLAUDE.md` and follow its skills
+(`fondasi-server`, `fondasi-data`, `bahasa-indonesia-plain`). Its decisions (`F-…`) apply here unless this repo
+records an exception. Shared data and skills are copied with its `tools/fondasi-sync` (versions in
+`fondasi.lock`), never edited by hand. SPMB still ships its own copies of the region/school data and
+`deploy/server/{setup,check}.sh` until they are switched to Fondasi (`docs/progress.md`).
+
 ## Flowbite Pro
 
 `flowbite/` holds licensed Flowbite Pro templates used as a **reference** for

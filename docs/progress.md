@@ -54,7 +54,7 @@ create your own branch from `main` instead.
 
 | Branch | Session label | Task | Status |
 | --- | --- | --- | --- |
-| `pw/peaceful-tesla-bjooc9` | session server-flow | Server flow (D-112): `check.sh` / `spmb check`, `setup.sh` safe on servers in use, `spmb up`, server playbook, app compose template | PR open |
+| `pw/peaceful-tesla-bjooc9` | session server-flow | Server flow (D-112) merged (#59); now: pointer to Fondasi (shared repo `arumiforge/server` → `fondasi`) | PR open |
 | `igi/gifted-davinci-j917i9` | session admin-site | Admin round (D-098…D-109), integration branch; round one merged (#56); round two: F (region list), G (Asisten), H (Statistik) merged | PR open |
 | `nty/intelligent-curie-pb1lv6` | session guides | Home map/contact layout (D-096), staff guides in the dashboard + in-page search on Panduan and Tanya Jawab (D-097) | PR open |
 | `pw/sleepy-hopper-d0a7h5` | session polish | Public polish round (D-090…D-095), Codex #49 and `langkah`, PR #43 notes | #50, #51 merged; follow-up PR open |
@@ -77,7 +77,12 @@ create your own branch from `main` instead.
 
 ## Next steps
 
-000000. **Server flow (D-112)**: after the PR is merged, on `spmb-prod`: `spmb deploy staging` (moves the
+0000000. **Fondasi** (shared rules/data/skills, `arumiforge/server`, to be renamed `fondasi`; its decisions F-001…F-008):
+   server scripts, app contract, settings/storage/Turnstile standards and the region/school data now live there too.
+   Later in SPMB: import `wilayah`/`sekolah` via `fondasi-sync`, use Fondasi's `setup.sh`/`check.sh`, copy
+   `bahasa-indonesia-plain` with `fondasi-sync skill`, add Turnstile and S3 storage per its `docs/settings.md` and
+   `docs/storage.md`.
+000000. **Server flow (D-112)**: merged (PR #59). On `spmb-prod`: `spmb deploy staging` (moves the
    checkout to the new commit, so `spmb check` and `spmb up` exist), then `spmb check` — expected state S9 with the earlier-setup marker note;
    run `setup.sh` once more (same variables) to write `/opt/apps/.server-setup` (its `daemon.json` is unchanged, so Docker
    is not restarted). Not yet rehearsed end to end on a VM: `setup.sh` on a server already running Docker containers and
@@ -157,6 +162,7 @@ when the container idles).
 
 ## Session log (newest first, keep the last 10)
 
+- 2026-11-25 · session server-flow · `pw/peaceful-tesla-bjooc9` — PR #59 merged; first `check.sh` on `spmb-prod` (S9); shared repo created (interview F-001…F-008) and SPMB points to it from `CLAUDE.md`. Next: rename to `fondasi`, switch SPMB's data/scripts to Fondasi.
 - 2026-11-25 · session server-flow · `pw/peaceful-tesla-bjooc9` — D-112: read-only `check.sh` (states S0…S9 + next command), `setup.sh` for servers already running Docker/other services (keeps packages, merges daemon.json, no restart while containers run, `ALLOW_PORTS`/`FIREWALL`, marker file), `spmb up` and `spmb check`, `docs/server-playbook.md`, `deploy/templates/app.compose.yaml`. Next: merge, run `spmb check` on `spmb-prod`.
 - 2026-11-25 · session admin-site · `igi/gifted-davinci-j917i9` — PR #56 merged (CI green); round two with workers F (region list + address picker), G (Tanya Asisten), H (Statistik, also fixed switched-off module routes); Codex briefs 073–079. Next: PR for round two, deploy, one-time address matching, AI connection setup.
 - 2026-11-25 · session admin-site · `igi/gifted-davinci-j917i9` — admin round D-098…D-109 with workers A–E: logo 304 redirect fix, server page, setup checklist, folding cards, one-column settings + rail, Berkas examples + SK Aktif, Analitik, ticker/popup/footer links, registration stepper + guardian + consent, home timeline, complete demo applicant; deploy clears cache. Next: merge E (three languages), full suite, PR.
@@ -166,4 +172,3 @@ when the container idles).
 - 2026-11-24 · coordinator (session ui-round) · `nty/vigilant-wozniak-lvnhku` — UI round: email-or-username sign-in, mobile bottom bar (raised middle button without text), right drawer, top bar, slogan/map/social settings, hero slideshow with uploads, art buttons and painted-icon slots with three.js, date picker, folds and contents highlight, full-width admin; workers A (Codex briefs 036–071, #42), B (minified SVGs, #44), C (dashboard pass, #45), D (public pages, tests) merged; cloud setup script moved to packages.sury.org; 465 tests green. Next: Codex batches. User merged PR #47; CI additions (Docker build check, dependency audit, server-side staging auto-deploy) offered and declined for now.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — staging and production live on `spmb-prod` (04b2ccc), staging behind Access, Laragon exposure removed; `spmb domain` (#40); off-site backups to Cloudflare R2 with restic (D-079). Next: `spmb offsite setup` on the server, Admin Sekolah account, school data.
 - 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — `setup.sh` waits for first-boot updates (#36, #37), per-repo deploy key docs (#38), light theme by default (D-078), Codex `svg-kit` installed; server: setup, tunnel, key-only SSH, clone done. Next: staging check, production, Admin Sekolah.
-- 2026-11-23 · session go-live 2 · `pw/eager-archimedes-s119yf` — new account's cloud environment checked (442 tests green); domain on Cloudflare confirmed; full server flow rehearsed in the container (all steps passed). Next: user runs `setup.sh` on `spmb-prod`, then tunnel.

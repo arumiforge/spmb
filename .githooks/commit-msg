@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Rejects AI attribution in commit messages. Arumi Studios is the sole contributor.
 msg_file="$1"
-if grep -qiE '^(co-authored-by:.*(claude|anthropic|openai|copilot|chatgpt|noreply@anthropic)|claude-session:)|generated with \[?claude|claude\.ai/code' "$msg_file"; then
+if grep -qiE '^(co-authored-by:|claude-session:)|generated (with|by) \[?(claude|codex|chatgpt|openai|copilot)|claude\.ai/code|chatgpt\.com/codex|noreply@anthropic\.com' "$msg_file"; then
   echo "commit-msg: AI attribution lines are not allowed in this repository." >&2
   echo "Remove Co-Authored-By / Claude-Session / 'Generated with' lines and commit again." >&2
   exit 1
