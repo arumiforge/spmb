@@ -4,7 +4,7 @@ name: tombol-seni
 kind: svg
 batch: tombol-seni
 files: img/tombol/tombol-seni-bentuk.svg, img/tombol/tombol-seni-tepi.svg, img/tombol/lencana-tengah.svg, css/tombol-seni.css
-status: requested
+status: generated
 ---
 
 # 049 — tombol-seni (art buttons and the raised bottom-bar badge)

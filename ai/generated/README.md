@@ -12,6 +12,17 @@ status to `done`. Nothing here is served by the app directly.
 
 ## Codex deliveries
 
+### tombol-seni (2026-11-25)
+
+| ID | File | Size (px) | KB | Background | Review notes |
+| --- | --- | --- | --- | --- | --- |
+| 049 | `install/img/tombol/tombol-seni-bentuk.svg` | 240×60 | 0.23 | Transparent mask | Asymmetric leaf frame with a conforming inner outline |
+| 049 | `install/img/tombol/tombol-seni-tepi.svg` | 24×8 | 0.23 | Transparent mask | Rounded tumpal and small kawung ovals along the lower edge |
+| 049 | `install/img/tombol/lencana-tengah.svg` | 72×72 | 0.52 | Transparent mask | Eight rounded petals around a circular opening |
+| 049 | `install/css/tombol-seni.css` | 56 px min. button height, 68×68 badge | 10.71 | School colour and theme | Button and badge states, with reduced-motion and forced-colour button styles |
+| 049 | `demo/contoh-ikon.webp` | 144×144 | 8.91 | Transparent | Demo-only painted placeholder cropped from 005 |
+| 049 | `demo/index.html` | 360×800 and 1280×800 | 28.27 | White or gray-900 | Both button variants and icon types, registration CTA comparison, and mock mobile navigation |
+
 ### langkah and D-089 revisions (2026-11-24)
 
 | ID | File | Size (px) | KB | Background | Review notes |
