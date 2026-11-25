@@ -82,6 +82,8 @@ create your own branch from `main` instead.
    run `setup.sh` once more (same variables) to write `/opt/apps/.server-setup` (its `daemon.json` is unchanged, so Docker
    is not restarted). Not yet rehearsed end to end on a VM: `setup.sh` on a server already running Docker containers and
    a public nginx (logic unit-tested: `daemon.json` merge, listener and published-port detection).
+   First real run of `check.sh` on `spmb-prod` (2026-11-25): S9, both environments 200, Access on staging; a reboot was
+   pending, and a third stack `milklife-staging` runs there (record its port in `/opt/apps/PORTS`, check.sh now flags it).
 
 00000. **Admin round**: round one merged (#56). Round two (region list, Statistik, Tanya Asisten) in the next PR. After merge also: `spmb spark production referensi:cocokkan-alamat --dry-run` then without `--dry-run` (one-time), Super Admin adds the AI connection and switches AI on, Admin Sekolah switches the widget on. Codex batches `asisten-chat` and `kosong-states-2` (073–079) are queued; when 074 lands, copy it into the client pack as `asisten.webp`. After merge: `spmb deploy staging` (migrations: has_guardian, document examples,
    SK Aktif, site_news, analytics tables), check `/`, `/daftar`, `/admin`, Website pages, then production; run

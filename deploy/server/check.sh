@@ -261,6 +261,23 @@ if [ -f "$SPMB_ROOT/PORTS" ]; then
 else
     todo "No port list yet (setup.sh creates $SPMB_ROOT/PORTS)."
 fi
+# Ports published by containers but missing from the list: the next app could pick the same port.
+if [ "$DOCKER_UP" = 1 ]; then
+    while IFS='|' read -r project name ports; do
+        tr ',' '\n' <<< "$ports" | sed 's/^ *//' | grep -- '->' | while read -r p; do
+            hostport="${p%%->*}"; port="${hostport##*:}"
+            awk -v p="$port" '$1 == p {found = 1} END {exit !found}' "$SPMB_ROOT/PORTS" 2>/dev/null && continue
+            printf '%s %s\n' "$port" "${project:-$name}"
+        done
+    done < <(docker ps --format '{{.Label "com.docker.compose.project"}}|{{.Names}}|{{.Ports}}' 2>/dev/null) \
+        | sort -u -k1,1n | while read -r port owner; do
+            printf '  [!!] Port %s (%s) is used but not in %s: echo "%s %s" >> %s\n' \
+                "$port" "$owner" "$SPMB_ROOT/PORTS" "$port" "$owner" "$SPMB_ROOT/PORTS"
+        done
+    unlisted_count="$(docker ps --format '{{.Ports}}' 2>/dev/null | tr ',' '\n' | grep -- '->' | sed 's/->.*//; s/.*://' | sort -u \
+        | while read -r port; do awk -v p="$port" '$1 == p {f = 1} END {exit !f}' "$SPMB_ROOT/PORTS" 2>/dev/null || echo "$port"; done | wc -l)"
+    [ "$unlisted_count" -eq 0 ] || WARNINGS+=("$unlisted_count published port(s) are not in $SPMB_ROOT/PORTS (lines above): add them so no two apps take the same port.")
+fi
 
 # ------------------------------------------------------------------------------------------
 head_ "SPMB"

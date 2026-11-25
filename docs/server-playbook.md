@@ -38,7 +38,9 @@ The first step that is not done decides the state. Each row is safe to repeat.
 | S9 | Live | everyday: `spmb deploy staging` → check → `spmb deploy production` |
 
 Warnings that do not change the state (password login still on, off-site backups missing, pending reboot,
-a container published on `0.0.0.0`, low disk) are listed under **Needs attention**.
+a container published on `0.0.0.0`, a published port missing from `/opt/apps/PORTS`, low disk) are listed
+under **Needs attention**. A port missing from the list comes with the exact `echo "<port> <project>" >> /opt/apps/PORTS`
+line to record it, so the next app never takes the same port.
 
 ```
 check.sh ─▶ Docker from snap? ──yes──▶ S0x: move containers, snap remove docker ─▶ check again
