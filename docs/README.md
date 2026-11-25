@@ -15,6 +15,7 @@ User-facing guides for each role are in Indonesian and live inside the app: `/pa
 | [decisions.md](decisions.md) | Decision log (accepted and proposed) |
 | [roadmap.md](roadmap.md) | Delivery phases and status |
 | [deployment.md](deployment.md) | Ubuntu 24.04 server with Docker (staging + production), Cloudflare Tunnel, Cockpit, CI |
+| [server-playbook.md](server-playbook.md) | Server flow from the first check to a running site; fresh vs busy servers; adding other Docker apps (D-112) |
 | [development.md](development.md) | Local setup, conventions, git rules |
 | [i18n.md](i18n.md) | Public website in Indonesian, English and Arabic: prefixes, fallbacks, translation files, school translations (D-109) |
 | [cloud-environment.md](cloud-environment.md) | Claude Code cloud environment for any Claude account (setup script in `.claude/cloud/`) |

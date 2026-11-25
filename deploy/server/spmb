@@ -47,6 +47,10 @@ usage() {
     cat <<'USAGE'
 Usage: spmb <command> [arguments]
 
+  check                       Where this server is (fresh, set up, tunnel, repository, staging,
+                              production) and the next command. Read-only (check.sh).
+  up <env> [domain] [ref]     All in one, safe to repeat: init when needed, deploy when not running,
+                              first Super Admin when there is none, health check. Start here.
   init <env> <domain>         Prepare an environment (staging | production): folder, passwords,
                               encryption key, a free local port, daily backup timer.
   deploy staging [ref]        Fetch, build the images of <ref> (default origin/main), back up,
@@ -179,6 +183,10 @@ port_in_use() {
     grep -qE "^${port}[[:space:]]" "$PORTS_FILE" 2>/dev/null && return 0
     if command -v ss >/dev/null; then
         [ -n "$(ss -ltnH "sport = :$port" 2>/dev/null)" ] && return 0
+    fi
+    # Ports Docker publishes without a listening proxy process (userland-proxy off), any stack.
+    if command -v docker >/dev/null; then
+        docker ps --format '{{.Ports}}' 2>/dev/null | grep -qF ":${port}->" && return 0
     fi
     return 1
 }
@@ -459,6 +467,71 @@ cmd_deploy() {
         confirm "Deploy $tag to PRODUCTION ($(get_var "$(env_dir production)/stack.env" SPMB_DOMAIN))?"
     fi
     activate "$env" "$tag"
+}
+
+# --- up: from wherever this environment is to a running site --------------------------------
+superadmin_count() {
+    dc "$1" exec -T db sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -N -B -e "SELECT COUNT(*) FROM spmb.auth_groups_users WHERE \`group\` = '"'"'superadmin'"'"'" 2>/dev/null' \
+        2>/dev/null | tr -dc '0-9' || true
+}
+
+cmd_up() {
+    local env="${1:-}" domain="" ref="" dir tag
+    check_env "$env"; shift
+    if [ -n "${1:-}" ] && valid_domain "$1"; then domain="$1"; shift; fi
+    ref="${1:-}"
+    need_root
+    dir="$(env_dir "$env")"
+
+    if [ ! -f "$dir/stack.env" ]; then
+        [ -n "$domain" ] || die "'$env' is new: give its domain, e.g. spmb up $env $( [ "$env" = staging ] && echo staging.)example.sch.id"
+        cmd_init "$env" "$domain"
+    elif [ -n "$domain" ] && [ "$domain" != "$(get_var "$dir/stack.env" SPMB_DOMAIN)" ]; then
+        die "$env uses $(get_var "$dir/stack.env" SPMB_DOMAIN). To change the domain: spmb domain $env $domain"
+    fi
+
+    tag="$(get_var "$dir/stack.env" SPMB_TAG)"
+    if [ -n "$ref" ] || [ -z "$tag" ]; then
+        cmd_deploy "$env" ${ref:+"$ref"}
+    elif ! stack_running "$env" || ! health_check "$env" >/dev/null 2>&1; then
+        if image_exists "spmb-app:$tag" && image_exists "spmb-web:$tag"; then
+            step "$env is not running: starting the same image $tag again"
+            lock
+            install_host_bits
+            activate "$env" "$tag"
+        else
+            warn "Images for $tag are gone; deploying again."
+            cmd_deploy "$env"
+        fi
+    else
+        say "   $env already runs $tag and answers. Newer code: spmb deploy $env"
+    fi
+
+    local admins; admins="$(superadmin_count "$env")"
+    if [ "$admins" = 0 ]; then
+        if [ -t 0 ]; then
+            step "First Super Admin of $env"
+            dc "$env" exec app php spark spmb:install
+        else
+            warn "No Super Admin yet; run in a terminal: spmb spark $env spmb:install"
+        fi
+    fi
+
+    local port clients
+    port="$(get_var "$dir/stack.env" SPMB_PORT)"
+    clients="$(find "$SRC/clients" -mindepth 2 -maxdepth 2 -name branding -type d 2>/dev/null | sed "s|^$SRC/||" | tr '\n' ' ')"
+    say
+    say "$env is up: https://$(get_var "$dir/stack.env" SPMB_DOMAIN)/ -> http://127.0.0.1:$port"
+    say " - Tunnel route (once): $(get_var "$dir/stack.env" SPMB_DOMAIN) -> http://127.0.0.1:$port$( [ "$env" = staging ] && echo ' (behind Access)')"
+    [ -z "$clients" ] || say " - School branding (once): spmb spark $env spmb:branding <one of: $clients>"
+    [ "$env" = production ] || say " - Then: spmb up production <domain>"
+    say " - Whole server: spmb check"
+}
+
+cmd_check() {
+    local here
+    here="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+    SPMB_ROOT="$SPMB_ROOT" SPMB_SRC="$SRC" bash "$here/check.sh" "$@"
 }
 
 # --- domain --------------------------------------------------------------------------------
@@ -802,6 +875,8 @@ set -- "${args[@]+"${args[@]}"}"
 
 local cmd="${1:-}"; shift || true
 case "$cmd" in
+    check)    cmd_check "$@" ;;
+    up)       cmd_up "$@" ;;
     init)     cmd_init "$@" ;;
     deploy)   cmd_deploy "$@" ;;
     rollback) cmd_rollback "$@" ;;

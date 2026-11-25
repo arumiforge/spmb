@@ -5,6 +5,18 @@ All notable changes are documented here ([Keep a Changelog](https://keepachangel
 ## [Unreleased]
 
 ### Added
+- Server flow (D-112): `deploy/server/check.sh` / `spmb check` shows where a server stands (fresh, already in
+  use, set up, tunnel, repository, staging, production, live) and the next command, without changing anything;
+  `spmb up <env> [domain]` brings an environment from any state to a running site; `docs/server-playbook.md`
+  and `deploy/templates/app.compose.yaml` for other Docker apps on the same server.
+
+### Changed
+- `setup.sh` is safe on a server that already runs Docker or other services: keeps the installed Docker packages
+  (adds Compose/Buildx), merges its settings into `daemon.json`, does not restart Docker while containers run,
+  and does not switch the firewall on while public services are not listed in `ALLOW_PORTS`. `spmb init` also
+  skips ports used by any container.
+
+### Added
 - National region list (D-111): 83,762 villages (Kepmendagri 2025) as default data, address picker province →
   regency/city → district → village with search on the registration and staff forms, one-time matching of old
   typed addresses.

@@ -1,0 +1,61 @@
+# Template for another Docker app on an SPMB server (docs/server-playbook.md, "Adding another Docker app").
+# Copy to /opt/apps/<app>/<env>/compose.yaml, replace every <…>, then:
+#   docker compose -p <app>-<env> --env-file stack.env up -d --wait
+# stack.env (mode 600, next to this file, never in git) sets APP_PORT, APP_TAG and the passwords.
+# Rules kept by this template: port on 127.0.0.1 only (Docker bypasses ufw), own network and volumes,
+# restart policy, health checks, log limits. SPMB itself uses deploy/compose.yaml, not this file.
+
+name: <app>-${APP_ENV:?APP_ENV is not set}
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--innodb-buffer-pool-size=128M"]
+    environment:
+      MYSQL_DATABASE: <app>
+      MYSQL_USER: <app>
+      MYSQL_PASSWORD: ${APP_DB_PASSWORD:?APP_DB_PASSWORD is not set}
+      MYSQL_ROOT_PASSWORD: ${APP_DB_ROOT_PASSWORD:?APP_DB_ROOT_PASSWORD is not set}
+      TZ: Asia/Jakarta
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+    logging: *logging
+
+  web:
+    image: <image>:${APP_TAG:?APP_TAG is not set}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Jakarta
+    volumes:
+      - data:/data
+    ports:
+      # Loopback only. The port comes from /opt/apps/PORTS; cloudflared forwards the hostname to it.
+      - "127.0.0.1:${APP_PORT:?APP_PORT is not set}:<container port>"
+    healthcheck:
+      # Any cheap request that proves the app answers; adjust path and tool to the image.
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:<container port>/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging: *logging
+
+volumes:
+  db:
+  data:
